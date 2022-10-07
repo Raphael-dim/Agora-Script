@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title><?php echo $pagetitle; ?></title>
+    <link href = "css/global.css" rel = "stylesheet">
+    <link href = "css/nav.css" rel = "stylesheet">
+</head>
+<body>
+<header>
+    <nav>
+        <ul id="Menu" style="list-style-type: none">
+            <li class="grosmenu" ><a href = "index.php">Acceuil</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <?php
+    require __DIR__ . "/{$cheminVueBody}";
+    ?>
+</main>
+<footer>
+    <p>
+        Site de vote de ...
+    </p>
+</footer>
+</body>
+</html>
