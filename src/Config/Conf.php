@@ -1,4 +1,5 @@
 <?php
+namespace App\Vote\Config;
 class Conf {
 
     static private array $databases = array(
