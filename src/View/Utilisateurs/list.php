@@ -1,4 +1,6 @@
 <?php
+
+require "../src/View/Utilisateurs/search.php";
 foreach ($utilisateurs as $utilisateur) {
     $nom =   rawurlencode($utilisateur->getNom());
     $prenom =   rawurlencode($utilisateur->getPrenom());
