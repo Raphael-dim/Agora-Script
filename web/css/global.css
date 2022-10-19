@@ -9,6 +9,8 @@ main{
     margin-top:50px;
     background:#FF5660;
     opacity:0.9;
+    overflow-y:scroll;
+    max-height:85vh;
 }
 
 main p{

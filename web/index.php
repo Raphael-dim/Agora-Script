@@ -11,14 +11,14 @@ $loader->register();
 $pagetitle = "index";
 
 if (!isset($_GET["controller"])){
-    $controller = "utilisateur";
+    $controller = "accueil";
 }
 else{
     $controller = $_GET["controller"];
 }
 
 if (!isset($_GET["action"])){
-    $action = "readAll";
+    $action = "home";
 }
 else{
     $action = $_GET["action"];
