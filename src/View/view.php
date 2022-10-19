@@ -10,7 +10,7 @@
 <header>
     <nav>
         <ul id="Menu" style="list-style-type: none">
-            <li class="grosmenu" ><a href = "index.php">Acceuil</a></li>
+            <li class="grosmenu" ><a href = "index.php?action=home&controller=acceuil">Acceuil</a></li>
             <li class="grosmenu" ><a href = "index.php?action=search&controller=utilisateur">Chercher un utilisateur</a></li>
         </ul>
     </nav>

@@ -2,9 +2,12 @@
 
 namespace App\Vote\Controller;
 
+use App\Vote\Model\Repository\UtilisateurRepository;
+
 class ControllerAcceuil
 {
-    private static function home(){
+
+    public static function home() {
         ControllerAcceuil::afficheVue('view.php',
             ["pagetitle" => "Acceuil",
                 "cheminVueBody" => "Acceuil/acceuil.php"]);
