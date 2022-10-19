@@ -4,20 +4,20 @@ require_once '../src/Lib/Psr4AutoloaderClass.php';
 use App\Vote\Model\DatabaseConnection as Model;
 
 $loader = new App\Vote\Lib\Psr4AutoloaderClass();
-$loader->addNamespace('App\Vote', __DIR__ . '/../src');
+$loader->addNamespace('App\Vote', __DIR__ .  '/../src');
 // register the autoloader
 $loader->register();
 
 $pagetitle = "index";
 
-if (isset($_GET["controller"]) == false){
-    $controller = "";
+if (!isset($_GET["controller"])){
+    $controller = "utilisateur";
 }
 else{
     $controller = $_GET["controller"];
 }
 
-if (isset($_GET["action"]) == false){
+if (!isset($_GET["action"])){
     $action = "readAll";
 }
 else{
@@ -40,3 +40,4 @@ else{
 
 
 ?>
+
