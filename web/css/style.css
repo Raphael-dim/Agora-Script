@@ -1,0 +1,11 @@
+body{
+    /*background-color: blue;*/
+}
+
+form {
+    max-width: 1200px;
+}
+
+.titreEtnbSections {
+    display: flex;
+}
