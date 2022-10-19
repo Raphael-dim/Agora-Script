@@ -4,13 +4,13 @@ namespace App\Vote\Controller;
 
 use App\Vote\Model\Repository\UtilisateurRepository;
 
-class ControllerAcceuil
+class ControllerAccueil
 {
 
     public static function home() {
-        ControllerAcceuil::afficheVue('view.php',
-            ["pagetitle" => "Acceuil",
-                "cheminVueBody" => "Acceuil/acceuil.php"]);
+        ControllerAccueil::afficheVue('view.php',
+            ["pagetitle" => "Accueil",
+                "cheminVueBody" => "Accueil/accueil.php"]);
     }
 
     private static function afficheVue(string $cheminVue, array $parametres = []) : void {
