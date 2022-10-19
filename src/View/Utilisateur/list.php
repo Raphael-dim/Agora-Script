@@ -1,9 +1,12 @@
 <?php
+
+require "../src/View/Utilisateurs/search.php";
 foreach ($utilisateurs as $utilisateur) {
-    $identifiant = rawurlencode($utilisateur->getIdentifiant());
+    $nom =   rawurlencode($utilisateur->getNom());
+    $prenom =   rawurlencode($utilisateur->getPrenom());
     $urlidentifiant = rawurlencode($utilisateur->getIdentifiant());
     echo '<p> <a href = "../web/frontController.php?action=read&login='
-        . $urlidentifiant. '&controller=utilisateur">' .$identifiant . '</a> </p> ';
+        . $urlidentifiant. '&controller=utilisateur">' .$nom.' '.$prenom . '</a> </p> ';
 }
 
 ?>
