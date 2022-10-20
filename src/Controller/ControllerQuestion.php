@@ -8,7 +8,14 @@ class ControllerQuestion
     {
         self::afficheVue('view.php',
             ["pagetitle" => "Creer une question",
-                "cheminVueBody" => "Question/create.php"]);
+                "cheminVueBody" => "Question/create/create.php"]);
+    }
+
+    public static function create2()
+    {
+        self::afficheVue('view.php',
+            ["pagetitle" => "Creer une question",
+                "cheminVueBody" => "Question/create/create2.php"]);
     }
 
     private static function afficheVue(string $cheminVue, array $parametres = []): void
