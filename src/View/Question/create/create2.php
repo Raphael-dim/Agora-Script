@@ -1,12 +1,21 @@
 <?php
-if (isset($_POST["nbSection"])){
-    $nbSection = $_POST["nbSection"];
+if (isset($_POST["nbSections"])){
+    $nbSection = $_POST["nbSections"];
 }
-else{
 
+else{
+    $nbSection = 1;
 }
+if (isset($_POST["Titre"])){
+    $Titre = htmlspecialchars($_POST["Titre"]);
+}
+else {
+    $Titre = "";
+}
+
 
 ?>
+<h1><?php echo $Titre ?></h1>
 
 
 <form method=\"get\" action='../web/frontController.php'>
@@ -23,10 +32,11 @@ else{
         }
         for ($i = 1; $i <= $nb; $i++) {
             echo "<p>
-            <label for='nbSections_id'>Titre de la section n°" . $i . "</plabel> :
-            <input type='text' name=titre".$i." id='' required/>
-            <label for='nbSections_id'>Corp du texte" . $i . "</plabel> :
-            <input type='text' name=corp".$i." id='nbSections_id' required/>
+            <label for='nbSections_id'>Titre de la section n°" . $i . "</label> :
+            <input type='text' name=titre".$i." id='' required/></p>
+            <p>
+            <label for='nbSections_id'>Description de la section" . $i . "</plabel> :
+            <input type='text' name=description".$i." id='sections_id' required/>
             </p>";
         }
 
@@ -34,8 +44,8 @@ else{
     </fieldset>
     <input type="submit" value="Créer"/>
 </form>
-<form method = "post" action = "index.php?controller=question&action=create")>
+<form method = "post" action = "index.php?controller=question&action=create">
       <input type = hidden value = <?php echo $_POST["Titre"] ?> name = Titre />
-      <input type = hidden value = <?php echo $_POST["nbSection"] ?> name = nbSection />
+      <input type = hidden value = <?php echo $_POST["nbSections"] ?> name = nbSections />
     <input type="submit" value="Retour"/>
 </form>
