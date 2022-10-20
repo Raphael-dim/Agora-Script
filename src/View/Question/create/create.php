@@ -22,7 +22,7 @@ if ((isset($_POST["Titre"]) && isset($_POST["nbSections"]))) {
                 <?php
                 for ($i = 1; $i <= 10; $i++) {
                     if ($nbSection == $i) {
-                        echo "<option value=' . $i . ' selected '>" . $i . "</option>";
+                        echo "<option value=" . $i . " selected '>" . $i . "</option>";
                     }
                     else{
                         echo "<option value=" . $i . ">" . $i . "</option>";
