@@ -1,16 +1,25 @@
 <?php
-session_start();
-$nbSection = $_POST["nbSections"];
-
-foreach ($_POST as $key => $value) {
-    $_SESSION['post'][$key] = $value;
+if (isset($_POST["nbSections"])){
+    $nbSection = $_POST["nbSections"];
 }
-var_dump($_SESSION['post']);
+
+else{
+    $nbSection = 1;
+}
+if (isset($_POST["Titre"])){
+    $Titre = htmlspecialchars($_POST["Titre"]);
+}
+else {
+    $Titre = "";
+}
+
+
 ?>
-<h1><?php echo $_POST["Titre"] ?></h1>
+<h1><?php echo $Titre ?></h1>
 
 
-<form method= post action='index.php?controller=question&action=search'>
+<form method=\"get\" action='../web/frontController.php'>
+    <input type='hidden' name='action' value='created'>
     <fieldset>
 
         <?php
@@ -34,4 +43,9 @@ var_dump($_SESSION['post']);
         ?>
     </fieldset>
     <input type="submit" value="Créer"/>
+</form>
+<form method = "post" action = "index.php?controller=question&action=create">
+      <input type = hidden value = <?php echo $_POST["Titre"] ?> name = Titre />
+      <input type = hidden value = <?php echo $_POST["nbSections"] ?> name = nbSections />
+    <input type="submit" value="Retour"/>
 </form>
