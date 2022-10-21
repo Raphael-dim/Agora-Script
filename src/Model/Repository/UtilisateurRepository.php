@@ -22,7 +22,7 @@ class UtilisateurRepository extends AbstractRepository
 
     protected function getNomClePrimaire(): string
     {
-        return "indentifiant";
+        return "identifiant";
     }
 
     protected function getNomsColonnes(): array
