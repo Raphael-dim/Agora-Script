@@ -3,6 +3,8 @@
 namespace App\Vote\Controller;
 
 
+use App\Vote\Model\DataObject\Question;
+use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
 
 class ControllerQuestion
@@ -27,6 +29,18 @@ class ControllerQuestion
             ["utilisateurs" => $utilisateurs,
                 "pagetitle" => "Rechercher un utilisateur",
                 "cheminVueBody" => "Question/create/select.php"]);
+    }
+
+    public static function created(): void
+    {
+        $question = new Question($_GET['id'], $_GET['titre'], $_GET['nbSections']);
+        $cree = (new QuestionRepository())->sauvegarder($question);
+        $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
+        if ($cree) {
+            self::afficheVue('view.php', ["pagetitle" => "Question crée", "cheminVueBody" => "Question/created.php", "questions" => $questions]);
+        } else {
+            // ERREUR À FAIRE
+        }
     }
 
     public static function select(){

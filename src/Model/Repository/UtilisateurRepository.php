@@ -6,7 +6,7 @@ use App\Vote\Model\DataObject\Utilisateur as Utilisateur;
 class UtilisateurRepository extends AbstractRepository
 {
 
-    protected function construire( $utilisateurTableau) : Utilisateur
+    protected function construire(array $utilisateurTableau) : Utilisateur
     {
         return new Utilisateur(
             $utilisateurTableau["identifiant"],
@@ -23,5 +23,10 @@ class UtilisateurRepository extends AbstractRepository
     protected function getNomClePrimaire(): string
     {
         return "indentifiant";
+    }
+
+    protected function getNomsColonnes(): array
+    {
+        return array("identifiant", "nom", "prenom");
     }
 }

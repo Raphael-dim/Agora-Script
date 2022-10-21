@@ -1,7 +1,9 @@
 <?php
 namespace App\Vote\Model\DataObject;
 
-class Utilisateur
+use App\Vote\Model\Repository\AbstractRepository;
+
+class Utilisateur extends AbstractDataObject
 {
     private string $identifiant;
     private string $nom;
@@ -68,4 +70,11 @@ class Utilisateur
     }
 
 
+    public function formatTableau(): array
+    {
+        return array(
+            "identifiant" =>  $this->identifiant,
+            "nom" =>  $this->nom,
+            "prenom" =>  $this->prenom);
+    }
 }
