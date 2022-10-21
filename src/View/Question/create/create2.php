@@ -6,16 +6,16 @@ if (isset($_POST["nbSections"])){
 else{
     $nbSection = 1;
 }
-if (isset($_POST["titre"])){
-    $titre = htmlspecialchars($_POST["titre"]);
+if (isset($_POST["Titre"])){
+    $Titre = htmlspecialchars($_POST["Titre"]);
 }
 else {
-    $titre = "";
+    $Titre = "";
 }
 
 
 ?>
-<h1><?php echo $titre ?></h1>
+<h1><?php echo $Titre ?></h1>
 
 
 <form method=\"get\" action='../web/frontController.php'>
@@ -45,7 +45,7 @@ else {
     <input type="submit" value="Créer"/>
 </form>
 <form method = "post" action = "index.php?controller=question&action=create">
-      <input type = hidden value = <?php echo $_POST["titre"] ?> name = titre />
+      <input type = hidden value = <?php echo $_POST["Titre"] ?> name = Titre />
       <input type = hidden value = <?php echo $_POST["nbSections"] ?> name = nbSections />
     <input type="submit" value="Retour"/>
 </form>

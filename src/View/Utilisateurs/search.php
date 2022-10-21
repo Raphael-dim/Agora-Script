@@ -1,4 +1,9 @@
-<form method="post" action="../web/index.php?action=readKeyword&controller=utilisateur">
+<?php
+
+
+?>
+
+<form method="post" action="index.php?controller=utilisateur&action=readKeyword">
     <fieldset>
         <legend>Chercher un utilisateur :</legend>
         <p>
