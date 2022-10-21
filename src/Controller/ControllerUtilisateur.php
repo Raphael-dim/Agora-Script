@@ -27,6 +27,15 @@ class ControllerUtilisateur
                 "cheminVueBody" => "Utilisateurs/list.php"]);
     }
 
+    public static function select(){
+        $row = $_POST['row'];
+        $keyword = $_POST['keyword'];
+        $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword,$row);
+        ControllerUtilisateur::afficheVue('view.php',
+            ["utilisateurs" => $utilisateurs,
+                "pagetitle" => "Liste des Utilisateurs",
+                "cheminVueBody" => "Utilisateurs/select.php"]);
+    }
 
     private static function afficheVue(string $cheminVue, array $parametres = []) : void {
         extract($parametres); // Crée des variables à partir du tableau $parametres
