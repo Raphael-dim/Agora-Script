@@ -18,9 +18,30 @@ class ControllerQuestion
 
     public static function create2()
     {
-        self::afficheVue('view.php',
-            ["pagetitle" => "Creer une question",
-                "cheminVueBody" => "Question/create/create2.php"]);
+        $debutEcriture = $_POST['debutEcriture'];
+        $finEcriture = $_POST['finEcriture'];
+        $debutVote = $_POST['debutVote'];
+        $finVote = $_POST['finVote'];
+        if ($debutEcriture > $finEcriture) {
+            self::afficheVue('view.php',
+                ["pagetitle" => "Creer une question",
+                    "cheminVueBody" => "Question/create/create.php",
+                    "message" => "Date de fin d'écriture inférieure à date de début d'écriture"]);
+        } else if ($debutVote > $finVote) {
+            self::afficheVue('view.php',
+                ["pagetitle" => "Creer une question",
+                    "cheminVueBody" => "Question/create/create.php",
+                    "message" => "Date de fin de vote inférieure à date de début de vote"]);
+        } else if ($debutVote < $debutEcriture || $debutVote < $finEcriture) {
+            self::afficheVue('view.php',
+                ["pagetitle" => "Creer une question",
+                    "cheminVueBody" => "Question/create/create.php",
+                    "message" => "La phase de vote doit commencer après la phase d'écriture"]);
+        } else {
+            self::afficheVue('view.php',
+                ["pagetitle" => "Creer une question",
+                    "cheminVueBody" => "Question/create/create2.php"]);
+        }
     }
 
     public static function search()
