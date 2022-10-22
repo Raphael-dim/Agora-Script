@@ -20,20 +20,20 @@ if(array_key_exists('delete', $_POST)) {
 
 function adduser(String $id) : void
 {
-    if (!in_array($id,$_SESSION['auteurs']))
+    if (!in_array($id,$_SESSION[$_SESSION['type']]))
     {
-        $_SESSION['auteurs'][] = $id;
+        $_SESSION[$_SESSION['type']][] = $id;
     }
 }
 
 function removeuser(String $id) : void
 {
 
-    if (($key = array_search($id, $_SESSION['auteurs'])) !== false){
-        unset($_SESSION['auteurs'][$key]);
+    if (($key = array_search($id, $_SESSION[$_SESSION['type']])) !== false){
+        unset($_SESSION[$_SESSION['type']][$key]);
     }
 }
-var_dump( $_SESSION['post']);
+
 ?>
 
 
@@ -48,7 +48,7 @@ var_dump( $_SESSION['post']);
 
 <form method = post>
     <?php
-        foreach ($_SESSION['auteurs'] as $auteur){
+        foreach ($_SESSION[$_SESSION['type']] as $auteur){
             echo '
 
                 <span><button type = submit value = "'.$auteur.'" name = "delete">'.$auteur.'</button></span>
@@ -77,11 +77,17 @@ var_dump( $_SESSION['post']);
                         <p><button type = submit value = "'.$identifiant.'" name = "user">' . $nom .' ' . $prenom . '</button></p>
                         <input type ="hidden" name = "row" value = "nom" />
                         <input type = "hidden" name = "keyword" value ="'. $keyword . '"/> 
+       
                         
                     </form>
                     '
             ;
         }
     ?>
-    <input type="submit" value="Selectionner" name ="path">
+
+    <form method = post action = <?php echo $_SESSION['next'] ?> >
+        <input type="submit" value="Selectionner"/>
+        <input type ="hidden" name = "row" value = "nom" />
+        <input type = "hidden" name = "keyword" value ="<?php echo $keyword ?>"/>
+    </form>
 

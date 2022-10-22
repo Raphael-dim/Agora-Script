@@ -1,7 +1,9 @@
 <?php
 session_start();
 $_SESSION['auteurs'] = array();
+$_SESSION['votants'] = array();
 $_SESSION['post'] = array();
+$_SESSION['sections'] = array();
 ?>
 <form method="post" action="index.php?controller=question&action=create2">
     <fieldset>

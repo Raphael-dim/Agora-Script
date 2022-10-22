@@ -34,7 +34,7 @@ class ControllerUtilisateur
         ControllerUtilisateur::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,
                 "pagetitle" => "Liste des Utilisateurs",
-                "cheminVueBody" => "Utilisateurs/select.php"]);
+                "cheminVueBody" => "Utilisateurs/selectauteurs.php"]);
     }
 
     private static function afficheVue(string $cheminVue, array $parametres = []) : void {
