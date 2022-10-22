@@ -7,6 +7,7 @@ class Question extends AbstractDataObject
     private int $id;
     private string $titre;
     private int $nbSections;
+    private Calendrier $calendrier;
 
     /**
      * @param int $id
