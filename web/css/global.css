@@ -28,3 +28,8 @@ main p a{
     color:lightseagreen;
     text-decoration: none;
 }
+
+.attention{
+    max-width: 30px;
+    max-height: 30px;
+}
