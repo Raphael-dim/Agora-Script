@@ -1,3 +1,1 @@
-<?php
-echo "<p>Page d'accueil du site de vote</p>
-";
+<?="<p>Page d'accueil du site de vote</p>"?>

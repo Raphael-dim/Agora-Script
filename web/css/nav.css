@@ -4,12 +4,11 @@ nav {
     margin: 0;
     display:block;
     margin:auto;
-    background-color: green;
     color: white;
     padding: 6px;
     height:42px;
     transition: ease-in-out 0.5s;
-    background-color:#FF5660;
+    background-color: #012e49;
     z-index:100;
     overflow:hidden;
 }
