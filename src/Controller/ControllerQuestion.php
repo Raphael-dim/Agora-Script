@@ -26,18 +26,32 @@ class ControllerQuestion
         ControllerQuestion::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,
                 "pagetitle" => "Rechercher un utilisateur",
-                "cheminVueBody" => "Question/create/select.php"]);
+                "cheminVueBody" => "Question/create/selectauteurs.php"]);
     }
 
-    public static function select(){
+    public static function selectAuteurs(){
         $row = $_POST['row'];
         $keyword = $_POST['keyword'];
         $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword,$row);
         self::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,"pagetitle" => "Creer une question",
-                "cheminVueBody" => "Question/create/select.php"]);
+                "cheminVueBody" => "Question/create/selectauteurs.php"]);
     }
 
+    public static function selectVotants(){
+        $row = $_POST['row'];
+        $keyword = $_POST['keyword'];
+        $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword,$row);
+        self::afficheVue('view.php',
+            ["utilisateurs" => $utilisateurs,"pagetitle" => "Creer une question",
+                "cheminVueBody" => "Question/create/selectvotants.php"]);
+    }
+
+    public static function recap(){
+        self::afficheVue('view.php',
+            ["pagetitle" => "Creer une question",
+                "cheminVueBody" => "Question/create/recap.php"]);
+    }
 
     private static function afficheVue(string $cheminVue, array $parametres = []): void
     {
