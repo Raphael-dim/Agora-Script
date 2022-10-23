@@ -31,8 +31,8 @@ foreach ($_SESSION as $key => $value) {
 
 <div>
     <h2>Calendrier</h2>
-    <p>Ecriture du <?= $debutEcriture ?> au <?= $finEcriture ?></p>
-    <p>Votes du <?= $debutVote ?> au <?= $finVote ?></p>
+    <p>Phase d'écriture : du <?= $debutEcriture ?> au <?= $finEcriture ?></p>
+    <p>Phase de vote : du <?= $debutVote ?> au <?= $finVote ?></p>
 </div>
 
 <div>

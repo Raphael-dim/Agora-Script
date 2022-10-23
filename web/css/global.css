@@ -38,7 +38,7 @@ main p a {
     max-width: 45px;
 }
 
-h1 {
+h1, h2{
     color: #dcdcdc;
 }
 

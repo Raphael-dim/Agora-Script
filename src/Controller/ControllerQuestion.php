@@ -20,7 +20,7 @@ class ControllerQuestion
         self::form();
     }
 
-    public static function form()
+    public static function form(): void
     {
         $view = "";
         $step = $_GET['step'] ?? 1;
