@@ -11,29 +11,6 @@ else{
     $keyword = "";
 }
 
-if(array_key_exists('user', $_POST)) {
-    adduser($_POST["user"]);
-}
-if(array_key_exists('delete', $_POST)) {
-    removeuser($_POST["delete"]);
-}
-
-function adduser(String $id) : void
-{
-    if (!in_array($id,$_SESSION[$_SESSION['type']]))
-    {
-        $_SESSION[$_SESSION['type']][] = $id;
-    }
-}
-
-function removeuser(String $id) : void
-{
-
-    if (($key = array_search($id, $_SESSION[$_SESSION['type']])) !== false){
-        unset($_SESSION[$_SESSION['type']][$key]);
-    }
-}
-
 ?>
 
 
@@ -85,9 +62,4 @@ function removeuser(String $id) : void
         }
     ?>
 
-    <form method = post action = <?php echo $_SESSION['next'] ?> >
-        <input type="submit" value="Selectionner"/>
-        <input type ="hidden" name = "row" value = "nom" />
-        <input type = "hidden" name = "keyword" value ="<?php echo $keyword ?>"/>
-    </form>
 

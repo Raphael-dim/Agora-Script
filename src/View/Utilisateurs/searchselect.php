@@ -9,7 +9,7 @@ if ((isset($_POST["keyword"]) && isset($_POST["row"]))) {
 }
 ?>
 
-<form method="post" action=<?php echo $_SESSION['current']?>>
+<form method="post" >
     <fieldset>
         <legend>Selectionner des <?php echo $_SESSION['type'] ?> :</legend>
         <p>

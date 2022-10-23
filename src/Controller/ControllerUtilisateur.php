@@ -41,7 +41,7 @@ class ControllerUtilisateur
         self::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,
                 "pagetitle" => "Liste des Utilisateurs",
-                "cheminVueBody" => "Utilisateurs/selectauteurs.php"]);
+                "cheminVueBody" => "Utilisateurs/step-4.php"]);
     }
 
     private static function afficheVue(string $cheminVue, array $parametres = []): void

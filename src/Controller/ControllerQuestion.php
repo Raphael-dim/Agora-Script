@@ -11,38 +11,51 @@ class ControllerQuestion
 {
     public static function create()
     {
-        self::afficheVue('view.php',
-            ["pagetitle" => "Creer une question",
-                "cheminVueBody" => "Question/create/create.php"]);
+       if (!isset($_SESSION)){
+           session_start();
+           $_SESSION = array();
+           session_destroy();
+       }
+
+        self::form();
     }
 
-    public static function create2()
-    {
-        $debutEcriture = $_POST['debutEcriture'];
-        $finEcriture = $_POST['finEcriture'];
-        $debutVote = $_POST['debutVote'];
-        $finVote = $_POST['finVote'];
-        if ($debutEcriture > $finEcriture) {
-            self::afficheVue('view.php',
-                ["pagetitle" => "Creer une question",
-                    "cheminVueBody" => "Question/create/create.php",
-                    "message" => "Date de fin d'écriture inférieure à date de début d'écriture"]);
-        } else if ($debutVote > $finVote) {
-            self::afficheVue('view.php',
-                ["pagetitle" => "Creer une question",
-                    "cheminVueBody" => "Question/create/create.php",
-                    "message" => "Date de fin de vote inférieure à date de début de vote"]);
-        } else if ($debutVote < $debutEcriture || $debutVote < $finEcriture) {
-            self::afficheVue('view.php',
-                ["pagetitle" => "Creer une question",
-                    "cheminVueBody" => "Question/create/create.php",
-                    "message" => "La phase de vote doit commencer après la phase d'écriture"]);
-        } else {
-            self::afficheVue('view.php',
-                ["pagetitle" => "Creer une question",
-                    "cheminVueBody" => "Question/create/create2.php"]);
+    public static function form(){
+        $step = $_GET['step'] ?? 1;
+        $params = array();
+        switch($step){
+            case 1:
+                $view = "step-1";break;
+            case 2:
+                $view = "step-2";break;
+            case 3:
+                $view = "step-3";break;
+            case 4:
+                if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row"!=""){
+                    $row = $_POST['row'];
+                    $keyword = $_POST['keyword'];
+                    $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, $row);
+                    $params['utilisateurs'] = $utilisateurs;
+                }
+                $view = "step-4";break;
+            case 5:
+                if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row"!=""){
+                    $row = $_POST['row'];
+                    $keyword = $_POST['keyword'];
+                    $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, $row);
+                    $params['utilisateurs'] = $utilisateurs;
+                }
+                $view = "step-5";break;
+            case 6:
+                $view = "step-6";break;
+
         }
+
+        self::afficheVue('view.php',
+            array_merge(["pagetitle" => "Creer une question",
+                "cheminVueBody" => "Question/create/".$view.".php"],$params));
     }
+
 
     public static function search()
     {
@@ -50,7 +63,7 @@ class ControllerQuestion
         self::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,
                 "pagetitle" => "Rechercher un utilisateur",
-                "cheminVueBody" => "Question/create/selectauteurs.php"]);
+                "cheminVueBody" => "Question/create/step-4.php"]);
     }
 
     public static function created(): void
@@ -65,29 +78,11 @@ class ControllerQuestion
         }
     }
 
-    public static function selectAuteurs()
-    {
-        $row = $_POST['row'];
-        $keyword = $_POST['keyword'];
-        $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, $row);
-        self::afficheVue('view.php',
-            ["utilisateurs" => $utilisateurs,"pagetitle" => "Creer une question",
-                "cheminVueBody" => "Question/create/selectauteurs.php"]);
-    }
-
-    public static function selectVotants(){
-        $row = $_POST['row'];
-        $keyword = $_POST['keyword'];
-        $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword,$row);
-        self::afficheVue('view.php',
-            ["utilisateurs" => $utilisateurs,"pagetitle" => "Creer une question",
-                "cheminVueBody" => "Question/create/selectvotants.php"]);
-    }
 
     public static function recap(){
         self::afficheVue('view.php',
             ["pagetitle" => "Creer une question",
-                "cheminVueBody" => "Question/create/recap.php"]);
+                "cheminVueBody" => "Question/create/step-6.php"]);
     }
 
     private static function afficheVue(string $cheminVue, array $parametres = []): void
