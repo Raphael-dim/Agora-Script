@@ -6,19 +6,40 @@ class Question extends AbstractDataObject
 {
     private int $id;
     private string $titre;
+    private Utilisateur $auteur;
     private int $nbSections;
+    private Calendrier $calendrier;
 
     /**
      * @param int $id
      * @param string $titre
      * @param int $nbSections
+     * @param Calendrier $calendrier
      */
-    public function __construct(int $id, string $titre, int $nbSections)
+    public function __construct(int $id, string $titre, int $nbSections, Calendrier $calendrier)
     {
         $this->id = $id;
         $this->titre = $titre;
         $this->nbSections = $nbSections;
+        $this->calendrier = $calendrier;
     }
+
+    /**
+     * @return Calendrier
+     */
+    public function getCalendrier(): Calendrier
+    {
+        return $this->calendrier;
+    }
+
+    /**
+     * @param Calendrier $calendrier
+     */
+    public function setCalendrier(Calendrier $calendrier): void
+    {
+        $this->calendrier = $calendrier;
+    }
+
 
     /**
      * @return int

@@ -49,9 +49,9 @@ $_SESSION['sections'] = array();
     </fieldset>
     <input type="submit" value="Mettre à jour"/>
 </form>
-    <?php
-    if (isset($message)) {
-        echo "<p><img src=\"/web/images/attention.png\" class=\"attention\" > " . $message . "</p>";
-    } ?>
+<?php
+if (isset($message)) {
+    echo "<div class=\"message\"><p><img src=\"/web/images/attention.png\" class=\"attention\"  alt=\"Warning\"> " . $message . "</p></div>";
+} ?>
 
 

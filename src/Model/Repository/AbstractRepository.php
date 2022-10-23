@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Vote\Model\Repository;
+
 use App\Vote\Model\DatabaseConnection as DatabaseConnection;
 use App\Vote\Model\DataObject\AbstractDataObject;
 use PDOException;
@@ -29,6 +30,20 @@ abstract class AbstractRepository
         return true;
     }
 
+    public function delete(string $valeurClePrimaire)
+    {
+        $sql = "DELETE FROM " . $this->getNomTable() . " WHERE " . $this->getNomClePrimaire() . " =:clePrimaireTag";
+        $value = array(
+            "clePrimaireTag" => $valeurClePrimaire
+        );
+        $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
+        try {
+            $pdoStatement->execute($value);
+        } catch (PDOException $e) {
+            echo($e->getMessage());
+        }
+    }
+
     public function update(AbstractDataObject $object)
     {
         $sql = "UPDATE " . $this->getNomTable() . "
@@ -50,7 +65,7 @@ abstract class AbstractRepository
     public function selectAll(): array
     {
         $ADonnees = array();
-        $pdoStatement = DatabaseConnection::getPdo()->query('SELECT * FROM '.($this->getNomTable()));
+        $pdoStatement = DatabaseConnection::getPdo()->query('SELECT * FROM ' . ($this->getNomTable()));
 
         foreach ($pdoStatement as $donneesFormatTableau) {
 
@@ -59,15 +74,15 @@ abstract class AbstractRepository
         return $ADonnees;
     }
 
-    public function selectKeyword($motclef,$row)
+    public function selectKeyword($motclef, $row)
     {
         $ADonnees = array();
-        $sql = 'SELECT * from '.$this->getNomTable() .' WHERE LOWER('.$row .') LIKE LOWER(:motclef) ';
+        $sql = 'SELECT * from ' . $this->getNomTable() . ' WHERE LOWER(' . $row . ') LIKE LOWER(:motclef) ';
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
 
         $values = array(
-            "motclef" => $motclef.'%',
+            "motclef" => $motclef . '%',
         );
 
         $pdoStatement->execute($values);
@@ -80,7 +95,10 @@ abstract class AbstractRepository
     }
 
     protected abstract function getNomTable(): string;
+
     protected abstract function construire(array $objetFormatTableau);
+
     protected abstract function getNomClePrimaire(): string;
-    protected abstract function getNomsColonnes() : array;
+
+    protected abstract function getNomsColonnes(): array;
 }
