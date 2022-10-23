@@ -11,49 +11,57 @@ class ControllerQuestion
 {
     public static function create()
     {
-       if (!isset($_SESSION)){
-           session_start();
-           $_SESSION = array();
-           session_destroy();
-       }
+        if (!isset($_SESSION)) {
+            session_start();
+            $_SESSION = array();
+            session_destroy();
+        }
 
         self::form();
     }
 
-    public static function form(){
+    public static function form()
+    {
+        $view = "";
         $step = $_GET['step'] ?? 1;
         $params = array();
-        switch($step){
+        switch ($step) {
             case 1:
-                $view = "step-1";break;
+                $view = "step-1";
+                break;
             case 2:
-                $view = "step-2";break;
+                $view = "step-2";
+                break;
             case 3:
-                $view = "step-3";break;
+                $view = "step-3";
+                break;
             case 4:
-                if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row"!=""){
+                if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row" != "") {
                     $row = $_POST['row'];
                     $keyword = $_POST['keyword'];
                     $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, $row);
                     $params['utilisateurs'] = $utilisateurs;
                 }
-                $view = "step-4";break;
+                $view = "step-4";
+                break;
             case 5:
-                if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row"!=""){
+                if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row" != "") {
                     $row = $_POST['row'];
                     $keyword = $_POST['keyword'];
                     $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, $row);
                     $params['utilisateurs'] = $utilisateurs;
                 }
-                $view = "step-5";break;
+                $view = "step-5";
+                break;
             case 6:
-                $view = "step-6";break;
+                $view = "step-6";
+                break;
 
         }
 
         self::afficheVue('view.php',
-            array_merge(["pagetitle" => "Creer une question",
-                "cheminVueBody" => "Question/create/".$view.".php"],$params));
+            array_merge(["pagetitle" => "Créer une question",
+                "cheminVueBody" => "Question/create/" . $view . ".php"], $params));
     }
 
 
@@ -79,7 +87,8 @@ class ControllerQuestion
     }
 
 
-    public static function recap(){
+    public static function recap()
+    {
         self::afficheVue('view.php',
             ["pagetitle" => "Creer une question",
                 "cheminVueBody" => "Question/create/step-6.php"]);
@@ -87,7 +96,7 @@ class ControllerQuestion
 
     private static function afficheVue(string $cheminVue, array $parametres = []): void
     {
-        extract($parametres); // Crée des variables à partir du tableau $parametres
+        extract($parametres); // Crée des variables à partir du tableau $paramètres
         require "../src/view/$cheminVue"; // Charge la vue
     }
 }

@@ -12,13 +12,13 @@ if (isset($_POST['previous'])) {
 
 extract($_SESSION);
 
-$_SESSION['Sections']=array();
+$_SESSION['Sections'] = array();
 $ct = 0;
-foreach ($_SESSION as $key => $value){
-    if (str_starts_with($key,"titre")){
+foreach ($_SESSION as $key => $value) {
+    if (str_starts_with($key, "titre")) {
         $_SESSION['Sections'][$ct]['titre'] = $value;
     }
-    if (str_starts_with($key,"description")){
+    if (str_starts_with($key, "description")) {
         $_SESSION['Sections'][$ct]['description'] = $value;
         $ct++;
     }
@@ -31,14 +31,14 @@ foreach ($_SESSION as $key => $value){
 
 <div>
     <h2>Calendrier</h2>
-    <p>Ecriture du <?=$debutEcriture?> au <?=$finEcriture?></p>
-    <p>Votes du <?=$debutVote?> au <?=$finVote?></p>
+    <p>Ecriture du <?= $debutEcriture ?> au <?= $finEcriture ?></p>
+    <p>Votes du <?= $debutVote ?> au <?= $finVote ?></p>
 </div>
 
 <div>
-   <h2>Auteurs</h2>
+    <h2>Auteurs</h2>
     <?php
-    foreach ($_SESSION['auteurs'] as $auteur){
+    foreach ($_SESSION['auteurs'] as $auteur) {
         echo "<p> $auteur </p>";
     }
     ?>
@@ -46,27 +46,26 @@ foreach ($_SESSION as $key => $value){
 
 <div>
     <h2>Votants</h2>
-<?php
-foreach ($_SESSION['votants'] as $votant){
-    echo "<p> $votant </p>";
-}
-?>
+    <?php
+    foreach ($_SESSION['votants'] as $votant) {
+        echo "<p> $votant </p>";
+    }
+    ?>
 </div>
-
 
 
 <div>
     <h2>Sections</h2>
     <?php
-        foreach ($_SESSION['Sections'] as $Section){
-            echo '<p>'. $Section["titre"]. ' : </p>';
-            echo '<p>'. $Section["description"]. ' : </p>';
-            echo '&nbsp';
-        }
+    foreach ($_SESSION['Sections'] as $Section) {
+        echo '<p>' . $Section["titre"] . ' : </p>';
+        echo '<p>' . $Section["description"] . ' : </p>';
+        echo '&nbsp';
+    }
     ?>
 </div>
 
-<form method="post">
-    <input type="submit" name=next value="Suivant"/>
+<form method="post" class="nav">
     <input type="submit" name=previous value="Retour" formnovalidate/>
+    <input type="submit" name=next value="Suivant"/>
 </form>
