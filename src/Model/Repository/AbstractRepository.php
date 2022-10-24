@@ -18,6 +18,8 @@ abstract class AbstractRepository
         }
         $sql = substr($sql, 0, -2);
         $sql = $sql . ")";
+        echo $sql;
+        var_dump($object);
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
         // On donne les valeurs et on exécute la requête

@@ -9,9 +9,11 @@ class QuestionRepository extends AbstractRepository
     protected function construire(array $questionTableau) : Question
     {
         return new Question(
-            $questionTableau["id"],
             $questionTableau["titre"],
-            $questionTableau["nbSections"]
+            $questionTableau["description"],
+            $questionTableau["nbSections"],
+            $questionTableau["calendrier"],
+            $questionTableau["auteur"]
         );
     }
 

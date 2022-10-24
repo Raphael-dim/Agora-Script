@@ -3,7 +3,11 @@
 namespace App\Vote\Controller;
 
 
+use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Question;
+use App\Vote\Model\DataObject\Section;
+use App\Vote\Model\DataObject\Utilisateur;
+use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
 
@@ -76,14 +80,22 @@ class ControllerQuestion
 
     public static function created(): void
     {
-        $question = new Question($_GET['id'], $_GET['titre'], $_GET['nbSections']);
-        $cree = (new QuestionRepository())->sauvegarder($question);
-        $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
-        if ($cree) {
-            self::afficheVue('view.php', ["pagetitle" => "Question crée", "cheminVueBody" => "Question/created.php", "questions" => $questions]);
-        } else {
-            // ERREUR À FAIRE
-        }
+        session_start();
+        $calendrier = new Calendrier($_SESSION['debutEcriture'], $_SESSION['finEcriture'], $_SESSION['debutVote'], $_SESSION['finVote']);
+        $calendierBD = (new CalendrierRepository())->sauvegarder($calendrier);
+        $auteurs = $_SESSION['auteurs'];
+        $votants = $_SESSION['votants'];
+
+        //var_dump($sections);
+
+//        $question = new Question($_SESSION['Titre'], "description", $_SESSION['nbSections'], $calendrier, new Utilisateur("test", "test", "test"),);
+//        $questionBD = (new QuestionRepository())->sauvegarder($question);
+//
+//        $sections = $_SESSION['Sections'];
+//        foreach ($sections as $value) {
+//            $section = new Section($value['titre'], $value['description']);
+//            var_dump($section);
+//        }
     }
 
 

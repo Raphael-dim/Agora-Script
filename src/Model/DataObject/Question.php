@@ -6,22 +6,20 @@ class Question extends AbstractDataObject
 {
     private int $id;
     private string $titre;
+    private string $description;
     private Utilisateur $auteur;
-    private int $nbSections;
     private Calendrier $calendrier;
+    private int $nbSections;
 
-    /**
-     * @param int $id
-     * @param string $titre
-     * @param int $nbSections
-     * @param Calendrier $calendrier
-     */
-    public function __construct(int $id, string $titre, int $nbSections, Calendrier $calendrier)
+
+    public function __construct(string $titre, string $description, int $nbSections, Calendrier $calendrier, Utilisateur $auteur)
     {
-        $this->id = $id;
+        $this->id = 1;
         $this->titre = $titre;
+        $this->description = "blabla";
         $this->nbSections = $nbSections;
         $this->calendrier = $calendrier;
+        $this->auteur = $auteur;
     }
 
     /**
@@ -93,9 +91,12 @@ class Question extends AbstractDataObject
     public function formatTableau(): array
     {
         return array(
-        "id" =>  $this->id,
-        "titre" =>  $this->titre,
-        "nbSections" =>  $this->nbSections
-    );
+            "id" => $this->id,
+            "titre" => $this->titre,
+            "description" => $this->description,
+            "nbSections" => $this->nbSections,
+            "calendrier" => $this->calendrier,
+            "auteur" => $this->auteur
+        );
     }
 }

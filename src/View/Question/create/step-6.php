@@ -8,6 +8,10 @@ if (isset($_POST['previous'])) {
     FormConfig::postSession();
     FormConfig::redirect("index.php?controller=question&action=form&step=5");
 }
+else if (isset($_POST['next'])) {
+    FormConfig::postSession();
+    FormConfig::redirect("index.php?controller=question&action=created");
+}
 
 
 extract($_SESSION);

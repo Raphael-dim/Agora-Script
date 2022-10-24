@@ -3,8 +3,9 @@
 namespace App\Vote\Model\DataObject;
 
 
-class Calendrier
+class Calendrier extends AbstractDataObject
 {
+    private int $idCalendrier;
     private string $debutEcriture;
     private string $finEcriture;
     private string $debutVote;
@@ -18,6 +19,7 @@ class Calendrier
      */
     public function __construct(string $debutEcriture, string $finEcriture, string $debutVote, string $finVote)
     {
+        $this->idCalendrier = 1;
         $this->debutEcriture = $debutEcriture;
         $this->finEcriture = $finEcriture;
         $this->debutVote = $debutVote;
@@ -89,5 +91,14 @@ class Calendrier
     }
 
 
-
+    public function formatTableau(): array
+    {
+        return array(
+            "debutEcriture" =>  $this->debutEcriture,
+            "finEcriture" =>  $this->finEcriture,
+            "debutVote" =>  $this->debutVote,
+            "finVote" =>  $this->finVote,
+            "idCalendrier" => $this->idCalendrier
+        );
+    }
 }
