@@ -3,8 +3,11 @@
 namespace App\Vote\Model\DataObject;
 
 
-class Calendrier
+use Cassandra\Date;
+
+class Calendrier extends AbstractDataObject
 {
+    private int $idCalendrier;
     private string $debutEcriture;
     private string $finEcriture;
     private string $debutVote;
@@ -88,6 +91,30 @@ class Calendrier
         $this->finVote = $finVote;
     }
 
+    /**
+     * @return int
+     */
+    public function getIdCalendrier(): int
+    {
+        return $this->idCalendrier;
+    }
+
+    /**
+     * @param int $idCalendrier
+     */
+    public function setIdCalendrier(int $idCalendrier): void
+    {
+        $this->idCalendrier = $idCalendrier;
+    }
 
 
+    public function formatTableau(): array
+    {
+        return array(
+            "debutEcritureTag" =>  $this->debutEcriture,
+            "finEcritureTag" =>  $this->finEcriture,
+            "debutVoteTag" =>  $this->debutVote,
+            "finVoteTag" =>  $this->finVote
+        );
+    }
 }

@@ -9,25 +9,36 @@ use PDOException;
 abstract class AbstractRepository
 {
 
-    public function sauvegarder(AbstractDataObject $object): bool
+    public function sauvegarder(AbstractDataObject $object): ? int
     {
-        $sql = "INSERT INTO " . $this->getNomTable() . "
-                VALUES (";
+        $sql = "INSERT INTO \"" . $this->getNomTable() . "\"";
+        $sql = $sql . " (";
+        foreach ($this->getNomsColonnes() as $colonne) {
+            $sql = $sql . $colonne . ", ";
+        }
+        $sql = substr($sql, 0, -2);
+        $sql = $sql . ") VALUES (";
         foreach ($this->getNomsColonnes() as $colonne) {
             $sql = $sql . ":" . $colonne . "Tag, ";
         }
         $sql = substr($sql, 0, -2);
-        $sql = $sql . ")";
+        $sql = $sql . ");";
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
+
         // On donne les valeurs et on exécute la requête
         try {
             $pdoStatement->execute($object->formatTableau());
         } catch (PDOException $e) {
             echo($e->getMessage());
-            return false;
+            return null;
         }
-        return true;
+        $id = DatabaseConnection::getPdo()->query("SELECT MAX(" . $this->getNomClePrimaire() . ") FROM \"" . $this->getNomTable() . "\"");
+        foreach ($id as $retour)
+        {
+            $max = $retour[0];
+            return $max;
+        }
     }
 
     public function delete(string $valeurClePrimaire)

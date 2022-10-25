@@ -3,7 +3,11 @@
 namespace App\Vote\Controller;
 
 
+use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Question;
+use App\Vote\Model\DataObject\Section;
+use App\Vote\Model\DataObject\Utilisateur;
+use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
 
@@ -11,49 +15,57 @@ class ControllerQuestion
 {
     public static function create()
     {
-       if (!isset($_SESSION)){
-           session_start();
-           $_SESSION = array();
-           session_destroy();
-       }
+        if (!isset($_SESSION)) {
+            session_start();
+            $_SESSION = array();
+            session_destroy();
+        }
 
         self::form();
     }
 
-    public static function form(){
+    public static function form(): void
+    {
+        $view = "";
         $step = $_GET['step'] ?? 1;
         $params = array();
-        switch($step){
+        switch ($step) {
             case 1:
-                $view = "step-1";break;
+                $view = "step-1";
+                break;
             case 2:
-                $view = "step-2";break;
+                $view = "step-2";
+                break;
             case 3:
-                $view = "step-3";break;
+                $view = "step-3";
+                break;
             case 4:
-                if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row"!=""){
+                if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row" != "") {
                     $row = $_POST['row'];
                     $keyword = $_POST['keyword'];
                     $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, $row);
                     $params['utilisateurs'] = $utilisateurs;
                 }
-                $view = "step-4";break;
+                $view = "step-4";
+                break;
             case 5:
-                if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row"!=""){
+                if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row" != "") {
                     $row = $_POST['row'];
                     $keyword = $_POST['keyword'];
                     $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, $row);
                     $params['utilisateurs'] = $utilisateurs;
                 }
-                $view = "step-5";break;
+                $view = "step-5";
+                break;
             case 6:
-                $view = "step-6";break;
+                $view = "step-6";
+                break;
 
         }
 
         self::afficheVue('view.php',
-            array_merge(["pagetitle" => "Creer une question",
-                "cheminVueBody" => "Question/create/".$view.".php"],$params));
+            array_merge(["pagetitle" => "Créer une question",
+                "cheminVueBody" => "Question/create/" . $view . ".php"], $params));
     }
 
 
@@ -68,18 +80,36 @@ class ControllerQuestion
 
     public static function created(): void
     {
-        $question = new Question($_GET['id'], $_GET['titre'], $_GET['nbSections']);
-        $cree = (new QuestionRepository())->sauvegarder($question);
-        $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
-        if ($cree) {
-            self::afficheVue('view.php', ["pagetitle" => "Question crée", "cheminVueBody" => "Question/created.php", "questions" => $questions]);
-        } else {
-            // ERREUR À FAIRE
+        session_start();
+        $calendrier = new Calendrier($_SESSION['debutEcriture'], $_SESSION['finEcriture'], $_SESSION['debutVote'], $_SESSION['finVote']);
+        $calendierBD = (new CalendrierRepository())->sauvegarder($calendrier);
+        if ($calendierBD != null)
+        {
+            $calendrier->setIdCalendrier($calendierBD);
         }
+        else{
+
+        }
+
+        //var_dump($sections);
+        $utlisateur = new Utilisateur(1, "Créateur de question", "Prenom du monsieur");
+        $question = new Question($_SESSION['Titre'], "description", $calendrier, $utlisateur );
+        $questionBD = (new QuestionRepository())->sauvegarder($question);
+
+
+        $auteurs = $_SESSION['auteurs'];
+        $votants = $_SESSION['votants'];
+
+//        $sections = $_SESSION['Sections'];
+//        foreach ($sections as $value) {
+//            $section = new Section($value['titre'], $value['description']);
+//            var_dump($section);
+//        }
     }
 
 
-    public static function recap(){
+    public static function recap()
+    {
         self::afficheVue('view.php',
             ["pagetitle" => "Creer une question",
                 "cheminVueBody" => "Question/create/step-6.php"]);
@@ -87,7 +117,7 @@ class ControllerQuestion
 
     private static function afficheVue(string $cheminVue, array $parametres = []): void
     {
-        extract($parametres); // Crée des variables à partir du tableau $parametres
+        extract($parametres); // Crée des variables à partir du tableau $paramètres
         require "../src/view/$cheminVue"; // Charge la vue
     }
 }

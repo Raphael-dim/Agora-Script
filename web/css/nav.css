@@ -1,30 +1,30 @@
 nav {
-    position:absolute;
-    width:100%;
+    position: absolute;
+    width: 100%;
     margin: 0;
-    display:block;
-    margin:auto;
+    display: block;
+    margin: auto;
     color: white;
     padding: 6px;
-    height:42px;
+    height: 42px;
     transition: ease-in-out 0.5s;
     background-color: #012e49;
-    z-index:100;
-    overflow:hidden;
+    z-index: 100;
+    overflow: hidden;
 }
 
-nav:hover{
-    height:50px;
+nav:hover {
+    height: 50px;
 }
 
-nav:hover #Menu{
-    margin-top:0%;
+nav:hover #Menu {
+    margin-top: 0%;
 }
 
 #Menu {
     display: flex;
     margin: 0px;
-    margin-top:-1%;
+    margin-top: -1%;
     height: 50px;
     padding-bottom: 10px;
     transition: ease-in-out 0.5s;
@@ -35,11 +35,11 @@ nav:hover #Menu{
     color: white;
 }
 
-ul[id="Menu"] li.grosmenu{
-    margin-right:20px;
+ul[id="Menu"] li.grosmenu {
+    margin-right: 20px;
 }
 
-ul[id="Menu"] li.grosmenu>a {
+ul[id="Menu"] li.grosmenu > a {
     text-decoration: none;
     display: inline-block;
     height: 40px;

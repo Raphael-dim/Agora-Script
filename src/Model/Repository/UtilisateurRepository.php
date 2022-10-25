@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Vote\Model\Repository;
+
 use App\Vote\Model\DataObject\Utilisateur as Utilisateur;
 
 class UtilisateurRepository extends AbstractRepository
 {
 
-    protected function construire(array $utilisateurTableau) : Utilisateur
+    protected function construire(array $utilisateurTableau): Utilisateur
     {
         return new Utilisateur(
             $utilisateurTableau["identifiant"],
@@ -17,7 +18,7 @@ class UtilisateurRepository extends AbstractRepository
 
     protected function getNomTable(): string
     {
-       return "utilisateurs";
+        return "utilisateurs";
     }
 
     protected function getNomClePrimaire(): string
