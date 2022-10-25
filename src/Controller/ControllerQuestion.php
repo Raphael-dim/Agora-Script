@@ -24,6 +24,16 @@ class ControllerQuestion
         self::form();
     }
 
+    public static function readAll()
+    {
+        $questions = (new QuestionRepository())->selectAll();
+
+        self::afficheVue('view.php',
+            ["questions" => $questions,
+                "pagetitle" => "Liste des questions",
+                "cheminVueBody" => "Question/list.php"]);
+    }
+
     public static function form(): void
     {
         $view = "";
@@ -83,19 +93,21 @@ class ControllerQuestion
         session_start();
         $calendrier = new Calendrier($_SESSION['debutEcriture'], $_SESSION['finEcriture'], $_SESSION['debutVote'], $_SESSION['finVote']);
         $calendierBD = (new CalendrierRepository())->sauvegarder($calendrier);
-        if ($calendierBD != null)
-        {
+        if ($calendierBD != null) {
             $calendrier->setIdCalendrier($calendierBD);
-        }
-        else{
-
+        } else {
+            self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
 
         //var_dump($sections);
         $utilisateur = (new UtilisateurRepository)->select("hambrighta");
-        $question = new Question($_SESSION['Titre'], "description", $calendrier, $utilisateur );
+        $question = new Question($_SESSION['Titre'], "description", $calendrier, $utilisateur);
         $questionBD = (new QuestionRepository())->sauvegarder($question);
-
+        if ($questionBD != null) {
+            $question->setId($questionBD);
+        } else {
+            self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+        }
 
         $auteurs = $_SESSION['auteurs'];
         $votants = $_SESSION['votants'];
@@ -110,7 +122,7 @@ class ControllerQuestion
 
         self::afficheVue('view.php',
             ["questions" => $questions,
-                "pagetitle" => "Rechercher un utilisateur",
+                "pagetitle" => "Question crée",
                 "cheminVueBody" => "Question/created.php"]);
 
     }

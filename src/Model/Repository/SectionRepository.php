@@ -8,11 +8,12 @@ class SectionRepository extends AbstractRepository
 {
     protected function construire(array $questionTableau) : Section
     {
-        return new Section(
+        $section = new Section(
             $questionTableau["id"],
             $questionTableau["titre"],
             $questionTableau["description"]
         );
+        $section->setId($questionTableau["idsection"]);
     }
 
     protected function getNomTable(): string
