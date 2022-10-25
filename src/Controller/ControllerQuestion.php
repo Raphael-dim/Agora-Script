@@ -92,8 +92,8 @@ class ControllerQuestion
         }
 
         //var_dump($sections);
-        $utlisateur = new Utilisateur(1, "Créateur de question", "Prenom du monsieur");
-        $question = new Question($_SESSION['Titre'], "description", $calendrier, $utlisateur );
+        $utilisateur = (new UtilisateurRepository)->select("hambrighta");
+        $question = new Question($_SESSION['Titre'], "description", $calendrier, $utilisateur );
         $questionBD = (new QuestionRepository())->sauvegarder($question);
 
 
@@ -105,6 +105,14 @@ class ControllerQuestion
 //            $section = new Section($value['titre'], $value['description']);
 //            var_dump($section);
 //        }
+
+        $questions = (new QuestionRepository())->selectAll();
+
+        self::afficheVue('view.php',
+            ["questions" => $questions,
+                "pagetitle" => "Rechercher un utilisateur",
+                "cheminVueBody" => "Question/created.php"]);
+
     }
 
 
