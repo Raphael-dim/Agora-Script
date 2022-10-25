@@ -1,0 +1,24 @@
+CREATE TABLE "Calendriers" (
+idCalendrier serial PRIMARY KEY,
+debutEcriture date,
+finEcriture date, 
+debutVote date, 
+finVote date);
+
+CREATE TABLE "Sections" (
+idSection serial,
+idQuestion int, 
+titre VARCHAR(30),
+desciption VARCHAR(100),
+PRIMARY KEY (idSection, idQuestion),
+FOREIGN KEY (idQuestion)
+      REFERENCES "Questions" (idQuestion));
+
+CREATE TABLE "Questions" (
+idQuestion serial PRIMARY KEY, 
+titre varchar(30),
+description varchar(100),
+idAuteur int,
+idCalendrier int,
+FOREIGN KEY (idCalendrier)
+      REFERENCES "Calendriers" (idCalendrier));

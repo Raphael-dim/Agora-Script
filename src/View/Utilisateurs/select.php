@@ -13,16 +13,6 @@ else{
 
 ?>
 
-
-<style>
-    span{
-        background:lightblue;
-        opacity: 0.8;
-        padding:1px;
-        border:dodgerblue;
-    }
-</style>
-
 <form method = post>
     <?php
         foreach ($_SESSION[$_SESSION['type']] as $auteur){

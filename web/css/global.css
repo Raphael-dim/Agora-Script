@@ -1,45 +1,48 @@
-*{
+* {
     box-sizing: border-box;
-    overflow:hidden;
+    overflow: hidden;
 }
 
-body{
+body {
     background-color: #484859;
 }
 
-main{
-    width:50vw;
-    margin:auto;
-    margin-top:50px;
+main {
+    width: 50vw;
+    margin: auto;
+    margin-top: 50px;
     background: #012e49;
-    opacity:0.9;
-    overflow-y:scroll;
-    max-height:85vh;
+    opacity: 0.9;
+    overflow-y: scroll;
+    max-height: 85vh;
 }
 
-main p{
-    background:#dff5f4;
-    padding:5px;
-    margin:3px;
+main p {
+    background: #dff5f4;
+    padding: 5px;
+    margin: 3px;
     border: solid lightgrey 1px;
 }
 
-#delete{
-    color:red;
+#delete {
+    color: red;
     text-decoration: none;
 }
 
-main p a{
-    color:lightseagreen;
+main p a {
+    color: lightseagreen;
     text-decoration: none;
 }
 
-.attention{
-
+.attention {
     max-width: 45px;
 }
 
-form legend{
+h1, h2{
+    color: #dcdcdc;
+}
+
+form legend {
     color: white;
 }
 
@@ -48,4 +51,24 @@ form legend{
     padding-right: 10px;
     color: red;
     vertical-align: baseline;
+}
+
+.nav *, form .nav {
+    background-color: #dff5f4;
+    font-size: 17px;
+    border-radius: 15px;
+}
+
+.nav *:hover, form .nav:hover {
+    color: white;
+    font-size: 20px;
+    background-color: #1a3341;
+    border-color: #dff5f4;
+}
+
+span{
+    background:lightblue;
+    opacity: 0.8;
+    padding:1px;
+    border:dodgerblue;
 }

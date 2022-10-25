@@ -7,15 +7,16 @@ class Section extends AbstractDataObject
     private int $id;
     private string $titre;
     private int $description;
+    private Question $question;
 
     /**
      * @param int $id
      * @param string $titre
      * @param int $nbSections
      */
-    public function __construct(int $id, string $titre, int $description)
+    public function __construct(string $titre, int $description, Question $question)
     {
-        $this->id = $id;
+        //$this->id = $id;
         $this->titre = $titre;
         $this->description = $description;
     }

@@ -6,22 +6,17 @@ class Question extends AbstractDataObject
 {
     private int $id;
     private string $titre;
+    private string $description;
     private Utilisateur $auteur;
-    private int $nbSections;
     private Calendrier $calendrier;
 
-    /**
-     * @param int $id
-     * @param string $titre
-     * @param int $nbSections
-     * @param Calendrier $calendrier
-     */
-    public function __construct(int $id, string $titre, int $nbSections, Calendrier $calendrier)
+
+    public function __construct(string $titre, string $description, Calendrier $calendrier, Utilisateur $auteur)
     {
-        $this->id = $id;
         $this->titre = $titre;
-        $this->nbSections = $nbSections;
+        $this->description = "blabla";
         $this->calendrier = $calendrier;
+        $this->auteur = $auteur;
     }
 
     /**
@@ -73,29 +68,14 @@ class Question extends AbstractDataObject
         $this->titre = $titre;
     }
 
-    /**
-     * @return int
-     */
-    public function getNbSections(): int
-    {
-        return $this->nbSections;
-    }
-
-    /**
-     * @param int $nbSections
-     */
-    public function setNbSections(int $nbSections): void
-    {
-        $this->nbSections = $nbSections;
-    }
-
 
     public function formatTableau(): array
     {
         return array(
-        "id" =>  $this->id,
-        "titre" =>  $this->titre,
-        "nbSections" =>  $this->nbSections
-    );
+            "titreTag" => $this->titre,
+            "descriptionTag" => $this->description,
+            "idCalendrierTag" => $this->calendrier->getIdCalendrier(),
+            "idAuteurTag" => $this->auteur->getIdentifiant()
+        );
     }
 }

@@ -1,11 +1,13 @@
 <?php
 session_start();
+
 use App\Vote\Config\FormConfig as FormConfig;
-if(!isset($_SESSION['step'][1])){
+
+if (!isset($_SESSION['step'][1])) {
     FormConfig::redirect("index.php?controller=question&action=create");
 }
 
-if (isset($_POST['next'])){
+if (isset($_POST['next'])) {
     $debutEcriture = $_POST['debutEcriture'];
     $finEcriture = $_POST['finEcriture'];
     $debutVote = $_POST['debutVote'];
@@ -16,14 +18,14 @@ if (isset($_POST['next'])){
         $message = "Date de fin de vote inférieure à date de début de vote";
     } else if ($debutVote < $debutEcriture || $debutVote < $finEcriture) {
         $message = "La phase de vote doit commencer après la phase d'écriture";
-    }else{
+    } else {
         FormConfig::postSession();
         $_SESSION['step'][2] = 2;
         FormConfig::redirect("index.php?controller=question&action=form&step=3");
     }
 
 
-}else if (isset($_POST['previous'])){
+} else if (isset($_POST['previous'])) {
     FormConfig::postSession();
     FormConfig::redirect("index.php?controller=question&action=form&step=1");
 }
@@ -31,36 +33,36 @@ if (isset($_POST['next'])){
 ?>
 <h1>Selection du calendrier</h1>
 
-<form method="post" >
+<form method="post">
     <p>
         <label for="debutEcriture">Date de début d'écriture des propositions :</label>
         <input type="date" id="debutEcriture" name="debutEcriture"
-               value = "<?=FormConfig::TextField('debutEcriture')?>"
+               value="<?= FormConfig::TextField('debutEcriture') ?>"
                min="<?= date('Y-m-d'); ?>" required/>
     </p>
     <p>
         <label for="finEcriture">Date de fin d'écriture des propositions :</label>
         <input type="date" id="finEcriture" name="finEcriture"
-               value = "<?=FormConfig::TextField('finEcriture')?>"
+               value="<?= FormConfig::TextField('finEcriture') ?>"
                min="<?= date('Y-m-d'); ?>" required/>
     </p>
     <p>
         <label for="debutVote">Date de début des votes :</label>
         <input type="date" id="debutVote" name="debutVote"
-               value = "<?=FormConfig::TextField('debutVote')?>"
+               value="<?= FormConfig::TextField('debutVote') ?>"
                min="<?= date('Y-m-d'); ?>" required/>
     </p>
     <p>
         <label for="finVote">Date de fin des votes :</label>
         <input type="date" id="finVote" name="finVote"
-               value = "<?=FormConfig::TextField('finVote')?>"
+               value="<?= FormConfig::TextField('finVote') ?>"
                min="<?= date('Y-m-d'); ?>" required/>
     </p>
-    <input type="submit" name=next value="Suivant"/>
-    <input type="submit" name=previous value="Retour" formnovalidate/>
+    <input type="submit" name=previous value="Retour" class="nav" formnovalidate/>
+    <input type="submit" name=next value="Suivant" class="nav"/>
 </form>
 
 <?php
 if (isset($message)) {
-    echo "<div class=\"message\"><p><img width = 15px src=\"../web/images/attention.png\" class=\"attention\"  alt=\"Warning\"> " . $message . "</p></div>";
+    echo "<div class=\"message\"><p><img src=\"../web/images/attention.png\" class=\"attention\"  alt=\"Warning\"> " . $message . "</p></div>";
 } ?>
