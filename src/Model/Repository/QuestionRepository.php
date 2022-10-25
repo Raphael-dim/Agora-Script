@@ -2,6 +2,7 @@
 
 namespace App\Vote\Model\Repository;
 
+use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Question;
 
 class QuestionRepository extends AbstractRepository
@@ -11,8 +12,8 @@ class QuestionRepository extends AbstractRepository
         return new Question(
             $questionTableau["titre"],
             $questionTableau["description"],
-            $questionTableau["calendrier"],
-            $questionTableau["auteur"]
+            (new CalendrierRepository)->select($questionTableau["idcalendrier"]),
+            (new UtilisateurRepository)->select($questionTableau["idauteur"])
         );
     }
 

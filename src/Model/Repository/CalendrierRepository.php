@@ -10,10 +10,10 @@ class CalendrierRepository extends AbstractRepository
     protected function construire(array $calendrierTableau) : Calendrier
     {
         return new Calendrier(
-            $calendrierTableau["debutEcriture"],
-            $calendrierTableau["finEcriture"],
-            $calendrierTableau["debutVote"],
-            $calendrierTableau["finVote"],
+            $calendrierTableau["debutecriture"],
+            $calendrierTableau["finecriture"],
+            $calendrierTableau["debutvote"],
+            $calendrierTableau["finvote"],
         );
     }
 

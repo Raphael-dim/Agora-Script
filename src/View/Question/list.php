@@ -2,6 +2,7 @@
 
 //require "../src/View/Utilisateurs/search.php";
 foreach ($questions as $question) {
+    echo "<p>".$question->getTitre()."</p>";
 //    $nom =   rawurlencode($question->getNom());
 //    $prenom =   rawurlencode($question->getPrenom());
 //    $urlidentifiant = rawurlencode($question->getIdentifiant());

@@ -11,7 +11,7 @@ abstract class AbstractRepository
 
     public function sauvegarder(AbstractDataObject $object): ? int
     {
-        $sql = "INSERT INTO \"" . $this->getNomTable() . "\"";
+        $sql = "INSERT INTO " . $this->getNomTable() ;
         $sql = $sql . " (";
         foreach ($this->getNomsColonnes() as $colonne) {
             $sql = $sql . $colonne . ", ";
@@ -33,7 +33,7 @@ abstract class AbstractRepository
             echo($e->getMessage());
             return null;
         }
-        $id = DatabaseConnection::getPdo()->query("SELECT MAX(" . $this->getNomClePrimaire() . ") FROM \"" . $this->getNomTable() . "\"");
+        $id = DatabaseConnection::getPdo()->query("SELECT MAX(" . $this->getNomClePrimaire() . ") FROM " . $this->getNomTable());
         foreach ($id as $retour)
         {
             $max = $retour[0];
@@ -103,6 +103,28 @@ abstract class AbstractRepository
         }
 
         return $ADonnees;
+    }
+
+    public function select($clef)
+    {
+        $sql = 'SELECT * from '.$this->getNomTable() .' WHERE '.$this->getNomClePrimaire() .'=:clef';
+        // Préparation de la requête
+        $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
+
+        $values = array(
+            "clef" => $clef,
+        );
+        // On donne les valeurs et on exécute la requête
+        $pdoStatement->execute($values);
+
+        // On récupère les résultats comme précédemment
+        // Note: fetch() renvoie false si pas de voiture correspondante
+        $data = $pdoStatement->fetch();
+
+        if (!$data) {
+            return null;
+        }
+        return $this->construire($data);
     }
 
     protected abstract function getNomTable(): string;

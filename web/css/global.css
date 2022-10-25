@@ -72,3 +72,14 @@ span{
     padding:1px;
     border:dodgerblue;
 }
+
+.search{
+    height:20px;
+    width:20px;
+    background:lightgrey;
+    padding:2px;
+}
+
+.search:hover{
+    opacity:0.7;
+}
