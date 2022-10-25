@@ -11,7 +11,6 @@ class QuestionRepository extends AbstractRepository
         return new Question(
             $questionTableau["titre"],
             $questionTableau["description"],
-            $questionTableau["nbSections"],
             $questionTableau["calendrier"],
             $questionTableau["auteur"]
         );
@@ -24,12 +23,12 @@ class QuestionRepository extends AbstractRepository
 
     protected function getNomClePrimaire(): string
     {
-        return "id";
+        return "idQuestion";
     }
 
     protected function getNomsColonnes(): array
     {
-        return array("id", "titre", "nbSections");
+        return array("titre", "description", "idCalendrier", "idAuteur");
 
     }
 }

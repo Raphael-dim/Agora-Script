@@ -83,14 +83,23 @@ class ControllerQuestion
         session_start();
         $calendrier = new Calendrier($_SESSION['debutEcriture'], $_SESSION['finEcriture'], $_SESSION['debutVote'], $_SESSION['finVote']);
         $calendierBD = (new CalendrierRepository())->sauvegarder($calendrier);
+        if ($calendierBD != null)
+        {
+            $calendrier->setIdCalendrier($calendierBD);
+        }
+        else{
+
+        }
+
+        //var_dump($sections);
+        $utlisateur = new Utilisateur(1, "Créateur de question", "Prenom du monsieur");
+        $question = new Question($_SESSION['Titre'], "description", $calendrier, $utlisateur );
+        $questionBD = (new QuestionRepository())->sauvegarder($question);
+
+
         $auteurs = $_SESSION['auteurs'];
         $votants = $_SESSION['votants'];
 
-        //var_dump($sections);
-
-//        $question = new Question($_SESSION['Titre'], "description", $_SESSION['nbSections'], $calendrier, new Utilisateur("test", "test", "test"),);
-//        $questionBD = (new QuestionRepository())->sauvegarder($question);
-//
 //        $sections = $_SESSION['Sections'];
 //        foreach ($sections as $value) {
 //            $section = new Section($value['titre'], $value['description']);

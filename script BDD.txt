@@ -18,7 +18,6 @@ CREATE TABLE "Questions" (
 idQuestion serial PRIMARY KEY, 
 titre varchar(30),
 description varchar(100),
-nbSections int,
 idAuteur int,
 idCalendrier int,
 FOREIGN KEY (idCalendrier)

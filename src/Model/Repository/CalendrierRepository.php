@@ -29,6 +29,6 @@ class CalendrierRepository extends AbstractRepository
 
     protected function getNomsColonnes(): array
     {
-        return array("debutEcriture", "finEcriture", "debutVote", "finVote", "idCalendrier");
+        return array("debutEcriture", "finEcriture", "debutVote", "finVote");
     }
 }
