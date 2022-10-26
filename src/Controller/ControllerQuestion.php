@@ -9,6 +9,7 @@ use App\Vote\Model\DataObject\Section;
 use App\Vote\Model\DataObject\Utilisateur;
 use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\QuestionRepository;
+use App\Vote\Model\Repository\SectionRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
 
 class ControllerQuestion
@@ -112,11 +113,16 @@ class ControllerQuestion
         $auteurs = $_SESSION['auteurs'];
         $votants = $_SESSION['votants'];
 
-//        $sections = $_SESSION['Sections'];
-//        foreach ($sections as $value) {
-//            $section = new Section($value['titre'], $value['description']);
-//            var_dump($section);
-//        }
+        $sections = $_SESSION['Sections'];
+        foreach ($sections as $value) {
+            $section = new Section($value['titre'], $value['description'], $question);
+            $sectionBD = (new SectionRepository())->sauvegarder($section);
+            if ($sectionBD != null) {
+                $section->setId($sectionBD);
+            } else {
+                self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+            }
+        }
 
         $questions = (new QuestionRepository())->selectAll();
 

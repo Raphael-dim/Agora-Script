@@ -7,7 +7,7 @@ use App\Vote\Model\DataObject\Question;
 
 class QuestionRepository extends AbstractRepository
 {
-    protected function construire(array $questionTableau) : Question
+    protected function construire(array $questionTableau): Question
     {
         $question = new Question(
             $questionTableau["titre"],
