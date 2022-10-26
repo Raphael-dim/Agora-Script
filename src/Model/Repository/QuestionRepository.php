@@ -2,6 +2,7 @@
 
 namespace App\Vote\Model\Repository;
 
+use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Question;
 
 class QuestionRepository extends AbstractRepository
@@ -9,9 +10,10 @@ class QuestionRepository extends AbstractRepository
     protected function construire(array $questionTableau) : Question
     {
         return new Question(
-            $questionTableau["id"],
             $questionTableau["titre"],
-            $questionTableau["nbSections"]
+            $questionTableau["description"],
+            (new CalendrierRepository)->select($questionTableau["idcalendrier"]),
+            (new UtilisateurRepository)->select($questionTableau["idauteur"])
         );
     }
 
@@ -22,12 +24,12 @@ class QuestionRepository extends AbstractRepository
 
     protected function getNomClePrimaire(): string
     {
-        return "id";
+        return "idQuestion";
     }
 
     protected function getNomsColonnes(): array
     {
-        return array("id", "titre", "nbSections");
+        return array("titre", "description", "idCalendrier", "idAuteur");
 
     }
 }

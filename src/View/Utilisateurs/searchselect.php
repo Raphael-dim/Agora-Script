@@ -13,11 +13,9 @@ if ((isset($_POST["keyword"]) && isset($_POST["row"]))) {
     <fieldset>
         <legend>Selectionner des <?php echo $_SESSION['type'] ?> :</legend>
         <p>
-            <input type="text" placeholder="" name="keyword" id="motclef" value ="<?php echo $keyword ?>"required/>
+            <input type="text" placeholder="" name="keyword" id="motclef" value ="<?php echo $keyword ?>" required/>
             <input type ="hidden" name = "row" value = "nom" />
-        </p>
-        <p>
-            <input type="submit" value="Envoyer" />
+            <input type="image" alt = "Submit" src="../web/images/search.png" value="Envoyer" class = "search"/>
         </p>
     </fieldset>
 </form>
