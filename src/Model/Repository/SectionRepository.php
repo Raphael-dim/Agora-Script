@@ -14,6 +14,7 @@ class SectionRepository extends AbstractRepository
             $questionTableau["description"]
         );
         $section->setId($questionTableau["idsection"]);
+        return $section;
     }
 
     protected function getNomTable(): string
