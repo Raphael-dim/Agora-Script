@@ -7,14 +7,16 @@ use App\Vote\Model\DataObject\Question;
 
 class QuestionRepository extends AbstractRepository
 {
-    protected function construire(array $questionTableau) : Question
+    protected function construire(array $questionTableau): Question
     {
-        return new Question(
+        $question = new Question(
             $questionTableau["titre"],
             $questionTableau["description"],
             (new CalendrierRepository)->select($questionTableau["idcalendrier"]),
             (new UtilisateurRepository)->select($questionTableau["idauteur"])
         );
+        $question->setId($questionTableau["idquestion"]);
+        return $question;
     }
 
     protected function getNomTable(): string

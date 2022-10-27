@@ -26,7 +26,6 @@ class Calendrier extends AbstractDataObject
         $this->debutVote = $debutVote;
         $this->finVote = $finVote;
     }
-
     /**
      * @return string
      */
