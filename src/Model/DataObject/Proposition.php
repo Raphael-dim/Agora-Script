@@ -88,7 +88,7 @@ class Proposition extends AbstractDataObject
         return array(
             "titreTag" => $this->titre,
             "contenuTag" => $this->contenu,
-            "idAuteurTag" => $this->contenu->getIdCalendrier(),
+            "idAuteurTag" => $this->auteur->getIdentifiant(),
             "idQuestionTag" => $this->question->getId()
         );
     }

@@ -104,7 +104,7 @@ abstract class AbstractRepository
         return $ADonnees;
     }
 
-    public function select($clef,$row = '*')
+    /*public function select($clef,$row = '*')
     {
         $sql = 'SELECT ' . $row .' from ' . $this->getNomTable() . ' WHERE ' . $this->getNomClePrimaire() . '=:clef';
         // Préparation de la requête
@@ -124,6 +124,35 @@ abstract class AbstractRepository
             return null;
         }
         return $this->construire($data);
+    }*/
+
+    public function select($clef,$rowSelect = '*', $whereCondition = null)
+    {
+        $ADonnees = array();
+        $sql = 'SELECT ' . $rowSelect . ' from ' . $this->getNomTable();
+        if(is_null($whereCondition)){
+            $sql = $sql . ' WHERE '. $this->getNomClePrimaire() . ' =:clef';
+        }else{
+            $sql = $sql . ' WHERE '. $whereCondition . ' =:clef';
+        }
+        // Préparation de la requête
+        $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
+
+        $values = array(
+            "clef" => $clef,
+        );
+
+        $pdoStatement->execute($values);
+
+        foreach ($pdoStatement as $donneesFormatTableau) {
+            if ($pdoStatement->rowCount() > 1) {
+                $ADonnees[] = $this::construire(json_decode(json_encode($donneesFormatTableau), true));
+            } else {
+                return $this::construire(json_decode(json_encode($donneesFormatTableau), true));
+            }
+        }
+        //var_dump($ADonnees);
+        return $ADonnees;
     }
 
     protected abstract function getNomTable(): string;
