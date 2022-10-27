@@ -9,6 +9,7 @@ use App\Vote\Model\DataObject\Section;
 use App\Vote\Model\DataObject\Utilisateur;
 use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\QuestionRepository;
+use App\Vote\Model\Repository\SectionRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
 
 class ControllerQuestion
@@ -22,6 +23,16 @@ class ControllerQuestion
         }
 
         self::form();
+    }
+
+    public static function readAll()
+    {
+        $questions = (new QuestionRepository())->selectAll();
+
+        self::afficheVue('view.php',
+            ["questions" => $questions,
+                "pagetitle" => "Liste des questions",
+                "cheminVueBody" => "Question/list.php"]);
     }
 
     public static function form(): void
@@ -83,34 +94,41 @@ class ControllerQuestion
         session_start();
         $calendrier = new Calendrier($_SESSION['debutEcriture'], $_SESSION['finEcriture'], $_SESSION['debutVote'], $_SESSION['finVote']);
         $calendierBD = (new CalendrierRepository())->sauvegarder($calendrier);
-        if ($calendierBD != null)
-        {
+        if ($calendierBD != null) {
             $calendrier->setIdCalendrier($calendierBD);
-        }
-        else{
-
+        } else {
+            self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
 
         //var_dump($sections);
         $utilisateur = (new UtilisateurRepository)->select("hambrighta");
-        $question = new Question($_SESSION['Titre'], "description", $calendrier, $utilisateur );
+        $question = new Question($_SESSION['Titre'], "description", $calendrier, $utilisateur);
         $questionBD = (new QuestionRepository())->sauvegarder($question);
-
+        if ($questionBD != null) {
+            $question->setId($questionBD);
+        } else {
+            self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+        }
 
         $auteurs = $_SESSION['auteurs'];
         $votants = $_SESSION['votants'];
 
-//        $sections = $_SESSION['Sections'];
-//        foreach ($sections as $value) {
-//            $section = new Section($value['titre'], $value['description']);
-//            var_dump($section);
-//        }
+        $sections = $_SESSION['Sections'];
+        foreach ($sections as $value) {
+            $section = new Section($value['titre'], $value['description'], $question);
+            $sectionBD = (new SectionRepository())->sauvegarder($section);
+            if ($sectionBD != null) {
+                $section->setId($sectionBD);
+            } else {
+                self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+            }
+        }
 
         $questions = (new QuestionRepository())->selectAll();
 
         self::afficheVue('view.php',
             ["questions" => $questions,
-                "pagetitle" => "Rechercher un utilisateur",
+                "pagetitle" => "Question crée",
                 "cheminVueBody" => "Question/created.php"]);
 
     }

@@ -38,7 +38,7 @@ main p a {
     max-width: 45px;
 }
 
-h1, h2{
+h1, h2 {
     color: #dcdcdc;
 }
 
@@ -66,20 +66,24 @@ form legend {
     border-color: #dff5f4;
 }
 
-span{
-    background:lightblue;
+span {
+    background: lightblue;
     opacity: 0.8;
-    padding:1px;
-    border:dodgerblue;
+    padding: 1px;
+    border: dodgerblue;
 }
 
-.search{
-    height:20px;
-    width:20px;
-    background:lightgrey;
-    padding:2px;
+.search {
+    height: 20px;
+    width: 20px;
+    background: lightgrey;
+    padding: 2px;
 }
 
-.search:hover{
-    opacity:0.7;
+.search:hover {
+    opacity: 0.7;
+}
+
+li, a {
+    color: #dff5f4;
 }
