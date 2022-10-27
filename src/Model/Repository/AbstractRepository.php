@@ -104,9 +104,9 @@ abstract class AbstractRepository
         return $ADonnees;
     }
 
-    public function select($clef)
+    public function select($clef,$row = '*')
     {
-        $sql = 'SELECT * from ' . $this->getNomTable() . ' WHERE ' . $this->getNomClePrimaire() . '=:clef';
+        $sql = 'SELECT ' . $row .' from ' . $this->getNomTable() . ' WHERE ' . $this->getNomClePrimaire() . '=:clef';
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
 
