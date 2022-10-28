@@ -6,13 +6,15 @@ use App\Vote\Model\DataObject\Section;
 
 class SectionRepository extends AbstractRepository
 {
-    protected function construire(array $questionTableau) : Section
+    protected function construire(array $questionTableau): Section
     {
-        return new Section(
-            $questionTableau["id"],
+        $section = new Section(
             $questionTableau["titre"],
-            $questionTableau["description"]
+            $questionTableau["description"],
+            (new QuestionRepository())->select($questionTableau['idquestion'])
         );
+        $section->setId($questionTableau["idsection"]);
+        return $section;
     }
 
     protected function getNomTable(): string
@@ -22,12 +24,12 @@ class SectionRepository extends AbstractRepository
 
     protected function getNomClePrimaire(): string
     {
-        return "id";
+        return "idsection";
     }
 
     protected function getNomsColonnes(): array
     {
-        return array("id", "titre", "description");
+        return array("idquestion", "titre", "description");
 
     }
 }

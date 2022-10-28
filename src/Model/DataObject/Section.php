@@ -6,7 +6,7 @@ class Section extends AbstractDataObject
 {
     private int $id;
     private string $titre;
-    private int $description;
+    private string $description;
     private Question $question;
 
     /**
@@ -14,11 +14,11 @@ class Section extends AbstractDataObject
      * @param string $titre
      * @param int $nbSections
      */
-    public function __construct(string $titre, int $description, Question $question)
+    public function __construct(string $titre, string $description, Question $question)
     {
-        //$this->id = $id;
         $this->titre = $titre;
         $this->description = $description;
+        $this->question = $question;
     }
 
     /**
@@ -45,18 +45,12 @@ class Section extends AbstractDataObject
         return $this->titre;
     }
 
-    /**
-     * @return int
-     */
-    public function getDescription(): int
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @param int $description
-     */
-    public function setDescription(int $description): void
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }
@@ -72,9 +66,9 @@ class Section extends AbstractDataObject
     public function formatTableau(): array
     {
         return array(
-            "id" =>  $this->id,
-            "titre" =>  $this->titre,
-            "description" =>  $this->description
+            "idquestionTag" => $this->question->getId(),
+            "titreTag" => $this->titre,
+            "descriptionTag" => $this->description
         );
     }
 }
