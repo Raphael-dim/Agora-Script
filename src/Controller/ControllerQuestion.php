@@ -4,18 +4,21 @@ namespace App\Vote\Controller;
 
 
 use App\Vote\Model\DataObject\Calendrier;
-use App\Vote\Model\DataObject\Proposition;
 use App\Vote\Model\DataObject\Question;
 use App\Vote\Model\DataObject\Section;
 use App\Vote\Model\DataObject\Utilisateur;
 use App\Vote\Model\Repository\CalendrierRepository;
-use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\SectionRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
 
 class ControllerQuestion
 {
+
+    /*
+     * Réinitialise les variables de session et
+     * lance le formulaire de création
+     */
     public static function create()
     {
         if (!isset($_SESSION)) {
@@ -31,25 +34,31 @@ class ControllerQuestion
     {
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $sections = (new SectionRepository())->select($_GET['idQuestion'],'*',"idquestion");
-        //$propositions = (new PropositionRepository())->select($_GET['idQuestion'],"*","idQuestion");
 
-        Controller::afficheVue('view.php', ["question" => $question,
+        self::afficheVue('view.php', ["question" => $question,
                                                 "sections" => $sections,
-                                                //"propositions" => $propositions,
                                                 "pagetitle" => "Detail question",
                                                 "cheminVueBody" => "Question/detail.php"]);
     }
+
+
+    /*
+     * Liste les questions
+     */
 
     public static function readAll()
     {
         $questions = (new QuestionRepository())->selectAll();
 
-        Controller::afficheVue('view.php',
+        self::afficheVue('view.php',
             ["questions" => $questions,
                 "pagetitle" => "Liste des questions",
                 "cheminVueBody" => "Question/list.php"]);
     }
 
+    /*
+     * Lancement des page du formulaire de création de la Question
+     */
     public static function form(): void
     {
         $view = "";
@@ -89,21 +98,31 @@ class ControllerQuestion
 
         }
 
-        Controller::afficheVue('view.php',
+        self::afficheVue('view.php',
             array_merge(["pagetitle" => "Créer une question",
                 "cheminVueBody" => "Question/create/" . $view . ".php"], $params));
     }
 
 
+    /*
+     * Recherche de Question
+     */
     public static function search()
     {
         $utilisateurs = array();
-        Controller::afficheVue('view.php',
+        self::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,
                 "pagetitle" => "Rechercher un utilisateur",
                 "cheminVueBody" => "Question/create/step-4.php"]);
     }
 
+    /*
+     * Enregistre dans la base de donnée toutes les données relatives à la Question:
+     * - Calendrier
+     * - Auteurs
+     * - Sections
+     * - Votants
+     */
     public static function created(): void
     {
         session_start();
@@ -112,7 +131,7 @@ class ControllerQuestion
         if ($calendierBD != null) {
             $calendrier->setIdCalendrier($calendierBD);
         } else {
-            Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+            self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
 
         //var_dump($sections);
@@ -122,7 +141,7 @@ class ControllerQuestion
         if ($questionBD != null) {
             $question->setId($questionBD);
         } else {
-            Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+            self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
 
         $auteurs = $_SESSION['auteurs'];
@@ -135,13 +154,13 @@ class ControllerQuestion
             if ($sectionBD != null) {
                 $section->setId($sectionBD);
             } else {
-                Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+                self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
             }
         }
 
         $questions = (new QuestionRepository())->selectAll();
 
-        Controller::afficheVue('view.php',
+        self::afficheVue('view.php',
             ["questions" => $questions,
                 "pagetitle" => "Question crée",
                 "cheminVueBody" => "Question/created.php"]);
