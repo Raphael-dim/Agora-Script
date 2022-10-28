@@ -35,7 +35,7 @@ class ControllerQuestion
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $sections = (new SectionRepository())->select($_GET['idQuestion'],'*',"idquestion");
 
-        self::afficheVue('view.php', ["question" => $question,
+        Controller::afficheVue('view.php', ["question" => $question,
                                                 "sections" => $sections,
                                                 "pagetitle" => "Detail question",
                                                 "cheminVueBody" => "Question/detail.php"]);
@@ -50,7 +50,7 @@ class ControllerQuestion
     {
         $questions = (new QuestionRepository())->selectAll();
 
-        self::afficheVue('view.php',
+        Controller::afficheVue('view.php',
             ["questions" => $questions,
                 "pagetitle" => "Liste des questions",
                 "cheminVueBody" => "Question/list.php"]);
@@ -98,7 +98,7 @@ class ControllerQuestion
 
         }
 
-        self::afficheVue('view.php',
+        Controller::afficheVue('view.php',
             array_merge(["pagetitle" => "Créer une question",
                 "cheminVueBody" => "Question/create/" . $view . ".php"], $params));
     }
@@ -110,7 +110,7 @@ class ControllerQuestion
     public static function search()
     {
         $utilisateurs = array();
-        self::afficheVue('view.php',
+        Controller::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,
                 "pagetitle" => "Rechercher un utilisateur",
                 "cheminVueBody" => "Question/create/step-4.php"]);
@@ -131,7 +131,7 @@ class ControllerQuestion
         if ($calendierBD != null) {
             $calendrier->setIdCalendrier($calendierBD);
         } else {
-            self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+            Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
 
         //var_dump($sections);
@@ -141,7 +141,7 @@ class ControllerQuestion
         if ($questionBD != null) {
             $question->setId($questionBD);
         } else {
-            self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+            Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
 
         $auteurs = $_SESSION['auteurs'];
@@ -154,13 +154,13 @@ class ControllerQuestion
             if ($sectionBD != null) {
                 $section->setId($sectionBD);
             } else {
-                self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+                Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
             }
         }
 
         $questions = (new QuestionRepository())->selectAll();
 
-        self::afficheVue('view.php',
+        Controller::afficheVue('view.php',
             ["questions" => $questions,
                 "pagetitle" => "Question crée",
                 "cheminVueBody" => "Question/created.php"]);
