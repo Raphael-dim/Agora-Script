@@ -8,6 +8,9 @@ if (!isset($_SESSION['step'][1])) {
 }
 
 if (isset($_POST['next'])) {
+    /*
+     * Vérification de la continuité des dates
+     */
     $debutEcriture = $_POST['debutEcriture'];
     $finEcriture = $_POST['finEcriture'];
     $debutVote = $_POST['debutVote'];
