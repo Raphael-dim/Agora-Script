@@ -30,9 +30,23 @@ class ControllerQuestion
         self::form();
     }
 
+
+    public static function read()
+    {
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        $sections = (new SectionRepository())->select($_GET['idQuestion'],'*',"idquestion");
+
+        self::afficheVue('view.php', ["question" => $question,
+                                                "sections" => $sections,
+                                                "pagetitle" => "Detail question",
+                                                "cheminVueBody" => "Question/detail.php"]);
+    }
+
+
     /*
      * Liste les questions
      */
+
     public static function readAll()
     {
         $questions = (new QuestionRepository())->selectAll();
