@@ -48,6 +48,7 @@ class ControllerQuestion
 
     public static function readAll()
     {
+        //A optimiser
         $questions = (new QuestionRepository())->selectAll();
 
         Controller::afficheVue('view.php',
