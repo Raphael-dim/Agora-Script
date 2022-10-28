@@ -125,7 +125,7 @@ abstract class AbstractRepository
     /*
      * Selectionne une ligne par rapport à la clef primaire
      */
- public function select($clef,$row = '*')
+ /*public function select($clef,$row = '*')
     {
         $sql = 'SELECT ' . $row .' from ' . $this->getNomTable() . ' WHERE ' . $this->getNomClePrimaire() . '=:clef';
         // Préparation de la requête
