@@ -79,7 +79,7 @@ abstract class AbstractRepository
 
         foreach ($pdoStatement as $donneesFormatTableau) {
 
-            $ADonnees[] = $this::construire(json_decode(json_encode($donneesFormatTableau), true));
+            $ADonnees[] = $this::construire(($donneesFormatTableau));
         }
         return $ADonnees;
     }
@@ -98,7 +98,7 @@ abstract class AbstractRepository
         $pdoStatement->execute($values);
 
         foreach ($pdoStatement as $donneesFormatTableau) {
-            $ADonnees[] = $this::construire(json_decode(json_encode($donneesFormatTableau), true));
+            $ADonnees[] = $this::construire(($donneesFormatTableau));
         }
 
         return $ADonnees;
@@ -148,10 +148,9 @@ abstract class AbstractRepository
             if ($pdoStatement->rowCount() > 1) {
                 $ADonnees[] = $this::construire(json_decode(json_encode($donneesFormatTableau), true));
             } else {
-                return $this::construire(json_decode(json_encode($donneesFormatTableau), true));
+                return $this::construire($donneesFormatTableau);
             }
         }
-        //var_dump($ADonnees);
         return $ADonnees;
     }
 

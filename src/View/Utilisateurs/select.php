@@ -44,8 +44,6 @@ else{
                         <p><button type = submit value = "'.$identifiant.'" name = "user">' . $nom .' ' . $prenom . '</button></p>
                         <input type ="hidden" name = "row" value = "nom" />
                         <input type = "hidden" name = "keyword" value ="'. $keyword . '"/> 
-       
-                        
                     </form>
                     '
             ;

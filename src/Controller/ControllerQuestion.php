@@ -4,10 +4,12 @@ namespace App\Vote\Controller;
 
 
 use App\Vote\Model\DataObject\Calendrier;
+use App\Vote\Model\DataObject\Proposition;
 use App\Vote\Model\DataObject\Question;
 use App\Vote\Model\DataObject\Section;
 use App\Vote\Model\DataObject\Utilisateur;
 use App\Vote\Model\Repository\CalendrierRepository;
+use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\SectionRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
@@ -29,9 +31,11 @@ class ControllerQuestion
     {
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $sections = (new SectionRepository())->select($_GET['idQuestion'],'*',"idquestion");
+        //$propositions = (new PropositionRepository())->select($_GET['idQuestion'],"*","idQuestion");
 
-        self::afficheVue('view.php', ["question" => $question,
+        Controller::afficheVue('view.php', ["question" => $question,
                                                 "sections" => $sections,
+                                                //"propositions" => $propositions,
                                                 "pagetitle" => "Detail question",
                                                 "cheminVueBody" => "Question/detail.php"]);
     }
@@ -40,7 +44,7 @@ class ControllerQuestion
     {
         $questions = (new QuestionRepository())->selectAll();
 
-        self::afficheVue('view.php',
+        Controller::afficheVue('view.php',
             ["questions" => $questions,
                 "pagetitle" => "Liste des questions",
                 "cheminVueBody" => "Question/list.php"]);
@@ -85,7 +89,7 @@ class ControllerQuestion
 
         }
 
-        self::afficheVue('view.php',
+        Controller::afficheVue('view.php',
             array_merge(["pagetitle" => "Créer une question",
                 "cheminVueBody" => "Question/create/" . $view . ".php"], $params));
     }
@@ -94,7 +98,7 @@ class ControllerQuestion
     public static function search()
     {
         $utilisateurs = array();
-        self::afficheVue('view.php',
+        Controller::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,
                 "pagetitle" => "Rechercher un utilisateur",
                 "cheminVueBody" => "Question/create/step-4.php"]);
@@ -108,7 +112,7 @@ class ControllerQuestion
         if ($calendierBD != null) {
             $calendrier->setIdCalendrier($calendierBD);
         } else {
-            self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+            Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
 
         //var_dump($sections);
@@ -118,7 +122,7 @@ class ControllerQuestion
         if ($questionBD != null) {
             $question->setId($questionBD);
         } else {
-            self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+            Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
 
         $auteurs = $_SESSION['auteurs'];
@@ -131,13 +135,13 @@ class ControllerQuestion
             if ($sectionBD != null) {
                 $section->setId($sectionBD);
             } else {
-                self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+                Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
             }
         }
 
         $questions = (new QuestionRepository())->selectAll();
 
-        self::afficheVue('view.php',
+        Controller::afficheVue('view.php',
             ["questions" => $questions,
                 "pagetitle" => "Question crée",
                 "cheminVueBody" => "Question/created.php"]);
@@ -147,14 +151,8 @@ class ControllerQuestion
 
     public static function recap()
     {
-        self::afficheVue('view.php',
+        Controller::afficheVue('view.php',
             ["pagetitle" => "Creer une question",
                 "cheminVueBody" => "Question/create/step-6.php"]);
-    }
-
-    private static function afficheVue(string $cheminVue, array $parametres = []): void
-    {
-        extract($parametres); // Crée des variables à partir du tableau $paramètres
-        require "../src/view/$cheminVue"; // Charge la vue
     }
 }

@@ -2,6 +2,7 @@ DROP TABLE Utilisateurs CASCADE ;
 DROP TABLE Calendriers CASCADE;
 DROP TABLE Sections CASCADE;
 DROP TABLE Questions CASCADE;
+DROP TABLE Propositions CASCADE;
 
 
 CREATE TABLE Utilisateurs
@@ -41,3 +42,37 @@ desciption VARCHAR(100),
 PRIMARY KEY (idSection, idQuestion),
 FOREIGN KEY (idQuestion)
       REFERENCES Questions (idQuestion));
+
+CREATE TABLE Propositions (
+idProposition serial PRIMARY KEY,
+idQuestion int,
+idUtilisateur int,
+titre VARCHAR(30),
+contenu VARCHAR(1000),
+PRIMARY KEY (idProposition, idQuestion,idUtilisateur),
+FOREIGN KEY (idQuestion)
+    REFERENCES Questions (idQuestion),
+FOREIGN KEY (idUtilisateur)
+    REFERENCES Questions (idUtilisateur));
+
+CREATE TABLE Auteurs (
+idQuestion int,
+idUtilisateur int,
+titre VARCHAR(30),
+contenu VARCHAR(1000),
+PRIMARY KEY (idQuestion,idUtilisateur),
+FOREIGN KEY (idQuestion)
+    REFERENCES Questions (idQuestion),
+FOREIGN KEY (idUtilisateur)
+    REFERENCES Questions (idUtilisateur));
+
+CREATE TABLE Votants (
+idQuestion int,
+idUtilisateur int,
+titre VARCHAR(30),
+contenu VARCHAR(1000),
+PRIMARY KEY (idQuestion,idUtilisateur),
+FOREIGN KEY (idQuestion)
+    REFERENCES Questions (idQuestion),
+FOREIGN KEY (idUtilisateur)
+    REFERENCES Questions (idUtilisateur));

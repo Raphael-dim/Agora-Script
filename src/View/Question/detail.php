@@ -44,3 +44,23 @@
 
     ?>
 </div>
+
+<div>
+    <h2>Propositions</h2>
+    <p>Pas encore dispo</p>
+    <!--<?php
+    if(is_array($propositions)){
+        foreach ($propositions as $Section) {
+            echo '<p>' . $Section->getTitre() . '</p>';
+            echo '<p>' . $propositions->getAuteur() . '</p>';
+            echo '<p>' . $Section->getContenu() . '</p>';
+            echo '&nbsp';
+        }
+    }else{
+        echo '<p>' . $propositions->getTitre() . '</p>';
+        echo '<p>' . $propositions->getAuteur() . '</p>';
+        echo '<p>' . $propositions->getContenu() . '</p>';
+        echo '&nbsp';
+    }
+    ?>//-->
+</div>

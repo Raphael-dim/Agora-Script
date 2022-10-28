@@ -1,7 +1,6 @@
 nav {
     position: absolute;
     width: 100%;
-    margin: 0;
     display: block;
     margin: auto;
     color: white;
@@ -68,5 +67,3 @@ ul[id="Menu"] li {
     display: inline;
     border-radius: 0;
 }
-
-

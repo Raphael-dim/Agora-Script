@@ -4,7 +4,6 @@ require_once '../src/Lib/Psr4AutoloaderClass.php';
 
 use App\Vote\Controller\ControllerAccueil;
 use App\Vote\Model\DatabaseConnection as Model;
-
 $loader = new App\Vote\Lib\Psr4AutoloaderClass();
 $loader->addNamespace('App\Vote', __DIR__ . '/../src');
 // register the autoloader
