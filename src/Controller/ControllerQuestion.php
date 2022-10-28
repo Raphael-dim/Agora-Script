@@ -14,6 +14,11 @@ use App\Vote\Model\Repository\UtilisateurRepository;
 
 class ControllerQuestion
 {
+
+    /*
+     * Réinitialise les variables de session et
+     * lance le formulaire de création
+     */
     public static function create()
     {
         if (!isset($_SESSION)) {
@@ -24,6 +29,7 @@ class ControllerQuestion
 
         self::form();
     }
+
 
     public static function read()
     {
@@ -36,6 +42,11 @@ class ControllerQuestion
                                                 "cheminVueBody" => "Question/detail.php"]);
     }
 
+
+    /*
+     * Liste les questions
+     */
+
     public static function readAll()
     {
         $questions = (new QuestionRepository())->selectAll();
@@ -46,6 +57,9 @@ class ControllerQuestion
                 "cheminVueBody" => "Question/list.php"]);
     }
 
+    /*
+     * Lancement des page du formulaire de création de la Question
+     */
     public static function form(): void
     {
         $view = "";
@@ -91,6 +105,9 @@ class ControllerQuestion
     }
 
 
+    /*
+     * Recherche de Question
+     */
     public static function search()
     {
         $utilisateurs = array();
@@ -100,6 +117,13 @@ class ControllerQuestion
                 "cheminVueBody" => "Question/create/step-4.php"]);
     }
 
+    /*
+     * Enregistre dans la base de donnée toutes les données relatives à la Question:
+     * - Calendrier
+     * - Auteurs
+     * - Sections
+     * - Votants
+     */
     public static function created(): void
     {
         session_start();
@@ -144,13 +168,6 @@ class ControllerQuestion
 
     }
 
-
-    public static function recap()
-    {
-        self::afficheVue('view.php',
-            ["pagetitle" => "Creer une question",
-                "cheminVueBody" => "Question/create/step-6.php"]);
-    }
 
     private static function afficheVue(string $cheminVue, array $parametres = []): void
     {
