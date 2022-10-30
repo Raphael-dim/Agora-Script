@@ -57,11 +57,11 @@ form legend {
     background-color: #dff5f4;
     font-size: 17px;
     border-radius: 15px;
+    transition: 0.3s;
 }
 
 .nav *:hover, form .nav:hover {
     color: white;
-    font-size: 20px;
     background-color: #1a3341;
     border-color: #dff5f4;
 }

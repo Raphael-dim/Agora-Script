@@ -92,7 +92,7 @@ abstract class AbstractRepository
 
         foreach ($pdoStatement as $donneesFormatTableau) {
 
-            $ADonnees[] = $this::construire(($donneesFormatTableau));
+            $ADonnees[] = $this::construire(json_decode(json_encode($donneesFormatTableau), true));
         }
         return $ADonnees;
     }
@@ -115,7 +115,7 @@ abstract class AbstractRepository
         $pdoStatement->execute($values);
 
         foreach ($pdoStatement as $donneesFormatTableau) {
-            $ADonnees[] = $this::construire(($donneesFormatTableau));
+            $ADonnees[] = $this::construire(json_decode(json_encode($donneesFormatTableau), true));
         }
 
         return $ADonnees;
@@ -125,27 +125,6 @@ abstract class AbstractRepository
     /*
      * Selectionne une ligne par rapport à la clef primaire
      */
- /*public function select($clef,$row = '*')
-    {
-        $sql = 'SELECT ' . $row .' from ' . $this->getNomTable() . ' WHERE ' . $this->getNomClePrimaire() . '=:clef';
-        // Préparation de la requête
-        $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
-
-        $values = array(
-            "clef" => $clef,
-        );
-        // On donne les valeurs et on exécute la requête
-        $pdoStatement->execute($values);
-
-        // On récupère les résultats comme précédemment
-        // Note: fetch() renvoie false si pas de voiture correspondante
-        $data = $pdoStatement->fetch();
-
-        if (!$data) {
-            return null;
-        }
-        return $this->construire($data);
-    }*/
 
     public function select($clef,$rowSelect = '*', $whereCondition = null)
     {
@@ -172,6 +151,7 @@ abstract class AbstractRepository
                 return $this::construire($donneesFormatTableau);
             }
         }
+        //var_dump($ADonnees);
         return $ADonnees;
     }
 
