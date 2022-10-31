@@ -2,6 +2,7 @@
 session_start();
 
 use App\Vote\Config\FormConfig as FormConfig;
+use App\Vote\Model\Repository\QuestionRepository;
 
 if (isset($_POST['Titre'])) {
     FormConfig::postSession();
@@ -15,8 +16,15 @@ if (isset($_POST['Titre'])) {
 }
 
 ?>
-
-<h1>Création d'un question</h1>
+<?php  if (isset($_GET['idQuestion'])){
+    echo "<h1>Modification de la question</h1>";
+    $question = (new QuestionRepository())->select($_GET['idQuestion']);
+    $_SESSION['idQuestion'] = $question->getId();
+}
+else {
+    echo "<h1>Création d'une question</h1>";
+}
+?>
 
 
 <form method="post">
@@ -24,6 +32,11 @@ if (isset($_POST['Titre'])) {
     <p>
         <label for="titre_id">Titre</label> :
         <input type="text" placeholder="Ex : " name="Titre" id="titre_id" value="<?= FormConfig::TextField('Titre') ?>"
+               required/>
+    </p>
+    <p>
+        <label for="description_id">Description</label> :
+        <input type="text" placeholder="Ex : " name="Description" id="description_id" value="<?= FormConfig::TextField('Description') ?>"
                required/>
     </p>
     <p>

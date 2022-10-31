@@ -1,9 +1,12 @@
-<p>Titre <?php echo $question->getTitre() ?></p>
+<p>Titre : <?= $question->getTitre() ?></p>
+<p>Description : <?= $question->getDescription() ?></p>
 
 <div>
     <h2>Calendrier</h2>
-    <p>Phase d'écriture : du <?= $question->getCalendrier()->getDebutEcriture() ?> au <?= $question->getCalendrier()->getFinEcriture() ?></p>
-    <p>Phase de vote : du <?= $question->getCalendrier()->getDebutVote() ?> au <?= $question->getCalendrier()->getFinEcriture() ?></p>
+    <p>Phase d'écriture : du <?= $question->getCalendrier()->getDebutEcriture() ?>
+        au <?= $question->getCalendrier()->getFinEcriture() ?></p>
+    <p>Phase de vote : du <?= $question->getCalendrier()->getDebutVote() ?>
+        au <?= $question->getCalendrier()->getFinEcriture() ?></p>
 </div>
 
 <div>
@@ -26,21 +29,27 @@
     ?>//-->
 </div>
 
-
-<div>
-    <h2>Sections</h2>
-    <?php
-    if(is_array($sections)){
-        foreach ($sections as $Section) {
-            echo '<p>' . $Section->getTitre() . '</p>';
-            echo '<p>' . $Section->getDescription() . '</p>';
-            echo '&nbsp';
-        }
-    }else{
-        echo '<p>' . $sections->getTitre() . '</p>';
-        echo '<p>' . $sections->getDescription() . '</p>';
+<h2>Sections</h2>
+<?php
+if (is_array($sections)) {
+    $i = 1;
+    foreach ($sections as $Section) {
+        echo '<h3> Section n° ' . $i . '</h3>';
+        echo '<p>' . $Section->getTitre() . '</p>';
+        echo '<p>' . $Section->getDescription() . '</p>';
         echo '&nbsp';
+        $i++;
     }
+} else {
+    echo '<h3> Section n°1</h3>';
+    echo '<p>' . $sections->getTitre() . '</p>';
+    echo '<p>' . $sections->getDescription() . '</p>';
+    echo '&nbsp';
+}
 
-    ?>
-</div>
+?>
+<h2>Date de création :</h2>
+<p>
+    <?= $question->getcreation(); ?>
+</p>
+

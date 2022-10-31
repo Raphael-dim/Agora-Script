@@ -7,10 +7,13 @@ use App\Vote\Config\FormConfig as FormConfig;
 if (isset($_POST['previous'])) {
     FormConfig::postSession();
     FormConfig::redirect("index.php?controller=question&action=form&step=5");
-}
-else if (isset($_POST['next'])) {
-    FormConfig::postSession();
-    FormConfig::redirect("index.php?controller=question&action=created");
+} else if (isset($_POST['next'])) {
+    if (isset($_SESSION['idQuestion'])) {
+        FormConfig::redirect('index.php?controller=question&action=updated');
+    } else {
+        FormConfig::postSession();
+        FormConfig::redirect("index.php?controller=question&action=created");
+    }
 }
 
 
@@ -31,7 +34,9 @@ foreach ($_SESSION as $key => $value) {
 
 ?>
 
-<p>Titre <?php echo $Titre ?></p>
+<p>Titre <?= $Titre ?></p>
+<p>Description <?= $Description ?></p>
+
 
 <div>
     <h2>Calendrier</h2>

@@ -34,12 +34,12 @@ class ControllerQuestion
     public static function read()
     {
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        $sections = (new SectionRepository())->select($_GET['idQuestion'],'*',"idquestion");
+        $sections = (new SectionRepository())->select($_GET['idQuestion'], '*', "idquestion");
 
         self::afficheVue('view.php', ["question" => $question,
-                                                "sections" => $sections,
-                                                "pagetitle" => "Detail question",
-                                                "cheminVueBody" => "Question/detail.php"]);
+            "sections" => $sections,
+            "pagetitle" => "Detail question",
+            "cheminVueBody" => "Question/detail.php"]);
     }
 
 
@@ -135,9 +135,13 @@ class ControllerQuestion
             self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
 
+
         //var_dump($sections);
-        $utilisateur = (new UtilisateurRepository)->select("hambrighta");
-        $question = new Question($_SESSION['Titre'], "description", $calendrier, $utilisateur);
+        $auteur = (new UtilisateurRepository)->select("hambrighta");
+
+        $creation = date("Y/m/d H:i:s");
+
+        $question = new Question($_SESSION['Titre'], $_SESSION['Description'], $creation, $calendrier, $auteur);
         $questionBD = (new QuestionRepository())->sauvegarder($question);
         if ($questionBD != null) {
             $question->setId($questionBD);
@@ -166,6 +170,32 @@ class ControllerQuestion
                 "pagetitle" => "Question crée",
                 "cheminVueBody" => "Question/created.php"]);
 
+    }
+
+    public static function update(): void
+    {
+        self::afficheVue('view.php', ["pagetitle" => "Modifier Question", "cheminVueBody" => "question/create/step-1.php", "idQuestion" => $_GET['idQuestion']]);
+    }
+
+    public static function updated(): void
+    {
+        session_start();
+        $question = (new QuestionRepository())->select($_SESSION['idQuestion']);
+        $sections = $_SESSION['Sections'];
+        if ($sections != $question->getSections())
+        foreach ($sections as $section) {
+
+        }
+        (new QuestionRepository())->update($question);
+        $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
+        self::afficheVue('view.php', ["pagetitle" => "Question modifiée", "cheminVueBody" => "question/updated.php", "questions" => $questions]);
+    }
+
+    public static function delete(): void
+    {
+        (new QuestionRepository())->delete($_GET['idQuestion']);
+        $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
+        self::afficheVue('view.php', ["pagetitle" => "Question supprimée", "cheminVueBody" => "question/deleted.php", "questions" => $questions]);
     }
 
 
