@@ -26,6 +26,7 @@ class Calendrier extends AbstractDataObject
         $this->debutVote = $debutVote;
         $this->finVote = $finVote;
     }
+
     /**
      * @return string
      */
@@ -107,13 +108,17 @@ class Calendrier extends AbstractDataObject
     }
 
 
-    public function formatTableau(): array
+    public function formatTableau($update = false): array
     {
-        return array(
-            "debutEcritureTag" =>  $this->debutEcriture,
-            "finEcritureTag" =>  $this->finEcriture,
-            "debutVoteTag" =>  $this->debutVote,
-            "finVoteTag" =>  $this->finVote
+        $tab = array(
+            "debutEcritureTag" => $this->debutEcriture,
+            "finEcritureTag" => $this->finEcriture,
+            "debutVoteTag" => $this->debutVote,
+            "finVoteTag" => $this->finVote
         );
+        if ($update) {
+            $tab['idCalendrierTag'] = $this->idCalendrier;
+        }
+        return $tab;
     }
 }

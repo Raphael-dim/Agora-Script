@@ -6,7 +6,7 @@
     <p>Phase d'écriture : du <?= $question->getCalendrier()->getDebutEcriture() ?>
         au <?= $question->getCalendrier()->getFinEcriture() ?></p>
     <p>Phase de vote : du <?= $question->getCalendrier()->getDebutVote() ?>
-        au <?= $question->getCalendrier()->getFinEcriture() ?></p>
+        au <?= $question->getCalendrier()->getFinVote() ?></p>
 </div>
 
 <div>

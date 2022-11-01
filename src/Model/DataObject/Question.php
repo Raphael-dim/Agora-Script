@@ -124,20 +124,22 @@ class Question extends AbstractDataObject
 
     public function getSections(): array
     {
-        $sections = (new SectionRepository())->select($this->id, "idQuestion");
-        var_dump($sections);
-        return $this->getSections();
+        return (new SectionRepository())->selects($this->id, '*', "idQuestion", "sections");
     }
 
 
-    public function formatTableau(): array
+    public function formatTableau($update = false): array
     {
-        return array(
+        $tab = array(
             "titreTag" => $this->titre,
             "descriptionTag" => $this->description,
             "creationTag" => $this->creation,
             "idCalendrierTag" => $this->calendrier->getIdCalendrier(),
             "idAuteurTag" => $this->auteur->getIdentifiant()
         );
+        if ($update) {
+            $tab["idQuestionTag"] = $this->id;
+        }
+        return $tab;
     }
 }

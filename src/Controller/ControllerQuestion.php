@@ -181,12 +181,27 @@ class ControllerQuestion
     {
         session_start();
         $question = (new QuestionRepository())->select($_SESSION['idQuestion']);
-        $sections = $_SESSION['Sections'];
-        if ($sections != $question->getSections())
-        foreach ($sections as $section) {
-
-        }
+        $question->setTitre($_SESSION['Titre']);
+        $question->setDescription($_SESSION['Description']);
         (new QuestionRepository())->update($question);
+
+
+        $calendrier = (new CalendrierRepository())->select($question->getCalendrier()->getIdCalendrier());
+        $calendrier->setDebutEcriture($_SESSION['debutEcriture']);
+        $calendrier->setFinEcriture($_SESSION['finEcriture']);
+        $calendrier->setDebutVote($_SESSION['debutVote']);
+        $calendrier->setFinVote($_SESSION['finVote']);
+        (new CalendrierRepository())->update($calendrier);
+
+
+//        $ancSections = $question->getSections();
+//        $nouvSections = $_SESSION['Sections'];
+//        for ($i = 0; $i < count($nouvSections) && $i < count($ancSections); $i++) {
+//
+//        }
+//
+//        echo count($nouvSections);
+
         $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
         self::afficheVue('view.php', ["pagetitle" => "Question modifiée", "cheminVueBody" => "question/updated.php", "questions" => $questions]);
     }
@@ -199,7 +214,8 @@ class ControllerQuestion
     }
 
 
-    private static function afficheVue(string $cheminVue, array $parametres = []): void
+    private
+    static function afficheVue(string $cheminVue, array $parametres = []): void
     {
         extract($parametres); // Crée des variables à partir du tableau $paramètres
         require "../src/view/$cheminVue"; // Charge la vue
