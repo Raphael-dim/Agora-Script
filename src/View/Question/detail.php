@@ -31,22 +31,14 @@
 
 <h2>Sections</h2>
 <?php
-if (is_array($sections)) {
-    $i = 1;
-    foreach ($sections as $Section) {
-        echo '<h3> Section n° ' . $i . '</h3>';
-        echo '<p>' . $Section->getTitre() . '</p>';
-        echo '<p>' . $Section->getDescription() . '</p>';
-        echo '&nbsp';
-        $i++;
-    }
-} else {
-    echo '<h3> Section n°1</h3>';
-    echo '<p>' . $sections->getTitre() . '</p>';
-    echo '<p>' . $sections->getDescription() . '</p>';
+$i = 1;
+foreach ($sections as $Section) {
+    echo '<h3> Section n° ' . $i . '</h3>';
+    echo '<p>' . $Section->getTitre() . '</p>';
+    echo '<p>' . $Section->getDescription() . '</p>';
     echo '&nbsp';
+    $i++;
 }
-
 ?>
 <h2>Date de création :</h2>
 <p>

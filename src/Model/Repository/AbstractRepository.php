@@ -165,13 +165,11 @@ abstract class AbstractRepository
             "clef" => $clef,
         );
         $pdoStatement->execute($values);
+//        echo $sql;
         foreach ($pdoStatement as $donneesFormatTableau) {
-            if ($pdoStatement->rowCount() > 1) {
-                $ADonnees[] = $this::construire(json_decode(json_encode($donneesFormatTableau), true));
-            } else {
-                return $this::construire(json_decode(json_encode($donneesFormatTableau), true));
-            }
+            $ADonnees[] = $this::construire(json_decode(json_encode($donneesFormatTableau), true));
         }
+
         return $ADonnees;
     }
 

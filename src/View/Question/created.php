@@ -5,7 +5,7 @@
     <title>Question crée</title>
 </head>
 <body>
-<p>La Question a bien été créée !</p>
+<h2>La question a bien été créée !</h2>
 <?php
 require __DIR__ . "/list.php";
 ?>

@@ -34,7 +34,7 @@ class ControllerQuestion
     public static function read()
     {
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        $sections = (new SectionRepository())->select($_GET['idQuestion'], '*', "idquestion");
+        $sections = $question->getSections();
 
         self::afficheVue('view.php', ["question" => $question,
             "sections" => $sections,
@@ -194,13 +194,28 @@ class ControllerQuestion
         (new CalendrierRepository())->update($calendrier);
 
 
-//        $ancSections = $question->getSections();
-//        $nouvSections = $_SESSION['Sections'];
-//        for ($i = 0; $i < count($nouvSections) && $i < count($ancSections); $i++) {
-//
-//        }
-//
-//        echo count($nouvSections);
+        $sections = $question->getSections();
+        $nouvSections = $_SESSION['Sections'];
+        for ($i = 0; $i < count($nouvSections); $i++) {
+            if (count($sections) <= $i) {
+                $section = new Section($nouvSections[$i]['titre'], $nouvSections[$i]['description'], $question);
+                $sectionBD = (new SectionRepository())->sauvegarder($section);
+                if ($sectionBD != null) {
+                    $section->setId($sectionBD);
+                } else {
+                    self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+                }
+            } else {
+                $sections[$i]->setTitre($nouvSections[$i]['titre']);
+                $sections[$i]->setDescription($nouvSections[$i]['description']);
+                (new SectionRepository())->update($sections[$i]);
+            }
+        }
+
+        if (count($sections) > count($nouvSections)) {
+
+        }
+
 
         $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
         self::afficheVue('view.php', ["pagetitle" => "Question modifiée", "cheminVueBody" => "question/updated.php", "questions" => $questions]);
@@ -208,7 +223,12 @@ class ControllerQuestion
 
     public static function delete(): void
     {
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        foreach ($question->getSections() as $section) {
+            (new SectionRepository())->delete($section->getId());
+        }
         (new QuestionRepository())->delete($_GET['idQuestion']);
+        (new CalendrierRepository())->delete($question->getCalendrier()->getIdCalendrier());
         $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
         self::afficheVue('view.php', ["pagetitle" => "Question supprimée", "cheminVueBody" => "question/deleted.php", "questions" => $questions]);
     }
