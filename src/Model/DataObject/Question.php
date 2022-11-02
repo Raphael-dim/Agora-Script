@@ -14,7 +14,7 @@ class Question extends AbstractDataObject
     public function __construct(string $titre, string $description, Calendrier $calendrier, Utilisateur $auteur)
     {
         $this->titre = $titre;
-        $this->description = "blabla";
+        $this->description = $description;
         $this->calendrier = $calendrier;
         $this->auteur = $auteur;
     }

@@ -8,22 +8,29 @@
 
 <div>
     <h2>Auteurs</h2>
-    <p>Pas encore dispo</p>
-    <!--<?php
-    foreach ($_SESSION['auteurs'] as $auteur) {
-        echo "<p> $auteur </p>";
+    <?php
+    if(is_array($auteurs)){
+        foreach ($auteurs as $auteur) {
+            echo "<p>" . $auteur->getUtilisateur()->getIdentifiant() . "</p>";
+        }
+    }else{
+        echo "<p>" . $auteurs->getUtilisateur()->getIdentifiant() . "</p>";
     }
-    ?>//-->
+    ?>
 </div>
 
 <div>
     <h2>Votants</h2>
-    <p>Pas encore dispo</p>
-    <!--<?php
-    foreach ($_SESSION['votants'] as $votant) {
-        echo "<p> $votant </p>";
+    <?php
+    if(is_array($votants)){
+        foreach ($votants as $votant) {
+            echo "<p>" . $votant->getUtilisateur()->getIdentifiant() . "</p>";
+        }
+    }else{
+        echo "<p>" . $votants->getUtilisateur()->getIdentifiant() . "</p>";
     }
-    ?>//-->
+
+    ?>
 </div>
 
 

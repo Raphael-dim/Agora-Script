@@ -126,10 +126,15 @@ abstract class AbstractRepository
      * Selectionne une ligne par rapport à la clef primaire
      */
 
-    public function select($clef,$rowSelect = '*', $whereCondition = null)
+    public function select($clef,$rowSelect = '*', $whereCondition = null, $from = null)
     {
         $ADonnees = array();
-        $sql = 'SELECT ' . $rowSelect . ' from ' . $this->getNomTable();
+        $sql = 'SELECT ' . $rowSelect . ' from ';
+        if(is_null($from)){
+            $sql = $sql . $this->getNomTable();
+        }else{
+            $sql = $sql . $from;
+        }
         if(is_null($whereCondition)){
             $sql = $sql . ' WHERE '. $this->getNomClePrimaire() . ' =:clef';
         }else{
@@ -146,7 +151,7 @@ abstract class AbstractRepository
 
         foreach ($pdoStatement as $donneesFormatTableau) {
             if ($pdoStatement->rowCount() > 1) {
-                $ADonnees[] = $this::construire(json_decode(json_encode($donneesFormatTableau), true));
+                $ADonnees[] = $this::construire($donneesFormatTableau);
             } else {
                 return $this::construire($donneesFormatTableau);
             }

@@ -3,14 +3,17 @@
 namespace App\Vote\Controller;
 
 
+use App\Vote\Model\DatabaseConnection as DatabaseConnection;
 use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Question;
 use App\Vote\Model\DataObject\Section;
 use App\Vote\Model\DataObject\Utilisateur;
+use App\Vote\Model\Repository\AuteurRepository;
 use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\SectionRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
+use App\Vote\Model\Repository\VotantRepository;
 
 class ControllerQuestion
 {
@@ -34,9 +37,14 @@ class ControllerQuestion
     {
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $sections = (new SectionRepository())->select($_GET['idQuestion'],'*',"idquestion");
+        $auteurs = (new AuteurRepository())->select($_GET['idQuestion'],'*',"idquestion", "Auteurs");
+        $votants = (new VotantRepository())->select($_GET['idQuestion'],'*',"idquestion", "Votants");
+
 
         Controller::afficheVue('view.php', ["question" => $question,
                                                 "sections" => $sections,
+                                                "auteurs" => $auteurs,
+                                                "votants" => $votants,
                                                 "pagetitle" => "Detail question",
                                                 "cheminVueBody" => "Question/detail.php"]);
     }
@@ -146,7 +154,40 @@ class ControllerQuestion
         }
 
         $auteurs = $_SESSION['auteurs'];
+        foreach($auteurs as $auteur){
+            var_dump($auteur);
+            $sql = "INSERT INTO Auteurs (idQuestion,idUtilisateur)";
+            $sql = $sql . " VALUES (" . $question->getId() . ", '" . $auteur . "');";
+            $sql = substr($sql, 0, -1);
+
+            // Préparation de la requête
+            $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
+
+            // On donne les valeurs et on exécute la requête
+            try {
+                $pdoStatement->execute();
+            } catch (PDOException $e) {
+                echo($e->getMessage());
+            }
+        }
+
         $votants = $_SESSION['votants'];
+        foreach($votants as $votant){
+            var_dump($auteur);
+            $sql = "INSERT INTO Votants (idQuestion,idUtilisateur)";
+            $sql = $sql . " VALUES (" . $question->getId() . ", '" . $votant . "');";
+            $sql = substr($sql, 0, -1);
+
+            // Préparation de la requête
+            $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
+
+            // On donne les valeurs et on exécute la requête
+            try {
+                $pdoStatement->execute();
+            } catch (PDOException $e) {
+                echo($e->getMessage());
+            }
+        }
 
         $sections = $_SESSION['Sections'];
         foreach ($sections as $value) {
