@@ -194,10 +194,10 @@ class ControllerQuestion
         (new CalendrierRepository())->update($calendrier);
 
 
-        $sections = $question->getSections();
+        $ancSections = $question->getSections();
         $nouvSections = $_SESSION['Sections'];
         for ($i = 0; $i < count($nouvSections); $i++) {
-            if (count($sections) <= $i) {
+            if (count($ancSections) <= $i) {
                 $section = new Section($nouvSections[$i]['titre'], $nouvSections[$i]['description'], $question);
                 $sectionBD = (new SectionRepository())->sauvegarder($section);
                 if ($sectionBD != null) {
@@ -206,14 +206,19 @@ class ControllerQuestion
                     self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
                 }
             } else {
-                $sections[$i]->setTitre($nouvSections[$i]['titre']);
-                $sections[$i]->setDescription($nouvSections[$i]['description']);
-                (new SectionRepository())->update($sections[$i]);
+                $ancSections[$i]->setTitre($nouvSections[$i]['titre']);
+                $ancSections[$i]->setDescription($nouvSections[$i]['description']);
+                (new SectionRepository())->update($ancSections[$i]);
             }
         }
 
-        if (count($sections) > count($nouvSections)) {
-
+        if (count($ancSections) > count($nouvSections)) {
+            $diff = count($ancSections) - count($nouvSections) - 1;
+            while ($diff > count($nouvSections)) {
+                var_dump($ancSections[$diff]);
+                (new SectionRepository())->delete($ancSections[$diff]);
+                $diff--;
+            }
         }
 
 
