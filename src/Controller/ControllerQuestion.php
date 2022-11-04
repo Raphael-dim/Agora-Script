@@ -58,7 +58,7 @@ class ControllerQuestion
     }
 
     /*
-     * Lancement des page du formulaire de création de la Question
+     * Lancement des pages du formulaire de création de la Question
      */
     public static function form(): void
     {
@@ -169,12 +169,15 @@ class ControllerQuestion
             ["questions" => $questions,
                 "pagetitle" => "Question crée",
                 "cheminVueBody" => "Question/created.php"]);
+        session_unset();
 
     }
 
     public static function update(): void
     {
-        self::afficheVue('view.php', ["pagetitle" => "Modifier Question", "cheminVueBody" => "question/create/step-1.php", "idQuestion" => $_GET['idQuestion']]);
+        self::afficheVue('view.php', ["pagetitle" => "Modifier une question",
+            "cheminVueBody" => "question/create/step-1.php",
+            "idQuestion" => $_GET['idQuestion']]);
     }
 
     public static function updated(): void
@@ -211,19 +214,19 @@ class ControllerQuestion
                 (new SectionRepository())->update($ancSections[$i]);
             }
         }
-
         if (count($ancSections) > count($nouvSections)) {
-            $diff = count($ancSections) - count($nouvSections) - 1;
-            while ($diff > count($nouvSections)) {
-                var_dump($ancSections[$diff]);
-                (new SectionRepository())->delete($ancSections[$diff]);
-                $diff--;
+            for ($diff = count($ancSections) - count($nouvSections); $diff > 0; $diff--) {
+                (new SectionRepository())->delete($ancSections[count($ancSections) - 1]->getId());
+                unset($ancSections[count($ancSections) - 1]);
             }
         }
 
 
         $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
-        self::afficheVue('view.php', ["pagetitle" => "Question modifiée", "cheminVueBody" => "question/updated.php", "questions" => $questions]);
+        self::afficheVue('view.php', ["pagetitle" => "Question modifiée",
+            "cheminVueBody" => "question/updated.php",
+            "questions" => $questions]);
+        session_unset();
     }
 
     public static function delete(): void

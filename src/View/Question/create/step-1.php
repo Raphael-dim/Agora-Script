@@ -16,12 +16,18 @@ if (isset($_POST['Titre'])) {
 }
 
 ?>
-<?php  if (isset($_GET['idQuestion'])){
+<?php if (isset($_GET['idQuestion'])) {
     echo "<h1>Modification de la question</h1>";
     $question = (new QuestionRepository())->select($_GET['idQuestion']);
-    $_SESSION['idQuestion'] = $question->getId();
-}
-else {
+    if ($question == null) {
+        \App\Vote\Controller\ControllerAccueil::erreur();
+    }
+    else{
+        FormConfig::initialiserSessions($question);
+        $_SESSION['idQuestion'] = $question->getId();
+    }
+
+} else {
     echo "<h1>Création d'une question</h1>";
 }
 ?>
@@ -36,7 +42,8 @@ else {
     </p>
     <p>
         <label for="description_id">Description</label> :
-        <input type="text" placeholder="Ex : " name="Description" id="description_id" value="<?= FormConfig::TextField('Description') ?>"
+        <input type="text" placeholder="Ex : " name="Description" id="description_id"
+               value="<?= FormConfig::TextField('Description') ?>"
                required/>
     </p>
     <p>

@@ -29,8 +29,14 @@ foreach ($_SESSION as $key => $value) {
         $_SESSION['Sections'][$ct]['description'] = $value;
         $ct++;
     }
-
 }
+
+if (count($_SESSION['Sections']) > $_SESSION['nbSections']) {
+    for ($diff = count($_SESSION['Sections']) - $_SESSION['nbSections']; $diff > 0; $diff--) {
+        unset($_SESSION['Sections'][count($_SESSION['Sections']) - 1]);
+    }
+}
+
 
 ?>
 
@@ -66,11 +72,15 @@ foreach ($_SESSION as $key => $value) {
 <div>
     <h2>Sections</h2>
     <?php
+    $i = 1;
     foreach ($_SESSION['Sections'] as $Section) {
-        echo '<p>' . $Section["titre"] . ' : </p>';
-        echo '<p>' . $Section["description"] . ' : </p>';
+        echo '<h3> Section n° ' . $i . '</h3>';
+        echo '<p>' . $Section["titre"] . '  </p>';
+        echo '<p>' . $Section["description"] . '  </p>';
         echo '&nbsp';
+        $i++;
     }
+
     ?>
 </div>
 
