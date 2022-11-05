@@ -53,8 +53,8 @@ if (count($_SESSION['Sections']) > $_SESSION['nbSections']) {
 <div>
     <h2>Auteurs</h2>
     <?php
-    foreach ($_SESSION['auteurs'] as $auteur) {
-        echo "<p> $auteur </p>";
+    foreach ($_SESSION['responsables'] as $responsable) {
+        echo "<p> $responsable </p>";
     }
     ?>
 </div>

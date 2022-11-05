@@ -5,10 +5,12 @@ namespace App\Vote\Controller;
 
 use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Question;
+use App\Vote\Model\DataObject\Responsable;
 use App\Vote\Model\DataObject\Section;
 use App\Vote\Model\DataObject\Utilisateur;
 use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\QuestionRepository;
+use App\Vote\Model\Repository\ResponsableRepository;
 use App\Vote\Model\Repository\SectionRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
 
@@ -137,11 +139,11 @@ class ControllerQuestion
 
 
         //var_dump($sections);
-        $auteur = (new UtilisateurRepository)->select("hambrighta");
+        $organisateur = (new UtilisateurRepository)->select("hambrighta");
 
         $creation = date("Y/m/d H:i:s");
 
-        $question = new Question($_SESSION['Titre'], $_SESSION['Description'], $creation, $calendrier, $auteur);
+        $question = new Question($_SESSION['Titre'], $_SESSION['Description'], $creation, $calendrier, $organisateur);
         $questionBD = (new QuestionRepository())->sauvegarder($question);
         if ($questionBD != null) {
             $question->setId($questionBD);
@@ -149,7 +151,11 @@ class ControllerQuestion
             self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
 
-        $auteurs = $_SESSION['auteurs'];
+        $responsables = $_SESSION['responsables'];
+//        foreach ($responsables as $responsable) {
+//            $utilisateur = (new UtilisateurRepository())->select($responsable);
+//            $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
+//        }
         $votants = $_SESSION['votants'];
 
         $sections = $_SESSION['Sections'];

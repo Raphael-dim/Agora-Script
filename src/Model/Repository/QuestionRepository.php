@@ -14,7 +14,7 @@ class QuestionRepository extends AbstractRepository
             $questionTableau["description"],
             $questionTableau['creation'],
             (new CalendrierRepository)->select($questionTableau["idcalendrier"]),
-            (new UtilisateurRepository)->select($questionTableau["idauteur"])
+            (new UtilisateurRepository)->select($questionTableau["idorganisateur"])
         );
         $question->setId($questionTableau["idquestion"]);
         return $question;
@@ -32,7 +32,7 @@ class QuestionRepository extends AbstractRepository
 
     protected function getNomsColonnes(): array
     {
-        return array("titre", "description", "creation", "idCalendrier", "idAuteur");
+        return array("titre", "description", "creation", "idCalendrier", "idOrganisateur");
 
     }
 }

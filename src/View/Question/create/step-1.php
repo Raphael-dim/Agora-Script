@@ -7,8 +7,8 @@ use App\Vote\Model\Repository\QuestionRepository;
 if (isset($_POST['Titre'])) {
     FormConfig::postSession();
     $_SESSION['step'][1] = 1;
-    if (!isset($_SESSION['auteurs']) && !isset($_SESSION['votants'])) {
-        $_SESSION['auteurs'] = array();
+    if (!isset($_SESSION['responsables']) && !isset($_SESSION['votants'])) {
+        $_SESSION['responsables'] = array();
         $_SESSION['votants'] = array();
 
     }

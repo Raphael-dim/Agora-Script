@@ -11,17 +11,18 @@ class Question extends AbstractDataObject
     private string $titre;
     private string $description;
     private string $creation;
-    private Utilisateur $auteur;
+    private Utilisateur $organisateur;
     private Calendrier $calendrier;
 
 
-    public function __construct(string $titre, string $description, string $creation, Calendrier $calendrier, Utilisateur $auteur)
+    public function __construct(string $titre, string $description, string $creation,
+                                Calendrier $calendrier, Utilisateur $organisateur)
     {
         $this->titre = $titre;
         $this->description = $description;
         $this->creation = $creation;
         $this->calendrier = $calendrier;
-        $this->auteur = $auteur;
+        $this->organisateur = $organisateur;
     }
 
     /**
@@ -68,18 +69,6 @@ class Question extends AbstractDataObject
     /**
      * @return Utilisateur
      */
-    public function getAuteur(): Utilisateur
-    {
-        return $this->auteur;
-    }
-
-    /**
-     * @param Utilisateur $auteur
-     */
-    public function setAuteur(Utilisateur $auteur): void
-    {
-        $this->auteur = $auteur;
-    }
 
     /**
      * @param Calendrier $calendrier
@@ -135,7 +124,7 @@ class Question extends AbstractDataObject
             "descriptionTag" => $this->description,
             "creationTag" => $this->creation,
             "idCalendrierTag" => $this->calendrier->getIdCalendrier(),
-            "idAuteurTag" => $this->auteur->getIdentifiant()
+            "idOrganisateurTag" => $this->organisateur->getIdentifiant()
         );
         if ($update) {
             $tab["idQuestionTag"] = $this->id;

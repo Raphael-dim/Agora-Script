@@ -3,6 +3,7 @@ session_start();
 
 use App\Vote\Config\FormConfig as FormConfig;
 
+
 $_SESSION['type'] = 'votants';
 
 if (array_key_exists('user', $_POST)) {
