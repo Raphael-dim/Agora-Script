@@ -9,7 +9,7 @@ class ControllerUtilisateur
     public static function readAll()
     {
         $utilisateurs = (new UtilisateurRepository())->selectAll();     //appel au modèle pour gerer la BD
-        self::afficheVue('view.php',
+        Controller::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,
                 "pagetitle" => "Liste des Utilisateurs",
                 "cheminVueBody" => "Utilisateurs/list.php"]); //"redirige" vers la vue
@@ -17,7 +17,7 @@ class ControllerUtilisateur
 
     public static function search()
     {
-        self::afficheVue('view.php',
+        Controller::afficheVue('view.php',
             ["pagetitle" => "Rechercher un utilisateur",
                 "cheminVueBody" => "Utilisateurs/search.php"]);
     }
@@ -27,7 +27,7 @@ class ControllerUtilisateur
         $row = $_POST['row'];
         $keyword = $_POST['keyword'];
         $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, $row);
-        self::afficheVue('view.php',
+        Controller::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,
                 "pagetitle" => "Liste des Utilisateurs",
                 "cheminVueBody" => "Utilisateurs/list.php"]);
@@ -38,15 +38,10 @@ class ControllerUtilisateur
         $row = $_POST['row'];
         $keyword = $_POST['keyword'];
         $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, $row);
-        self::afficheVue('view.php',
+        Controller::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,
                 "pagetitle" => "Liste des Utilisateurs",
                 "cheminVueBody" => "Utilisateurs/step-4.php"]);
     }
 
-    private static function afficheVue(string $cheminVue, array $parametres = []): void
-    {
-        extract($parametres); // Crée des variables à partir du tableau $parametres
-        require "../src/view/$cheminVue"; // Charge la vue
-    }
 }

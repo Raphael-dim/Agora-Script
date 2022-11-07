@@ -11,22 +11,29 @@
 
 <div>
     <h2>Auteurs</h2>
-    <p>Pas encore dispo</p>
-    <!--<?php
-    foreach ($_SESSION['auteurs'] as $auteur) {
-        echo "<p> $auteur </p>";
+    <?php
+    if(is_array($auteurs)){
+        foreach ($auteurs as $auteur) {
+            echo "<p>" . $auteur->getUtilisateur()->getIdentifiant() . "</p>";
+        }
+    }else{
+        echo "<p>" . $auteurs->getUtilisateur()->getIdentifiant() . "</p>";
     }
-    ?>//-->
+    ?>
 </div>
 
 <div>
     <h2>Votants</h2>
-    <p>Pas encore dispo</p>
-    <!--<?php
-    foreach ($_SESSION['votants'] as $votant) {
-        echo "<p> $votant </p>";
+    <?php
+    if(is_array($votants)){
+        foreach ($votants as $votant) {
+            echo "<p>" . $votant->getUtilisateur()->getIdentifiant() . "</p>";
+        }
+    }else{
+        echo "<p>" . $votants->getUtilisateur()->getIdentifiant() . "</p>";
     }
-    ?>//-->
+
+    ?>
 </div>
 
 <h2>Sections</h2>
@@ -44,4 +51,43 @@ foreach ($sections as $Section) {
 <p>
     <?= $question->getcreation(); ?>
 </p>
+
+
+<div>
+    <h2>Sections</h2>
+    <?php
+    if(is_array($sections)){
+        foreach ($sections as $Section) {
+            echo '<p>' . $Section->getTitre() . '</p>';
+            echo '<p>' . $Section->getDescription() . '</p>';
+            echo '&nbsp';
+        }
+    }else{
+        echo '<p>' . $sections->getTitre() . '</p>';
+        echo '<p>' . $sections->getDescription() . '</p>';
+        echo '&nbsp';
+    }
+
+    ?>
+</div>
+
+<div>
+    <h2>Propositions</h2>
+    <p>Pas encore dispo</p>
+    <!--<?php
+    if(is_array($propositions)){
+        foreach ($propositions as $Section) {
+            echo '<p>' . $Section->getTitre() . '</p>';
+            echo '<p>' . $propositions->getAuteur() . '</p>';
+            echo '<p>' . $Section->getContenu() . '</p>';
+            echo '&nbsp';
+        }
+    }else{
+        echo '<p>' . $propositions->getTitre() . '</p>';
+        echo '<p>' . $propositions->getAuteur() . '</p>';
+        echo '<p>' . $propositions->getContenu() . '</p>';
+        echo '&nbsp';
+    }
+    ?>//-->
+</div>
 

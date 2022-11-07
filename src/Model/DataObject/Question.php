@@ -20,7 +20,9 @@ class Question extends AbstractDataObject
     {
         $this->titre = $titre;
         $this->description = $description;
+
         $this->creation = $creation;
+
         $this->calendrier = $calendrier;
         $this->organisateur = $organisateur;
     }

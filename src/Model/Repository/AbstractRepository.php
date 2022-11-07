@@ -158,6 +158,7 @@ abstract class AbstractRepository
             $sql = $sql . ' WHERE ' . $this->getNomClePrimaire() . ' =:clef';
         } else {
             $sql = $sql . ' WHERE ' . $whereCondition . ' =:clef';
+
         }
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
@@ -167,7 +168,10 @@ abstract class AbstractRepository
         );
         $pdoStatement->execute($values);
         foreach ($pdoStatement as $donneesFormatTableau) {
+
             $ADonnees[] = $this::construire(json_decode(json_encode($donneesFormatTableau), true));
+
+
         }
 
         return $ADonnees;

@@ -6,10 +6,6 @@ use App\Vote\Model\DataObject\Question;
 
 if (isset($_POST['Titre'])){
     FormConfig::postSession();
-    /*if (!isset($_SESSION['auteurs']) && !isset($_SESSION['votants'])){
-        $_SESSION['auteurs'] = array();
-        $_SESSION['votants'] = array();
-    }*/
     FormConfig::redirect("index.php?action=created&controller=proposition");
 }
 
