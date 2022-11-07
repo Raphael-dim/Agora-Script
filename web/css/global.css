@@ -38,7 +38,21 @@ main p a {
     max-width: 45px;
 }
 
-h1, h2 {
+.modifier {
+    max-width: 25px;
+}
+
+.delete {
+    max-width: 35px;
+}
+
+.listes * {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 15px;
+}
+
+h1, h2, h3 {
     color: #dcdcdc;
 }
 

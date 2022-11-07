@@ -6,11 +6,13 @@ namespace App\Vote\Controller;
 use App\Vote\Model\DatabaseConnection as DatabaseConnection;
 use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Question;
+use App\Vote\Model\DataObject\Responsable;
 use App\Vote\Model\DataObject\Section;
 use App\Vote\Model\DataObject\Utilisateur;
 use App\Vote\Model\Repository\AuteurRepository;
 use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\QuestionRepository;
+use App\Vote\Model\Repository\ResponsableRepository;
 use App\Vote\Model\Repository\SectionRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
 use App\Vote\Model\Repository\VotantRepository;
@@ -36,17 +38,13 @@ class ControllerQuestion
     public static function read()
     {
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        $sections = (new SectionRepository())->select($_GET['idQuestion'],'*',"idquestion");
-        $auteurs = (new AuteurRepository())->select($_GET['idQuestion'],'*',"idquestion", "Auteurs");
-        $votants = (new VotantRepository())->select($_GET['idQuestion'],'*',"idquestion", "Votants");
 
+        $sections = $question->getSections();
 
-        Controller::afficheVue('view.php', ["question" => $question,
-                                                "sections" => $sections,
-                                                "auteurs" => $auteurs,
-                                                "votants" => $votants,
-                                                "pagetitle" => "Detail question",
-                                                "cheminVueBody" => "Question/detail.php"]);
+        self::afficheVue('view.php', ["question" => $question,
+            "sections" => $sections,
+            "pagetitle" => "Detail question",
+            "cheminVueBody" => "Question/detail.php"]);
     }
 
 
@@ -66,7 +64,7 @@ class ControllerQuestion
     }
 
     /*
-     * Lancement des page du formulaire de création de la Question
+     * Lancement des pages du formulaire de création de la Question
      */
     public static function form(): void
     {
@@ -143,9 +141,13 @@ class ControllerQuestion
             Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
 
+
         //var_dump($sections);
-        $utilisateur = (new UtilisateurRepository)->select("hambrighta");
-        $question = new Question($_SESSION['Titre'], "description", $calendrier, $utilisateur);
+        $organisateur = (new UtilisateurRepository)->select("hambrighta");
+
+        $creation = date("Y/m/d H:i:s");
+
+        $question = new Question($_SESSION['Titre'], $_SESSION['Description'], $creation, $calendrier, $organisateur);
         $questionBD = (new QuestionRepository())->sauvegarder($question);
         if ($questionBD != null) {
             $question->setId($questionBD);
@@ -153,22 +155,11 @@ class ControllerQuestion
             Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
 
-        $auteurs = $_SESSION['auteurs'];
-        foreach($auteurs as $auteur){
-            var_dump($auteur);
-            $sql = "INSERT INTO Auteurs (idQuestion,idUtilisateur)";
-            $sql = $sql . " VALUES (" . $question->getId() . ", '" . $auteur . "');";
-            $sql = substr($sql, 0, -1);
 
-            // Préparation de la requête
-            $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
-
-            // On donne les valeurs et on exécute la requête
-            try {
-                $pdoStatement->execute();
-            } catch (PDOException $e) {
-                echo($e->getMessage());
-            }
+        $responsables = $_SESSION['responsables'];
+            foreach ($responsables as $responsable) {
+            $utilisateur = (new UtilisateurRepository())->select($responsable);
+            $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
         }
 
         $votants = $_SESSION['votants'];
@@ -206,14 +197,83 @@ class ControllerQuestion
             ["questions" => $questions,
                 "pagetitle" => "Question crée",
                 "cheminVueBody" => "Question/created.php"]);
+        session_unset();
 
     }
 
-
-    public static function recap()
+    public static function update(): void
     {
-        Controller::afficheVue('view.php',
-            ["pagetitle" => "Creer une question",
-                "cheminVueBody" => "Question/create/step-6.php"]);
+        self::afficheVue('view.php', ["pagetitle" => "Modifier une question",
+            "cheminVueBody" => "question/create/step-1.php",
+            "idQuestion" => $_GET['idQuestion']]);
     }
+
+    public static function updated(): void
+    {
+        session_start();
+        $question = (new QuestionRepository())->select($_SESSION['idQuestion']);
+        $question->setTitre($_SESSION['Titre']);
+        $question->setDescription($_SESSION['Description']);
+        (new QuestionRepository())->update($question);
+
+
+        $calendrier = (new CalendrierRepository())->select($question->getCalendrier()->getIdCalendrier());
+        $calendrier->setDebutEcriture($_SESSION['debutEcriture']);
+        $calendrier->setFinEcriture($_SESSION['finEcriture']);
+        $calendrier->setDebutVote($_SESSION['debutVote']);
+        $calendrier->setFinVote($_SESSION['finVote']);
+        (new CalendrierRepository())->update($calendrier);
+
+
+        $ancSections = $question->getSections();
+        $nouvSections = $_SESSION['Sections'];
+        for ($i = 0; $i < count($nouvSections); $i++) {
+            if (count($ancSections) <= $i) {
+                $section = new Section($nouvSections[$i]['titre'], $nouvSections[$i]['description'], $question);
+                $sectionBD = (new SectionRepository())->sauvegarder($section);
+                if ($sectionBD != null) {
+                    $section->setId($sectionBD);
+                } else {
+                    self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+                }
+            } else {
+                $ancSections[$i]->setTitre($nouvSections[$i]['titre']);
+                $ancSections[$i]->setDescription($nouvSections[$i]['description']);
+                (new SectionRepository())->update($ancSections[$i]);
+            }
+        }
+        if (count($ancSections) > count($nouvSections)) {
+            for ($diff = count($ancSections) - count($nouvSections); $diff > 0; $diff--) {
+                (new SectionRepository())->delete($ancSections[count($ancSections) - 1]->getId());
+                unset($ancSections[count($ancSections) - 1]);
+            }
+        }
+
+
+        $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
+        self::afficheVue('view.php', ["pagetitle" => "Question modifiée",
+            "cheminVueBody" => "question/updated.php",
+            "questions" => $questions]);
+        session_unset();
+    }
+
+    public static function delete(): void
+    {
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        foreach ($question->getSections() as $section) {
+            (new SectionRepository())->delete($section->getId());
+        }
+        (new QuestionRepository())->delete($_GET['idQuestion']);
+        (new CalendrierRepository())->delete($question->getCalendrier()->getIdCalendrier());
+        $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
+        self::afficheVue('view.php', ["pagetitle" => "Question supprimée", "cheminVueBody" => "question/deleted.php", "questions" => $questions]);
+    }
+
+
+private static function afficheVue(string $cheminVue, array $parametres = []): void
+    {
+        extract($parametres); // Crée des variables à partir du tableau $paramètres
+        require "../src/view/$cheminVue"; // Charge la vue
+    }
+    
 }

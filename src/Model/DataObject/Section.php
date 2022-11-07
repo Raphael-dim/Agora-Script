@@ -63,12 +63,16 @@ class Section extends AbstractDataObject
         $this->titre = $titre;
     }
 
-    public function formatTableau(): array
+    public function formatTableau($update = false): array
     {
-        return array(
+        $tab = array(
             "idquestionTag" => $this->question->getId(),
             "titreTag" => $this->titre,
             "descriptionTag" => $this->description
         );
+        if ($update) {
+            $tab["idsectionTag"] = $this->id;
+        }
+        return $tab;
     }
 }

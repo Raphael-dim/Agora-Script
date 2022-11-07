@@ -1,9 +1,12 @@
-<p>Titre <?php echo $question->getTitre() ?></p>
+<p>Titre : <?= $question->getTitre() ?></p>
+<p>Description : <?= $question->getDescription() ?></p>
 
 <div>
     <h2>Calendrier</h2>
-    <p>Phase d'écriture : du <?= $question->getCalendrier()->getDebutEcriture() ?> au <?= $question->getCalendrier()->getFinEcriture() ?></p>
-    <p>Phase de vote : du <?= $question->getCalendrier()->getDebutVote() ?> au <?= $question->getCalendrier()->getFinEcriture() ?></p>
+    <p>Phase d'écriture : du <?= $question->getCalendrier()->getDebutEcriture() ?>
+        au <?= $question->getCalendrier()->getFinEcriture() ?></p>
+    <p>Phase de vote : du <?= $question->getCalendrier()->getDebutVote() ?>
+        au <?= $question->getCalendrier()->getFinVote() ?></p>
 </div>
 
 <div>
@@ -32,6 +35,22 @@
 
     ?>
 </div>
+
+<h2>Sections</h2>
+<?php
+$i = 1;
+foreach ($sections as $Section) {
+    echo '<h3> Section n° ' . $i . '</h3>';
+    echo '<p>' . $Section->getTitre() . '</p>';
+    echo '<p>' . $Section->getDescription() . '</p>';
+    echo '&nbsp';
+    $i++;
+}
+?>
+<h2>Date de création :</h2>
+<p>
+    <?= $question->getcreation(); ?>
+</p>
 
 
 <div>
@@ -71,3 +90,4 @@
     }
     ?>//-->
 </div>
+

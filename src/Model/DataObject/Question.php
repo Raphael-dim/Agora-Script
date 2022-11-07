@@ -2,21 +2,29 @@
 
 namespace App\Vote\Model\DataObject;
 
+use App\Vote\Model\Repository\SectionRepository;
+
 class Question extends AbstractDataObject
 {
+
     private int $id;
     private string $titre;
     private string $description;
-    private Utilisateur $auteur;
+    private string $creation;
+    private Utilisateur $organisateur;
     private Calendrier $calendrier;
 
 
-    public function __construct(string $titre, string $description, Calendrier $calendrier, Utilisateur $auteur)
+    public function __construct(string $titre, string $description, string $creation,
+                                Calendrier $calendrier, Utilisateur $organisateur)
     {
         $this->titre = $titre;
         $this->description = $description;
+
+        $this->creation = $creation;
+
         $this->calendrier = $calendrier;
-        $this->auteur = $auteur;
+        $this->organisateur = $organisateur;
     }
 
     /**
@@ -26,6 +34,43 @@ class Question extends AbstractDataObject
     {
         return $this->calendrier;
     }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreation(): string
+    {
+        $date = date_create($this->creation);
+        return date_format($date, 'd/m/Y H:i:s');
+    }
+
+    /**
+     * @param string $creation
+     */
+    public function setCreation(string $creation): void
+    {
+        $this->creation = $creation;
+    }
+
+    /**
+     * @return Utilisateur
+     */
 
     /**
      * @param Calendrier $calendrier
@@ -68,14 +113,24 @@ class Question extends AbstractDataObject
         $this->titre = $titre;
     }
 
-
-    public function formatTableau(): array
+    public function getSections(): array
     {
-        return array(
+        return (new SectionRepository())->selects($this->id, '*', "idQuestion", "sections");
+    }
+
+
+    public function formatTableau($update = false): array
+    {
+        $tab = array(
             "titreTag" => $this->titre,
             "descriptionTag" => $this->description,
+            "creationTag" => $this->creation,
             "idCalendrierTag" => $this->calendrier->getIdCalendrier(),
-            "idAuteurTag" => $this->auteur->getIdentifiant()
+            "idOrganisateurTag" => $this->organisateur->getIdentifiant()
         );
+        if ($update) {
+            $tab["idQuestionTag"] = $this->id;
+        }
+        return $tab;
     }
 }
