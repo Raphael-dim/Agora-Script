@@ -2,14 +2,14 @@
 
 namespace App\Vote\Model\Repository;
 
-use App\Vote\Model\DataObject\Auteur;
+use App\Vote\Model\DataObject\Votant;
 use App\Vote\Model\DataObject\Utilisateur;
 
 class VotantRepository extends AbstractRepository
 {
-    protected function construire(array $questionTableau): Auteur
+    protected function construire(array $questionTableau): Votant
     {
-        $auteur = new Auteur(
+        $auteur = new Votant(
             (new QuestionRepository())->select($questionTableau['idquestion']),
             (new UtilisateurRepository())->select($questionTableau['idutilisateur'])
         );

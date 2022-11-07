@@ -53,23 +53,6 @@ foreach ($sections as $Section) {
 </p>
 
 
-<div>
-    <h2>Sections</h2>
-    <?php
-    if(is_array($sections)){
-        foreach ($sections as $Section) {
-            echo '<p>' . $Section->getTitre() . '</p>';
-            echo '<p>' . $Section->getDescription() . '</p>';
-            echo '&nbsp';
-        }
-    }else{
-        echo '<p>' . $sections->getTitre() . '</p>';
-        echo '<p>' . $sections->getDescription() . '</p>';
-        echo '&nbsp';
-    }
-
-    ?>
-</div>
 
 <div>
     <h2>Propositions</h2>

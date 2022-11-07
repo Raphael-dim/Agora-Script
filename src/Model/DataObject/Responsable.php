@@ -6,13 +6,28 @@ use App\Vote\Model\Repository\AbstractRepository;
 
 class Responsable extends Utilisateur
 {
-    private Utilisateur $responsable;
     private Question $question;
+    private Utilisateur $utilisateur;
 
-    public function formatTableau(): array
+    public function __construct(Question $question, Utilisateur $utilisateur)
     {
-        return array(
-            "idutilisateur" => $this->responsable->getIdentifiant(),
-            "idquestion" => $this->question->getId());
+        $this->question = $question;
+        $this->utilisateur = $utilisateur;
+    }
+
+    /**
+     * @return Question
+     */
+    public function getQuestion(): Question
+    {
+        return $this->question;
+    }
+
+    /**
+     * @return Utilisateur
+     */
+    public function getUtilisateur(): Utilisateur
+    {
+        return $this->utilisateur;
     }
 }

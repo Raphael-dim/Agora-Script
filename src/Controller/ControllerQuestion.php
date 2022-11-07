@@ -40,9 +40,12 @@ class ControllerQuestion
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
 
         $sections = $question->getSections();
-
+        $auteurs = $question->getResponsables();
+        $votants = $question->getVotants();
         self::afficheVue('view.php', ["question" => $question,
             "sections" => $sections,
+            "auteurs" => $auteurs,
+            "votants" => $votants,
             "pagetitle" => "Detail question",
             "cheminVueBody" => "Question/detail.php"]);
     }
@@ -157,14 +160,34 @@ class ControllerQuestion
 
 
         $responsables = $_SESSION['responsables'];
-            foreach ($responsables as $responsable) {
-            $utilisateur = (new UtilisateurRepository())->select($responsable);
-            $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
+
+        foreach ($responsables as $responsable) {
+            $sql = "INSERT INTO Responsables (idQuestion,idUtilisateur)";
+            $sql = $sql . " VALUES (" . $question->getId() . ", '" . $responsable . "');";
+            $sql = substr($sql, 0, -1);
+
+            // Préparation de la requête
+            $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
+
+            // On donne les valeurs et on exécute la requête
+            try {
+                $pdoStatement->execute();
+            } catch (PDOException $e) {
+                echo($e->getMessage());
+            }
         }
+
+
+
+            /*
+                foreach ($responsables as $responsable) {
+                $utilisateur = (new UtilisateurRepository())->select($responsable);
+                $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
+            }*/
 
         $votants = $_SESSION['votants'];
         foreach($votants as $votant){
-            var_dump($auteur);
+
             $sql = "INSERT INTO Votants (idQuestion,idUtilisateur)";
             $sql = $sql . " VALUES (" . $question->getId() . ", '" . $votant . "');";
             $sql = substr($sql, 0, -1);

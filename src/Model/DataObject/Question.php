@@ -3,6 +3,8 @@
 namespace App\Vote\Model\DataObject;
 
 use App\Vote\Model\Repository\SectionRepository;
+use App\Vote\Model\Repository\ResponsableRepository;
+use App\Vote\Model\Repository\VotantRepository;
 
 class Question extends AbstractDataObject
 {
@@ -116,6 +118,16 @@ class Question extends AbstractDataObject
     public function getSections(): array
     {
         return (new SectionRepository())->selects($this->id, '*', "idQuestion", "sections");
+    }
+
+    public function getResponsables(): array
+    {
+        return (new ResponsableRepository())->selects($this->id, '*', "idQuestion", "responsables");
+    }
+
+    public function getVotants(): array
+    {
+        return (new VotantRepository())->selects($this->id, '*', "idQuestion", "votants");
     }
 
 
