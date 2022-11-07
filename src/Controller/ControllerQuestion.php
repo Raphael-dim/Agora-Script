@@ -11,6 +11,7 @@ use App\Vote\Model\DataObject\Section;
 use App\Vote\Model\DataObject\Utilisateur;
 use App\Vote\Model\Repository\AuteurRepository;
 use App\Vote\Model\Repository\CalendrierRepository;
+use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\ResponsableRepository;
 use App\Vote\Model\Repository\SectionRepository;
@@ -42,10 +43,12 @@ class ControllerQuestion
         $sections = $question->getSections();
         $auteurs = $question->getResponsables();
         $votants = $question->getVotants();
+        $propositions = (new PropositionRepository())->select($_GET['idQuestion']);
         self::afficheVue('view.php', ["question" => $question,
             "sections" => $sections,
             "auteurs" => $auteurs,
             "votants" => $votants,
+            "propositions" => $propositions,
             "pagetitle" => "Detail question",
             "cheminVueBody" => "Question/detail.php"]);
     }
@@ -176,8 +179,6 @@ class ControllerQuestion
                 echo($e->getMessage());
             }
         }
-
-
 
             /*
                 foreach ($responsables as $responsable) {

@@ -56,21 +56,20 @@ foreach ($sections as $Section) {
 
 <div>
     <h2>Propositions</h2>
-    <p>Pas encore dispo</p>
-    <!--<?php
+    <?php
     if(is_array($propositions)){
-        foreach ($propositions as $Section) {
-            echo '<p>' . $Section->getTitre() . '</p>';
-            echo '<p>' . $propositions->getAuteur() . '</p>';
-            echo '<p>' . $Section->getContenu() . '</p>';
+        foreach ($propositions as $proposition) {
+            echo '<p>' . $proposition->getTitre() . '</p>';
+            echo '<p>' . $proposition->getAuteur() . '</p>';
+            echo '<p>' . $proposition->getContenu() . '</p>';
             echo '&nbsp';
         }
-    }else{
+    }else if(!is_null($propositions)){
         echo '<p>' . $propositions->getTitre() . '</p>';
         echo '<p>' . $propositions->getAuteur() . '</p>';
         echo '<p>' . $propositions->getContenu() . '</p>';
         echo '&nbsp';
     }
-    ?>//-->
+    ?>
 </div>
 

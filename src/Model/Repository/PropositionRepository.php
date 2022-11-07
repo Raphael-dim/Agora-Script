@@ -25,12 +25,12 @@ class PropositionRepository extends AbstractRepository
 
     protected function getNomClePrimaire(): string
     {
-        return "idProposition";
+        return "idQuestion";
     }
 
     protected function getNomsColonnes(): array
     {
-        return array("idProposition", "titre", "contenu","idAuteur","idQuestion");
+        return array("idQuestion", "idUtilisateur", "titre","contenu");
 
     }
 }

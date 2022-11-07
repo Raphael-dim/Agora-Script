@@ -6,7 +6,7 @@ use App\Vote\Model\DataObject\Question;
 
 if (isset($_POST['Titre'])){
     FormConfig::postSession();
-    FormConfig::redirect("index.php?action=created&controller=proposition");
+    //FormConfig::redirect("index.php?action=created&controller=proposition");
 }
 
 ?>
@@ -14,7 +14,7 @@ if (isset($_POST['Titre'])){
 <h1>Création d'une proposition</h1>
 
 
-<form method="post" >
+<form method="post" action="index.php?action=created&controller=proposition">
     <p>
         <label for="question_select">Question : </label>
         <select name="question" id="question_select">
