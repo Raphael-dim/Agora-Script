@@ -4,7 +4,6 @@ namespace App\Vote\Model\DataObject;
 
 class Proposition extends AbstractDataObject
 {
-    private int $id;
     private string $titre;
     private string $contenu;
     private Utilisateur $auteur;
@@ -17,22 +16,6 @@ class Proposition extends AbstractDataObject
         $this->contenu = $contenu;
         $this->auteur = $auteur;
         $this->question = $question;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
     }
 
     /**

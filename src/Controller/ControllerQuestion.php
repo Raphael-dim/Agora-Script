@@ -3,14 +3,17 @@
 namespace App\Vote\Controller;
 
 
+use App\Vote\Model\DatabaseConnection as DatabaseConnection;
 use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Question;
 use App\Vote\Model\DataObject\Section;
 use App\Vote\Model\DataObject\Utilisateur;
+use App\Vote\Model\Repository\AuteurRepository;
 use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\SectionRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
+use App\Vote\Model\Repository\VotantRepository;
 
 class ControllerQuestion
 {
@@ -30,14 +33,18 @@ class ControllerQuestion
         self::form();
     }
 
-
     public static function read()
     {
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $sections = (new SectionRepository())->select($_GET['idQuestion'],'*',"idquestion");
+        $auteurs = (new AuteurRepository())->select($_GET['idQuestion'],'*',"idquestion", "Auteurs");
+        $votants = (new VotantRepository())->select($_GET['idQuestion'],'*',"idquestion", "Votants");
 
-        self::afficheVue('view.php', ["question" => $question,
+
+        Controller::afficheVue('view.php', ["question" => $question,
                                                 "sections" => $sections,
+                                                "auteurs" => $auteurs,
+                                                "votants" => $votants,
                                                 "pagetitle" => "Detail question",
                                                 "cheminVueBody" => "Question/detail.php"]);
     }
@@ -49,9 +56,10 @@ class ControllerQuestion
 
     public static function readAll()
     {
+        //A optimiser
         $questions = (new QuestionRepository())->selectAll();
 
-        self::afficheVue('view.php',
+        Controller::afficheVue('view.php',
             ["questions" => $questions,
                 "pagetitle" => "Liste des questions",
                 "cheminVueBody" => "Question/list.php"]);
@@ -99,7 +107,7 @@ class ControllerQuestion
 
         }
 
-        self::afficheVue('view.php',
+        Controller::afficheVue('view.php',
             array_merge(["pagetitle" => "Créer une question",
                 "cheminVueBody" => "Question/create/" . $view . ".php"], $params));
     }
@@ -111,7 +119,7 @@ class ControllerQuestion
     public static function search()
     {
         $utilisateurs = array();
-        self::afficheVue('view.php',
+        Controller::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,
                 "pagetitle" => "Rechercher un utilisateur",
                 "cheminVueBody" => "Question/create/step-4.php"]);
@@ -132,7 +140,7 @@ class ControllerQuestion
         if ($calendierBD != null) {
             $calendrier->setIdCalendrier($calendierBD);
         } else {
-            self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+            Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
 
         //var_dump($sections);
@@ -142,11 +150,44 @@ class ControllerQuestion
         if ($questionBD != null) {
             $question->setId($questionBD);
         } else {
-            self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+            Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
 
         $auteurs = $_SESSION['auteurs'];
+        foreach($auteurs as $auteur){
+            var_dump($auteur);
+            $sql = "INSERT INTO Auteurs (idQuestion,idUtilisateur)";
+            $sql = $sql . " VALUES (" . $question->getId() . ", '" . $auteur . "');";
+            $sql = substr($sql, 0, -1);
+
+            // Préparation de la requête
+            $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
+
+            // On donne les valeurs et on exécute la requête
+            try {
+                $pdoStatement->execute();
+            } catch (PDOException $e) {
+                echo($e->getMessage());
+            }
+        }
+
         $votants = $_SESSION['votants'];
+        foreach($votants as $votant){
+            var_dump($auteur);
+            $sql = "INSERT INTO Votants (idQuestion,idUtilisateur)";
+            $sql = $sql . " VALUES (" . $question->getId() . ", '" . $votant . "');";
+            $sql = substr($sql, 0, -1);
+
+            // Préparation de la requête
+            $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
+
+            // On donne les valeurs et on exécute la requête
+            try {
+                $pdoStatement->execute();
+            } catch (PDOException $e) {
+                echo($e->getMessage());
+            }
+        }
 
         $sections = $_SESSION['Sections'];
         foreach ($sections as $value) {
@@ -155,13 +196,13 @@ class ControllerQuestion
             if ($sectionBD != null) {
                 $section->setId($sectionBD);
             } else {
-                self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+                Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
             }
         }
 
         $questions = (new QuestionRepository())->selectAll();
 
-        self::afficheVue('view.php',
+        Controller::afficheVue('view.php',
             ["questions" => $questions,
                 "pagetitle" => "Question crée",
                 "cheminVueBody" => "Question/created.php"]);
@@ -169,9 +210,10 @@ class ControllerQuestion
     }
 
 
-    private static function afficheVue(string $cheminVue, array $parametres = []): void
+    public static function recap()
     {
-        extract($parametres); // Crée des variables à partir du tableau $paramètres
-        require "../src/view/$cheminVue"; // Charge la vue
+        Controller::afficheVue('view.php',
+            ["pagetitle" => "Creer une question",
+                "cheminVueBody" => "Question/create/step-6.php"]);
     }
 }
