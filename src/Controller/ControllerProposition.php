@@ -22,8 +22,7 @@ class ControllerProposition
 
     public static function created()
     {
-        var_dump($_POST);
-        $proposition = new Proposition($_POST['Titre'],$_POST['contenu'],(new UtilisateurRepository)->select("hambrighta"),$_POST['question']);
+        $proposition = new Proposition($_POST['Titre'],$_POST['contenu'],(new UtilisateurRepository)->select("hambrighta"),(new QuestionRepository())->select($_POST['question']));
         (new PropositionRepository())->sauvegarder($proposition);
         $questions = (new QuestionRepository())->selectAll();
         Controller::afficheVue('view.php', ["pagetitle" => "Accueil",

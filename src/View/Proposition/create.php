@@ -22,7 +22,7 @@ if (isset($_POST['Titre'])){
             <?php
             $_SESSION['questions'] = (new QuestionRepository())->selectAll();
             foreach ($_SESSION['questions'] as $question) {
-                echo "<option value=" . $question->getTitre() . " >" . $question->getTitre() . "</option>";
+                echo "<option value=" . $question->getId() . " >" . $question->getTitre() . "</option>";
             } ?>
         </select>
     </p>

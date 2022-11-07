@@ -34,8 +34,10 @@ abstract class AbstractRepository
             $pdoStatement->execute($object->formatTableau());
         } catch (PDOException $e) {
             echo($e->getMessage());
+            echo 'testeeeeee';
             return null;
         }
+
         $id = DatabaseConnection::getPdo()->query("SELECT MAX(" . $this->getNomClePrimaire() . ") FROM " . $this->getNomTable());
         foreach ($id as $retour) {
             $max = $retour[0];

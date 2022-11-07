@@ -155,6 +155,7 @@ class ControllerQuestion
 
         $question = new Question($_SESSION['Titre'], $_SESSION['Description'], $creation, $calendrier, $organisateur);
         $questionBD = (new QuestionRepository())->sauvegarder($question);
+        var_dump($questionBD);
         if ($questionBD != null) {
             $question->setId($questionBD);
         } else {
