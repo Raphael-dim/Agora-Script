@@ -25,7 +25,7 @@
 </main>
 <footer>
     <p>
-        Site de vote de ...
+        Site de vote des Prog'Raleur
     </p>
 </footer>
 </body>

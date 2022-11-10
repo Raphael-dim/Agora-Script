@@ -2,8 +2,7 @@
 session_start();
 
 use App\Vote\Config\FormConfig as FormConfig;
-
-$_SESSION['type'] = 'auteurs';
+$_SESSION['type'] = 'responsables';
 
 if (array_key_exists('user', $_POST)) {
     adduser($_POST["user"]);

@@ -11,25 +11,26 @@ class PropositionRepository extends AbstractRepository
     protected function construire(array $propositionTableau) : Proposition
     {
         return new Proposition(
-            $propositionTableau["id"],
             $propositionTableau["titre"],
-            $propositionTableau["contenu"]
+            $propositionTableau["contenu"],
+            $propositionTableau["auteur"],
+            $propositionTableau["question"]
         );
     }
 
     protected function getNomTable(): string
     {
-        return "Proposition";
+        return "Propositions";
     }
 
     protected function getNomClePrimaire(): string
     {
-        return "id";
+        return "idProposition";
     }
 
     protected function getNomsColonnes(): array
     {
-        return array("id", "titre", "contenu");
+        return array("idProposition", "titre", "contenu","idAuteur","idQuestion");
 
     }
 }

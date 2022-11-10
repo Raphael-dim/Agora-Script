@@ -5,16 +5,18 @@ namespace App\Vote\Model\Repository;
 
 use App\Vote\Model\DataObject\Calendrier;
 
-class CalendrierRepository extends AbstractRepository
+class   CalendrierRepository extends AbstractRepository
 {
     protected function construire(array $calendrierTableau) : Calendrier
     {
-        return new Calendrier(
+        $calendrier = new Calendrier(
             $calendrierTableau["debutecriture"],
             $calendrierTableau["finecriture"],
             $calendrierTableau["debutvote"],
             $calendrierTableau["finvote"],
         );
+        $calendrier->setIdCalendrier($calendrierTableau['idcalendrier']);
+        return $calendrier;
     }
 
     protected function getNomTable(): string

@@ -28,7 +28,7 @@ abstract class AbstractRepository
         $sql = $sql . ");";
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
-
+        echo $sql;
         // On donne les valeurs et on exécute la requête
         try {
             $pdoStatement->execute($object->formatTableau());
@@ -76,7 +76,7 @@ abstract class AbstractRepository
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
         // On donne les valeurs et on exécute la requête
         try {
-            $pdoStatement->execute($object->formatTableau());
+            $pdoStatement->execute($object->formatTableau(true));
         } catch (PDOException $e) {
             echo($e->getMessage());
         }
@@ -126,14 +126,39 @@ abstract class AbstractRepository
      * Selectionne une ligne par rapport à la clef primaire
      */
 
-    public function select($clef,$rowSelect = '*', $whereCondition = null)
+    public function select($clef): ?AbstractDataObject
+    {
+        $sql = 'SELECT * from ' . $this->getNomTable() . ' WHERE ' . $this->getNomClePrimaire() . '=:clef';
+        // Préparation de la requête
+        $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
+
+        $values = array(
+            "clef" => $clef,
+        );
+        // On donne les valeurs et on exécute la requête
+        $pdoStatement->execute($values);
+        // On récupère les résultats comme précédemment
+        // Note : fetch() renvoie false si pas d'objet correspondant
+        $data = $pdoStatement->fetch();
+        if (!$data) {
+            return null;
+        }
+        return $this->construire($data);
+    }
+
+    public function selects($clef, $rowSelect = '*', $whereCondition = null, $nomTable = null): array
     {
         $ADonnees = array();
-        $sql = 'SELECT ' . $rowSelect . ' from ' . $this->getNomTable();
-        if(is_null($whereCondition)){
-            $sql = $sql . ' WHERE '. $this->getNomClePrimaire() . ' =:clef';
-        }else{
-            $sql = $sql . ' WHERE '. $whereCondition . ' =:clef';
+        if (is_null($nomTable)) {
+            $sql = 'SELECT ' . $rowSelect . ' from ' . $this->getNomTable();
+        } else {
+            $sql = 'SELECT ' . $rowSelect . ' from ' . $nomTable;
+        }
+        if (is_null($whereCondition)) {
+            $sql = $sql . ' WHERE ' . $this->getNomClePrimaire() . ' =:clef';
+        } else {
+            $sql = $sql . ' WHERE ' . $whereCondition . ' =:clef';
+
         }
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
@@ -141,37 +166,21 @@ abstract class AbstractRepository
         $values = array(
             "clef" => $clef,
         );
-
         $pdoStatement->execute($values);
-
         foreach ($pdoStatement as $donneesFormatTableau) {
-            if ($pdoStatement->rowCount() > 1) {
-                $ADonnees[] = $this::construire(json_decode(json_encode($donneesFormatTableau), true));
-            } else {
-                return $this::construire(json_decode(json_encode($donneesFormatTableau), true));
-            }
+            $ADonnees[] = $this::construire(json_decode(json_encode($donneesFormatTableau), true));
+
+
         }
-        //var_dump($ADonnees);
+
         return $ADonnees;
     }
 
-    /*
-     * Retourne le nom de la table associé à la classe
-     */
     protected abstract function getNomTable(): string;
 
-    /*
-     * Transforme un tableau de donnée en Objet
-     */
     protected abstract function construire(array $objetFormatTableau);
 
-    /*
-     * Retourne le nom de la clef primaire de la table
-     */
     protected abstract function getNomClePrimaire(): string;
 
-    /*
-     * Retourne les noms de colonnes de la table
-     */
     protected abstract function getNomsColonnes(): array;
 }
