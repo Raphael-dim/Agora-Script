@@ -283,11 +283,7 @@ class ControllerQuestion
     public static function delete(): void
     {
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        foreach ($question->getSections() as $section) {
-            (new SectionRepository())->delete($section->getId());
-        }
         (new QuestionRepository())->delete($_GET['idQuestion']);
-        (new CalendrierRepository())->delete($question->getCalendrier()->getIdCalendrier());
         $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
         self::afficheVue('view.php', ["pagetitle" => "Question supprimée", "cheminVueBody" => "question/deleted.php", "questions" => $questions]);
     }
