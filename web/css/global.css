@@ -8,13 +8,31 @@ body {
 }
 
 main {
-    width: 55vw;
+    width: 50%;
     margin: auto;
     margin-top: 50px;
     background: #012e49;
     opacity: 0.9;
     overflow-y: scroll;
     max-height: 85vh;
+}
+
+@media screen and (max-width: 1500px) {
+    main {
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    main {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    main {
+        width: 100%;
+    }
 }
 
 main p {
