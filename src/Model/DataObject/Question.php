@@ -117,17 +117,17 @@ class Question extends AbstractDataObject
 
     public function getSections(): array
     {
-        return (new SectionRepository())->selects($this->id, '*', "idQuestion", "sections");
+        return (new SectionRepository())->selectWhere($this->id, '*', "idQuestion", "sections");
     }
 
     public function getResponsables(): array
     {
-        return (new ResponsableRepository())->selects($this->id, '*', "idQuestion", "responsables");
+        return (new ResponsableRepository())->selectWhere($this->id, '*', "idQuestion", "responsables");
     }
 
     public function getVotants(): array
     {
-        return (new VotantRepository())->selects($this->id, '*', "idQuestion", "votants");
+        return (new VotantRepository())->selectWhere($this->id, '*', "idQuestion", "votants");
     }
 
 

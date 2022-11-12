@@ -9,16 +9,16 @@ class VotantRepository extends AbstractRepository
 {
     protected function construire(array $questionTableau): Votant
     {
-        $auteur = new Votant(
+        $votant = new Votant(
             (new QuestionRepository())->select($questionTableau['idquestion']),
-            (new UtilisateurRepository())->select($questionTableau['idutilisateur'])
         );
-        return $auteur;
+        $votant->setIdentifiant($questionTableau['idutilisateur']);
+        return $votant;
     }
 
     protected function getNomTable(): string
     {
-        return "Votants";
+        return "votants";
     }
 
     protected function getNomClePrimaire(): string
@@ -28,7 +28,7 @@ class VotantRepository extends AbstractRepository
 
     protected function getNomsColonnes(): array
     {
-        return array("idquestion", "titre", "description");
+        return array("idquestion", "idutilisateur");
 
     }
 }

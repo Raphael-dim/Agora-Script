@@ -9,6 +9,7 @@ use App\Vote\Model\DataObject\Question;
 use App\Vote\Model\DataObject\Responsable;
 use App\Vote\Model\DataObject\Section;
 use App\Vote\Model\DataObject\Utilisateur;
+use App\Vote\Model\DataObject\Votant;
 use App\Vote\Model\Repository\AuteurRepository;
 use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\QuestionRepository;
@@ -40,11 +41,11 @@ class ControllerQuestion
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
 
         $sections = $question->getSections();
-        $auteurs = $question->getResponsables();
+        $responsables = $question->getResponsables();
         $votants = $question->getVotants();
         self::afficheVue('view.php', ["question" => $question,
             "sections" => $sections,
-            "auteurs" => $auteurs,
+            "responsables" => $responsables,
             "votants" => $votants,
             "pagetitle" => "Detail question",
             "cheminVueBody" => "Question/detail.php"]);
@@ -162,45 +163,17 @@ class ControllerQuestion
         $responsables = $_SESSION['responsables'];
 
         foreach ($responsables as $responsable) {
-            $sql = "INSERT INTO Responsables (idQuestion,idUtilisateur)";
-            $sql = $sql . " VALUES (" . $question->getId() . ", '" . $responsable . "');";
-            $sql = substr($sql, 0, -1);
-
-            // Préparation de la requête
-            $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
-
-            // On donne les valeurs et on exécute la requête
-            try {
-                $pdoStatement->execute();
-            } catch (PDOException $e) {
-                echo($e->getMessage());
-            }
+            $utilisateur = new Responsable($question);
+            $utilisateur->setIdentifiant($responsable);
+            $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
         }
 
-
-
-            /*
-                foreach ($responsables as $responsable) {
-                $utilisateur = (new UtilisateurRepository())->select($responsable);
-                $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
-            }*/
-
         $votants = $_SESSION['votants'];
+
         foreach($votants as $votant){
-
-            $sql = "INSERT INTO Votants (idQuestion,idUtilisateur)";
-            $sql = $sql . " VALUES (" . $question->getId() . ", '" . $votant . "');";
-            $sql = substr($sql, 0, -1);
-
-            // Préparation de la requête
-            $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
-
-            // On donne les valeurs et on exécute la requête
-            try {
-                $pdoStatement->execute();
-            } catch (PDOException $e) {
-                echo($e->getMessage());
-            }
+            $utilisateur = new Votant($question);
+            $utilisateur->setIdentifiant($votant);
+            $votantBD = (new VotantRepository())->sauvegarder($utilisateur);
         }
 
         $sections = $_SESSION['Sections'];

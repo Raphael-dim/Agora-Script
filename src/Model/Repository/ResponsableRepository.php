@@ -10,11 +10,11 @@ class ResponsableRepository extends UtilisateurRepository
 
     protected function construire(array $questionTableau): Responsable
     {
-        $auteur = new Responsable(
-            (new QuestionRepository())->select($questionTableau['idquestion']),
-            (new UtilisateurRepository())->select($questionTableau['idutilisateur'])
+        $responsable = new Responsable(
+            (new QuestionRepository())->select($questionTableau['idquestion'])
         );
-        return $auteur;
+        $responsable->setIdentifiant($questionTableau['idutilisateur']);
+        return $responsable;
     }
 
 
