@@ -137,7 +137,7 @@ class Question extends AbstractDataObject
             "titreTag" => $this->titre,
             "descriptionTag" => $this->description,
             "creationTag" => $this->creation,
-            "idCalendrierTag" => $this->calendrier->getIdCalendrier(),
+            "idCalendrierTag" => $this->calendrier->getId(),
             "idOrganisateurTag" => $this->organisateur->getIdentifiant()
         );
         if ($update) {

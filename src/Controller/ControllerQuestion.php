@@ -140,7 +140,7 @@ class ControllerQuestion
         $calendrier = new Calendrier($_SESSION['debutEcriture'], $_SESSION['finEcriture'], $_SESSION['debutVote'], $_SESSION['finVote']);
         $calendierBD = (new CalendrierRepository())->sauvegarder($calendrier);
         if ($calendierBD != null) {
-            $calendrier->setIdCalendrier($calendierBD);
+            $calendrier->setId($calendierBD);
         } else {
             Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
@@ -213,7 +213,7 @@ class ControllerQuestion
         (new QuestionRepository())->update($question);
 
 
-        $calendrier = (new CalendrierRepository())->select($question->getCalendrier()->getIdCalendrier());
+        $calendrier = (new CalendrierRepository())->select($question->getCalendrier()->getId());
         $calendrier->setDebutEcriture($_SESSION['debutEcriture']);
         $calendrier->setFinEcriture($_SESSION['finEcriture']);
         $calendrier->setDebutVote($_SESSION['debutVote']);
@@ -257,6 +257,8 @@ class ControllerQuestion
     {
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         (new QuestionRepository())->delete($_GET['idQuestion']);
+        $calendrier = $question->getCalendrier();
+        (new CalendrierRepository())->delete($calendrier->getId());
         $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
         self::afficheVue('view.php', ["pagetitle" => "Question supprimée", "cheminVueBody" => "question/deleted.php", "questions" => $questions]);
     }

@@ -29,22 +29,21 @@ abstract class AbstractRepository
             $sql = $sql . ":" . $colonne . "Tag, ";
         }
         $sql = substr($sql, 0, -2);
-        $sql = $sql . ");";
+        $sql = $sql . ")";
+        if (get_class($object) == Question::class || get_class($object) == Section::class || get_class($object) == Calendrier::class) {
+            $sql = $sql . " RETURNING " . $this->getNomClePrimaire();
+        }
+        $sql = $sql .";";
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
         // On donne les valeurs et on exécute la requête
         try {
             $pdoStatement->execute($object->formatTableau());
+            foreach ($pdoStatement as $clePrimaire) {
+                return $clePrimaire[0];
+            }
         } catch (PDOException $e) {
             echo($e->getMessage());
-            return null;
-        }
-
-        if (get_class($object) == Question::class || get_class($object) == Section::class || get_class($object) == Calendrier::class) {
-            $id = DatabaseConnection::getPdo()->query("SELECT MAX(" . $this->getNomClePrimaire() . ") FROM " . $this->getNomTable());
-            foreach ($id as $retour) {
-                return $retour[0];
-            }
         }
         return null;
     }
