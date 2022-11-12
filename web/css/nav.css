@@ -1,19 +1,14 @@
 nav {
-    position: absolute;
-    width: 100%;
     display: block;
-    margin: auto;
     color: white;
-    padding: 6px;
-    height: 42px;
+    border-radius: 20px;
     transition: ease-in-out 0.5s;
     background-color: #012e49;
-    /*z-index: 100;*/
-    overflow: hidden;
 }
 
+
 nav:hover {
-    height: 50px;
+    height: 85px;
 }
 
 nav:hover #Menu {
@@ -21,10 +16,11 @@ nav:hover #Menu {
 }
 
 #Menu {
+    margin-left: 10%;
+    margin-right: 10%;
     display: flex;
-    margin: 0px;
     margin-top: -1%;
-    height: 50px;
+    height: 75px;
     padding-bottom: 10px;
     transition: ease-in-out 0.5s;
 }
@@ -34,24 +30,22 @@ nav:hover #Menu {
     color: white;
 }
 
+
 ul[id="Menu"] li.grosmenu {
-    margin-right: 20px;
+
+    /*margin-right: 20px;*/
 }
 
 ul[id="Menu"] li.grosmenu > a {
-    text-decoration: none;
+    margin-top: 15px;
     display: inline-block;
-    height: 40px;
-    width: 100px;
+    width: 150px;
     position: relative;
-    /* top:-2px; */
     color: white;
-    text-align: left;
+    text-align: center;
     padding: 10px;
-    font-size: 12px;
-    margin-left: -7px;
-    line-height: 17px;
-    cursor: pointer;
+    font-size: 20px;
+    line-height: 24px;
 }
 
 ul[id="Menu"] li a:hover {
@@ -66,4 +60,49 @@ ul[id="Menu"] li a:hover {
 ul[id="Menu"] li {
     display: inline;
     border-radius: 0;
+}
+
+@media screen and (max-width: 1500px) {
+    #Menu {
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+
+    ul[id="Menu"] li.grosmenu > a {
+        padding: 0px;
+        height: 40px;
+        width: 150px;
+        font-size: 19px;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    #Menu {
+        margin-left: 0%;
+        margin-right: 0%;
+    }
+
+    ul[id="Menu"] li.grosmenu > a {
+        padding: 0px;
+        height: 40px;
+        width: 100px;
+        font-size: 17px;
+        line-height: 22px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    #Menu {
+        margin-left: 0%;
+        margin-right: 0%;
+    }
+
+    ul[id="Menu"] li.grosmenu > a {
+        margin-left: 0px;
+        padding: 0px;
+        height: 40px;
+        width: 80px;
+        font-size: 15px;
+        line-height: 20px;
+    }
 }
