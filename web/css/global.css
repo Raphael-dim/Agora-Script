@@ -1,6 +1,6 @@
 * {
     box-sizing: border-box;
-    overflow: hidden;
+    /*overflow: auto;*/
 }
 
 body {
@@ -8,19 +8,37 @@ body {
 }
 
 main {
-    width: 50vw;
+    border-radius: 20px;
+    width: 50%;
     margin: auto;
     margin-top: 50px;
     background: #012e49;
     opacity: 0.9;
-    overflow-y: scroll;
-    max-height: 85vh;
+}
+
+@media screen and (max-width: 1500px) {
+    main {
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    main {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    main {
+        width: 100%;
+    }
 }
 
 main p {
+    border-radius: 15px;
     background: #dff5f4;
-    padding: 5px;
-    margin: 3px;
+    padding: 10px;
+    margin: 7px;
     border: solid lightgrey 1px;
 }
 
@@ -39,6 +57,7 @@ main p a {
 }
 
 .modifier {
+    filter: invert(0.9);
     max-width: 25px;
 }
 
@@ -53,7 +72,18 @@ main p a {
 }
 
 h1, h2, h3 {
+    margin-left: 15px;
     color: #dcdcdc;
+}
+
+h1 {
+    text-decoration: underline;
+}
+
+form p label:first-child {
+    /*color: #011b2a;*/
+    font-size: 20px;
+    /*font-weight: bold;*/
 }
 
 form legend {
@@ -99,5 +129,20 @@ span {
 }
 
 li, a {
+    margin-left: 20px;
     color: #dff5f4;
+}
+
+textarea {
+    resize: none;
+}
+
+.champ textarea {
+    background-color: white;
+}
+
+.champ * {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 15px;
 }

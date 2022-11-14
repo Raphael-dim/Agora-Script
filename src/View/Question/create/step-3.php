@@ -32,13 +32,20 @@ $nbSection = $_SESSION['nbSections'];
         $nb = $nbSection;
     }
     for ($i = 1; $i <= $nb; $i++) {
-        echo '<p>
-            <label>Titre de la section n°' . $i . '</label> :
-            <input type="text" name=titre' . $i . ' value = "' . FormConfig::TextField('titre' . $i) . '" id="titre_id"  required/></p>
-            <p>
-            <label>Description de la section n°' . $i . '</label> :
-            <input type="text" name=description' . $i . ' value = "' . FormConfig::TextField('description' . $i) . '" id="sections_id" required/>
-            </p>';
+        echo '  
+                <h2>Section n°' . $i . '</h2>
+                <p>
+                    <label>Titre :</label>
+                    <input type="text" name=titre' . $i . ' id="titre_id"  size="77" maxlength="70"
+                    value = "' . FormConfig::TextField('titre' . $i) . '" 
+                    required/>
+                    <label for="max_id">70 caractères maximum</label>
+                </p>
+                <p class ="champ">
+                    <label>Description :</label>
+                    <textarea id="section_id" maxlength="350" name=description' . $i . ' rows="7" cols="50" required>' . FormConfig::TextField('description' . $i) . '</textarea>
+                    <label for="max_id">350 caractères maximum</label>
+               </p>';
     }
 
     ?>

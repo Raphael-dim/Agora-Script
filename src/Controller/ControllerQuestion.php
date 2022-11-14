@@ -9,6 +9,7 @@ use App\Vote\Model\DataObject\Question;
 use App\Vote\Model\DataObject\Responsable;
 use App\Vote\Model\DataObject\Section;
 use App\Vote\Model\DataObject\Utilisateur;
+use App\Vote\Model\DataObject\Votant;
 use App\Vote\Model\Repository\AuteurRepository;
 use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\QuestionRepository;
@@ -40,11 +41,11 @@ class ControllerQuestion
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
 
         $sections = $question->getSections();
-        $auteurs = $question->getResponsables();
+        $responsables = $question->getResponsables();
         $votants = $question->getVotants();
         self::afficheVue('view.php', ["question" => $question,
             "sections" => $sections,
-            "auteurs" => $auteurs,
+            "responsables" => $responsables,
             "votants" => $votants,
             "pagetitle" => "Detail question",
             "cheminVueBody" => "Question/detail.php"]);
@@ -139,7 +140,7 @@ class ControllerQuestion
         $calendrier = new Calendrier($_SESSION['debutEcriture'], $_SESSION['finEcriture'], $_SESSION['debutVote'], $_SESSION['finVote']);
         $calendierBD = (new CalendrierRepository())->sauvegarder($calendrier);
         if ($calendierBD != null) {
-            $calendrier->setIdCalendrier($calendierBD);
+            $calendrier->setId($calendierBD);
         } else {
             Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
@@ -162,45 +163,17 @@ class ControllerQuestion
         $responsables = $_SESSION['responsables'];
 
         foreach ($responsables as $responsable) {
-            $sql = "INSERT INTO Responsables (idQuestion,idUtilisateur)";
-            $sql = $sql . " VALUES (" . $question->getId() . ", '" . $responsable . "');";
-            $sql = substr($sql, 0, -1);
-
-            // Préparation de la requête
-            $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
-
-            // On donne les valeurs et on exécute la requête
-            try {
-                $pdoStatement->execute();
-            } catch (PDOException $e) {
-                echo($e->getMessage());
-            }
+            $utilisateur = new Responsable($question);
+            $utilisateur->setIdentifiant($responsable);
+            $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
         }
 
-
-
-            /*
-                foreach ($responsables as $responsable) {
-                $utilisateur = (new UtilisateurRepository())->select($responsable);
-                $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
-            }*/
-
         $votants = $_SESSION['votants'];
+
         foreach($votants as $votant){
-
-            $sql = "INSERT INTO Votants (idQuestion,idUtilisateur)";
-            $sql = $sql . " VALUES (" . $question->getId() . ", '" . $votant . "');";
-            $sql = substr($sql, 0, -1);
-
-            // Préparation de la requête
-            $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
-
-            // On donne les valeurs et on exécute la requête
-            try {
-                $pdoStatement->execute();
-            } catch (PDOException $e) {
-                echo($e->getMessage());
-            }
+            $utilisateur = new Votant($question);
+            $utilisateur->setIdentifiant($votant);
+            $votantBD = (new VotantRepository())->sauvegarder($utilisateur);
         }
 
         $sections = $_SESSION['Sections'];
@@ -240,7 +213,7 @@ class ControllerQuestion
         (new QuestionRepository())->update($question);
 
 
-        $calendrier = (new CalendrierRepository())->select($question->getCalendrier()->getIdCalendrier());
+        $calendrier = (new CalendrierRepository())->select($question->getCalendrier()->getId());
         $calendrier->setDebutEcriture($_SESSION['debutEcriture']);
         $calendrier->setFinEcriture($_SESSION['finEcriture']);
         $calendrier->setDebutVote($_SESSION['debutVote']);
@@ -283,11 +256,9 @@ class ControllerQuestion
     public static function delete(): void
     {
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        foreach ($question->getSections() as $section) {
-            (new SectionRepository())->delete($section->getId());
-        }
         (new QuestionRepository())->delete($_GET['idQuestion']);
-        (new CalendrierRepository())->delete($question->getCalendrier()->getIdCalendrier());
+        $calendrier = $question->getCalendrier();
+        (new CalendrierRepository())->delete($calendrier->getId());
         $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
         self::afficheVue('view.php', ["pagetitle" => "Question supprimée", "cheminVueBody" => "question/deleted.php", "questions" => $questions]);
     }

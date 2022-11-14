@@ -7,7 +7,7 @@ use Cassandra\Date;
 
 class Calendrier extends AbstractDataObject
 {
-    private int $idCalendrier;
+    private int $id;
     private string $debutEcriture;
     private string $finEcriture;
     private string $debutVote;
@@ -94,17 +94,17 @@ class Calendrier extends AbstractDataObject
     /**
      * @return int
      */
-    public function getIdCalendrier(): int
+    public function getId(): int
     {
-        return $this->idCalendrier;
+        return $this->id;
     }
 
     /**
-     * @param int $idCalendrier
+     * @param int $id
      */
-    public function setIdCalendrier(int $idCalendrier): void
+    public function setId(int $id): void
     {
-        $this->idCalendrier = $idCalendrier;
+        $this->id = $id;
     }
 
 
@@ -117,7 +117,7 @@ class Calendrier extends AbstractDataObject
             "finVoteTag" => $this->finVote
         );
         if ($update) {
-            $tab['idCalendrierTag'] = $this->idCalendrier;
+            $tab['idCalendrierTag'] = $this->id;
         }
         return $tab;
     }

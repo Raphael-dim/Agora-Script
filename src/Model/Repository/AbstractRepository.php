@@ -4,6 +4,10 @@ namespace App\Vote\Model\Repository;
 
 use App\Vote\Model\DatabaseConnection as DatabaseConnection;
 use App\Vote\Model\DataObject\AbstractDataObject;
+use App\Vote\Model\DataObject\Calendrier;
+use App\Vote\Model\DataObject\Question;
+use App\Vote\Model\DataObject\Section;
+use App\Vote\Model\DataObject\Utilisateur;
 use PDOException;
 
 abstract class AbstractRepository
@@ -25,27 +29,27 @@ abstract class AbstractRepository
             $sql = $sql . ":" . $colonne . "Tag, ";
         }
         $sql = substr($sql, 0, -2);
-        $sql = $sql . ");";
+        $sql = $sql . ")";
+        if (get_class($object) == Question::class || get_class($object) == Section::class || get_class($object) == Calendrier::class) {
+            $sql = $sql . " RETURNING " . $this->getNomClePrimaire();
+        }
+        $sql = $sql .";";
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
-        echo $sql;
         // On donne les valeurs et on exécute la requête
         try {
             $pdoStatement->execute($object->formatTableau());
+            foreach ($pdoStatement as $clePrimaire) {
+                return $clePrimaire[0];
+            }
         } catch (PDOException $e) {
             echo($e->getMessage());
-            return null;
-        }
-        $id = DatabaseConnection::getPdo()->query("SELECT MAX(" . $this->getNomClePrimaire() . ") FROM " . $this->getNomTable());
-        foreach ($id as $retour) {
-            $max = $retour[0];
-            return $max;
         }
         return null;
     }
 
     /*
-     * Supprime la ligne de la base de données graçe à la clef primaire
+     * Supprime la ligne de la base de données grâce à la clef primaire
      */
     public function delete(string $valeurClePrimaire)
     {
@@ -83,7 +87,7 @@ abstract class AbstractRepository
     }
 
     /*
-     * Selectionne toute les lignes de la table associé à la classe
+     * Sélectionne toutes les lignes de la table associée à la classe
      */
     public function selectAll(): array
     {
@@ -99,7 +103,7 @@ abstract class AbstractRepository
 
 
     /*
-     * Selectionne les lignes par rapport à un mot clef
+     * Sélectionne les lignes par rapport à un mot clef
      */
     public function selectKeyword($motclef, $row)
     {
@@ -123,7 +127,7 @@ abstract class AbstractRepository
 
 
     /*
-     * Selectionne une ligne par rapport à la clef primaire
+     * Sélectionne une ligne par rapport à la clef primaire
      */
 
     public function select($clef): ?AbstractDataObject
@@ -146,7 +150,7 @@ abstract class AbstractRepository
         return $this->construire($data);
     }
 
-    public function selects($clef, $rowSelect = '*', $whereCondition = null, $nomTable = null): array
+    public function selectWhere($clef, $rowSelect = '*', $whereCondition = null, $nomTable = null): array
     {
         $ADonnees = array();
         if (is_null($nomTable)) {
@@ -169,10 +173,7 @@ abstract class AbstractRepository
         $pdoStatement->execute($values);
         foreach ($pdoStatement as $donneesFormatTableau) {
             $ADonnees[] = $this::construire(json_decode(json_encode($donneesFormatTableau), true));
-
-
         }
-
         return $ADonnees;
     }
 

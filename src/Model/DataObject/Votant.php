@@ -6,12 +6,10 @@ use App\Vote\Model\Repository\AbstractRepository;
 class Votant extends Utilisateur
 {
     private Question $question;
-    private Utilisateur $utilisateur;
 
-    public function __construct(Question $question, Utilisateur $utilisateur)
+    public function __construct(Question $question)
     {
         $this->question = $question;
-        $this->utilisateur = $utilisateur;
     }
 
     /**
@@ -22,12 +20,10 @@ class Votant extends Utilisateur
         return $this->question;
     }
 
-    /**
-     * @return Utilisateur
-     */
-    public function getUtilisateur(): Utilisateur
+    public function formatTableau(): array
     {
-        return $this->utilisateur;
+        return array(
+            "idquestionTag" =>  $this->question->getId(),
+            "idutilisateurTag" => $this->getIdentifiant());
     }
-
 }
