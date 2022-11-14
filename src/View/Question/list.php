@@ -1,3 +1,9 @@
+
+<div class="barreHaut">
+    <a class="rechercher" href="">Rechercher une question</a>
+    <a class="creer" href="index.php?action=create&controller=question">Créer votre question</a>
+</div>
+
 <ul class="selection">
     <li class="phases">
         <a href="index.php?action=readAll&selection=toutes&controller=question">Toutes</a>
@@ -21,43 +27,43 @@
 
 <ul class="questions">
 
-<?php
+    <?php
 
-use App\Vote\Controller\ControllerAccueil;
+    use App\Vote\Controller\ControllerAccueil;
 
-$selection = "toutes";
-if (isset($_GET['selection'])) {
-    $selection = $_GET['selection'];
-}
-
-
-$date = date("Y/m/d H:i:s");
-
-if ($selection == 'ecriture') {
-    foreach ($questions as $question) {
-        $calendrier = $question->getCalendrier();
-        if ($calendrier->getDebutEcriture() > $date || $calendrier->getFinEcriture() < $date) {
-            unset($questions[array_search($question, $questions)]);
-        }
-    }
-} else if ($selection == 'vote') {
-    foreach ($questions as $question) {
-        $calendrier = $question->getCalendrier();
-        if ($calendrier->getDebutVote() > $date || $calendrier->getFinVote() < $date) {
-            unset($questions[array_search($question, $questions)]);
-        }
+    $selection = "toutes";
+    if (isset($_GET['selection'])) {
+        $selection = $_GET['selection'];
     }
 
-} else if ($selection == 'terminees') {
-    foreach ($questions as $question) {
-        $calendrier = $question->getCalendrier();
-        if ($calendrier->getFinVote() >= $date) {
-            unset($questions[array_search($question, $questions)]);
+
+    $date = date("Y/m/d H:i:s");
+
+    if ($selection == 'ecriture') {
+        foreach ($questions as $question) {
+            $calendrier = $question->getCalendrier();
+            if ($calendrier->getDebutEcriture() > $date || $calendrier->getFinEcriture() < $date) {
+                unset($questions[array_search($question, $questions)]);
+            }
         }
+    } else if ($selection == 'vote') {
+        foreach ($questions as $question) {
+            $calendrier = $question->getCalendrier();
+            if ($calendrier->getDebutVote() > $date || $calendrier->getFinVote() < $date) {
+                unset($questions[array_search($question, $questions)]);
+            }
+        }
+
+    } else if ($selection == 'terminees') {
+        foreach ($questions as $question) {
+            $calendrier = $question->getCalendrier();
+            if ($calendrier->getFinVote() >= $date) {
+                unset($questions[array_search($question, $questions)]);
+            }
+        }
+    } else if ($selection != 'toutes') {
+        ControllerAccueil::erreur();
     }
-} else if ($selection != 'toutes') {
-    ControllerAccueil::erreur();
-}
 
     foreach ($questions as $question) {
         $idQuestionURL = rawurlencode($question->getId());
@@ -75,3 +81,6 @@ if ($selection == 'ecriture') {
     }
     ?>
 </ul>
+
+
+
