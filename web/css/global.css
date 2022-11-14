@@ -146,3 +146,35 @@ textarea {
     vertical-align: middle;
     margin-left: 15px;
 }
+
+.selection {
+    width: 100%;
+    justify-content: center;
+    border-style: solid;
+    border-color: #dff5f4;
+    border-radius: 15px;
+    list-style-type: none;
+    display: flex;
+}
+
+.crayon {
+    width: 60px;
+    border-radius: 8px;
+}
+
+
+.terminee {
+    filter: invert(0.9);
+    max-width: 60px;
+}
+
+.vote {
+    width: 60px;
+}
+
+.phases * {
+    display: block;
+    horiz-align: center;
+    margin: 15px;
+    /*padding: 10px;*/
+}

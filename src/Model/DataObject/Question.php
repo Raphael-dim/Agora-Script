@@ -100,6 +100,22 @@ class Question extends AbstractDataObject
     }
 
     /**
+     * @return Utilisateur
+     */
+    public function getOrganisateur(): Utilisateur
+    {
+        return $this->organisateur;
+    }
+
+    /**
+     * @param Utilisateur $organisateur
+     */
+    public function setOrganisateur(Utilisateur $organisateur): void
+    {
+        $this->organisateur = $organisateur;
+    }
+
+    /**
      * @return string
      */
     public function getTitre(): string
