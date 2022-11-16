@@ -9,9 +9,7 @@ class ControllerAccueil
 
     public static function home()
     {
-        Controller::afficheVue('view.php',
-            ["pagetitle" => "Accueil",
-                "cheminVueBody" => "Accueil/accueil.php"]);
+        require "../src/View/Accueil/accueil.php";
 
     }
 
