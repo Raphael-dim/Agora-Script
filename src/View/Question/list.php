@@ -28,43 +28,6 @@
 <ul class="questions">
 
     <?php
-
-    use App\Vote\Controller\ControllerAccueil;
-
-    $selection = "toutes";
-    if (isset($_GET['selection'])) {
-        $selection = $_GET['selection'];
-    }
-
-
-    $date = date("Y/m/d H:i:s");
-
-    if ($selection == 'ecriture') {
-        foreach ($questions as $question) {
-            $calendrier = $question->getCalendrier();
-            if ($calendrier->getDebutEcriture() > $date || $calendrier->getFinEcriture() < $date) {
-                unset($questions[array_search($question, $questions)]);
-            }
-        }
-    } else if ($selection == 'vote') {
-        foreach ($questions as $question) {
-            $calendrier = $question->getCalendrier();
-            if ($calendrier->getDebutVote() > $date || $calendrier->getFinVote() < $date) {
-                unset($questions[array_search($question, $questions)]);
-            }
-        }
-
-    } else if ($selection == 'terminees') {
-        foreach ($questions as $question) {
-            $calendrier = $question->getCalendrier();
-            if ($calendrier->getFinVote() >= $date) {
-                unset($questions[array_search($question, $questions)]);
-            }
-        }
-    } else if ($selection != 'toutes') {
-        ControllerAccueil::erreur();
-    }
-
     foreach ($questions as $question) {
         $idQuestionURL = rawurlencode($question->getId());
         $organisateur = htmlspecialchars($question->getOrganisateur()->getNom());
