@@ -59,7 +59,19 @@ class ControllerQuestion
     public static function readAll()
     {
         //A optimiser
-        $questions = (new QuestionRepository())->selectAll();
+
+        if ($_GET["selection"]== "vote"){
+            $questions= (new QuestionRepository())->getPhaseVote();
+        }
+        else if ($_GET["selection"]== "ecriture") {
+            $questions = (new QuestionRepository())->getPhaseEcriture();
+        }
+        else if ($_GET["selection"]== "terminees") {
+            $questions = (new QuestionRepository())->getTerminees();
+        }
+        else{
+            $questions = (new QuestionRepository())->selectAll();
+        }
 
         Controller::afficheVue('view.php',
             ["questions" => $questions,
