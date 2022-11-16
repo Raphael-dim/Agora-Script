@@ -59,6 +59,9 @@ class ControllerQuestion
     public static function readAll()
     {
         //A optimiser
+        if(!isset($_GET["selection"])){
+            $_GET["selection"]="toutes";
+        }
 
         if ($_GET["selection"]== "vote"){
             $questions= (new QuestionRepository())->getPhaseVote();
