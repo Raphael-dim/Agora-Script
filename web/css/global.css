@@ -49,7 +49,7 @@ main p {
 }
 
 main p a {
-    color: lightseagreen;
+    color: #000000;
     text-decoration: none;
 }
 
@@ -149,6 +149,96 @@ textarea {
 }
 
 
+.selection {
+    padding-inline-start: 0px;
+    width: 100%;
+    justify-content: center;
+    border-style: solid;
+    border-color: #dff5f4;
+    border-radius: 15px;
+    list-style-type: none;
+    display: flex;
+}
+
+.crayon {
+    width: 60px;
+    border-radius: 8px;
+}
+
+
+.terminee {
+    filter: invert(0.9);
+    max-width: 60px;
+}
+
+.vote {
+    width: 60px;
+}
+
+.phases * {
+    justify-content: space-between;
+    display: block;
+    margin: 15px;
+    justify-items: center;
+}
+
+.creer,
+.creer::after {
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+}
+.creer {
+    max-width: 20%;
+    max-height: 15%;
+    background: none;
+    border: 4px solid #fff;
+    border-radius: 10px;
+    color: #fff;
+    display: block;
+    font-size: 1.6em;
+    font-weight: bold;
+    margin: 50px;
+    position: relative;
+    text-transform: uppercase;
+}
+.creer::before,
+.creer::after {
+    background: #fff;
+    content: "";
+    position: absolute;
+    z-index: -1;
+}
+.creer:hover {
+    color: #0c344b;
+}
+
+.creer::after {
+    height: 0;
+    left: 50%;
+    top: 50%;
+    width: 0;
+}
+.creer:hover:after {
+    height: 100%;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+
+
+.barreHaut * {
+     vertical-align: middle;
+     display: inline-block;
+
+ }
+
+.barreHaut :last-child{
+    margin-left: 50%;
+}
+
+
 #acceuil_search_form{
     position: relative;
     justify-content: center;
@@ -229,3 +319,4 @@ textarea {
     border-bottom: 0;
     border-left: 0;
 }
+
