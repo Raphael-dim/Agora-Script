@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -10,15 +9,14 @@
 </head>
 <body>
 <header>
-        <?php
-        require "../src/View/nav.php";
-        ?>
+    <?php
+    require "../src/View/nav.php";
+    ?>
 </header>
 <main>
-
     <h1>Page d'accueil du site de vote</h1>
-    <div id="accueil_search_form">
-        <h1><span>Recherche</span></h1>
+    <div id="acceuil_search_form">
+        <h1><span>Trouve les réponses à tes questions</span></h1>
         <img id = "imgsearch" src="../web/images/background.bmp"/>
         <form id = "form_search">
             <input id = "keyword_input" type="text" placeholder="Saisissez un mot clef" name="keyword" id="motclef"/>
