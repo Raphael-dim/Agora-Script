@@ -10,13 +10,12 @@
 </head>
 <body>
 <header>
-    <nav>
         <?php
         require "../src/View/nav.php";
         ?>
-    </nav>
 </header>
 <main>
+
     <h1>Page d'accueil du site de vote</h1>
     <div id="accueil_search_form">
         <h1><span>Recherche</span></h1>
