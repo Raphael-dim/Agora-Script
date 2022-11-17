@@ -39,27 +39,27 @@ if (isset($_POST['next'])) {
 <form method="post">
     <p>
         <label for="debutEcriture">Date de début d'écriture des propositions :</label>
-        <input type="date" id="debutEcriture" name="debutEcriture"
+        <input type="datetime-local" id="debutEcriture" name="debutEcriture"
                value="<?= FormConfig::TextField('debutEcriture') ?>"
-               min="<?= date('Y-m-d'); ?>" required/>
+               min="<?= date("Y-m-d H:i"); ?>" required/>
     </p>
     <p>
         <label for="finEcriture">Date de fin d'écriture des propositions :</label>
         <input type="datetime-local" id="finEcriture" name="finEcriture"
                value="<?= FormConfig::TextField('finEcriture') ?>"
-               min="<?= date('Y-m-d'); ?>" required/>
+               min="<?= date("Y-m-d H:i"); ?>" required/>
     </p>
     <p>
         <label for="debutVote">Date de début des votes :</label>
-        <input type="date" id="debutVote" name="debutVote"
+        <input type="datetime-local" id="debutVote" name="debutVote"
                value="<?= FormConfig::TextField('debutVote') ?>"
-               min="<?= date('Y-m-d'); ?>" required/>
+               min="<?= date("Y-m-d H:i"); ?>" required/>
     </p>
     <p>
         <label for="finVote">Date de fin des votes :</label>
-        <input type="date" id="finVote" name="finVote"
+        <input type="datetime-local" id="finVote" name="finVote"
                value="<?= FormConfig::TextField('finVote') ?>"
-               min="<?= date('Y-m-d'); ?>" required/>
+               min="<?= date("Y-m-d H:i"); ?>" required/>
     </p>
     <input type="submit" name=previous value="Retour" class="nav" formnovalidate/>
     <input type="submit" name=next value="Suivant" class="nav"/>
