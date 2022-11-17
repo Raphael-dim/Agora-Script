@@ -45,7 +45,7 @@ if (isset($_POST['next'])) {
     </p>
     <p>
         <label for="finEcriture">Date de fin d'écriture des propositions :</label>
-        <input type="date" id="finEcriture" name="finEcriture"
+        <input type="datetime-local" id="finEcriture" name="finEcriture"
                value="<?= FormConfig::TextField('finEcriture') ?>"
                min="<?= date('Y-m-d'); ?>" required/>
     </p>

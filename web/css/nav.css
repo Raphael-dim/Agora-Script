@@ -6,9 +6,9 @@ nav {
     width:100%;
     left:0;
     transition: ease-in-out 0.5s;
-    background-color: #012e49;
-    opacity:0.8;
+    background-color: var(--details);
     height: 60px;
+    z-index:100;
 }
 
 
@@ -19,8 +19,7 @@ nav:hover {
 
 
 #Menu {
-    margin-left: 10%;
-    margin-right: 10%;
+    padding:0;
     display: flex;
     margin-top: -1%;
     height: 75px;
@@ -38,11 +37,12 @@ nav:hover >#Menu{
 
 ul[id="Menu"] li.grosmenu {
 
-    /*margin-right: 20px;*/
+    margin:0;
 }
 
 ul[id="Menu"] li.grosmenu > a {
     text-decoration: none;
+    margin:0;
     margin-top: 15px;
     display: inline-block;
     width: 150px;
@@ -59,7 +59,7 @@ ul[id="Menu"] li a:hover {
 }
 
 ul[id="Menu"] li a:hover {
-    opacity: 50%;
+    opacity: 80%;
     border-radius: 0px;
 }
 
@@ -68,47 +68,54 @@ ul[id="Menu"] li {
     border-radius: 0;
 }
 
-@media screen and (max-width: 1500px) {
-    #Menu {
-        margin-left: 5%;
-        margin-right: 5%;
-    }
-
-    ul[id="Menu"] li.grosmenu > a {
-        padding: 0px;
-        height: 40px;
-        width: 150px;
-        font-size: 19px;
-    }
-}
 
 @media screen and (max-width: 1000px) {
+    nav{
+        opacity:1;
+    }
+
     #Menu {
-        margin-left: 0%;
-        margin-right: 0%;
+        width:75px;
+        padding:0;margin:0;
+        display:inline-block;
+        height:60px;
+        padding-top:60px;
+        background-image:url("../../web/images/Menu_icon.png");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 80%;
+    }
+    #Menu:hover{
+        background-color: #fd6d76;
+    }
+
+   #Menu > li{
+       display:none;
+       position:absolute;
+    }
+
+    #Menu:hover > li{
+        display:block;
+        position:relative;
+    }
+    #Menu:hover> li >a{
+        height: auto;
+    }
+
+    ul[id="Menu"] li.grosmenu{
+        padding:0;
+        margin:0;
     }
 
     ul[id="Menu"] li.grosmenu > a {
-        padding: 0px;
-        height: 40px;
-        width: 100px;
+        margin-top:60px;
+        position:relative;
+        background:var(--details);
+        margin:0;
+        padding: 10px;
+        height:0;
+        width: 150px;
         font-size: 17px;
         line-height: 22px;
-    }
-}
-
-@media screen and (max-width: 800px) {
-    #Menu {
-        margin-left: 0%;
-        margin-right: 0%;
-    }
-
-    ul[id="Menu"] li.grosmenu > a {
-        margin-left: 0px;
-        padding: 0px;
-        height: 40px;
-        width: 80px;
-        font-size: 15px;
-        line-height: 20px;
     }
 }

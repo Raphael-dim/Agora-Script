@@ -32,7 +32,7 @@
         $idQuestionURL = rawurlencode($question->getId());
         $organisateur = htmlspecialchars($question->getOrganisateur()->getNom());
         $titreHTML = htmlspecialchars($question->getTitre());
-        echo '<li class = "listes">
+        echo '<p class = "listes">
             <a href= index.php?action=read&controller=question&idQuestion=' .
             $idQuestionURL . '> ' . $titreHTML . ' : </a>
             <a href="">par ' . $organisateur . ' </a >
@@ -40,7 +40,7 @@
             $idQuestionURL . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >
             <a href = index.php?action=delete&controller=question&idQuestion=' .
             $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a >
-            </li > ';
+            </p > ';
     }
     ?>
 </ul>
