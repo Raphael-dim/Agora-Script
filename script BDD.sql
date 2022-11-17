@@ -89,35 +89,20 @@ create table votants
 );
 
 create or replace view questions_termines (idquestion, titre, description, idorganisateur, idcalendrier, creation) as
-SELECT q.idquestion,
-       q.titre,
-       q.description,
-       q.idorganisateur,
-       q.idcalendrier,
-       q.creation
+SELECT q.*
 FROM questions q
          JOIN calendriers c ON q.idcalendrier = c.idcalendrier
 WHERE ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) > c.finvote;
 
 create or replace view questions_ecriture (idquestion, titre, description, idorganisateur, idcalendrier, creation) as
-SELECT q.idquestion,
-       q.titre,
-       q.description,
-       q.idorganisateur,
-       q.idcalendrier,
-       q.creation
+SELECT q.*
 FROM questions q
          JOIN calendriers c ON q.idcalendrier = c.idcalendrier
 WHERE ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) > c.debutecriture
   AND ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) < c.finecriture;
 
 create or replace view questions_vote (idquestion, titre, description, idorganisateur, idcalendrier, creation) as
-SELECT q.idquestion,
-       q.titre,
-       q.description,
-       q.idorganisateur,
-       q.idcalendrier,
-       q.creation
+SELECT q.*
 FROM questions q
          JOIN calendriers c ON q.idcalendrier = c.idcalendrier
 WHERE ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) > c.debutvote

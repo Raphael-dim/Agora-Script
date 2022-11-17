@@ -39,7 +39,7 @@ class QuestionRepository extends AbstractRepository
     public function getPhaseVote(): array
     {
         $ADonnees = array();
-        $sql = "SELECT * FROM Questions_Vote";
+        $sql = "SELECT * FROM questions_vote";
         $pdoStatement = DatabaseConnection::getPdo()->query($sql);
         while ($row = $pdoStatement->fetch()) {
             $ADonnees[] = $this::construire(json_decode(json_encode($row), true));
@@ -50,7 +50,7 @@ class QuestionRepository extends AbstractRepository
     public function getPhaseEcriture(): array
     {
         $ADonnees = array();
-        $sql = "SELECT * FROM Questions_Ecriture";
+        $sql = "SELECT * FROM questions_ecriture";
         $pdoStatement = DatabaseConnection::getPdo()->query($sql);
         while ($row = $pdoStatement->fetch()) {
             $ADonnees[] = $this::construire(json_decode(json_encode($row), true));
@@ -61,7 +61,7 @@ class QuestionRepository extends AbstractRepository
     public function getTerminees(): array
     {
     $ADonnees = array();
-    $sql = "SELECT * FROM Questions_termines";
+    $sql = "SELECT * FROM questions_termines";
     $pdoStatement = DatabaseConnection::getPdo()->query($sql);
     while ($row = $pdoStatement->fetch()) {
         $ADonnees[] = $this::construire(json_decode(json_encode($row), true));
