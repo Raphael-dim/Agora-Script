@@ -4,101 +4,123 @@ DROP TABLE Sections CASCADE;
 DROP TABLE Questions CASCADE;
 DROP TABLE Propositions CASCADE;
 DROP TABLE Votants CASCADE;
-DROP TABLE Auteurs CASCADE;
+DROP TABLE responsables CASCADE ;
 
-
-CREATE TABLE Utilisateurs
+create table utilisateurs
 (
-	identifiant VARCHAR(30),
-	nom VARCHAR(30),
-	prenom VARCHAR(30),
-	email VARCHAR(80) UNIQUE,
-	CONSTRAINT pk_utilisateur PRIMARY KEY (identifiant),
-	CONSTRAINT chk_email check (email like '%_@__%.__%')
+    identifiant varchar(30) not null
+        constraint pk_utilisateur
+            primary key,
+    nom         varchar(30),
+    prenom      varchar(30),
+    email       varchar(80)
+        unique
+        constraint chk_email
+            check ((email)::text ~~ '%_@__%.__%'::text),
+    mdp         varchar(64)
 );
 
-
-
-CREATE TABLE Calendriers (
-    idCalendrier serial PRIMARY KEY,
-    debutEcriture date,
-    finEcriture date,
-    debutVote date,
-    finVote date
+create table calendriers
+(
+    idcalendrier  serial
+        primary key,
+    debutecriture timestamp,
+    finecriture   timestamp,
+    debutvote     timestamp,
+    finvote       timestamp
 );
 
-
-CREATE TABLE Questions (
-    idQuestion serial PRIMARY KEY,
-    titre varchar(30),
-    description varchar(100),
-    idAuteur VARCHAR(30),
-    idCalendrier int,
-    FOREIGN KEY (idCalendrier)
-          REFERENCES Calendriers (idCalendrier)
+create table questions
+(
+    idquestion     serial
+        primary key,
+    titre          varchar(80),
+    description    varchar(360),
+    idorganisateur varchar(30),
+    idcalendrier   integer
+        references calendriers
+            on delete cascade,
+    creation       timestamp
 );
 
-
-CREATE TABLE Sections (
-    idSection serial,
-    idQuestion int,
-    titre VARCHAR(30),
-    desciption VARCHAR(100),
-    PRIMARY KEY (idSection, idQuestion),
-    FOREIGN KEY (idQuestion)
-          REFERENCES Questions (idQuestion)
+create table sections
+(
+    idsection   serial,
+    idquestion  integer not null
+        references questions
+            on delete cascade,
+    titre       varchar(80),
+    description varchar(360),
+    primary key (idsection, idquestion)
 );
 
-
-CREATE TABLE Propositions (
-    idQuestion int,
-    idUtilisateur VARCHAR(30),
-    titre VARCHAR(30),
-    contenu VARCHAR(1000),
-    PRIMARY KEY (idQuestion,idUtilisateur),
-    FOREIGN KEY (idQuestion)
-        REFERENCES Questions (idQuestion),
-    FOREIGN KEY (idUtilisateur)
-        REFERENCES Utilisateurs (identifiant)
+create table propositions
+(
+    idquestion    integer     not null
+        references questions,
+    idutilisateur varchar(30) not null
+        references utilisateurs,
+    titre         varchar(30),
+    contenu       varchar(1000),
+    primary key (idquestion, idutilisateur)
 );
 
-
-CREATE TABLE Auteurs (
-    idQuestion int,
-    idUtilisateur VARCHAR(30),
-    PRIMARY KEY (idQuestion,idUtilisateur),
-    FOREIGN KEY (idQuestion)
-        REFERENCES Questions (idQuestion),
-    FOREIGN KEY (idUtilisateur)
-        REFERENCES Utilisateurs (identifiant)
+create table responsables
+(
+    idquestion    integer     not null
+        constraint auteurs_idquestion_fkey
+            references questions
+            on delete cascade,
+    idutilisateur varchar(30) not null
+        constraint auteurs_idutilisateur_fkey
+            references utilisateurs,
+    constraint auteurs_pkey
+        primary key (idquestion, idutilisateur)
 );
 
-
-CREATE TABLE Votants (
-    idQuestion int,
-    idUtilisateur VARCHAR(30),
-    PRIMARY KEY (idQuestion,idUtilisateur),
-    FOREIGN KEY (idQuestion)
-        REFERENCES Questions (idQuestion),
-    FOREIGN KEY (idUtilisateur)
-        REFERENCES Utilisateurs (identifiant)
+create table votants
+(
+    idquestion    integer     not null
+        references questions
+            on delete cascade,
+    idutilisateur varchar(30) not null
+        references utilisateurs,
+    primary key (idquestion, idutilisateur)
 );
 
-CREATE OR REPLACE VIEW Questions_Vote AS
-SELECT q.* FROM QUESTIONS q
-JOIN CALENDRIERS c
-ON q.idcalendrier = c.idcalendrier
-WHERE (SELECT CURRENT_DATE)>c.debutvote AND(SELECT CURRENT_DATE)<c.finvote
+create or replace view questions_termines (idquestion, titre, description, idorganisateur, idcalendrier, creation) as
+SELECT q.idquestion,
+       q.titre,
+       q.description,
+       q.idorganisateur,
+       q.idcalendrier,
+       q.creation
+FROM questions q
+         JOIN calendriers c ON q.idcalendrier = c.idcalendrier
+WHERE ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) > c.finvote;
+
+create or replace view questions_ecriture (idquestion, titre, description, idorganisateur, idcalendrier, creation) as
+SELECT q.idquestion,
+       q.titre,
+       q.description,
+       q.idorganisateur,
+       q.idcalendrier,
+       q.creation
+FROM questions q
+         JOIN calendriers c ON q.idcalendrier = c.idcalendrier
+WHERE ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) > c.debutecriture
+  AND ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) < c.finecriture;
+
+create or replace view questions_vote (idquestion, titre, description, idorganisateur, idcalendrier, creation) as
+SELECT q.idquestion,
+       q.titre,
+       q.description,
+       q.idorganisateur,
+       q.idcalendrier,
+       q.creation
+FROM questions q
+         JOIN calendriers c ON q.idcalendrier = c.idcalendrier
+WHERE ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) > c.debutvote
+  AND ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) < c.finvote;
 
 
-CREATE OR REPLACE VIEW Questions_Ecriture AS
-SELECT q.* FROM QUESTIONS q
-JOIN CALENDRIERS c
-ON q.idcalendrier = c.idcalendrier
-WHERE (SELECT CURRENT_DATE)>c.debutecriture AND(SELECT CURRENT_DATE)<c.finecriture
-
-CREATE OR REPLACE VIEW Questions_Termines AS
-SELECT q.* FROM QUESTIONS q
-JOIN CALENDRIERS c
-ON q.idcalendrier = c.idcalendrier
-WHERE (SELECT CURRENT_DATE)>c.finvote
