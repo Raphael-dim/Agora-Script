@@ -17,8 +17,8 @@
     </nav>
 </header>
 <main>
-    <p>Page d'accueil du site de vote</p>
-    <div id="acceuil_search_form">
+    <h1>Page d'accueil du site de vote</h1>
+    <div id="accueil_search_form">
         <h1><span>Recherche</span></h1>
         <img id = "imgsearch" src="../web/images/background.bmp"/>
         <form id = "form_search">

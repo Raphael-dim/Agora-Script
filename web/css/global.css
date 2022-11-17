@@ -1,3 +1,21 @@
+h1, h2 {
+    animation-duration: 1s;
+    animation-name: slidein;
+}
+
+@keyframes slidein {
+    from {
+        margin-left: 100%;
+        width: 300%;
+    }
+
+    to {
+        margin-left: 0%;
+        width: 100%;
+    }
+}
+
+
 * {
     box-sizing: border-box;
     /*overflow: auto;*/
@@ -239,7 +257,7 @@ textarea {
 }
 
 
-#acceuil_search_form{
+#accueil_search_form{
     position: relative;
     justify-content: center;
 }
@@ -279,7 +297,7 @@ textarea {
     background:white;
 }
 
-#acceuil_search_form > h1{
+#accueil_search_form > h1{
     font-size:3.5em;
     top:22%;
     left:18%;
@@ -292,25 +310,25 @@ textarea {
     text-decoration: none;
 
 }
-#acceuil_search_form >h1> span{
+#accueil_search_form >h1> span{
     position:relative;
     background:transparent;
 }
 
-#acceuil_search_form > h1>span:before, #acceuil_search_form > h1>span:after {
+#accueil_search_form > h1>span:before, #acceuil_search_form > h1>span:after {
     content: '';
     position: absolute;
     background: transparent;
     height: 15px;
     border: 7px solid currentColor;
 }
-#acceuil_search_form > h1>span:before {
+#accueil_search_form > h1>span:before {
     width: 25%;
     top:-35%;
     border-top: 0;
     border-right: 0;
 }
-#acceuil_search_form > h1>span:after {
+#accueil_search_form > h1>span:after {
     width: 41%;
     left: 70%;
     right: 24px;
