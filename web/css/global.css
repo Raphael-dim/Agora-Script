@@ -1,39 +1,29 @@
+:root {
+    --background: white;
+    --background2:#4BC2BC;
+    --details:#FF5660;
+}
+
 * {
     box-sizing: border-box;
     /*overflow: auto;*/
 }
 
 body {
-    background-color: #484859;
-
+    background: var(--background);
 }
 
 main {
+    padding:15px;
     border-radius: 20px;
     width:85%;
     margin: auto;
     margin-top: 100px;
-    background: #012e49;
+    background: var(--background2);
     opacity: 0.9;
+    z-index:-1;
 }
 
-@media screen and (max-width: 1500px) {
-    main {
-        width: 85%;
-    }
-}
-
-@media screen and (max-width: 1000px) {
-    main {
-        width: 90%;
-    }
-}
-
-@media screen and (max-width: 800px) {
-    main {
-        width: 100%;
-    }
-}
 
 main p {
     border-radius: 15px;
@@ -65,11 +55,17 @@ main p a {
 .delete {
     max-width: 35px;
 }
-
+.listes>a{
+    margin:0;
+    padding:0;
+}
+.listes{
+    margin:0;
+    padding:0;
+}
 .listes * {
     display: inline-block;
     vertical-align: middle;
-    margin-left: 15px;
 }
 
 h1, h2, h3 {
@@ -280,17 +276,18 @@ textarea {
 }
 
 #acceuil_search_form > h1{
-    font-size:3.5em;
+    font-size:2em;
     top:22%;
     left:18%;
     position:absolute;
     line-height: 1.12em;
     color: white;
     margin: 0 0 25px;
+    text-transform: uppercase;
     padding: 34px 0 33px;
     word-break: break-word;
     text-decoration: none;
-
+    max-width:30%;
 }
 #acceuil_search_form >h1> span{
     position:relative;
@@ -306,7 +303,7 @@ textarea {
 }
 #acceuil_search_form > h1>span:before {
     width: 25%;
-    top:-35%;
+    top:-25%;
     border-top: 0;
     border-right: 0;
 }
@@ -320,3 +317,31 @@ textarea {
     border-left: 0;
 }
 
+
+
+
+@media screen and (max-width: 1000px) {
+    main {
+        width: 100%;
+    }
+
+    #acceuil_search_form > h1{
+        font-size:1.5em;
+        width:250px;
+    }
+    #form_search{
+        position:relative;
+        top:-20px;right:0;
+        left:5%;
+        width:90%;
+        height:40px;
+        transform: translateY(50%);
+        background:white;
+    }
+
+    #form_search .search {
+        transform: translateY(0%);
+        height:40px;
+        width:40px;
+    }
+}

@@ -9,11 +9,9 @@
 </head>
 <body>
 <header>
-    <nav>
         <?php
         require __DIR__ . "/nav.php";
         ?>
-    </nav>
 </header>
 <main>
     <?php
