@@ -65,7 +65,6 @@ main p a {
 }
 
 .modifier {
-    filter: invert(0.9);
     max-width: 25px;
 }
 
