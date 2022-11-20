@@ -3,27 +3,23 @@
     <a class="creer" href="index.php?action=create&controller=question">Créer votre question</a>
 </div>
 
-<ul class="selection">
+<div class="selection">
+    <input type="checkbox" name="filtres"/>  <label for="filtres">filtres</label>
+<ul>
     <li class="phases">
         <a href="index.php?action=readAll&selection=toutes&controller=question">Toutes</a>
     </li>
     <li class="phases">
-        <a href="index.php?action=readAll&selection=ecriture&controller=question">En phase d'écriture
-            <img class="crayon" src="..\web\images\crayon.png"
-        </a>
+        <a href="index.php?action=readAll&selection=ecriture&controller=question">En phase d'écriture</a>
     </li>
     <li class="phases">
-        <a href="index.php?action=readAll&selection=vote&controller=question">En phase de vote
-            <img class="vote" src="..\web\images\logo_vote.png"
-        </a>
+        <a href="index.php?action=readAll&selection=vote&controller=question">En phase de vote</a>
     </li>
     <li class="phases">
-        <a href="index.php?action=readAll&selection=terminees&controller=question">Terminées
-            <img class="terminee" src="..\web\images\terminee.png"
-        </a>
+        <a href="index.php?action=readAll&selection=terminees&controller=question">Terminées</a>
     </li>
 </ul>
-
+</div>
 <ul class="questions">
 
     <?php

@@ -164,95 +164,68 @@ textarea {
     margin-left: 15px;
 }
 
-
-.selection {
+.selection{
+    color:white;
+}
+.selection>ul {
     padding-inline-start: 0px;
     width: 100%;
     justify-content: center;
-    border-style: solid;
-    border-color: #dff5f4;
-    border-radius: 15px;
+    border: solid #dff5f4 2px;
     list-style-type: none;
     display: flex;
 }
-
-.crayon {
-    width: 60px;
-    border-radius: 8px;
+.selection> input[type=checkbox]{
+    appearance: none;
+}
+.selection> input[type=checkbox]:hover{
+    cursor:pointer;
 }
 
-
-.terminee {
-    filter: invert(0.9);
-    max-width: 60px;
+.selection> input[type=checkbox]:checked:after{
+    content:"-";
+}
+.selection> input[type=checkbox]:after{
+    font-size: 1.5em;
+    content:"+";
+}
+.selection> input[type=checkbox]:checked ~ ul {
+    display:flex;
 }
 
-.vote {
-    width: 60px;
+.selection > ul{
+    display: none;
 }
 
-.phases * {
+.phases {
     justify-content: space-between;
     display: block;
     margin: 15px;
     justify-items: center;
 }
 
-.creer,
-.creer::after {
-    -webkit-transition: all 0.3s;
-    -moz-transition: all 0.3s;
-    -o-transition: all 0.3s;
-    transition: all 0.3s;
-}
-.creer {
-    max-width: 20%;
-    max-height: 15%;
-    background: none;
-    border: 4px solid #fff;
-    border-radius: 10px;
+
+.creer, .rechercher {
+    padding:5px;
+    background:var(--details);
     color: #fff;
     display: block;
-    font-size: 1.6em;
+    font-size: 0.8em;
     font-weight: bold;
-    margin: 50px;
-    position: relative;
+    text-decoration: none;
     text-transform: uppercase;
 }
-.creer::before,
-.creer::after {
-    background: #fff;
-    content: "";
-    position: absolute;
-    z-index: -1;
-}
-.creer:hover {
+
+.creer:hover, .rechercher:hover {
     color: #0c344b;
 }
 
-.creer::after {
-    height: 0;
-    left: 50%;
-    top: 50%;
-    width: 0;
-}
-.creer:hover:after {
-    height: 100%;
-    left: 0;
-    top: 0;
-    width: 100%;
-}
-
-
-.barreHaut * {
+.barreHaut{
+    width:100%;
     vertical-align: middle;
-    display: inline-block;
-
+    display: flex;
 }
 
-.barreHaut :last-child{
-    margin-left: 50%;
-}
 
 
 #acceuil_search_form{
