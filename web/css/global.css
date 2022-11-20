@@ -17,6 +17,9 @@ main>h1, h2 {
 :root {
     background-image: url("../images/fond.jpg");
     background-position: center;
+    position:absolute;
+    top:0;left:0;
+    width:100vw;height:100vh;
     /*background-size: 150%;*/
     /*background-repeat: no-repeat;*/
     /*--background: #3f3b45;*/
