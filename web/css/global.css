@@ -15,9 +15,13 @@ main>h1, h2 {
 }
 
 :root {
-    --background: white;
-    --background2:#4BC2BC;
-    --details:#FF5660;
+    background-image: url("../images/fond.jpg");
+    background-position: center;
+    /*background-size: 150%;*/
+    /*background-repeat: no-repeat;*/
+    /*--background: #3f3b45;*/
+    --background2: #012e49;
+    --details: #012e49;
 }
 
 * {
