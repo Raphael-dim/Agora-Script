@@ -259,15 +259,17 @@ class ControllerQuestion
 
         $responsables = $question->getResponsables();
         $ancResponsables = array();
-        foreach ($responsables as $responsable){
+        foreach ($responsables as $responsable) {
             $ancResponsables[] = $responsable->getIdentifiant();
         }
-        $nouResponsables = $_SESSION['responsables'];
+        $tab = array();
+        $tab = $_SESSION['responsables'];
         $nouvResponsables = array();
-        $nouvResponsables = array_filter($nouvResponsables);
+        foreach ($tab as $val) {
+            $nouvResponsables[] = $val;
+        }
         for ($i = 0; $i < sizeof($nouvResponsables); $i++) {
             if (!in_array($nouvResponsables[$i], $ancResponsables)) {
-                echo $nouvResponsables[$i];
                 $utilisateur = new Responsable($question);
                 $utilisateur->setIdentifiant($nouvResponsables[$i]);
                 $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
@@ -277,7 +279,26 @@ class ControllerQuestion
             }
         }
 
-        $ancVotants = $question->getVotants();
+        $votants = $question->getVotants();
+        $ancVotants = array();
+        foreach ($votants as $val) {
+            $ancVotants[] = $val->getIdentifiant();
+        }
+        $tab2 = $_SESSION['votants'];
+        $nouvVotants = array();
+        foreach ($tab2 as $val) {
+            $nouvVotants[] = $val;
+        }
+        for ($i = 0; $i < sizeof($nouvVotants); $i++) {
+            if (!in_array($nouvVotants[$i], $ancVotants)) {
+                $utilisateur = new Votant($question);
+                $utilisateur->setIdentifiant($nouvVotants[$i]);
+                $votantBD = (new VotantRepository())->sauvegarder($utilisateur);
+            }
+            if (!in_array($ancVotants[$i], $nouvVotants)) {
+                (new VotantRepository())->delete($ancVotants[$i]);
+            }
+        }
 
 
         $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
