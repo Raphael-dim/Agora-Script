@@ -59,20 +59,17 @@ class ControllerQuestion
     public static function readAll()
     {
         //A optimiser
-        if(!isset($_GET["selection"])){
-            $_GET["selection"]="toutes";
+        if (!isset($_GET["selection"])) {
+            $_GET["selection"] = "toutes";
         }
 
-        if ($_GET["selection"]== "vote"){
-            $questions= (new QuestionRepository())->getPhaseVote();
-        }
-        else if ($_GET["selection"]== "ecriture") {
+        if ($_GET["selection"] == "vote") {
+            $questions = (new QuestionRepository())->getPhaseVote();
+        } else if ($_GET["selection"] == "ecriture") {
             $questions = (new QuestionRepository())->getPhaseEcriture();
-        }
-        else if ($_GET["selection"]== "terminees") {
+        } else if ($_GET["selection"] == "terminees") {
             $questions = (new QuestionRepository())->getTerminees();
-        }
-        else{
+        } else {
             $questions = (new QuestionRepository())->selectAll();
         }
 
@@ -185,7 +182,7 @@ class ControllerQuestion
 
         $votants = $_SESSION['votants'];
 
-        foreach($votants as $votant){
+        foreach ($votants as $votant) {
             $utilisateur = new Votant($question);
             $utilisateur->setIdentifiant($votant);
             $votantBD = (new VotantRepository())->sauvegarder($utilisateur);
@@ -260,6 +257,28 @@ class ControllerQuestion
             }
         }
 
+        $responsables = $question->getResponsables();
+        $ancResponsables = array();
+        foreach ($responsables as $responsable){
+            $ancResponsables[] = $responsable->getIdentifiant();
+        }
+        $nouResponsables = $_SESSION['responsables'];
+        $nouvResponsables = array();
+        $nouvResponsables = array_filter($nouvResponsables);
+        for ($i = 0; $i < sizeof($nouvResponsables); $i++) {
+            if (!in_array($nouvResponsables[$i], $ancResponsables)) {
+                echo $nouvResponsables[$i];
+                $utilisateur = new Responsable($question);
+                $utilisateur->setIdentifiant($nouvResponsables[$i]);
+                $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
+            }
+            if (!in_array($ancResponsables[$i], $nouvResponsables)) {
+                (new ResponsableRepository())->delete($ancResponsables[$i]);
+            }
+        }
+
+        $ancVotants = $question->getVotants();
+
 
         $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
         self::afficheVue('view.php', ["pagetitle" => "Question modifiée",
@@ -279,10 +298,10 @@ class ControllerQuestion
     }
 
 
-private static function afficheVue(string $cheminVue, array $parametres = []): void
+    private static function afficheVue(string $cheminVue, array $parametres = []): void
     {
         extract($parametres); // Crée des variables à partir du tableau $paramètres
         require "../src/view/$cheminVue"; // Charge la vue
     }
-    
+
 }

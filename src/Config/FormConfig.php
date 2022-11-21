@@ -31,7 +31,7 @@ class FormConfig
         }
     }
 
-    static public function initialiserSessions($question)
+    static public function initialiserSessions($question): void
     {
         $calendrier = $question->getCalendrier();
         $tabSections = $question->getSections();
@@ -45,6 +45,16 @@ class FormConfig
         for ($i = 1; $i <= count($tabSections); $i++) {
             $_SESSION['titre' . $i] = $tabSections[$i - 1]->getTitre();
             $_SESSION['description' . $i] = $tabSections[$i - 1]->getDescription();
+        }
+        $responsables = $question->getResponsables();
+        $_SESSION['responsables'] = array();
+        foreach ($responsables as $responsable) {
+            $_SESSION['responsables'][] = $responsable->getIdentifiant();
+        }
+        $votants = $question->getVotants();
+        $_SESSION['votants'] = array();
+        foreach ($votants as $votant) {
+            $_SESSION['votants'][] = $votant->getIdentifiant();
         }
     }
 
