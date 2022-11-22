@@ -14,10 +14,10 @@ class ControllerProposition
 
     public static function create()
     {
-        $questions = (new QuestionRepository())->selectAll();
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
         Controller::afficheVue('view.php', ["pagetitle" => "Accueil",
                                                 "cheminVueBody" => "Proposition/create.php",
-                                                "questions" => $questions]);
+                                                "question" => $question]);
     }
 
     public static function created()
