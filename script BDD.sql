@@ -1,11 +1,3 @@
-DROP TABLE Utilisateurs CASCADE ;
-DROP TABLE Calendriers CASCADE;
-DROP TABLE Sections CASCADE;
-DROP TABLE Questions CASCADE;
-DROP TABLE Propositions CASCADE;
-DROP TABLE Votants CASCADE;
-DROP TABLE responsables CASCADE ;
-
 create table utilisateurs
 (
     identifiant varchar(30) not null
@@ -58,11 +50,10 @@ create table propositions
 (
     idquestion    integer     not null
         references questions,
-    idutilisateur varchar(30) not null
+    idresponsable varchar(30) not null
         references utilisateurs,
-    titre         varchar(30),
-    contenu       varchar(1000),
-    primary key (idquestion, idutilisateur)
+    titre         varchar(500),
+    primary key (idquestion, idresponsable)
 );
 
 create table responsables
@@ -88,24 +79,45 @@ create table votants
     primary key (idquestion, idutilisateur)
 );
 
+create table proposition_section
+(
+    "idProposition" integer,
+    "idSection"     integer,
+    contenu         varchar(1500)
+);
+
 create or replace view questions_termines (idquestion, titre, description, idorganisateur, idcalendrier, creation) as
-SELECT q.*
+SELECT q.idquestion,
+       q.titre,
+       q.description,
+       q.idorganisateur,
+       q.idcalendrier,
+       q.creation
 FROM questions q
          JOIN calendriers c ON q.idcalendrier = c.idcalendrier
 WHERE ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) > c.finvote;
 
 create or replace view questions_ecriture (idquestion, titre, description, idorganisateur, idcalendrier, creation) as
-SELECT q.*
+SELECT q.idquestion,
+       q.titre,
+       q.description,
+       q.idorganisateur,
+       q.idcalendrier,
+       q.creation
 FROM questions q
          JOIN calendriers c ON q.idcalendrier = c.idcalendrier
 WHERE ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) > c.debutecriture
   AND ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) < c.finecriture;
 
 create or replace view questions_vote (idquestion, titre, description, idorganisateur, idcalendrier, creation) as
-SELECT q.*
+SELECT q.idquestion,
+       q.titre,
+       q.description,
+       q.idorganisateur,
+       q.idcalendrier,
+       q.creation
 FROM questions q
          JOIN calendriers c ON q.idcalendrier = c.idcalendrier
 WHERE ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) > c.debutvote
   AND ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) < c.finvote;
-
 
