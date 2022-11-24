@@ -4,17 +4,15 @@ namespace App\Vote\Model\Repository;
 
 use App\Vote\Model\DataObject\Proposition;
 
-//J'attend que la bdd soit fini, c'est provisoir
-
 class PropositionRepository extends AbstractRepository
 {
     protected function construire(array $propositionTableau) : Proposition
     {
         return new Proposition(
             $propositionTableau["titre"],
-            $propositionTableau["contenu"],
-            $propositionTableau["auteur"],
-            $propositionTableau["question"]
+            $propositionTableau["responsable"],
+            (new QuestionRepository())->select($propositionTableau['idquestion'])
+
         );
     }
 
@@ -30,7 +28,7 @@ class PropositionRepository extends AbstractRepository
 
     protected function getNomsColonnes(): array
     {
-        return array("idProposition", "titre", "contenu","idAuteur","idQuestion");
+        return array( "idquestion", "idresponsable", "titre");
 
     }
 }
