@@ -11,6 +11,7 @@ class PropositionSectionRepository extends AbstractRepository
     {
         return new PropositionSection(
             (new PropositionRepository())->select($propositionTableau['idproposition']),
+//            (new AuteurRepository())->select($propositionTableau['idauteur']),
             (new SectionRepository())->select($propositionTableau['idsection']),
             $propositionTableau["contenu"]
         );

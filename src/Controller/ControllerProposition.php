@@ -5,6 +5,7 @@ namespace App\Vote\Controller;
 use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Proposition;
 use App\Vote\Model\DataObject\PropositionSection;
+use App\Vote\Model\Repository\AuteurRepository;
 use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\PropositionSectionRepository;
@@ -26,15 +27,16 @@ class ControllerProposition
 
     public static function created()
     {
-        var_dump($_POST);
         $question = (new QuestionRepository())->select($_GET["idQuestion"]);
         $responsable = (new ResponsableRepository())->select("hambrighta");
         $proposition = new Proposition($_POST['titre'],$responsable, $question);
         $propositionBD = (new PropositionRepository())->sauvegarder($proposition);
+        $proposition->setId($propositionBD);
         $sections = $question->getSections();
         foreach ($sections as $section) {
             $propositionSection = new PropositionSection($proposition, $section, $_POST['contenu'.$section->getId()]);
             (new PropositionSectionRepository())->sauvegarder($propositionSection);
+
         }
 
         $questions = (new QuestionRepository())->selectAll();

@@ -8,12 +8,13 @@ class PropositionRepository extends AbstractRepository
 {
     protected function construire(array $propositionTableau) : Proposition
     {
-        return new Proposition(
+        $proposition = new Proposition(
             $propositionTableau["titre"],
             $propositionTableau["responsable"],
             (new QuestionRepository())->select($propositionTableau['idquestion'])
-
         );
+        $proposition->setId($propositionTableau["idProposition"]);
+        return $proposition;
     }
 
     protected function getNomTable(): string

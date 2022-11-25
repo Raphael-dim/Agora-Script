@@ -5,6 +5,7 @@ namespace App\Vote\Model\Repository;
 use App\Vote\Model\DatabaseConnection as DatabaseConnection;
 use App\Vote\Model\DataObject\AbstractDataObject;
 use App\Vote\Model\DataObject\Calendrier;
+use App\Vote\Model\DataObject\Proposition;
 use App\Vote\Model\DataObject\Question;
 use App\Vote\Model\DataObject\Section;
 use App\Vote\Model\DataObject\Utilisateur;
@@ -30,13 +31,13 @@ abstract class AbstractRepository
         }
         $sql = substr($sql, 0, -2);
         $sql = $sql . ")";
-        if (get_class($object) == Question::class || get_class($object) == Section::class || get_class($object) == Calendrier::class) {
+        if (get_class($object) == Question::class || get_class($object) == Proposition::class || get_class($object) == Section::class || get_class($object) == Calendrier::class) {
             $sql = $sql . " RETURNING " . $this->getNomClePrimaire();
         }
         $sql = $sql .";";
+        echo $sql;
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
-        echo $sql;
         // On donne les valeurs et on exécute la requête
         try {
             $pdoStatement->execute($object->formatTableau());
