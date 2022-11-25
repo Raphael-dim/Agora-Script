@@ -308,14 +308,27 @@ class ControllerQuestion
         session_unset();
     }
 
+
     public static function delete(): void
     {
-        $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        (new QuestionRepository())->delete($_GET['idQuestion']);
-        $calendrier = $question->getCalendrier();
-        (new CalendrierRepository())->delete($calendrier->getId());
-        $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
-        self::afficheVue('view.php', ["pagetitle" => "Question supprimée", "cheminVueBody" => "question/deleted.php", "questions" => $questions]);
+
+        if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])){
+            self::afficheVue('view.php', ["pagetitle" => "Question modifiée",
+                "cheminVueBody" => "confirm.php",
+                "message" => "Êtes vous sûr de vouloir supprimer cette question?",
+                "id"=>$_GET['idQuestion']]);
+        }
+        else if (isset($_POST["cancel"])){
+            self::readAll();
+        }
+        else if (isset($_POST["confirm"])){
+            $question = (new QuestionRepository())->select($_GET['idQuestion']);
+            (new QuestionRepository())->delete($_GET['idQuestion']);
+            $calendrier = $question->getCalendrier();
+            (new CalendrierRepository())->delete($calendrier->getId());
+            $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
+            self::afficheVue('view.php', ["pagetitle" => "Question supprimée", "cheminVueBody" => "question/deleted.php", "questions" => $questions]);
+        }
     }
 
 
