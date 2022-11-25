@@ -40,6 +40,7 @@
         if ($calendrier->getDebutEcriture() <= $date && $calendrier->getFinEcriture() >= $date ){
             echo '<a href = index.php?action=create&controller=proposition&idQuestion='.$idQuestionURL.'>Créer une proposition</a>';
         }
+        echo '<a href = index.php?action=readAll&controller=proposition&idQuestion=' .  $idQuestionURL . ' >Liste des propositions</a>';
         echo '</p>';
 
     }

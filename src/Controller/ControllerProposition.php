@@ -25,16 +25,37 @@ class ControllerProposition
             "question" => $question]);
     }
 
+    public static function read()
+    {
+//        $proposition = (new PropositionRepository())->select($_GET['idProposition']);
+//        $question = $proposition->getQuestion();
+//        $sections = $question->getSections();
+//        $responsable = $proposition->getResponsable();
+//        self::afficheVue('view.php', ["proposition" => $proposition,
+//            "sections" => $sections,
+//            "responsable" => $responsable,
+//            "pagetitle" => "Detail question",
+//            "cheminVueBody" => "Proposition/detail.php"]);
+    }
+
+    public static function readAll()
+    {
+        $propositions = (new PropositionRepository())->selectWhere($_GET['idQuestion'], '*', 'idquestion');
+        Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
+            "cheminVueBody" => "Proposition/list.php",
+            "propositions" => $propositions]);
+    }
+
     public static function created()
     {
         $question = (new QuestionRepository())->select($_GET["idQuestion"]);
         $responsable = (new ResponsableRepository())->select("hambrighta");
-        $proposition = new Proposition($_POST['titre'],$responsable, $question);
+        $proposition = new Proposition($_POST['titre'], $responsable, $question);
         $propositionBD = (new PropositionRepository())->sauvegarder($proposition);
         $proposition->setId($propositionBD);
         $sections = $question->getSections();
         foreach ($sections as $section) {
-            $propositionSection = new PropositionSection($proposition, $section, $_POST['contenu'.$section->getId()]);
+            $propositionSection = new PropositionSection($proposition, $section, $_POST['contenu' . $section->getId()]);
             (new PropositionSectionRepository())->sauvegarder($propositionSection);
 
         }
