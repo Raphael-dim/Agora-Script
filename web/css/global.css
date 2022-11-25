@@ -74,7 +74,8 @@ main p a {
 .modifier {
     max-width: 25px;
 }
-
+.vote{
+}
 .delete {
     max-width: 35px;
 }

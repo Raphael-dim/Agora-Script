@@ -36,6 +36,10 @@
             <a href = index.php?action=delete&controller=question&idQuestion=' .
 
             $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a >
+            ';
+            echo '<a href = index.php?action=create&controller=vote&idQuestion=' .
+                $idQuestionURL . ' ><img class="vote" src = "..\web\images\vote.png" ></a >
+            
             </p > ';
 
     }
