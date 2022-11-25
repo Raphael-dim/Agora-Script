@@ -4,26 +4,27 @@
 </div>
 
 <div class="selection">
-    <input type="checkbox" name="filtres"/>  <label for="filtres">filtres</label>
-<ul>
-    <li class="phases">
-        <a href="index.php?action=readAll&selection=toutes&controller=question">Toutes</a>
-    </li>
-    <li class="phases">
-        <a href="index.php?action=readAll&selection=ecriture&controller=question">En phase d'écriture</a>
-    </li>
-    <li class="phases">
-        <a href="index.php?action=readAll&selection=vote&controller=question">En phase de vote</a>
-    </li>
-    <li class="phases">
-        <a href="index.php?action=readAll&selection=terminees&controller=question">Terminées</a>
-    </li>
-</ul>
+    <input type="checkbox" name="filtres"/> <label for="filtres">filtres</label>
+    <ul>
+        <li class="phases">
+            <a href="index.php?action=readAll&selection=toutes&controller=question">Toutes</a>
+        </li>
+        <li class="phases">
+            <a href="index.php?action=readAll&selection=ecriture&controller=question">En phase d'écriture</a>
+        </li>
+        <li class="phases">
+            <a href="index.php?action=readAll&selection=vote&controller=question">En phase de vote</a>
+        </li>
+        <li class="phases">
+            <a href="index.php?action=readAll&selection=terminees&controller=question">Terminées</a>
+        </li>
+    </ul>
 </div>
 <ul class="questions">
-
     <?php
+    $date = date("Y-m-d H:i:s");
     foreach ($questions as $question) {
+        $calendrier = $question->getCalendrier();
         $idQuestionURL = rawurlencode($question->getId());
         $organisateur = htmlspecialchars($question->getOrganisateur()->getNom());
         $titreHTML = htmlspecialchars($question->getTitre());
@@ -31,12 +32,15 @@
             <a href= index.php?action=read&controller=question&idQuestion=' .
             $idQuestionURL . '> ' . $titreHTML . ' : </a>
             <a href="">par ' . $organisateur . ' </a >';
-            echo '<a href = index.php?action=update&controller=question&idQuestion=' .
-                $idQuestionURL . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >
+        echo '<a href = index.php?action=update&controller=question&idQuestion=' .
+            $idQuestionURL . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >
             <a href = index.php?action=delete&controller=question&idQuestion=' .
+            $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a >';
 
-            $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a >
-            </p > ';
+        if ($calendrier->getDebutEcriture() <= $date && $calendrier->getFinEcriture() >= $date ){
+            echo '<a href = index.php?action=create&controller=proposition&idQuestion='.$idQuestionURL.'>Créer une proposition</a>';
+        }
+        echo '</p>';
 
     }
     ?>
