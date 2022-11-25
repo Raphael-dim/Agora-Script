@@ -14,15 +14,12 @@ if (isset($_POST['Titre'])) {
     }
     FormConfig::redirect("index.php?controller=question&action=form&step=2");
 }
-
-?>
-<?php if (isset($_GET['idQuestion'])) {
+if (isset($_GET['idQuestion'])) {
     echo "<h1>Modification de la question</h1>";
     $question = (new QuestionRepository())->select($_GET['idQuestion']);
     if ($question == null) {
         \App\Vote\Controller\ControllerAccueil::erreur();
-    }
-    else{
+    } else {
         FormConfig::initialiserSessions($question);
         $_SESSION['idQuestion'] = $question->getId();
     }
@@ -37,14 +34,15 @@ if (isset($_POST['Titre'])) {
 
     <p>
         <label for="titre_id">Titre</label> :
-        <input type="text" placeholder="Ex : " name="Titre" id="titre_id" value="<?= FormConfig::TextField('Titre') ?>"
+        <input type="text" placeholder="L'oeuf ou la poule ? " size="78" maxlength="70" name="Titre" id="titre_id"
+               value="<?= FormConfig::TextField('Titre') ?>"
                required/>
+        <label for="max_id">70 caractères maximum</label>
     </p>
-    <p>
-        <label for="description_id">Description</label> :
-        <input type="text" placeholder="Ex : " name="Description" id="description_id"
-               value="<?= FormConfig::TextField('Description') ?>"
-               required/>
+    <p class ="champ">
+        <label for="description_id">Description : </label>
+        <textarea id="description_id" maxlength="350" name="Description" rows="7" cols="50" required><?= FormConfig::TextField('Description'); ?></textarea>
+        <label for="max_id">350 caractères maximum</label>
     </p>
     <p>
         <label for="nbSections_select">Nombre de sections</label>

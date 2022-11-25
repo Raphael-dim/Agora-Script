@@ -9,9 +9,9 @@ use App\Vote\Model\DataObject\Question;
 use App\Vote\Model\DataObject\Responsable;
 use App\Vote\Model\DataObject\Section;
 use App\Vote\Model\DataObject\Utilisateur;
+use App\Vote\Model\DataObject\Votant;
 use App\Vote\Model\Repository\AuteurRepository;
 use App\Vote\Model\Repository\CalendrierRepository;
-use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\ResponsableRepository;
 use App\Vote\Model\Repository\SectionRepository;
@@ -41,14 +41,12 @@ class ControllerQuestion
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
 
         $sections = $question->getSections();
-        $auteurs = $question->getResponsables();
+        $responsables = $question->getResponsables();
         $votants = $question->getVotants();
-        $propositions = (new PropositionRepository())->select($_GET['idQuestion']);
         self::afficheVue('view.php', ["question" => $question,
             "sections" => $sections,
-            "auteurs" => $auteurs,
+            "responsables" => $responsables,
             "votants" => $votants,
-            "propositions" => $propositions,
             "pagetitle" => "Detail question",
             "cheminVueBody" => "Question/detail.php"]);
     }
@@ -61,7 +59,19 @@ class ControllerQuestion
     public static function readAll()
     {
         //A optimiser
-        $questions = (new QuestionRepository())->selectAll();
+        if (!isset($_GET["selection"])) {
+            $_GET["selection"] = "toutes";
+        }
+
+        if ($_GET["selection"] == "vote") {
+            $questions = (new QuestionRepository())->getPhaseVote();
+        } else if ($_GET["selection"] == "ecriture") {
+            $questions = (new QuestionRepository())->getPhaseEcriture();
+        } else if ($_GET["selection"] == "terminees") {
+            $questions = (new QuestionRepository())->getTerminees();
+        } else {
+            $questions = (new QuestionRepository())->selectAll();
+        }
 
         Controller::afficheVue('view.php',
             ["questions" => $questions,
@@ -142,7 +152,7 @@ class ControllerQuestion
         $calendrier = new Calendrier($_SESSION['debutEcriture'], $_SESSION['finEcriture'], $_SESSION['debutVote'], $_SESSION['finVote']);
         $calendierBD = (new CalendrierRepository())->sauvegarder($calendrier);
         if ($calendierBD != null) {
-            $calendrier->setIdCalendrier($calendierBD);
+            $calendrier->setId($calendierBD);
         } else {
             Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
@@ -155,7 +165,6 @@ class ControllerQuestion
 
         $question = new Question($_SESSION['Titre'], $_SESSION['Description'], $creation, $calendrier, $organisateur);
         $questionBD = (new QuestionRepository())->sauvegarder($question);
-        var_dump($questionBD);
         if ($questionBD != null) {
             $question->setId($questionBD);
         } else {
@@ -166,43 +175,17 @@ class ControllerQuestion
         $responsables = $_SESSION['responsables'];
 
         foreach ($responsables as $responsable) {
-            $sql = "INSERT INTO Responsables (idQuestion,idUtilisateur)";
-            $sql = $sql . " VALUES (" . $question->getId() . ", '" . $responsable . "');";
-            $sql = substr($sql, 0, -1);
-
-            // Préparation de la requête
-            $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
-
-            // On donne les valeurs et on exécute la requête
-            try {
-                $pdoStatement->execute();
-            } catch (PDOException $e) {
-                echo($e->getMessage());
-            }
+            $utilisateur = new Responsable($question);
+            $utilisateur->setIdentifiant($responsable);
+            $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
         }
 
-            /*
-                foreach ($responsables as $responsable) {
-                $utilisateur = (new UtilisateurRepository())->select($responsable);
-                $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
-            }*/
-
         $votants = $_SESSION['votants'];
-        foreach($votants as $votant){
 
-            $sql = "INSERT INTO Votants (idQuestion,idUtilisateur)";
-            $sql = $sql . " VALUES (" . $question->getId() . ", '" . $votant . "');";
-            $sql = substr($sql, 0, -1);
-
-            // Préparation de la requête
-            $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
-
-            // On donne les valeurs et on exécute la requête
-            try {
-                $pdoStatement->execute();
-            } catch (PDOException $e) {
-                echo($e->getMessage());
-            }
+        foreach ($votants as $votant) {
+            $utilisateur = new Votant($question);
+            $utilisateur->setIdentifiant($votant);
+            $votantBD = (new VotantRepository())->sauvegarder($utilisateur);
         }
 
         $sections = $_SESSION['Sections'];
@@ -242,7 +225,7 @@ class ControllerQuestion
         (new QuestionRepository())->update($question);
 
 
-        $calendrier = (new CalendrierRepository())->select($question->getCalendrier()->getIdCalendrier());
+        $calendrier = (new CalendrierRepository())->select($question->getCalendrier()->getId());
         $calendrier->setDebutEcriture($_SESSION['debutEcriture']);
         $calendrier->setFinEcriture($_SESSION['finEcriture']);
         $calendrier->setDebutVote($_SESSION['debutVote']);
@@ -274,6 +257,49 @@ class ControllerQuestion
             }
         }
 
+        $responsables = $question->getResponsables();
+        $ancResponsables = array();
+        foreach ($responsables as $responsable) {
+            $ancResponsables[] = $responsable->getIdentifiant();
+        }
+        $tab = array();
+        $tab = $_SESSION['responsables'];
+        $nouvResponsables = array();
+        foreach ($tab as $val) {
+            $nouvResponsables[] = $val;
+        }
+        for ($i = 0; $i < sizeof($nouvResponsables); $i++) {
+            if (!in_array($nouvResponsables[$i], $ancResponsables)) {
+                $utilisateur = new Responsable($question);
+                $utilisateur->setIdentifiant($nouvResponsables[$i]);
+                $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
+            }
+            if (!in_array($ancResponsables[$i], $nouvResponsables)) {
+                (new ResponsableRepository())->delete($ancResponsables[$i]);
+            }
+        }
+
+        $votants = $question->getVotants();
+        $ancVotants = array();
+        foreach ($votants as $val) {
+            $ancVotants[] = $val->getIdentifiant();
+        }
+        $tab2 = $_SESSION['votants'];
+        $nouvVotants = array();
+        foreach ($tab2 as $val) {
+            $nouvVotants[] = $val;
+        }
+        for ($i = 0; $i < sizeof($nouvVotants); $i++) {
+            if (!in_array($nouvVotants[$i], $ancVotants)) {
+                $utilisateur = new Votant($question);
+                $utilisateur->setIdentifiant($nouvVotants[$i]);
+                $votantBD = (new VotantRepository())->sauvegarder($utilisateur);
+            }
+            if (!in_array($ancVotants[$i], $nouvVotants)) {
+                (new VotantRepository())->delete($ancVotants[$i]);
+            }
+        }
+
 
         $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
         self::afficheVue('view.php', ["pagetitle" => "Question modifiée",
@@ -282,23 +308,34 @@ class ControllerQuestion
         session_unset();
     }
 
+
     public static function delete(): void
     {
-        $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        foreach ($question->getSections() as $section) {
-            (new SectionRepository())->delete($section->getId());
+
+        if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])){
+            self::afficheVue('view.php', ["pagetitle" => "Question modifiée",
+                "cheminVueBody" => "confirm.php",
+                "message" => "Êtes vous sûr de vouloir supprimer cette question?",
+                "id"=>$_GET['idQuestion']]);
         }
-        (new QuestionRepository())->delete($_GET['idQuestion']);
-        (new CalendrierRepository())->delete($question->getCalendrier()->getIdCalendrier());
-        $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
-        self::afficheVue('view.php', ["pagetitle" => "Question supprimée", "cheminVueBody" => "question/deleted.php", "questions" => $questions]);
+        else if (isset($_POST["cancel"])){
+            self::readAll();
+        }
+        else if (isset($_POST["confirm"])){
+            $question = (new QuestionRepository())->select($_GET['idQuestion']);
+            (new QuestionRepository())->delete($_GET['idQuestion']);
+            $calendrier = $question->getCalendrier();
+            (new CalendrierRepository())->delete($calendrier->getId());
+            $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
+            self::afficheVue('view.php', ["pagetitle" => "Question supprimée", "cheminVueBody" => "question/deleted.php", "questions" => $questions]);
+        }
     }
 
 
-private static function afficheVue(string $cheminVue, array $parametres = []): void
+    private static function afficheVue(string $cheminVue, array $parametres = []): void
     {
         extract($parametres); // Crée des variables à partir du tableau $paramètres
         require "../src/view/$cheminVue"; // Charge la vue
     }
-    
+
 }

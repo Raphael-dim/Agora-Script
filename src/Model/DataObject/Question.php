@@ -100,6 +100,22 @@ class Question extends AbstractDataObject
     }
 
     /**
+     * @return Utilisateur
+     */
+    public function getOrganisateur(): Utilisateur
+    {
+        return $this->organisateur;
+    }
+
+    /**
+     * @param Utilisateur $organisateur
+     */
+    public function setOrganisateur(Utilisateur $organisateur): void
+    {
+        $this->organisateur = $organisateur;
+    }
+
+    /**
      * @return string
      */
     public function getTitre(): string
@@ -117,17 +133,17 @@ class Question extends AbstractDataObject
 
     public function getSections(): array
     {
-        return (new SectionRepository())->selects($this->id, '*', "idQuestion", "sections");
+        return (new SectionRepository())->selectWhere($this->id, '*', "idQuestion", "sections");
     }
 
     public function getResponsables(): array
     {
-        return (new ResponsableRepository())->selects($this->id, '*', "idQuestion", "responsables");
+        return (new ResponsableRepository())->selectWhere($this->id, '*', "idQuestion", "responsables");
     }
 
     public function getVotants(): array
     {
-        return (new VotantRepository())->selects($this->id, '*', "idQuestion", "votants");
+        return (new VotantRepository())->selectWhere($this->id, '*', "idQuestion", "votants");
     }
 
 
@@ -137,7 +153,7 @@ class Question extends AbstractDataObject
             "titreTag" => $this->titre,
             "descriptionTag" => $this->description,
             "creationTag" => $this->creation,
-            "idCalendrierTag" => $this->calendrier->getIdCalendrier(),
+            "idCalendrierTag" => $this->calendrier->getId(),
             "idOrganisateurTag" => $this->organisateur->getIdentifiant()
         );
         if ($update) {

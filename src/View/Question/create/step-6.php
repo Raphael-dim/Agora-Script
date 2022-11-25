@@ -40,21 +40,21 @@ if (count($_SESSION['Sections']) > $_SESSION['nbSections']) {
 
 ?>
 
-<p>Titre <?= $Titre ?></p>
-<p>Description <?= $Description ?></p>
+<p>Titre : <?= htmlspecialchars($Titre) ?></p>
+<p>Description : <?= htmlspecialchars($Description) ?></p>
 
 
 <div>
     <h2>Calendrier</h2>
-    <p>Phase d'écriture : du <?= $debutEcriture ?> au <?= $finEcriture ?></p>
-    <p>Phase de vote : du <?= $debutVote ?> au <?= $finVote ?></p>
+    <p>Phase d'écriture : du <?= htmlspecialchars($debutEcriture) ?> au <?= htmlspecialchars($finEcriture) ?></p>
+    <p>Phase de vote : du <?= htmlspecialchars($debutVote) ?> au <?= htmlspecialchars($finVote) ?></p>
 </div>
 
 <div>
-    <h2>Auteurs</h2>
+    <h2>Responsables</h2>
     <?php
     foreach ($_SESSION['responsables'] as $responsable) {
-        echo "<p> $responsable </p>";
+        echo "<p> " . htmlspecialchars($responsable) . " </p>";
     }
     ?>
 </div>
@@ -63,7 +63,7 @@ if (count($_SESSION['Sections']) > $_SESSION['nbSections']) {
     <h2>Votants</h2>
     <?php
     foreach ($_SESSION['votants'] as $votant) {
-        echo "<p> $votant </p>";
+        echo "<p> " . htmlspecialchars($votant) . " </p>";
     }
     ?>
 </div>
@@ -75,12 +75,11 @@ if (count($_SESSION['Sections']) > $_SESSION['nbSections']) {
     $i = 1;
     foreach ($_SESSION['Sections'] as $Section) {
         echo '<h3> Section n° ' . $i . '</h3>';
-        echo '<p>' . $Section["titre"] . '  </p>';
-        echo '<p>' . $Section["description"] . '  </p>';
+        echo '<p>Titre : ' . htmlspecialchars($Section["titre"]) . '  </p>';
+        echo '<p>Description : ' . htmlspecialchars($Section["description"]) . '  </p>';
         echo '&nbsp';
         $i++;
     }
-
     ?>
 </div>
 

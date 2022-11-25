@@ -1,69 +1,122 @@
 nav {
-    position: absolute;
-    width: 100%;
     display: block;
-    margin: auto;
+    position:absolute;
     color: white;
-    padding: 6px;
-    height: 42px;
+    top:0;
+    width:100%;
+    left:0;
     transition: ease-in-out 0.5s;
-    background-color: #012e49;
-    /*z-index: 100;*/
-    overflow: hidden;
+    background-color: var(--details);
+    height: 60px;
+    z-index:100;
 }
+
 
 nav:hover {
-    height: 50px;
+    height: 55px;
+    opacity:0.95;
 }
 
-nav:hover #Menu {
-    margin-top: 0%;
-}
 
 #Menu {
+    padding:0;
     display: flex;
-    margin: 0px;
     margin-top: -1%;
-    height: 50px;
+    height: 75px;
     padding-bottom: 10px;
     transition: ease-in-out 0.5s;
 }
 
 .petitmenu a {
-    text-decoration: none;
     color: white;
 }
 
+nav:hover >#Menu{
+    margin-top:-0.5%;
+}
+
 ul[id="Menu"] li.grosmenu {
-    margin-right: 20px;
+
+    margin:0;
 }
 
 ul[id="Menu"] li.grosmenu > a {
     text-decoration: none;
+    margin:0;
+    margin-top: 15px;
     display: inline-block;
-    height: 40px;
-    width: 100px;
+    width: 200px;
     position: relative;
-    /* top:-2px; */
     color: white;
-    text-align: left;
+    text-align: center;
     padding: 10px;
-    font-size: 12px;
-    margin-left: -7px;
-    line-height: 17px;
-    cursor: pointer;
+    font-size: 19px;
+    line-height: 24px;
 }
 
 ul[id="Menu"] li a:hover {
+    color: #012e49;
+    background: #c1d9d7;
     transition: opacity 0.2s linear;
 }
 
 ul[id="Menu"] li a:hover {
-    opacity: 50%;
-    border-radius: 0px;
+    opacity: 80%;
+    border-radius: 2px;
 }
 
 ul[id="Menu"] li {
     display: inline;
-    border-radius: 0;
+}
+
+
+@media screen and (max-width: 1000px) {
+    nav{
+        opacity:1;
+    }
+
+    #Menu {
+        width:75px;
+        padding:0;margin:0;
+        display:inline-block;
+        height:60px;
+        padding-top:60px;
+        background-image:url("../../web/images/Menu_icon.png");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 80%;
+    }
+    #Menu:hover{
+        background-color: #fd6d76;
+    }
+
+   #Menu > li{
+       display:none;
+       position:absolute;
+    }
+
+    #Menu:hover > li{
+        display:block;
+        position:relative;
+    }
+    #Menu:hover> li >a{
+        height: auto;
+    }
+
+    ul[id="Menu"] li.grosmenu{
+        padding:0;
+        margin:0;
+    }
+
+    ul[id="Menu"] li.grosmenu > a {
+        margin-top:60px;
+        position:relative;
+        background:var(--details);
+        margin:0;
+        padding: 10px;
+        height:0;
+        width: 150px;
+        font-size: 17px;
+        line-height: 22px;
+    }
 }

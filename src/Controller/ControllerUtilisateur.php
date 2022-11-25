@@ -15,6 +15,18 @@ class ControllerUtilisateur
                 "cheminVueBody" => "Utilisateurs/list.php"]); //"redirige" vers la vue
     }
 
+    public static function connexion(){
+        Controller::afficheVue('view.php',
+            ["pagetitle"=>"Connexion",
+             "cheminVueBody"=>"Utilisateurs/connexion.php"]);
+    }
+
+    public static function create(){
+        Controller::afficheVue('view.php',
+        ["pagetitle"=>"Inscription",
+         "cheminVueBody"=>"Utilisateurs/create.php"]);
+    }
+
     public static function search()
     {
         Controller::afficheVue('view.php',
