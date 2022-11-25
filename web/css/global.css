@@ -36,6 +36,7 @@ main > h1, h2 {
 
 body {
     background: var(--background);
+    overflow-x:hidden;
 }
 
 main {
@@ -311,6 +312,8 @@ textarea {
 }
 
 #acceuil_search_form > h1 > span {
+    text-shadow: black 1px 2px 5px;
+    opacity:1;
     position: relative;
     background: transparent;
 }
