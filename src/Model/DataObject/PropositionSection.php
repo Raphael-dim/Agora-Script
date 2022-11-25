@@ -4,8 +4,25 @@ namespace App\Vote\Model\DataObject;
 
 class PropositionSection extends AbstractDataObject
 {
+    private Auteur $auteur;
     private Proposition $proposition;
     private Section $section;
+
+    /**
+     * @return Auteur
+     */
+    public function getAuteur(): Auteur
+    {
+        return $this->auteur;
+    }
+
+    /**
+     * @param Auteur $auteur
+     */
+    public function setAuteur(Auteur $auteur): void
+    {
+        $this->auteur = $auteur;
+    }
     private string $contenu;
 
     /**
@@ -15,6 +32,7 @@ class PropositionSection extends AbstractDataObject
      */
     public function __construct(Proposition $proposition, Section $section, string $contenu)
     {
+//        $this->auteur = $auteur;
         $this->proposition = $proposition;
         $this->section = $section;
         $this->contenu = $contenu;
@@ -72,6 +90,7 @@ class PropositionSection extends AbstractDataObject
     public function formatTableau(): array
     {
         return array(
+//            "idAuteurTag" =>$this->auteur->getId(),
             "idPropositionTag" => $this->proposition->getId(),
             "idSectionTag" => $this->section->getId(),
             "contenuTag" => $this->contenu
