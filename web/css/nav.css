@@ -45,27 +45,28 @@ ul[id="Menu"] li.grosmenu > a {
     margin:0;
     margin-top: 15px;
     display: inline-block;
-    width: 150px;
+    width: 200px;
     position: relative;
     color: white;
     text-align: center;
     padding: 10px;
-    font-size: 13px;
+    font-size: 19px;
     line-height: 24px;
 }
 
 ul[id="Menu"] li a:hover {
+    color: #012e49;
+    background: #c1d9d7;
     transition: opacity 0.2s linear;
 }
 
 ul[id="Menu"] li a:hover {
     opacity: 80%;
-    border-radius: 0px;
+    border-radius: 2px;
 }
 
 ul[id="Menu"] li {
     display: inline;
-    border-radius: 0;
 }
 
 

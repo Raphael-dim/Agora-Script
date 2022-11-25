@@ -16,9 +16,10 @@ if (isset($_POST["keyword"])) {
     <?php
     foreach ($_SESSION[$_SESSION['type']] as $responsable) {
         echo '
-
-                <span><button type = submit value = "' . $responsable . '" name = "delete">' . $responsable . '</button></span>
-
+                <span id="utilisateurs" class="listes">
+                <button type = submit value = "' . $responsable . '" name = "delete">' . $responsable . '</button>
+                <img class="delete" src="../../web/images/delete.png" alt="supprimer">
+                </span>
             ';
 
     }

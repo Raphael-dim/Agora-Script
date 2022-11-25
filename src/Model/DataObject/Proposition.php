@@ -4,17 +4,32 @@ namespace App\Vote\Model\DataObject;
 
 class Proposition extends AbstractDataObject
 {
+    private int $id;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
     private string $titre;
-    private string $contenu;
-    private Utilisateur $auteur;
+    private Responsable $responsable;
     private Question $question;
 
 
-    public function __construct(string $titre, string $contenu, Utilisateur $auteur, Question $question)
+    public function __construct(string $titre, Responsable $responsable, Question $question)
     {
         $this->titre = $titre;
-        $this->contenu = $contenu;
-        $this->auteur = $auteur;
+        $this->responsable = $responsable;
         $this->question = $question;
     }
 
@@ -35,27 +50,24 @@ class Proposition extends AbstractDataObject
     }
 
     /**
-     * @return string
+     * @param Utilisateur $responsable
      */
-    public function getContenu(): string
+    public function setResponsable(Responsable $responsable): void
     {
-        return $this->contenu;
+        $this->responsable = $responsable;
     }
 
     /**
-     * @param string $contenu
+     * @param Question $question
      */
-    public function setContenu(string $contenu): void
+    public function setQuestion(Question $question): void
     {
-        $this->contenu = $contenu;
+        $this->question = $question;
     }
 
-    /**
-     * @return Utilisateur
-     */
-    public function getAuteur(): Utilisateur
+    public function getResponsable(): Responsable
     {
-        return $this->auteur;
+        return $this->responsable;
     }
 
     /**
@@ -69,10 +81,9 @@ class Proposition extends AbstractDataObject
     public function formatTableau(): array
     {
         return array(
-            "titreTag" => $this->titre,
-            "contenuTag" => $this->contenu,
-            "idAuteurTag" => $this->auteur->getIdentifiant(),
-            "idQuestionTag" => $this->question->getId()
+            "idquestionTag" => $this->question->getId(),
+            "idresponsableTag" => $this->responsable->getIdentifiant(),
+            "titreTag" => $this->titre
         );
     }
 }

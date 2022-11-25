@@ -1,5 +1,5 @@
 
-main>h1, h2 {
+main > h1, h2 {
     animation-duration: 0.5s;
     animation-name: slidein;
 }
@@ -15,11 +15,13 @@ main>h1, h2 {
 }
 
 :root {
-    background-image: url("../images/fond.jpg");
+    background-image: url("../images/fond2.jpg");
     background-position: center;
-    position:absolute;
-    top:0;left:0;
-    width:100vw;height:100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     /*background-size: 150%;*/
     /*background-repeat: no-repeat;*/
     /*--background: #3f3b45;*/
@@ -34,18 +36,19 @@ main>h1, h2 {
 
 body {
     background: var(--background);
+    overflow-x:hidden;
 }
 
 main {
-    padding:15px;
+    padding: 15px;
     border-radius: 20px;
-    width:85%;
+    width: 85%;
     margin: auto;
     margin-top: 100px;
     background: var(--background2);
     opacity: 0.9;
-    z-index:-1;
-    overflow:hidden;
+    z-index: -1;
+    overflow: hidden;
 }
 
 
@@ -79,14 +82,21 @@ main p a {
 .delete {
     max-width: 35px;
 }
-.listes>a{
-    margin:0;
-    padding:0;
+
+#utilisateurs {
+    background: #012e49;
 }
-.listes{
-    margin:0;
-    padding:0;
+
+.listes > a {
+    margin: 0;
+    padding: 0;
 }
+
+.listes {
+    margin: 0;
+    padding: 0;
+}
+
 .listes * {
     display: inline-block;
     vertical-align: middle;
@@ -163,7 +173,7 @@ li, a {
 }
 
 textarea {
-    resize: none;
+    /*resize: none;*/
 }
 
 .champ textarea {
@@ -176,10 +186,11 @@ textarea {
     margin-left: 15px;
 }
 
-.selection{
-    color:white;
+.selection {
+    color: white;
 }
-.selection>ul {
+
+.selection > ul {
     padding-inline-start: 0px;
     width: 100%;
     justify-content: center;
@@ -187,25 +198,29 @@ textarea {
     list-style-type: none;
     display: flex;
 }
-.selection> input[type=checkbox]{
+
+.selection > input[type=checkbox] {
     appearance: none;
 }
-.selection> input[type=checkbox]:hover{
-    cursor:pointer;
+
+.selection > input[type=checkbox]:hover {
+    cursor: pointer;
 }
 
-.selection> input[type=checkbox]:checked:after{
-    content:"-";
+.selection > input[type=checkbox]:checked:after {
+    content: "-";
 }
-.selection> input[type=checkbox]:after{
+
+.selection > input[type=checkbox]:after {
     font-size: 1.5em;
-    content:"+";
-}
-.selection> input[type=checkbox]:checked ~ ul {
-    display:flex;
+    content: "+";
 }
 
-.selection > ul{
+.selection > input[type=checkbox]:checked ~ ul {
+    display: flex;
+}
+
+.selection > ul {
     display: none;
 }
 
@@ -218,8 +233,8 @@ textarea {
 
 
 .creer, .rechercher {
-    padding:5px;
-    background:var(--details);
+    padding: 5px;
+    background: var(--details);
     color: #fff;
     display: block;
     font-size: 0.8em;
@@ -232,59 +247,61 @@ textarea {
     color: #0c344b;
 }
 
-.barreHaut{
-    width:100%;
+.barreHaut {
+    width: 100%;
     vertical-align: middle;
     display: flex;
 }
 
 
-
-#acceuil_search_form{
+#acceuil_search_form {
     position: relative;
     justify-content: center;
 }
 
-#imgsearch{
+#imgsearch {
     height: auto;
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width:90%;
+    width: 90%;
     max-width: 100%;
-    z-index:-1;
+    z-index: -1;
 }
-#form_search{
-    position:absolute;
+
+#form_search {
+    position: absolute;
     display: flex;
     top: 65%;
     right: 15%;
     width: 35%;
-    height:auto;
-    background:white;
+    height: auto;
+    background: white;
 }
-#form_search > #keyword_input{
+
+#form_search > #keyword_input {
     position: relative;
-    float:left;
+    float: left;
     width: 100%;
     border: 0;
     padding: 20px 45px 20px 28px;
     font-size: 1.3rem;
     line-height: 1;
 }
-#form_search > .search{
-    float:right;
-    height:7%;
-    width:7%;
+
+#form_search > .search {
+    float: right;
+    height: 7%;
+    width: 7%;
     transform: translateY(50%);
-    background:white;
+    background: white;
 }
 
-#acceuil_search_form > h1{
-    font-size:2em;
-    top:22%;
-    left:18%;
-    position:absolute;
+#acceuil_search_form > h1 {
+    font-size: 2em;
+    top: 22%;
+    left: 18%;
+    position: absolute;
     line-height: 1.12em;
     color: white;
     margin: 0 0 25px;
@@ -292,27 +309,32 @@ textarea {
     padding: 34px 0 33px;
     word-break: break-word;
     text-decoration: none;
-    max-width:30%;
-}
-#acceuil_search_form >h1> span{
-    position:relative;
-    background:transparent;
+    max-width: 30%;
 }
 
-#acceuil_search_form > h1>span:before, #acceuil_search_form > h1>span:after {
+#acceuil_search_form > h1 > span {
+    text-shadow: black 1px 2px 5px;
+    opacity:1;
+    position: relative;
+    background: transparent;
+}
+
+#acceuil_search_form > h1 > span:before, #acceuil_search_form > h1 > span:after {
     content: '';
     position: absolute;
     background: transparent;
     height: 15px;
     border: 7px solid currentColor;
 }
-#acceuil_search_form > h1>span:before {
+
+#acceuil_search_form > h1 > span:before {
     width: 25%;
-    top:-25%;
+    top: -25%;
     border-top: 0;
     border-right: 0;
 }
-#acceuil_search_form > h1>span:after {
+
+#acceuil_search_form > h1 > span:after {
     width: 41%;
     left: 70%;
     right: 24px;
@@ -323,30 +345,30 @@ textarea {
 }
 
 
-
-
 @media screen and (max-width: 1000px) {
     main {
         width: 100%;
     }
 
-    #acceuil_search_form > h1{
-        font-size:1.5em;
-        width:250px;
+    #acceuil_search_form > h1 {
+        font-size: 1.5em;
+        width: 250px;
     }
-    #form_search{
-        position:relative;
-        top:-20px;right:0;
-        left:5%;
-        width:90%;
-        height:40px;
+
+    #form_search {
+        position: relative;
+        top: -20px;
+        right: 0;
+        left: 5%;
+        width: 90%;
+        height: 40px;
         transform: translateY(50%);
-        background:white;
+        background: white;
     }
 
     #form_search .search {
         transform: translateY(0%);
-        height:40px;
-        width:40px;
+        height: 40px;
+        width: 40px;
     }
 }

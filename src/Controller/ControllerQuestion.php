@@ -59,20 +59,17 @@ class ControllerQuestion
     public static function readAll()
     {
         //A optimiser
-        if(!isset($_GET["selection"])){
-            $_GET["selection"]="toutes";
+        if (!isset($_GET["selection"])) {
+            $_GET["selection"] = "toutes";
         }
 
-        if ($_GET["selection"]== "vote"){
-            $questions= (new QuestionRepository())->getPhaseVote();
-        }
-        else if ($_GET["selection"]== "ecriture") {
+        if ($_GET["selection"] == "vote") {
+            $questions = (new QuestionRepository())->getPhaseVote();
+        } else if ($_GET["selection"] == "ecriture") {
             $questions = (new QuestionRepository())->getPhaseEcriture();
-        }
-        else if ($_GET["selection"]== "terminees") {
+        } else if ($_GET["selection"] == "terminees") {
             $questions = (new QuestionRepository())->getTerminees();
-        }
-        else{
+        } else {
             $questions = (new QuestionRepository())->selectAll();
         }
 
@@ -185,7 +182,7 @@ class ControllerQuestion
 
         $votants = $_SESSION['votants'];
 
-        foreach($votants as $votant){
+        foreach ($votants as $votant) {
             $utilisateur = new Votant($question);
             $utilisateur->setIdentifiant($votant);
             $votantBD = (new VotantRepository())->sauvegarder($utilisateur);
@@ -260,6 +257,49 @@ class ControllerQuestion
             }
         }
 
+        $responsables = $question->getResponsables();
+        $ancResponsables = array();
+        foreach ($responsables as $responsable) {
+            $ancResponsables[] = $responsable->getIdentifiant();
+        }
+        $tab = array();
+        $tab = $_SESSION['responsables'];
+        $nouvResponsables = array();
+        foreach ($tab as $val) {
+            $nouvResponsables[] = $val;
+        }
+        for ($i = 0; $i < sizeof($nouvResponsables); $i++) {
+            if (!in_array($nouvResponsables[$i], $ancResponsables)) {
+                $utilisateur = new Responsable($question);
+                $utilisateur->setIdentifiant($nouvResponsables[$i]);
+                $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
+            }
+            if (!in_array($ancResponsables[$i], $nouvResponsables)) {
+                (new ResponsableRepository())->delete($ancResponsables[$i]);
+            }
+        }
+
+        $votants = $question->getVotants();
+        $ancVotants = array();
+        foreach ($votants as $val) {
+            $ancVotants[] = $val->getIdentifiant();
+        }
+        $tab2 = $_SESSION['votants'];
+        $nouvVotants = array();
+        foreach ($tab2 as $val) {
+            $nouvVotants[] = $val;
+        }
+        for ($i = 0; $i < sizeof($nouvVotants); $i++) {
+            if (!in_array($nouvVotants[$i], $ancVotants)) {
+                $utilisateur = new Votant($question);
+                $utilisateur->setIdentifiant($nouvVotants[$i]);
+                $votantBD = (new VotantRepository())->sauvegarder($utilisateur);
+            }
+            if (!in_array($ancVotants[$i], $nouvVotants)) {
+                (new VotantRepository())->delete($ancVotants[$i]);
+            }
+        }
+
 
         $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
         self::afficheVue('view.php', ["pagetitle" => "Question modifiée",
@@ -268,21 +308,34 @@ class ControllerQuestion
         session_unset();
     }
 
+
     public static function delete(): void
     {
-        $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        (new QuestionRepository())->delete($_GET['idQuestion']);
-        $calendrier = $question->getCalendrier();
-        (new CalendrierRepository())->delete($calendrier->getId());
-        $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
-        self::afficheVue('view.php', ["pagetitle" => "Question supprimée", "cheminVueBody" => "question/deleted.php", "questions" => $questions]);
+
+        if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])){
+            self::afficheVue('view.php', ["pagetitle" => "Question modifiée",
+                "cheminVueBody" => "confirm.php",
+                "message" => "Êtes vous sûr de vouloir supprimer cette question?",
+                "id"=>$_GET['idQuestion']]);
+        }
+        else if (isset($_POST["cancel"])){
+            self::readAll();
+        }
+        else if (isset($_POST["confirm"])){
+            $question = (new QuestionRepository())->select($_GET['idQuestion']);
+            (new QuestionRepository())->delete($_GET['idQuestion']);
+            $calendrier = $question->getCalendrier();
+            (new CalendrierRepository())->delete($calendrier->getId());
+            $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
+            self::afficheVue('view.php', ["pagetitle" => "Question supprimée", "cheminVueBody" => "question/deleted.php", "questions" => $questions]);
+        }
     }
 
 
-private static function afficheVue(string $cheminVue, array $parametres = []): void
+    private static function afficheVue(string $cheminVue, array $parametres = []): void
     {
         extract($parametres); // Crée des variables à partir du tableau $paramètres
         require "../src/view/$cheminVue"; // Charge la vue
     }
-    
+
 }

@@ -80,7 +80,6 @@ if (count($_SESSION['Sections']) > $_SESSION['nbSections']) {
         echo '&nbsp';
         $i++;
     }
-
     ?>
 </div>
 
