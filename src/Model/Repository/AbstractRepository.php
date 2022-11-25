@@ -34,15 +34,16 @@ abstract class AbstractRepository
         if (get_class($object) == Question::class || get_class($object) == Proposition::class || get_class($object) == Section::class || get_class($object) == Calendrier::class) {
             $sql = $sql . " RETURNING " . $this->getNomClePrimaire();
         }
-        $sql = $sql .";";
-        echo $sql;
+        $sql = $sql . ";";
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
         // On donne les valeurs et on exécute la requête
         try {
             $pdoStatement->execute($object->formatTableau());
             foreach ($pdoStatement as $clePrimaire) {
-                return $clePrimaire[0];
+                if (isset($clePrimaire[0])) {
+                    return $clePrimaire[0];
+                }
             }
         } catch (PDOException $e) {
             echo($e->getMessage());
