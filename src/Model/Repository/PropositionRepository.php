@@ -10,10 +10,10 @@ class PropositionRepository extends AbstractRepository
     {
         $proposition = new Proposition(
             $propositionTableau["titre"],
-            $propositionTableau["responsable"],
+            (new ResponsableRepository())->select($propositionTableau['idresponsable']),
             (new QuestionRepository())->select($propositionTableau['idquestion'])
         );
-        $proposition->setId($propositionTableau["idProposition"]);
+        $proposition->setId($propositionTableau["idproposition"]);
         return $proposition;
     }
 
