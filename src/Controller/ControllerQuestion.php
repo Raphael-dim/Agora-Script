@@ -164,7 +164,7 @@ class ControllerQuestion
 
 
         //var_dump($sections);
-        $organisateur = (new UtilisateurRepository)->select("hambrighta");
+        $organisateur = (new UtilisateurRepository)->select($_SESSION['user']['id']);
 
         $creation = date("Y/m/d H:i:s");
 
@@ -216,11 +216,18 @@ class ControllerQuestion
 
     public static function update(): void
     {
-        FormConfig::setArr('SessionQuestion');
-        FormConfig::startSession();
-        self::afficheVue('view.php', ["pagetitle" => "Modifier une question",
-            "cheminVueBody" => "question/create/step-1.php",
-            "idQuestion" => $_GET['idQuestion']]);
+        session_start();
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        if (!isset($_SESSION['user']) || $_SESSION['user']['id'] != $question->getOrganisateur()->getIdentifiant()) {
+            ControllerAccueil::erreur();
+        }
+        else{
+            FormConfig::setArr('SessionQuestion');
+            FormConfig::startSession();
+            self::afficheVue('view.php', ["pagetitle" => "Modifier une question",
+                "cheminVueBody" => "question/create/step-1.php",
+                "idQuestion" => $_GET['idQuestion']]);
+        }
     }
 
     public static function updated(): void
@@ -319,18 +326,18 @@ class ControllerQuestion
 
     public static function delete(): void
     {
-
-        if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])){
+        session_start();
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        if (!isset($_SESSION['user']) || $_SESSION['user']['id'] != $question->getOrganisateur()->getIdentifiant()) {
+            ControllerAccueil::erreur();
+        } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
             self::afficheVue('view.php', ["pagetitle" => "Question modifiée",
                 "cheminVueBody" => "confirm.php",
                 "message" => "Êtes vous sûr de vouloir supprimer cette question?",
-                "id"=>$_GET['idQuestion']]);
-        }
-        else if (isset($_POST["cancel"])){
+                "id" => $_GET['idQuestion']]);
+        } else if (isset($_POST["cancel"])) {
             self::readAll();
-        }
-        else if (isset($_POST["confirm"])){
-            $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        } else if (isset($_POST["confirm"])) {
             (new QuestionRepository())->delete($_GET['idQuestion']);
             $calendrier = $question->getCalendrier();
             (new CalendrierRepository())->delete($calendrier->getId());

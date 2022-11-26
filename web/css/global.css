@@ -87,11 +87,12 @@ main p a {
 }
 
 .listes > a {
-    margin: 0;
+    margin-left: 10px;
     padding: 0;
 }
 
 .listes {
+    height: 50px;
     margin: 0;
     padding: 0;
 }
@@ -347,6 +348,10 @@ textarea {
 @media screen and (max-width: 1000px) {
     main {
         width: 100%;
+    }
+
+    .listes {
+        height: auto;
     }
 
     #acceuil_search_form > h1 {
