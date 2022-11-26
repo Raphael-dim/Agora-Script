@@ -1,4 +1,4 @@
-<form method="post" action="index.php?controller=accueil&action=home">
+<form method="post" action="index.php?controller=utilisateur&action=connected">
     <fieldset>
         <legend>formulaire de connexion :</legend>
         <p>

@@ -1,9 +1,8 @@
 <?php
-session_start();
 
 use App\Vote\Config\FormConfig as FormConfig;
 
-if (!isset($_SESSION['step'][1])) {
+if (!isset($_SESSION[FormConfig::$arr]['step'][1])) {
     FormConfig::redirect("index.php?controller=question&action=create");
 }
 
@@ -23,7 +22,7 @@ if (isset($_POST['next'])) {
         $message = "La phase de vote doit commencer après la phase d'écriture";
     } else {
         FormConfig::postSession();
-        $_SESSION['step'][2] = 2;
+        $_SESSION[FormConfig::$arr]['step'][2] = 2;
         FormConfig::redirect("index.php?controller=question&action=form&step=3");
     }
 
