@@ -2,9 +2,24 @@
 
 namespace App\Vote\Config;
 
+use MongoDB\Driver\Session;
+
 class FormConfig
 {
+    public static String $arr = '';
 
+
+    static public function startSession(){
+        session_start();
+        if (isset($_SESSION[FormConfig::$arr])){
+            unset($_SESSION[FormConfig::$arr]);
+        }
+        $_SESSION[FormConfig::$arr] = array();
+    }
+
+    static public function setArr(String $string){
+        FormConfig::$arr=$string;
+    }
     /*
      * Si une variable session ou publiée existe pour le menu déroulant,
      * alors on selectionne la valeur concernée
@@ -13,7 +28,7 @@ class FormConfig
     {
         if (isset($_POST[$param]) && $_POST[$param] == $value) {
             return " selected =\"selected\"";
-        } else if (isset($_SESSION[$param]) && $_SESSION[$param] == $value) {
+        } else if (isset($_SESSION[FormConfig::$arr][$param]) && $_SESSION[FormConfig::$arr][$param] == $value) {
             return " selected =\"selected\"";
         }
     }
@@ -26,8 +41,8 @@ class FormConfig
     {
         if (isset($_POST[$param])) {
             return $_POST[$param];
-        } else if (isset($_SESSION[$param])) {
-            return $_SESSION[$param];
+        } else if (isset($_SESSION[FormConfig::$arr][$param])) {
+            return $_SESSION[FormConfig::$arr][$param];
         }
     }
 
@@ -35,26 +50,27 @@ class FormConfig
     {
         $calendrier = $question->getCalendrier();
         $tabSections = $question->getSections();
-        $_SESSION['Titre'] = $question->getTitre();
-        $_SESSION['Description'] = $question->getDescription();
-        $_SESSION['nbSections'] = count($question->getSections());
-        $_SESSION['debutEcriture'] = $calendrier->getDebutEcriture();
-        $_SESSION['finEcriture'] = $calendrier->getFinEcriture();
-        $_SESSION['debutVote'] = $calendrier->getDebutVote();
-        $_SESSION['finVote'] = $calendrier->getFinVote();
+        $_SESSION[FormConfig::$arr]['Titre'] = $question->getTitre();
+        $_SESSION[FormConfig::$arr]['Description'] = $question->getDescription();
+        $_SESSION[FormConfig::$arr]['nbSections'] = count($question->getSections());
+        $_SESSION[FormConfig::$arr]['debutEcriture'] = $calendrier->getDebutEcriture();
+        $_SESSION[FormConfig::$arr]['finEcriture'] = $calendrier->getFinEcriture();
+        $_SESSION[FormConfig::$arr]['debutVote'] = $calendrier->getDebutVote();
+        $_SESSION[FormConfig::$arr]['finVote'] = $calendrier->getFinVote();
         for ($i = 1; $i <= count($tabSections); $i++) {
-            $_SESSION['titre' . $i] = $tabSections[$i - 1]->getTitre();
-            $_SESSION['description' . $i] = $tabSections[$i - 1]->getDescription();
+            $_SESSION[FormConfig::$arr]['titre' . $i] = $tabSections[$i - 1]->getTitre();
+            $_SESSION[FormConfig::$arr]['description' . $i] = $tabSections[$i - 1]->getDescription();
         }
+
         $responsables = $question->getResponsables();
-        $_SESSION['responsables'] = array();
+        $_SESSION[FormConfig::$arr]['responsables'] = array();
         foreach ($responsables as $responsable) {
-            $_SESSION['responsables'][] = $responsable->getIdentifiant();
+            $_SESSION[FormConfig::$arr]['responsables'][] = $responsable->getIdentifiant();
         }
         $votants = $question->getVotants();
-        $_SESSION['votants'] = array();
+        $_SESSION[FormConfig::$arr]['votants'] = array();
         foreach ($votants as $votant) {
-            $_SESSION['votants'][] = $votant->getIdentifiant();
+            $_SESSION[FormConfig::$arr]['votants'][] = $votant->getIdentifiant();
         }
     }
 
@@ -81,7 +97,7 @@ class FormConfig
          */
         foreach ($_POST as $key => $value) {
             $value = is_array($value) ? $value : trim($value);
-            $_SESSION[$key] = $value;
+            $_SESSION[FormConfig::$arr][$key] = $value;
         }
     }
 

@@ -1,4 +1,5 @@
 <?php
+use App\Vote\Config\FormConfig as FormConfig;
 require "../src/View/Utilisateurs/searchselect.php";
 if (!isset($utilisateurs)) {
     $utilisateurs = [];
@@ -14,7 +15,7 @@ if (isset($_POST["keyword"])) {
 
 <form method=post>
     <?php
-    foreach ($_SESSION[$_SESSION['type']] as $responsable) {
+    foreach ($_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']] as $responsable) {
         echo '
                 <span id="utilisateurs" class="listes">
                 <button type = submit value = "' . $responsable . '" name = "delete">' . $responsable . '</button>
@@ -32,7 +33,7 @@ foreach ($utilisateurs as $utilisateur) {
     $nom = htmlspecialchars($utilisateur->getNom());
     $prenom = htmlspecialchars($utilisateur->getPrenom());
     $identifiant = $utilisateur->getIdentifiant();
-    if (in_array($identifiant, $_SESSION['responsables'])) {
+    if (in_array($identifiant, $_SESSION[FormConfig::$arr]['responsables'])) {
         $disable = "disabled";
     } else {
         $disable = "";

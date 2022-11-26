@@ -155,6 +155,7 @@ abstract class AbstractRepository
 
     public function selectWhere($clef, $rowSelect = '*', $whereCondition = null, $nomTable = null): array
     {
+
         $ADonnees = array();
         if (is_null($nomTable)) {
             $sql = 'SELECT ' . $rowSelect . ' from ' . $this->getNomTable();
@@ -167,6 +168,8 @@ abstract class AbstractRepository
             $sql = $sql . ' WHERE ' . $whereCondition . ' =:clef';
 
         }
+        var_dump($sql);
+        var_dump($clef);
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
 

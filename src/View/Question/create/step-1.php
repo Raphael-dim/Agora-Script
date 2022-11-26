@@ -1,19 +1,8 @@
 <?php
-session_start();
 
 use App\Vote\Config\FormConfig as FormConfig;
 use App\Vote\Model\Repository\QuestionRepository;
 
-if (isset($_POST['Titre'])) {
-    FormConfig::postSession();
-    $_SESSION['step'][1] = 1;
-    if (!isset($_SESSION['responsables']) && !isset($_SESSION['votants'])) {
-        $_SESSION['responsables'] = array();
-        $_SESSION['votants'] = array();
-
-    }
-    FormConfig::redirect("index.php?controller=question&action=form&step=2");
-}
 if (isset($_GET['idQuestion'])) {
     echo "<h1>Modification de la question</h1>";
     $question = (new QuestionRepository())->select($_GET['idQuestion']);
@@ -21,12 +10,26 @@ if (isset($_GET['idQuestion'])) {
         \App\Vote\Controller\ControllerAccueil::erreur();
     } else {
         FormConfig::initialiserSessions($question);
-        $_SESSION['idQuestion'] = $question->getId();
+        $_SESSION[FormConfig::$arr]['idQuestion'] = $question->getId();
     }
 
 } else {
     echo "<h1>Création d'une question</h1>";
 }
+
+
+
+if (isset($_POST['Titre'])) {
+    FormConfig::postSession();
+    $_SESSION[FormConfig::$arr]['step'][1] = 1;
+    if (!isset($_SESSION[FormConfig::$arr]['responsables']) && !isset($_SESSION[FormConfig::$arr]['votants'])) {
+        $_SESSION[FormConfig::$arr]['responsables'] = array();
+        $_SESSION[FormConfig::$arr]['votants'] = array();
+
+    }
+    FormConfig::redirect("index.php?controller=question&action=form&step=2");
+}
+
 ?>
 
 
