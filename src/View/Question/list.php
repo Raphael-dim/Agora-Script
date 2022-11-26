@@ -22,6 +22,9 @@
 </div>
 <ul class="questions">
     <?php
+
+    use App\Vote\Model\DataObject\Responsable;
+
     $date = date("Y-m-d H:i:s");
     foreach ($questions as $question) {
         $calendrier = $question->getCalendrier();
@@ -38,9 +41,13 @@
             <a href = index.php?action=delete&controller=question&idQuestion=' .
                 $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a >';
         }
-        if ($calendrier->getDebutEcriture() <= $date && $calendrier->getFinEcriture() >= $date) {
-            echo '<a href = index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '>Créer une proposition</a>';
+        if (isset($_SESSION['user']) && Responsable::estResponsable($question, $_SESSION['user']['id']))
+        {
+            if ($calendrier->getDebutEcriture() <= $date && $calendrier->getFinEcriture() >= $date) {
+                echo '<a href = index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '>Créer une proposition</a>';
+            }
         }
+
         echo '<a href = index.php?action=readAll&controller=proposition&idQuestion=' . $idQuestionURL . ' >Liste des propositions</a>';
         echo '</p>';
 

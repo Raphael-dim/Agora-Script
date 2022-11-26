@@ -164,7 +164,7 @@ class ControllerQuestion
 
 
         //var_dump($sections);
-        $organisateur = (new UtilisateurRepository)->select("hambrighta");
+        $organisateur = (new UtilisateurRepository)->select($_SESSION['user']['id']);
 
         $creation = date("Y/m/d H:i:s");
 

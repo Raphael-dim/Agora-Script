@@ -5,6 +5,7 @@ namespace App\Vote\Controller;
 use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Proposition;
 use App\Vote\Model\DataObject\PropositionSection;
+use App\Vote\Model\DataObject\Responsable;
 use App\Vote\Model\Repository\AuteurRepository;
 use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\PropositionRepository;
@@ -19,10 +20,25 @@ class ControllerProposition
 
     public static function create()
     {
+        session_start();
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        Controller::afficheVue('view.php', ["pagetitle" => "Accueil",
-            "cheminVueBody" => "Proposition/create.php",
-            "question" => $question]);
+        if ($question == null){
+            ControllerAccueil::erreur();
+        }else{
+            $date = date("Y/m/d H:i:s");
+            $calendrier = $question->getCalendrier();
+            if (!isset($_SESSION['user']) || !Responsable::estResponsable($question, $_SESSION['user']['id'])) {
+                ControllerAccueil::erreur();
+            }
+//        else if ($calendrier->getDebutEcriture() > $date || $calendrier->getFinEcriture() < $date) {
+//            ControllerAccueil::erreur();
+//        }
+            else {
+                Controller::afficheVue('view.php', ["pagetitle" => "Accueil",
+                    "cheminVueBody" => "Proposition/create.php",
+                    "question" => $question]);
+            }
+        }
     }
 
     public static function read()
