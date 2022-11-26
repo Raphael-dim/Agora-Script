@@ -3,14 +3,16 @@
 use App\Vote\Config\FormConfig as FormConfig;
 use App\Vote\Model\Repository\QuestionRepository;
 
-if (isset($_GET['idQuestion'])) {
+if (isset($_GET['idQuestion']) or isset($_SESSION[FormConfig::$arr]['idQuestion']) ) {
     echo "<h1>Modification de la question</h1>";
-    $question = (new QuestionRepository())->select($_GET['idQuestion']);
-    if ($question == null) {
-        \App\Vote\Controller\ControllerAccueil::erreur();
-    } else {
-        FormConfig::initialiserSessions($question);
-        $_SESSION[FormConfig::$arr]['idQuestion'] = $question->getId();
+    if (isset($_GET['idQuestion'])) {
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        if ($question == null) {
+            \App\Vote\Controller\ControllerAccueil::erreur();
+        } else {
+            FormConfig::initialiserSessions($question);
+            $_SESSION[FormConfig::$arr]['idQuestion'] = $question->getId();
+        }
     }
 
 } else {

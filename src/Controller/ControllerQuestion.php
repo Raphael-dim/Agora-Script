@@ -88,7 +88,6 @@ class ControllerQuestion
             session_start();
         }
         FormConfig::setArr('SessionQuestion');
-        FormConfig::printSession();
         $view = "";
         $step = $_GET['step'] ?? 1;
         $params = array();

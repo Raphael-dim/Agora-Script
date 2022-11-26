@@ -168,8 +168,7 @@ abstract class AbstractRepository
             $sql = $sql . ' WHERE ' . $whereCondition . ' =:clef';
 
         }
-        var_dump($sql);
-        var_dump($clef);
+
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
 

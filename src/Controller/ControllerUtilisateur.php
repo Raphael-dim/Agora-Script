@@ -2,6 +2,7 @@
 
 namespace App\Vote\Controller;
 
+use App\Vote\Config\FormConfig;
 use App\Vote\Model\Repository\UtilisateurRepository;
 
 class ControllerUtilisateur
@@ -19,6 +20,33 @@ class ControllerUtilisateur
         Controller::afficheVue('view.php',
             ["pagetitle"=>"Connexion",
              "cheminVueBody"=>"Utilisateurs/connexion.php"]);
+    }
+
+    public static function disconnected(){
+        session_start();
+        if (isset($_SESSION['user'])){
+            unset($_SESSION['user']);
+        }
+        ControllerAccueil::home();
+    }
+
+    public static function connected(){
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        $mdp = $_POST['mdp'];
+        $id = $_POST['identifiant'];
+        $utilisateur =  ((new UtilisateurRepository())->select($id));
+
+        if (!isset($utilisateur)){
+            Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+        }else{
+            $_SESSION['user']=array();
+            $_SESSION['user']['id'] = $id;
+            ControllerAccueil::home();
+        }
+
+
     }
 
     public static function create(){
@@ -55,5 +83,7 @@ class ControllerUtilisateur
                 "pagetitle" => "Liste des Utilisateurs",
                 "cheminVueBody" => "Utilisateurs/step-4.php"]);
     }
+
+
 
 }
