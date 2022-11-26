@@ -26,21 +26,22 @@
     foreach ($questions as $question) {
         $calendrier = $question->getCalendrier();
         $idQuestionURL = rawurlencode($question->getId());
-        $organisateur = htmlspecialchars($question->getOrganisateur()->getNom());
+        $organisateur = htmlspecialchars($question->getOrganisateur()->getIdentifiant());
         $titreHTML = htmlspecialchars($question->getTitre());
         echo '<p class = "listes">
             <a href= index.php?action=read&controller=question&idQuestion=' .
             $idQuestionURL . '> ' . $titreHTML . ' : </a>
             <a href="">par ' . $organisateur . ' </a >';
-        echo '<a href = index.php?action=update&controller=question&idQuestion=' .
-            $idQuestionURL . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >
+        if (isset($_SESSION['user']) && $_SESSION['user']['id'] == $organisateur) {
+            echo '<a href = index.php?action=update&controller=question&idQuestion=' .
+                $idQuestionURL . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >
             <a href = index.php?action=delete&controller=question&idQuestion=' .
-            $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a >';
-
-        if ($calendrier->getDebutEcriture() <= $date && $calendrier->getFinEcriture() >= $date ){
-            echo '<a href = index.php?action=create&controller=proposition&idQuestion='.$idQuestionURL.'>Créer une proposition</a>';
+                $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a >';
         }
-        echo '<a href = index.php?action=readAll&controller=proposition&idQuestion=' .  $idQuestionURL . ' >Liste des propositions</a>';
+        if ($calendrier->getDebutEcriture() <= $date && $calendrier->getFinEcriture() >= $date) {
+            echo '<a href = index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '>Créer une proposition</a>';
+        }
+        echo '<a href = index.php?action=readAll&controller=proposition&idQuestion=' . $idQuestionURL . ' >Liste des propositions</a>';
         echo '</p>';
 
     }
