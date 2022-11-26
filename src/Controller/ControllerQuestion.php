@@ -3,6 +3,7 @@
 namespace App\Vote\Controller;
 
 
+use App\Vote\Config\FormConfig;
 use App\Vote\Model\DatabaseConnection as DatabaseConnection;
 use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Question;
@@ -27,17 +28,16 @@ class ControllerQuestion
      */
     public static function create()
     {
-        if (!isset($_SESSION)) {
-            session_start();
-            $_SESSION = array();
-            session_destroy();
-        }
+
+        FormConfig::setArr('SessionQuestion');
+        FormConfig::startSession();
 
         self::form();
     }
 
     public static function read()
     {
+
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
 
         $sections = $question->getSections();
@@ -84,6 +84,10 @@ class ControllerQuestion
      */
     public static function form(): void
     {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        FormConfig::setArr('SessionQuestion');
         $view = "";
         $step = $_GET['step'] ?? 1;
         $params = array();
@@ -149,7 +153,8 @@ class ControllerQuestion
     public static function created(): void
     {
         session_start();
-        $calendrier = new Calendrier($_SESSION['debutEcriture'], $_SESSION['finEcriture'], $_SESSION['debutVote'], $_SESSION['finVote']);
+        FormConfig::setArr('SessionQuestion');
+        $calendrier = new Calendrier($_SESSION[FormConfig::$arr]['debutEcriture'], $_SESSION[FormConfig::$arr]['finEcriture'], $_SESSION[FormConfig::$arr]['debutVote'], $_SESSION[FormConfig::$arr]['finVote']);
         $calendierBD = (new CalendrierRepository())->sauvegarder($calendrier);
         if ($calendierBD != null) {
             $calendrier->setId($calendierBD);
@@ -159,11 +164,11 @@ class ControllerQuestion
 
 
         //var_dump($sections);
-        $organisateur = (new UtilisateurRepository)->select("hambrighta");
+        $organisateur = (new UtilisateurRepository)->select($_SESSION['user']['id']);
 
         $creation = date("Y/m/d H:i:s");
 
-        $question = new Question($_SESSION['Titre'], $_SESSION['Description'], $creation, $calendrier, $organisateur);
+        $question = new Question($_SESSION[FormConfig::$arr]['Titre'], $_SESSION[FormConfig::$arr]['Description'], $creation, $calendrier, $organisateur);
         $questionBD = (new QuestionRepository())->sauvegarder($question);
         if ($questionBD != null) {
             $question->setId($questionBD);
@@ -172,7 +177,7 @@ class ControllerQuestion
         }
 
 
-        $responsables = $_SESSION['responsables'];
+        $responsables = $_SESSION[FormConfig::$arr]['responsables'];
 
         foreach ($responsables as $responsable) {
             $utilisateur = new Responsable($question);
@@ -180,7 +185,7 @@ class ControllerQuestion
             $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
         }
 
-        $votants = $_SESSION['votants'];
+        $votants = $_SESSION[FormConfig::$arr]['votants'];
 
         foreach ($votants as $votant) {
             $utilisateur = new Votant($question);
@@ -188,7 +193,7 @@ class ControllerQuestion
             $votantBD = (new VotantRepository())->sauvegarder($utilisateur);
         }
 
-        $sections = $_SESSION['Sections'];
+        $sections = $_SESSION[FormConfig::$arr]['Sections'];
         foreach ($sections as $value) {
             $section = new Section($value['titre'], $value['description'], $question);
             $sectionBD = (new SectionRepository())->sauvegarder($section);
@@ -211,30 +216,40 @@ class ControllerQuestion
 
     public static function update(): void
     {
-        self::afficheVue('view.php', ["pagetitle" => "Modifier une question",
-            "cheminVueBody" => "question/create/step-1.php",
-            "idQuestion" => $_GET['idQuestion']]);
+        session_start();
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        if (!isset($_SESSION['user']) || $_SESSION['user']['id'] != $question->getOrganisateur()->getIdentifiant()) {
+            ControllerAccueil::erreur();
+        }
+        else{
+            FormConfig::setArr('SessionQuestion');
+            FormConfig::startSession();
+            self::afficheVue('view.php', ["pagetitle" => "Modifier une question",
+                "cheminVueBody" => "question/create/step-1.php",
+                "idQuestion" => $_GET['idQuestion']]);
+        }
     }
 
     public static function updated(): void
     {
         session_start();
-        $question = (new QuestionRepository())->select($_SESSION['idQuestion']);
-        $question->setTitre($_SESSION['Titre']);
-        $question->setDescription($_SESSION['Description']);
+        FormConfig::setArr('SessionQuestion');
+        $question = (new QuestionRepository())->select($_SESSION[FormConfig::$arr]['idQuestion']);
+        $question->setTitre($_SESSION[FormConfig::$arr]['Titre']);
+        $question->setDescription($_SESSION[FormConfig::$arr]['Description']);
         (new QuestionRepository())->update($question);
 
 
         $calendrier = (new CalendrierRepository())->select($question->getCalendrier()->getId());
-        $calendrier->setDebutEcriture($_SESSION['debutEcriture']);
-        $calendrier->setFinEcriture($_SESSION['finEcriture']);
-        $calendrier->setDebutVote($_SESSION['debutVote']);
-        $calendrier->setFinVote($_SESSION['finVote']);
+        $calendrier->setDebutEcriture($_SESSION[FormConfig::$arr]['debutEcriture']);
+        $calendrier->setFinEcriture($_SESSION[FormConfig::$arr]['finEcriture']);
+        $calendrier->setDebutVote($_SESSION[FormConfig::$arr]['debutVote']);
+        $calendrier->setFinVote($_SESSION[FormConfig::$arr]['finVote']);
         (new CalendrierRepository())->update($calendrier);
 
 
         $ancSections = $question->getSections();
-        $nouvSections = $_SESSION['Sections'];
+        $nouvSections = $_SESSION[FormConfig::$arr]['Sections'];
         for ($i = 0; $i < count($nouvSections); $i++) {
             if (count($ancSections) <= $i) {
                 $section = new Section($nouvSections[$i]['titre'], $nouvSections[$i]['description'], $question);
@@ -263,7 +278,7 @@ class ControllerQuestion
             $ancResponsables[] = $responsable->getIdentifiant();
         }
         $tab = array();
-        $tab = $_SESSION['responsables'];
+        $tab = $_SESSION[FormConfig::$arr]['responsables'];
         $nouvResponsables = array();
         foreach ($tab as $val) {
             $nouvResponsables[] = $val;
@@ -284,7 +299,7 @@ class ControllerQuestion
         foreach ($votants as $val) {
             $ancVotants[] = $val->getIdentifiant();
         }
-        $tab2 = $_SESSION['votants'];
+        $tab2 = $_SESSION[FormConfig::$arr]['votants'];
         $nouvVotants = array();
         foreach ($tab2 as $val) {
             $nouvVotants[] = $val;
@@ -305,24 +320,24 @@ class ControllerQuestion
         self::afficheVue('view.php', ["pagetitle" => "Question modifiée",
             "cheminVueBody" => "question/updated.php",
             "questions" => $questions]);
-        session_unset();
+
     }
 
 
     public static function delete(): void
     {
-
-        if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])){
+        session_start();
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        if (!isset($_SESSION['user']) || $_SESSION['user']['id'] != $question->getOrganisateur()->getIdentifiant()) {
+            ControllerAccueil::erreur();
+        } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
             self::afficheVue('view.php', ["pagetitle" => "Question modifiée",
                 "cheminVueBody" => "confirm.php",
                 "message" => "Êtes vous sûr de vouloir supprimer cette question?",
-                "id"=>$_GET['idQuestion']]);
-        }
-        else if (isset($_POST["cancel"])){
+                "id" => $_GET['idQuestion']]);
+        } else if (isset($_POST["cancel"])) {
             self::readAll();
-        }
-        else if (isset($_POST["confirm"])){
-            $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        } else if (isset($_POST["confirm"])) {
             (new QuestionRepository())->delete($_GET['idQuestion']);
             $calendrier = $question->getCalendrier();
             (new CalendrierRepository())->delete($calendrier->getId());

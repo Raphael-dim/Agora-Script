@@ -21,10 +21,21 @@ class Responsable extends Utilisateur
         return $this->question;
     }
 
+    public static function estResponsable($question, $utilisateur) : bool
+    {
+        $responsables = $question->getResponsables();
+        foreach ($responsables as $responsable){
+            if ($responsable->getIdentifiant() == $utilisateur){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function formatTableau(): array
     {
         return array(
-            "idquestionTag" =>  $this->question->getId(),
+            "idquestionTag" => $this->question->getId(),
             "idutilisateurTag" => $this->getIdentifiant());
     }
 }

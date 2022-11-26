@@ -1,22 +1,21 @@
 <?php
-session_start();
 
 use App\Vote\Config\FormConfig as FormConfig;
 
-if (!isset($_SESSION['step'][2])) {
+if (!isset($_SESSION[FormConfig::$arr]['step'][2])) {
     FormConfig::redirect("index.php?controller=question&action=create");
 }
 
 if (isset($_POST['next'])) {
     FormConfig::postSession();
-    $_SESSION['step'][3] = 3;
+    $_SESSION[FormConfig::$arr]['step'][3] = 3;
     FormConfig::redirect("index.php?controller=question&action=form&step=4");
 } else if (isset($_POST['previous'])) {
     FormConfig::postSession();
     FormConfig::redirect("index.php?controller=question&action=form&step=2");
 }
 
-$nbSection = $_SESSION['nbSections'];
+$nbSection = $_SESSION[FormConfig::$arr]['nbSections'];
 ?>
 <h1>Organisation des sections</h1>
 

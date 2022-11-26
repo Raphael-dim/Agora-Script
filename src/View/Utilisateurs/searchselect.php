@@ -1,5 +1,5 @@
 <?php
-
+use App\Vote\Config\FormConfig as FormConfig;
 if ((isset($_POST["keyword"]) && isset($_POST["row"]))) {
     $keyword = htmlspecialchars($_POST["keyword"]);
     $row = htmlspecialchars($_POST["row"]);
@@ -11,7 +11,7 @@ if ((isset($_POST["keyword"]) && isset($_POST["row"]))) {
 
 <form method="post" >
     <fieldset>
-        <legend>Selectionner des <?php echo $_SESSION['type'] ?> :</legend>
+        <legend>Selectionner des <?php echo $_SESSION[FormConfig::$arr]['type'] ?> :</legend>
         <p>
             <input type="text" placeholder="" name="keyword" id="motclef" value ="<?php echo $keyword ?>" required/>
             <input type ="hidden" name = "row" value = "nom" />
