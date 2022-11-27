@@ -43,15 +43,19 @@ class ControllerProposition
 
     public static function read()
     {
-//        $proposition = (new PropositionRepository())->select($_GET['idProposition']);
-//        $question = $proposition->getQuestion();
-//        $sections = $question->getSections();
-//        $responsable = $proposition->getResponsable();
-//        self::afficheVue('view.php', ["proposition" => $proposition,
-//            "sections" => $sections,
-//            "responsable" => $responsable,
-//            "pagetitle" => "Detail question",
-//            "cheminVueBody" => "Proposition/detail.php"]);
+        $propositions = (new PropositionRepository())->selectWhere($_GET['idProposition'],'idquestion, idproposition, titre, idresponsable','idproposition');
+        foreach ($propositions as $proposition) {
+            $prop = $proposition;
+            $question = $proposition->getQuestion();
+            $sections = $question->getSections();
+        }
+        $idProposition = $_GET['idProposition'];
+        Controller::afficheVue('view.php', ["question"=>$question,
+            "idProposition"=>$idProposition,
+            "proposition" => $prop,
+            "sections" => $sections,
+            "pagetitle" => "Detail question",
+            "cheminVueBody" => "Proposition/detail.php"]);
     }
 
     public static function readAll()
@@ -61,6 +65,7 @@ class ControllerProposition
             "cheminVueBody" => "Proposition/list.php",
             "propositions" => $propositions]);
     }
+
 
     public static function created()
     {

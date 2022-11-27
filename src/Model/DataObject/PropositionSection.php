@@ -7,6 +7,7 @@ class PropositionSection extends AbstractDataObject
     private Auteur $auteur;
     private Proposition $proposition;
     private Section $section;
+    private string $contenu;
 
     /**
      * @return Auteur
@@ -23,7 +24,7 @@ class PropositionSection extends AbstractDataObject
     {
         $this->auteur = $auteur;
     }
-    private string $contenu;
+
 
     /**
      * @param Proposition $proposition
