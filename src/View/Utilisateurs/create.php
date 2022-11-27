@@ -1,4 +1,4 @@
-<form method="post" action="index.php?controller=utilisateur&action=readAll">
+<form method="post" action="index.php?controller=utilisateur&action=created">
     <fieldset>
         <legend>Formulaire d'inscription : </legend>
         <p>

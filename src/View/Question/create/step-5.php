@@ -1,10 +1,9 @@
 <?php
-session_start();
 
 use App\Vote\Config\FormConfig as FormConfig;
 
 
-$_SESSION['type'] = 'votants';
+$_SESSION[FormConfig::$arr]['type'] = 'votants';
 
 if (array_key_exists('user', $_POST)) {
     adduser($_POST["user"]);
@@ -24,16 +23,16 @@ if (isset($_POST['next'])) {
 
 function adduser(string $id): void
 {
-    if (!in_array($id, $_SESSION[$_SESSION['type']])) {
-        $_SESSION[$_SESSION['type']][] = $id;
+    if (!in_array($id, $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']])) {
+        $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']][] = $id;
     }
 }
 
 function removeuser(string $id): void
 {
 
-    if (($key = array_search($id, $_SESSION[$_SESSION['type']])) !== false) {
-        unset($_SESSION[$_SESSION['type']][$key]);
+    if (($key = array_search($id, $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']])) !== false) {
+        unset($_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']][$key]);
     }
 }
 

@@ -2,6 +2,7 @@
 
 namespace App\Vote\Controller;
 
+use App\Vote\Config\FormConfig;
 use App\Vote\Model\Repository\UtilisateurRepository;
 
 class ControllerUtilisateur
@@ -15,16 +16,50 @@ class ControllerUtilisateur
                 "cheminVueBody" => "Utilisateurs/list.php"]); //"redirige" vers la vue
     }
 
-    public static function connexion(){
+    public static function connexion()
+    {
         Controller::afficheVue('view.php',
-            ["pagetitle"=>"Connexion",
-             "cheminVueBody"=>"Utilisateurs/connexion.php"]);
+            ["pagetitle" => "Connexion",
+                "cheminVueBody" => "Utilisateurs/connexion.php"]);
     }
 
-    public static function create(){
+    public static function disconnected()
+    {
+        session_start();
+        if (isset($_SESSION['user'])) {
+            unset($_SESSION['user']);
+        }
+        ControllerAccueil::home();
+    }
+
+    public static function connected()
+    {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        $mdp = $_POST['mdp'];
+        $id = $_POST['identifiant'];
+        $utilisateur = ((new UtilisateurRepository())->select($id));
+
+        if (!isset($utilisateur)) {
+            Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+        } else {
+            $_SESSION['user'] = array();
+            $_SESSION['user']['id'] = $id;
+            ControllerAccueil::home();
+        }
+    }
+
+    public static function profil()
+    {
+
+    }
+
+    public static function create()
+    {
         Controller::afficheVue('view.php',
-        ["pagetitle"=>"Inscription",
-         "cheminVueBody"=>"Utilisateurs/create.php"]);
+            ["pagetitle" => "Inscription",
+                "cheminVueBody" => "Utilisateurs/create.php"]);
     }
 
     public static function search()
@@ -55,5 +90,6 @@ class ControllerUtilisateur
                 "pagetitle" => "Liste des Utilisateurs",
                 "cheminVueBody" => "Utilisateurs/step-4.php"]);
     }
+
 
 }
