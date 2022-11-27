@@ -210,6 +210,7 @@ class ControllerQuestion
             ["questions" => $questions,
                 "pagetitle" => "Question crée",
                 "cheminVueBody" => "Question/created.php"]);
+        session_unset();
 
     }
 
