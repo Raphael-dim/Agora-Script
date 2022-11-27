@@ -210,7 +210,8 @@ class ControllerQuestion
             ["questions" => $questions,
                 "pagetitle" => "Question crée",
                 "cheminVueBody" => "Question/created.php"]);
-        session_unset();
+
+        FormConfig::startSession();
 
     }
 
@@ -321,6 +322,7 @@ class ControllerQuestion
             "cheminVueBody" => "question/updated.php",
             "questions" => $questions]);
 
+        FormConfig::startSession();
     }
 
 
