@@ -22,9 +22,9 @@ class ControllerProposition
     {
         session_start();
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        if ($question == null){
+        if ($question == null) {
             ControllerAccueil::erreur();
-        }else{
+        } else {
             $date = date("Y/m/d H:i:s");
             $calendrier = $question->getCalendrier();
             if (!isset($_SESSION['user']) || !Responsable::estResponsable($question, $_SESSION['user']['id'])) {
@@ -43,16 +43,14 @@ class ControllerProposition
 
     public static function read()
     {
-        $propositions = (new PropositionRepository())->selectWhere($_GET['idProposition'],'idquestion, idproposition, titre, idresponsable','idproposition');
-        foreach ($propositions as $proposition) {
-            $prop = $proposition;
-            $question = $proposition->getQuestion();
-            $sections = $question->getSections();
-        }
+        $proposition = (new PropositionRepository())->select($_GET['idProposition']);
+        $question = $proposition->getQuestion();
+        $sections = $question->getSections();
+
         $idProposition = $_GET['idProposition'];
-        Controller::afficheVue('view.php', ["question"=>$question,
-            "idProposition"=>$idProposition,
-            "proposition" => $prop,
+        Controller::afficheVue('view.php', ["question" => $question,
+            "idProposition" => $idProposition,
+            "proposition" => $proposition,
             "sections" => $sections,
             "pagetitle" => "Detail question",
             "cheminVueBody" => "Proposition/detail.php"]);
@@ -69,8 +67,9 @@ class ControllerProposition
 
     public static function created()
     {
+        session_start();
         $question = (new QuestionRepository())->select($_GET["idQuestion"]);
-        $responsable = (new ResponsableRepository())->select("hambrighta");
+        $responsable = (new ResponsableRepository())->select($_SESSION['user']['id']);
         $proposition = new Proposition($_POST['titre'], $responsable, $question);
         $propositionBD = (new PropositionRepository())->sauvegarder($proposition);
         $proposition->setId($propositionBD);
