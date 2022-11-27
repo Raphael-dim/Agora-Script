@@ -2,6 +2,8 @@
 
 namespace App\Vote\Model\DataObject;
 
+use App\Vote\Model\Repository\PropositionSectionRepository;
+
 class Proposition extends AbstractDataObject
 {
     private int $id;
@@ -24,6 +26,7 @@ class Proposition extends AbstractDataObject
     private string $titre;
     private Responsable $responsable;
     private Question $question;
+    private int $nbVotes;
 
 
     public function __construct(string $titre, Responsable $responsable, Question $question)
@@ -31,6 +34,7 @@ class Proposition extends AbstractDataObject
         $this->titre = $titre;
         $this->responsable = $responsable;
         $this->question = $question;
+        $this->nbVotes = 0;
     }
 
     /**
@@ -78,12 +82,18 @@ class Proposition extends AbstractDataObject
         return $this->question;
     }
 
+    public function getContenus()
+    {
+        return (new PropositionSectionRepository())->select($this->question->getId());
+    }
+
     public function formatTableau(): array
     {
         return array(
             "idquestionTag" => $this->question->getId(),
             "idresponsableTag" => $this->responsable->getIdentifiant(),
-            "titreTag" => $this->titre
+            "titreTag" => $this->titre,
+            "nbVotesTag" => $this->nbVotes
         );
     }
 }

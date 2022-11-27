@@ -53,6 +53,7 @@ create table propositions
     idresponsable varchar(30) not null
         references utilisateurs,
     titre         varchar(500),
+    nbvotes integer,
     primary key (idquestion, idresponsable)
 );
 
@@ -78,6 +79,14 @@ create table votants
         references utilisateurs,
     primary key (idquestion, idutilisateur)
 );
+
+create table vote
+(
+    idutilisateur varchar(30) not null,
+    idproposition integer not null,
+    primary key (idutilisateur, idproposition)
+);
+
 
 create table proposition_section
 (
@@ -120,4 +129,5 @@ FROM questions q
          JOIN calendriers c ON q.idcalendrier = c.idcalendrier
 WHERE ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) > c.debutvote
   AND ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) < c.finvote;
+
 
