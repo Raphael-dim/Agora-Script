@@ -405,3 +405,15 @@ textarea {
     margin: 15px;
 }
 
+.sortie{
+    max-width: 50px;
+    filter: invert(1);
+}
+.sortie{
+    max-width: 50px;
+    filter: invert(1);
+}
+.sortie:hover{
+    max-width: 50px;
+    filter: none;
+}
