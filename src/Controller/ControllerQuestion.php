@@ -11,6 +11,7 @@ use App\Vote\Model\DataObject\Responsable;
 use App\Vote\Model\DataObject\Section;
 use App\Vote\Model\DataObject\Utilisateur;
 use App\Vote\Model\DataObject\Votant;
+use App\Vote\Model\HTTP\Session;
 use App\Vote\Model\Repository\AuteurRepository;
 use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\QuestionRepository;
@@ -28,13 +29,14 @@ class ControllerQuestion
      */
     public static function create()
     {
+        echo (Session::getInstance()->contient('user'));
         if (isset($_SESSION['user']['id'])) {
             FormConfig::setArr('SessionQuestion');
             FormConfig::startSession();
-
             self::form();
-
         } else {
+            echo "test";
+
             ControllerUtilisateur::connexion();
         }
     }
@@ -156,7 +158,7 @@ class ControllerQuestion
      */
     public static function created(): void
     {
-        session_start();
+        Session::getInstance();
         FormConfig::setArr('SessionQuestion');
         $calendrier = new Calendrier($_SESSION[FormConfig::$arr]['debutEcriture'], $_SESSION[FormConfig::$arr]['finEcriture'], $_SESSION[FormConfig::$arr]['debutVote'], $_SESSION[FormConfig::$arr]['finVote']);
         $calendierBD = (new CalendrierRepository())->sauvegarder($calendrier);
@@ -221,7 +223,7 @@ class ControllerQuestion
 
     public static function update(): void
     {
-        session_start();
+        Session::getInstance();
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         if (!isset($_SESSION['user']) || $_SESSION['user']['id'] != $question->getOrganisateur()->getIdentifiant()) {
             ControllerAccueil::erreur();
@@ -236,7 +238,7 @@ class ControllerQuestion
 
     public static function updated(): void
     {
-        session_start();
+        Session::getInstance();
         FormConfig::setArr('SessionQuestion');
         $question = (new QuestionRepository())->select($_SESSION[FormConfig::$arr]['idQuestion']);
         $question->setTitre($_SESSION[FormConfig::$arr]['Titre']);
@@ -331,7 +333,7 @@ class ControllerQuestion
 
     public static function delete(): void
     {
-        session_start();
+        Session::getInstance();
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         if (!isset($_SESSION['user']) || $_SESSION['user']['id'] != $question->getOrganisateur()->getIdentifiant()) {
             ControllerAccueil::erreur();

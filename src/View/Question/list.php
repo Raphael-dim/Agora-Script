@@ -1,6 +1,6 @@
 <div class="barreHaut">
-    <a class="rechercher" href="">Rechercher une question</a>
-    <a class="creer" href="index.php?action=create&controller=question">Créer votre question</a>
+    <a class="bouton" href="">Rechercher une question</a>
+    <a class="bouton" href="index.php?action=create&controller=question">Créer votre question</a>
 </div>
 
 <div class="selection">
@@ -35,7 +35,7 @@
             <a href= index.php?action=read&controller=question&idQuestion=' .
             $idQuestionURL . '> ' . $titreHTML . ' : </a>
             <a href="">par ' . $organisateur . ' </a >';
-        if (! $calendrier->getDebutEcriture() >= $date){
+        if ($calendrier->getDebutEcriture() > $date){
             if (isset($_SESSION['user']) && $_SESSION['user']['id'] == $organisateur) {
                 echo '<a href = index.php?action=update&controller=question&idQuestion=' .
                     $idQuestionURL . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >
