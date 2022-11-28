@@ -1,10 +1,46 @@
 <?php
+
 namespace App\Vote\Model\DataObject;
 
-use App\Vote\Model\Repository\AbstractRepository;
-use App\Vote\Model\Repository\AuteurRepository;
-
-class CoAuteur extends Auteur
+class CoAuteur extends AbstractDataObject
 {
+    private Question $question;
+    private Utilisateur $utilisateur;
 
+    /**
+     * @param int $id
+     * @param string $titre
+     * @param int $nbSections
+     */
+    public function __construct(Question $question, Utilisateur $utilisateur)
+    {
+        $this->question = $question;
+        $this->utilisateur = $utilisateur;
+    }
+
+    /**
+     * @return Question
+     */
+    public function getQuestion(): Question
+    {
+        return $this->question;
+    }
+
+    /**
+     * @return Utilisateur
+     */
+    public function getUtilisateur(): Utilisateur
+    {
+        return $this->utilisateur;
+    }
+
+
+
+    public function formatTableau(): array
+    {
+        return array(
+            "idquestionTag" => $this->question->getId(),
+            "idutilisateurTag" => $this->utilisateur->getIdentifiant(),
+        );
+    }
 }
