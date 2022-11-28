@@ -82,6 +82,18 @@ create table Responsables
         foreign key (idutilisateur) references Utilisateurs (identifiant)
 );
 
+create table CoAuteur
+(
+    idquestion    int         not null,
+    idutilisateur varchar(30) not null,
+    primary key (idquestion, idutilisateur),
+    constraint Responsables_Questions_idquestion_fk
+        foreign key (idquestion) references Questions (idquestion)
+            on update cascade on delete cascade,
+    constraint Responsables_Utilisateurs_identifiant_fk
+        foreign key (idutilisateur) references Utilisateurs (identifiant)
+);
+
 create table Votants
 (
     idquestion    int         not null,
