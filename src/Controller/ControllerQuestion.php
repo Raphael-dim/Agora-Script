@@ -28,11 +28,15 @@ class ControllerQuestion
      */
     public static function create()
     {
+        if (isset($_SESSION['user']['id'])) {
+            FormConfig::setArr('SessionQuestion');
+            FormConfig::startSession();
 
-        FormConfig::setArr('SessionQuestion');
-        FormConfig::startSession();
+            self::form();
 
-        self::form();
+        } else {
+            ControllerUtilisateur::connexion();
+        }
     }
 
     public static function read()
@@ -221,8 +225,7 @@ class ControllerQuestion
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         if (!isset($_SESSION['user']) || $_SESSION['user']['id'] != $question->getOrganisateur()->getIdentifiant()) {
             ControllerAccueil::erreur();
-        }
-        else{
+        } else {
             FormConfig::setArr('SessionQuestion');
             FormConfig::startSession();
             self::afficheVue('view.php', ["pagetitle" => "Modifier une question",

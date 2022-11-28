@@ -36,7 +36,7 @@ main > h1, h2 {
 
 body {
     background: var(--background);
-    overflow-x:hidden;
+    overflow-x: hidden;
 }
 
 main {
@@ -77,9 +77,11 @@ main p a {
 .modifier {
     max-width: 25px;
 }
-.vote{
+
+.vote {
     max-width: 65px;
 }
+
 .delete {
     max-width: 35px;
 }
@@ -316,7 +318,7 @@ textarea {
 
 #acceuil_search_form > h1 > span {
     text-shadow: black 1px 2px 5px;
-    opacity:1;
+    opacity: 1;
     position: relative;
     background: transparent;
 }
@@ -378,3 +380,21 @@ textarea {
         width: 40px;
     }
 }
+
+.listes_sans_puces {
+    list-style-type: none;
+}
+
+#barre_utilisateur * {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#barre_utilisateur > a {
+    margin-left: 60%;
+}
+
+#barre_utilisateur > a img {
+    margin: 15px;
+}
+
