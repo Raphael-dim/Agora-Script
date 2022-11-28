@@ -24,7 +24,7 @@ class SectionRepository extends AbstractRepository
 
     protected function getNomClePrimaire(): string
     {
-        return "idsection";
+        return "idSection";
     }
 
     protected function getNomsColonnes(): array

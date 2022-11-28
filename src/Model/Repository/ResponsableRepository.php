@@ -11,21 +11,21 @@ class ResponsableRepository extends UtilisateurRepository
     protected function construire(array $questionTableau): Responsable
     {
         $responsable = new Responsable(
-            (new QuestionRepository())->select($questionTableau['idquestion'])
+            (new QuestionRepository())->select($questionTableau['idQuestion'])
         );
-        $responsable->setIdentifiant($questionTableau['idutilisateur']);
+        $responsable->setIdentifiant($questionTableau['idUtilisateur']);
         return $responsable;
     }
 
 
     protected function getNomTable(): string
     {
-        return "responsables";
+        return "Responsables";
     }
 
     protected function getNomClePrimaire(): string
     {
-        return "idutilisateur";
+        return "idUtilisateur";
     }
 
     protected function getNomsColonnes(): array

@@ -15,7 +15,7 @@ class   CalendrierRepository extends AbstractRepository
             $calendrierTableau["debutvote"],
             $calendrierTableau["finvote"],
         );
-        $calendrier->setId($calendrierTableau['idcalendrier']);
+        $calendrier->setId($calendrierTableau['idCalendrier']);
         return $calendrier;
     }
 

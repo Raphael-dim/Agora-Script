@@ -3,10 +3,10 @@ namespace App\Vote\Config;
 class Conf {
 
     static private array $databases = array(
-        'hostname' => 'lucky.db.elephantsql.com',
-        'database' => 'yhyayoup',
-        'login' => 'yhyayoup',
-        'password' => 'SfPcwfddmzZO-CBXuWYpUqg4Q6-IdS_j'
+        'hostname' => 'webinfo.iutmontp.univ-montp2.fr',
+        'database' => 'dimeckr',
+        'login' => 'dimeckr',
+        'password' => '061102693DC'
     );
 
     static public function getLogin() : string {

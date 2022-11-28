@@ -9,7 +9,7 @@ class VoteRepository extends AbstractRepository
 
     protected function getNomTable(): string
     {
-         return "vote";
+         return "Vote";
     }
 
     protected function construire(array $voteFormatTableau)
