@@ -17,7 +17,7 @@ use App\Vote\Model\DataObject\Question;
 
     $i = 1;
     foreach ($sections as $section) {
-        $propSection = (new PropositionSectionRepository())->selectWhere($section->getId(),'*','idsection','proposition_section');
+        $propSection = (new PropositionSectionRepository())->selectWhere($section->getId(),'*','idsection','Proposition_section');
         //var_dump($propSection);
         foreach ($propSection as $propSec) {
             $contenu = $propSec->getContenu();
