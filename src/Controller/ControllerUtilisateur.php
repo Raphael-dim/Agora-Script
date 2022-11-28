@@ -63,7 +63,7 @@ class ControllerUtilisateur
     {
         Controller::afficheVue('view.php',
             ["pagetitle" => "Inscription",
-                "cheminVueBody" => "Utilisateurs/create.php"]);
+                "cheminVueBody" => "Utilisateurs/created.php"]);
     }
 
     public static function search()
