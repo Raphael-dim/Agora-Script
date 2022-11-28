@@ -3,6 +3,7 @@
 namespace App\Vote\Controller;
 
 use App\Vote\Config\FormConfig;
+use App\Vote\Model\HTTP\Session;
 use App\Vote\Model\Repository\UtilisateurRepository;
 
 class ControllerUtilisateur
@@ -50,9 +51,12 @@ class ControllerUtilisateur
         }
     }
 
-    public static function profil()
+    public static function read()
     {
-
+        session_start();
+        $utilisateur = ((new UtilisateurRepository))->select($_SESSION['user']['id']);
+        Controller::afficheVue('view.php', ['pagetitle' => "Profil",
+            "cheminVueBody" => "Utilisateurs/detail.php", "Utilisateur" => $utilisateur]);
     }
 
     public static function create()

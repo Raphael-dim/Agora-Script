@@ -27,7 +27,7 @@ create table Propositions
     idquestion    int           not null,
     idresponsable varchar(30)   not null,
     titre         varchar(500)  null,
-    idproposition int           null,
+    idproposition int auto_increment,
     nbvotes       int default 0 null,
     primary key (idquestion, idresponsable),
     constraint Propositions_pk
@@ -45,7 +45,6 @@ create table Proposition_section
     idproposition int           null,
     constraint Proposition_section_Propositions_idproposition_fk
         foreign key (idproposition) references Propositions (idproposition)
-            on update cascade on delete cascade
 );
 
 create table Sections
