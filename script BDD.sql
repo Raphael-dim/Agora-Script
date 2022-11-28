@@ -27,7 +27,7 @@ create table Propositions
     idquestion    int           not null,
     idresponsable varchar(30)   not null,
     titre         varchar(500)  null,
-    idproposition int           null,
+    idproposition int auto_increment,
     nbvotes       int default 0 null,
     primary key (idquestion, idresponsable),
     constraint Propositions_pk
@@ -45,7 +45,6 @@ create table Proposition_section
     idproposition int           null,
     constraint Proposition_section_Propositions_idproposition_fk
         foreign key (idproposition) references Propositions (idproposition)
-            on update cascade on delete cascade
 );
 
 create table Sections
@@ -117,35 +116,10 @@ create table Votes
             on update cascade on delete cascade
 );
 
-create definer = dimeckr@`%` view questions_ecriture as
-select `q`.`idquestion`     AS `idquestion`,
-       `q`.`titre`          AS `titre`,
-       `q`.`description`    AS `description`,
-       `q`.`idorganisateur` AS `idorganisateur`,
-       `q`.`idcalendrier`   AS `idcalendrier`,
-       `q`.`creation`       AS `creation`
-from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
-where (select current_timestamp() AS `current_timestamp`) > `c`.`debutecriture`
-  and (select current_timestamp() AS `current_timestamp`) < `c`.`finecriture`;
-
-create definer = dimeckr@`%` view questions_termines as
-select `q`.`idquestion`     AS `idquestion`,
-       `q`.`titre`          AS `titre`,
-       `q`.`description`    AS `description`,
-       `q`.`idorganisateur` AS `idorganisateur`,
-       `q`.`idcalendrier`   AS `idcalendrier`,
-       `q`.`creation`       AS `creation`
-from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
-where (select current_timestamp() AS `current_timestamp`) > `c`.`finvote`;
-
-create definer = dimeckr@`%` view questions_vote as
-select `q`.`idquestion`     AS `idquestion`,
-       `q`.`titre`          AS `titre`,
-       `q`.`description`    AS `description`,
-       `q`.`idorganisateur` AS `idorganisateur`,
-       `q`.`idcalendrier`   AS `idcalendrier`,
-       `q`.`creation`       AS `creation`
-from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
-where (select current_timestamp() AS `current_timestamp`) > `c`.`debutvote`
-  and (select current_timestamp() AS `current_timestamp`) < `c`.`finvote`;
-
+CREATE OR REPLACE TRIGGER tr_maj_nbVotes
+    BEFORE INSERT ON Votes
+    FOR EACH ROW
+BEGIN UPDATE
+    Propositions SET nbvotes = nbvotes + 1
+    WHERE idproposition = NEW.idproposition;
+END;;

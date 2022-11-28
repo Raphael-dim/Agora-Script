@@ -7,27 +7,10 @@ use App\Vote\Model\Repository\PropositionSectionRepository;
 class Proposition extends AbstractDataObject
 {
     private int $id;
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
     private string $titre;
     private Responsable $responsable;
     private Question $question;
     private int $nbVotes;
-
 
     public function __construct(string $titre, Responsable $responsable, Question $question)
     {
@@ -37,12 +20,34 @@ class Proposition extends AbstractDataObject
         $this->nbVotes = 0;
     }
 
-    /**
-     * @return string
-     */
     public function getTitre(): string
     {
         return $this->titre;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNbVotes(): int
+    {
+        return $this->nbVotes;
+    }
+
+    /**
+     * @param int $nbVotes
+     */
+    public function setNbVotes(int $nbVotes): void
+    {
+        $this->nbVotes = $nbVotes;
+    }
+
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     /**
@@ -59,6 +64,11 @@ class Proposition extends AbstractDataObject
     public function setResponsable(Responsable $responsable): void
     {
         $this->responsable = $responsable;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     /**
