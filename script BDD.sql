@@ -104,35 +104,10 @@ create table Votes
             on update cascade on delete cascade
 );
 
-create definer = dimeckr@`%` view questions_ecriture as
-select `q`.`idquestion`     AS `idquestion`,
-       `q`.`titre`          AS `titre`,
-       `q`.`description`    AS `description`,
-       `q`.`idorganisateur` AS `idorganisateur`,
-       `q`.`idcalendrier`   AS `idcalendrier`,
-       `q`.`creation`       AS `creation`
-from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
-where (select current_timestamp() AS `current_timestamp`) > `c`.`debutecriture`
-  and (select current_timestamp() AS `current_timestamp`) < `c`.`finecriture`;
-
-create definer = dimeckr@`%` view questions_termines as
-select `q`.`idquestion`     AS `idquestion`,
-       `q`.`titre`          AS `titre`,
-       `q`.`description`    AS `description`,
-       `q`.`idorganisateur` AS `idorganisateur`,
-       `q`.`idcalendrier`   AS `idcalendrier`,
-       `q`.`creation`       AS `creation`
-from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
-where (select current_timestamp() AS `current_timestamp`) > `c`.`finvote`;
-
-create definer = dimeckr@`%` view questions_vote as
-select `q`.`idquestion`     AS `idquestion`,
-       `q`.`titre`          AS `titre`,
-       `q`.`description`    AS `description`,
-       `q`.`idorganisateur` AS `idorganisateur`,
-       `q`.`idcalendrier`   AS `idcalendrier`,
-       `q`.`creation`       AS `creation`
-from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
-where (select current_timestamp() AS `current_timestamp`) > `c`.`debutvote`
-  and (select current_timestamp() AS `current_timestamp`) < `c`.`finvote`;
-
+CREATE OR REPLACE TRIGGER tr_maj_nbVotes
+    BEFORE INSERT ON Votes
+    FOR EACH ROW
+BEGIN UPDATE
+    Propositions SET nbvotes = nbvotes + 1
+    WHERE idproposition = NEW.idproposition;
+END;;
