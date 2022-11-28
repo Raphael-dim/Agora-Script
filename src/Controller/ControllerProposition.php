@@ -46,20 +46,22 @@ class ControllerProposition
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         $question = $proposition->getQuestion();
         $sections = $question->getSections();
-
         $idProposition = $_GET['idProposition'];
         Controller::afficheVue('view.php', ["question" => $question,
-            "idProposition" => $idProposition,
-            "proposition" => $proposition,
-            "sections" => $sections,
-            "pagetitle" => "Detail question",
-            "cheminVueBody" => "Proposition/detail.php"]);
+                "idProposition" => $idProposition,
+                "proposition" => $proposition,
+                "sections" => $sections,
+                "pagetitle" => "Detail question",
+                "cheminVueBody" => "Proposition/detail.php"]);
     }
 
     public static function readAll()
     {
         $propositions = (new PropositionRepository())->selectWhere($_GET['idQuestion'], '*', 'idquestion');
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        $votants = $question->getVotants();
         Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
+            "votants" => $votants,
             "cheminVueBody" => "Proposition/list.php",
             "propositions" => $propositions]);
     }
