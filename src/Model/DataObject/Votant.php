@@ -20,6 +20,10 @@ class Votant extends Utilisateur
         return $this->question;
     }
 
+    public function getId(){
+        return $this->getIdentifiant();
+    }
+
     public function formatTableau(): array
     {
         return array(
