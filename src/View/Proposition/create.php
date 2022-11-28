@@ -23,8 +23,9 @@ use App\Vote\Model\DataObject\Question;
     </p>
     <?php
     $sections = $question->getSections();
-    $i = 1;
+    $i = 0;
     foreach ($sections as $section) {
+        $i++;
         echo '<h2>Section n°' . $i . '</h2>';
         echo '<p>Titre : ' . $section->getTitre() . ' </p > ';
         echo '<p>Description : ' . $section->getDescription() . ' </p > ';
