@@ -85,7 +85,21 @@ create or replace table Responsables
     foreign key (idutilisateur) references Utilisateurs (identifiant)
 );
 
+
+create table CoAuteur
+(
+    idquestion    int         not null,
+    idutilisateur varchar(30) not null,
+    primary key (idquestion, idutilisateur),
+    constraint CoAuteur_Questions_idquestion_fk
+        foreign key (idquestion) references Questions (idquestion)
+            on update cascade on delete cascade,
+    constraint CoAuteur_Utilisateurs_identifiant_fk
+        foreign key (idutilisateur) references Utilisateurs (identifiant)
+);
+
 create or replace table Votants
+
 (
     idquestion    int         not null,
     idutilisateur varchar(30) not null,
@@ -107,6 +121,7 @@ create or replace table Votes
     foreign key (idproposition) references Propositions (idproposition)
     on update cascade on delete cascade
 );
+
 
 create or replace definer = dimeckr@`%` trigger tr_maj_nbVotes
               before insert
