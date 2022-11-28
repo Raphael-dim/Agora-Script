@@ -9,13 +9,13 @@ class VoteRepository extends AbstractRepository
 
     protected function getNomTable(): string
     {
-         return "Vote";
+         return "Votes";
     }
 
     protected function construire(array $voteFormatTableau)
     {
         $vote = new Vote(
-            (new VotantRepository())->select($voteFormatTableau['idutilisateur']),
+            (new VotantRepository())->select($voteFormatTableau['idvotant']),
             (new PropositionRepository())->select($voteFormatTableau['idproposition'])
         );
         $vote->setId($voteFormatTableau["idvote"]);
@@ -24,14 +24,14 @@ class VoteRepository extends AbstractRepository
 
     protected function getNomClePrimaire(): string
     {
-        return "idVote";
+        return "idvote";
     }
 
     protected function getNomsColonnes(): array
     {
         return array(
-            "idVotant",
-            "idProposition"
+            "idvotant",
+            "idproposition"
         );
     }
 }

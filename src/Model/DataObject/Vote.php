@@ -8,6 +8,16 @@ class Vote extends AbstractDataObject
     private Votant $votant;
     private Proposition $proposition;
 
+    /**
+     * @param Votant $votant
+     * @param Proposition $proposition
+     */
+    public function __construct(Votant $votant, Proposition $proposition)
+    {
+        $this->votant = $votant;
+        $this->proposition = $proposition;
+    }
+
 
     public function setId(int $id): void{
         $this->idVote = $id;
@@ -20,8 +30,8 @@ class Vote extends AbstractDataObject
     public function formatTableau(): array
     {
         return array(
-            "votantTag" => $this->votant,
-            "propositionTag" => $this->proposition
+            "idvotantTag" => $this->votant->getId(),
+            "idpropositionTag" => $this->proposition->getId()
     );
     }
 }
