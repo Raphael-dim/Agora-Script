@@ -24,7 +24,7 @@ class PropositionRepository extends AbstractRepository
 
     protected function getNomClePrimaire(): string
     {
-        return "idProposition";
+        return "idproposition";
     }
 
     protected function getNomsColonnes(): array

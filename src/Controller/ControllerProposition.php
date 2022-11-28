@@ -35,7 +35,7 @@ class ControllerProposition
 //        }
             else {
                 Controller::afficheVue('view.php', ["pagetitle" => "Accueil",
-                    "cheminVueBody" => "Proposition/create.php",
+                    "cheminVueBody" => "Proposition/created.php",
                     "question" => $question]);
             }
         }
