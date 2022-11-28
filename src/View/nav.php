@@ -9,7 +9,7 @@
             session_start();
         }
         if(isset($_SESSION['user'])){
-            echo "<li class='grosmenu'><a href = 'index.php?action=disconnected&controller=utilisateur'>".$_SESSION['user']['id']."</a></li>";
+            echo "<li class='grosmenu'><a href = 'index.php?action=read&controller=utilisateur'>".$_SESSION['user']['id']."</a></li>";
         }else{
             echo "<li class='grosmenu' ><a href = 'index.php?action=connexion&controller=utilisateur'>Connexion</a></li>";
         } ?>
