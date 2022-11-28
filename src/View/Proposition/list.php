@@ -14,7 +14,6 @@
                     $idPropositionURL . '><img class="vote" src="..\web\images\button_vote.png"></a>';
             }
         }
-        //echo $proposition->getNbVotes();
         echo '</p>';
         $i = $i + 1;
     }
