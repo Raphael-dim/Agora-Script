@@ -2,7 +2,7 @@
 
 namespace App\Vote\Model\Repository;
 
-class AuteurRepository extends AbstractRepository
+class CoAuteurRepository extends AbstractRepository
 {
     protected function construire(array $coAuteurTableau): CoAuteur
     {
