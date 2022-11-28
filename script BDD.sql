@@ -1,133 +1,139 @@
-create table utilisateurs
+create table Calendriers
+(
+    idCalendrier  int auto_increment
+        primary key,
+    debutecriture timestamp default current_timestamp()   not null on update current_timestamp(),
+    finecriture   timestamp default '0000-00-00 00:00:00' not null,
+    debutvote     timestamp default '0000-00-00 00:00:00' not null,
+    finvote       timestamp default '0000-00-00 00:00:00' not null
+);
+
+create table Questions
+(
+    idquestion     int auto_increment
+        primary key,
+    titre          varchar(80)                           null,
+    description    varchar(360)                          null,
+    idorganisateur varchar(30)                           null,
+    idcalendrier   int                                   null,
+    creation       timestamp default current_timestamp() not null on update current_timestamp(),
+    constraint Questions_Calendriers_idCalendrier_fk
+        foreign key (idcalendrier) references Calendriers (idCalendrier)
+            on update cascade on delete cascade
+);
+
+create table Propositions
+(
+    idquestion    int           not null,
+    idresponsable varchar(30)   not null,
+    titre         varchar(500)  null,
+    idproposition int           null,
+    nbvotes       int default 0 null,
+    primary key (idquestion, idresponsable),
+    constraint Propositions_pk
+        unique (idproposition),
+    constraint Propositions_Questions_idquestion_fk
+        foreign key (idquestion) references Questions (idquestion)
+            on update cascade on delete cascade
+);
+
+create table Proposition_section
+(
+    idsection     int           not null
+        primary key,
+    contenu       varchar(1500) null,
+    idproposition int           null,
+    constraint Proposition_section_Propositions_idproposition_fk
+        foreign key (idproposition) references Propositions (idproposition)
+            on update cascade on delete cascade
+);
+
+create table Sections
+(
+    idsection   int auto_increment,
+    idquestion  int          not null,
+    titre       varchar(80)  null,
+    description varchar(360) null,
+    primary key (idsection, idquestion),
+    constraint Sections_Questions_idquestion_fk
+        foreign key (idquestion) references Questions (idquestion)
+            on update cascade on delete cascade
+);
+
+create table Utilisateurs
 (
     identifiant varchar(30) not null
-        constraint pk_utilisateur
-            primary key,
-    nom         varchar(30),
-    prenom      varchar(30),
-    email       varchar(80)
-        unique
-        constraint chk_email
-            check ((email)::text ~~ '%_@__%.__%'::text),
-    mdp         varchar(64)
-);
-
-create table calendriers
-(
-    idcalendrier  serial
         primary key,
-    debutecriture timestamp,
-    finecriture   timestamp,
-    debutvote     timestamp,
-    finvote       timestamp
+    nom         varchar(30) null,
+    prenom      varchar(30) null,
+    email       varchar(60) null,
+    mdp         varchar(64) null
 );
 
-create table questions
+create table Responsables
 (
-    idquestion     serial
-        primary key,
-    titre          varchar(80),
-    description    varchar(360),
-    idorganisateur varchar(30),
-    idcalendrier   integer
-        references calendriers
-            on delete cascade,
-    creation       timestamp
+    idquestion    int         not null,
+    idutilisateur varchar(30) not null,
+    primary key (idquestion, idutilisateur),
+    constraint Responsables_Questions_idquestion_fk
+        foreign key (idquestion) references Questions (idquestion)
+            on update cascade on delete cascade,
+    constraint Responsables_Utilisateurs_identifiant_fk
+        foreign key (idutilisateur) references Utilisateurs (identifiant)
 );
 
-create table sections
+create table Votants
 (
-    idsection   serial,
-    idquestion  integer not null
-        references questions
-            on delete cascade,
-    titre       varchar(80),
-    description varchar(360),
-    primary key (idsection, idquestion)
+    idquestion    int         not null,
+    idutilisateur varchar(30) not null,
+    primary key (idquestion, idutilisateur),
+    constraint Votants_Questions_idquestion_fk
+        foreign key (idquestion) references Questions (idquestion)
+            on update cascade on delete cascade,
+    constraint Votants_Utilisateurs_identifiant_fk
+        foreign key (idutilisateur) references Utilisateurs (identifiant)
+            on update cascade on delete cascade
 );
 
-create table propositions
-(
-    idquestion    integer     not null
-        references questions,
-    idresponsable varchar(30) not null
-        references utilisateurs,
-    titre         varchar(500),
-    nbvotes integer,
-    primary key (idquestion, idresponsable)
-);
-
-create table responsables
-(
-    idquestion    integer     not null
-        constraint auteurs_idquestion_fkey
-            references questions
-            on delete cascade,
-    idutilisateur varchar(30) not null
-        constraint auteurs_idutilisateur_fkey
-            references utilisateurs,
-    constraint auteurs_pkey
-        primary key (idquestion, idutilisateur)
-);
-
-create table votants
-(
-    idquestion    integer     not null
-        references questions
-            on delete cascade,
-    idutilisateur varchar(30) not null
-        references utilisateurs,
-    primary key (idquestion, idutilisateur)
-);
-
-create table vote
+create table Votes
 (
     idutilisateur varchar(30) not null,
-    idproposition integer not null,
-    primary key (idutilisateur, idproposition)
+    idproposition int         not null,
+    primary key (idutilisateur, idproposition),
+    constraint Votes_Propositions_idproposition_fk
+        foreign key (idproposition) references Propositions (idproposition)
+            on update cascade on delete cascade
 );
 
+create definer = dimeckr@`%` view questions_ecriture as
+select `q`.`idquestion`     AS `idquestion`,
+       `q`.`titre`          AS `titre`,
+       `q`.`description`    AS `description`,
+       `q`.`idorganisateur` AS `idorganisateur`,
+       `q`.`idcalendrier`   AS `idcalendrier`,
+       `q`.`creation`       AS `creation`
+from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
+where (select current_timestamp() AS `current_timestamp`) > `c`.`debutecriture`
+  and (select current_timestamp() AS `current_timestamp`) < `c`.`finecriture`;
 
-create table proposition_section
-(
-    "idProposition" integer,
-    "idSection"     integer,
-    contenu         varchar(1500)
-);
+create definer = dimeckr@`%` view questions_termines as
+select `q`.`idquestion`     AS `idquestion`,
+       `q`.`titre`          AS `titre`,
+       `q`.`description`    AS `description`,
+       `q`.`idorganisateur` AS `idorganisateur`,
+       `q`.`idcalendrier`   AS `idcalendrier`,
+       `q`.`creation`       AS `creation`
+from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
+where (select current_timestamp() AS `current_timestamp`) > `c`.`finvote`;
 
-create or replace view questions_termines (idquestion, titre, description, idorganisateur, idcalendrier, creation) as
-SELECT q.idquestion,
-       q.titre,
-       q.description,
-       q.idorganisateur,
-       q.idcalendrier,
-       q.creation
-FROM questions q
-         JOIN calendriers c ON q.idcalendrier = c.idcalendrier
-WHERE ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) > c.finvote;
-
-create or replace view questions_ecriture (idquestion, titre, description, idorganisateur, idcalendrier, creation) as
-SELECT q.idquestion,
-       q.titre,
-       q.description,
-       q.idorganisateur,
-       q.idcalendrier,
-       q.creation
-FROM questions q
-         JOIN calendriers c ON q.idcalendrier = c.idcalendrier
-WHERE ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) > c.debutecriture
-  AND ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) < c.finecriture;
-
-create or replace view questions_vote (idquestion, titre, description, idorganisateur, idcalendrier, creation) as
-SELECT q.idquestion,
-       q.titre,
-       q.description,
-       q.idorganisateur,
-       q.idcalendrier,
-       q.creation
-FROM questions q
-         JOIN calendriers c ON q.idcalendrier = c.idcalendrier
-WHERE ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) > c.debutvote
-  AND ((SELECT CURRENT_TIMESTAMP AS "current_timestamp")) < c.finvote;
-
+create definer = dimeckr@`%` view questions_vote as
+select `q`.`idquestion`     AS `idquestion`,
+       `q`.`titre`          AS `titre`,
+       `q`.`description`    AS `description`,
+       `q`.`idorganisateur` AS `idorganisateur`,
+       `q`.`idcalendrier`   AS `idcalendrier`,
+       `q`.`creation`       AS `creation`
+from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
+where (select current_timestamp() AS `current_timestamp`) > `c`.`debutvote`
+  and (select current_timestamp() AS `current_timestamp`) < `c`.`finvote`;
 

@@ -18,7 +18,7 @@ class VotantRepository extends AbstractRepository
 
     protected function getNomTable(): string
     {
-        return "votants";
+        return "Votants";
     }
 
     protected function getNomClePrimaire(): string

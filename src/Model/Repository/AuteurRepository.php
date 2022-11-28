@@ -23,7 +23,7 @@ class AuteurRepository extends AbstractRepository
 
     protected function getNomClePrimaire(): string
     {
-        return "idutilisateur";
+        return "idUtilisateur";
     }
 
     protected function getNomsColonnes(): array
