@@ -45,13 +45,14 @@ class ControllerQuestion
     {
 
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
-
+        $propositions = $question->getPropositions();
         $sections = $question->getSections();
         $responsables = $question->getResponsables();
         $votants = $question->getVotants();
         self::afficheVue('view.php', ["question" => $question,
             "sections" => $sections,
             "responsables" => $responsables,
+            "propositions" => $propositions,
             "votants" => $votants,
             "pagetitle" => "Detail question",
             "cheminVueBody" => "Question/detail.php"]);

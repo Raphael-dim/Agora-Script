@@ -2,6 +2,7 @@
 
 namespace App\Vote\Model\DataObject;
 
+use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\SectionRepository;
 use App\Vote\Model\Repository\ResponsableRepository;
 use App\Vote\Model\Repository\VotantRepository;
@@ -144,6 +145,11 @@ class Question extends AbstractDataObject
     public function getVotants(): array
     {
         return (new VotantRepository())->selectWhere($this->id, '*', "idQuestion", "Votants");
+    }
+
+    public function getPropositions() :array
+    {
+        return (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion", 'Propositions');
     }
 
 
