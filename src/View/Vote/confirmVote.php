@@ -3,7 +3,7 @@
 </div>
 <div class = "over">
     <form method = "post" action="index.php?action=create&controller=vote&idproposition=<?php echo $id ?>">
-        <h1><label><?php echo $message ?></label></h1>
+        <h1><label><?php echo $message ?> ?</label></h1>
 
         <?php
         require __DIR__ . "..\..\Proposition\detail.php";

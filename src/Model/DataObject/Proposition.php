@@ -12,12 +12,12 @@ class Proposition extends AbstractDataObject
     private Question $question;
     private int $nbVotes;
 
-    public function __construct(string $titre, Responsable $responsable, Question $question)
+    public function __construct(string $titre, Responsable $responsable, Question $question, int $nbVotes)
     {
         $this->titre = $titre;
         $this->responsable = $responsable;
         $this->question = $question;
-        $this->nbVotes = 0;
+        $this->nbVotes = $nbVotes;
     }
 
     public function getTitre(): string
