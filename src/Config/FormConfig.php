@@ -67,7 +67,6 @@ class FormConfig
 
         $responsables = $question->getResponsables();
         $_SESSION[FormConfig::$arr]['responsables'] = array();
-        $_SESSION[FormConfig::$arr]['co-auteurs'] = array();
         foreach ($responsables as $responsable) {
             $_SESSION[FormConfig::$arr]['responsables'][] = $responsable->getIdentifiant();
         }
