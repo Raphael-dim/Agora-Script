@@ -6,20 +6,23 @@ use App\Vote\Model\HTTP\Session;
 
 class FormConfig
 {
-    public static String $arr = '';
+    public static string $arr = '';
 
 
-    static public function startSession(){
+    static public function startSession()
+    {
         Session::getInstance();
-        if (isset($_SESSION[FormConfig::$arr])){
+        if (isset($_SESSION[FormConfig::$arr])) {
             unset($_SESSION[FormConfig::$arr]);
         }
         $_SESSION[FormConfig::$arr] = array();
     }
 
-    static public function setArr(String $string){
-        FormConfig::$arr=$string;
+    static public function setArr(string $string)
+    {
+        FormConfig::$arr = $string;
     }
+
     /*
      * Si une variable session ou publiée existe pour le menu déroulant,
      * alors on selectionne la valeur concernée

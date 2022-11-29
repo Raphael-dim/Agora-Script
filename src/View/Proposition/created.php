@@ -5,7 +5,7 @@
             <title>Proposition crée</title>
         </head>
     <body>
-        <p>La Proposition a bien été créée !</p>
+        <p>La proposition a bien été créée !</p>
         <?php require __DIR__ . "/../Question/list.php"; ?>
     </body>
 </html>

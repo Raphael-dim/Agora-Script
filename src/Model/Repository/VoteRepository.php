@@ -3,6 +3,7 @@
 namespace App\Vote\Model\Repository;
 
 use App\Vote\Model\DataObject\Proposition;
+use App\Vote\Model\DataObject\Vote;
 
 class VoteRepository extends AbstractRepository
 {
@@ -18,7 +19,7 @@ class VoteRepository extends AbstractRepository
             (new VotantRepository())->select($voteFormatTableau['idvotant']),
             (new PropositionRepository())->select($voteFormatTableau['idproposition'])
         );
-        $vote->setId($voteFormatTableau["idvote"]);
+        //$vote->setId($voteFormatTableau["idvote"]);
         return $vote;
     }
 

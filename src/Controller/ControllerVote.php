@@ -16,7 +16,8 @@ use App\Vote\Model\Repository\VoteRepository;
 class ControllerVote
 {
 
-    public static function create():void{
+    public static function create(): void
+    {
 
         Session::getInstance();
 
@@ -29,28 +30,29 @@ class ControllerVote
 
 
         if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
-            Controller::afficheVue('view.php',['pagetitle'=>'Vote',
-                "message" => 'Voulez vous vraiment voter pour cette proposition',
+            Controller::afficheVue('view.php', ['pagetitle' => 'Vote',
+                "message" => 'Voulez vous vraiment voter pour cette proposition ?',
                 "question" => $question,
                 "sections" => $sections,
                 "id" => $_GET['idproposition'],
-                'cheminVueBody'=>'vote/confirmVote.php']);
-        }
-        else if (isset($_POST["cancel"])) {
-            Controller::afficheVue('view.php', ["propositions"=>$propositions,
-                                    "votants" =>$votants,
-                                    "pagetitle" => "Liste des propositions",
-                                    "cheminVueBody" => "proposition/list.php"]);
-        }
-        else if (isset($_POST["confirm"])) {
+                'cheminVueBody' => 'vote/confirmVote.php']);
+        } else if (isset($_POST["cancel"])) {
+            Controller::afficheVue('view.php', ["propositions" => $propositions,
+                "votants" => $votants,
+                "pagetitle" => "Liste des propositions",
+                "cheminVueBody" => "proposition/list.php"]);
+        } else if (isset($_POST["confirm"])) {
             Session::getInstance();
             $proposition = (new PropositionRepository())->select($_GET['idproposition']);
             $votant = (new VotantRepository())->select($_SESSION['user']['id']);
-            $vote = new Vote($votant,$proposition);
+            $vote = new Vote($votant, $proposition);
             (new VoteRepository())->sauvegarder($vote);
-            Controller::afficheVue('view.php',['vote'=>$vote,
-                'pagetitle'=>'Vote confirmé',
-                'cheminVueBody'=>'Vote/created.php']);
+            Controller::afficheVue('view.php',
+                ['vote' => $vote,
+                    'pagetitle' => 'Vote confirmé',
+                    'cheminVueBody' => 'Vote/created.php',
+                    'question' => $question,
+                    'sections' => $sections]);
         }
 
     }

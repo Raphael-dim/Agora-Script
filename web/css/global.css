@@ -1,3 +1,4 @@
+
 main > h1, h2 {
     animation-duration: 0.5s;
     animation-name: slidein;
@@ -57,18 +58,6 @@ main p {
     padding: 10px;
     margin: 7px;
     border: solid lightgrey 1px;
-    animation-duration: 0.5s;
-    animation-name: appear;
-}
-
-@keyframes appear {
-    from {
-        transform: scale(1,0);
-    }
-
-    to {
-        transform: scale(1,1);
-    }
 }
 
 #delete {
@@ -144,7 +133,6 @@ form legend {
 }
 
 
-
 span {
     background: lightblue;
     opacity: 0.8;
@@ -218,6 +206,7 @@ textarea {
 }
 
 .selection > input[type=checkbox]:after {
+    filter: invert(1);
     font-size: 1.5em;
     content: "+";
 }
@@ -237,6 +226,30 @@ textarea {
     justify-items: center;
 }
 
+.vote {
+    padding: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+    height: auto;
+    background-color: #012e49;
+    font-size: 17px;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: 0.3s;
+    border-style: solid;
+    border-color: #f1f4f8;
+    border-width: 1px;
+    color: #ffffff;
+}
+
+.vote:hover {
+    color: #012134;
+    background-color: #f1f4f8;
+    border-color: rgba(69, 190, 187, 0.6);
+    border-width: 2px;
+}
+
 
 .bouton {
     padding: 5px;
@@ -244,18 +257,22 @@ textarea {
     margin-right: auto;
     width: auto;
     height: auto;
-    background-color: #dff5f4;
+    /*background-color: #f1f4f8;*/
     font-size: 17px;
     text-decoration: none;
-    border-radius: 15px;
+    border-radius: 8px;
     transition: 0.3s;
-    color: #012e49;
+    border-style: solid;
+    border-color: #f1f4f8;
+    border-width: 1px;
+    color: #ffffff;
 }
 
 .bouton:hover {
-    color: #ffffff;
-    background-color: #ff5b6a;
-    border-color: #dff5f4;
+    color: #012134;
+    background-color: #f1f4f8;
+    border-color: rgba(69, 190, 187, 0.6);
+    border-width: 2px;
 }
 
 .barreHaut {
@@ -290,12 +307,24 @@ textarea {
     background: white;
 }
 
+.nav *, form .nav {
+    background-color: #dff5f4;
+    font-size: 17px;
+    border-radius: 15px;
+    transition: 0.3s;
+}
+
+.nav *:hover, form .nav:hover {
+    color: white;
+    background-color: #1a3341;
+    border-color: #dff5f4;
+}
+
 #form_search > #keyword_input {
     position: relative;
     float: left;
     width: 100%;
     border: 0;
-    border-radius: 20px;
     padding: 20px 45px 20px 28px;
     font-size: 1.3rem;
     line-height: 1;
@@ -404,4 +433,19 @@ textarea {
 
 .barre_utilisateur > a img {
     margin: 15px;
+}
+
+.sortie {
+    max-width: 50px;
+    filter: invert(1);
+}
+
+.sortie {
+    max-width: 50px;
+    filter: invert(1);
+}
+
+.sortie:hover {
+    max-width: 50px;
+    filter: none;
 }
