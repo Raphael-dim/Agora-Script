@@ -133,7 +133,6 @@ form legend {
 }
 
 
-
 span {
     background: lightblue;
     opacity: 0.8;
@@ -233,18 +232,22 @@ textarea {
     margin-right: auto;
     width: auto;
     height: auto;
-    background-color: #dff5f4;
+    /*background-color: #f1f4f8;*/
     font-size: 17px;
     text-decoration: none;
     border-radius: 8px;
     transition: 0.3s;
-    color: #012e49;
+    border-style: solid;
+    border-color: #f1f4f8;
+    border-width: 1px;
+    color: #ffffff;
 }
 
 .bouton:hover {
-    /*color: #ffffff;*/
-    background-color: #ffcbbf;
-    border-color: #dff5f4;
+    color: #012e49;
+    background-color: #f1f4f8;
+    border-color: rgba(69, 190, 187, 0.6);
+    border-width: 2px;
 }
 
 .barreHaut {
@@ -407,15 +410,17 @@ textarea {
     margin: 15px;
 }
 
-.sortie{
+.sortie {
     max-width: 50px;
     filter: invert(1);
 }
-.sortie{
+
+.sortie {
     max-width: 50px;
     filter: invert(1);
 }
-.sortie:hover{
+
+.sortie:hover {
     max-width: 50px;
     filter: none;
 }
