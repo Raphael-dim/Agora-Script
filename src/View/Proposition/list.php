@@ -7,10 +7,14 @@
         $titreHTML = htmlspecialchars($proposition->getTitre());
         echo '<p class = "listes">
             <a href= index.php?action=read&controller=proposition&idProposition=' .
-        $idPropositionURL . '>'.$i.' : ' . $titreHTML . '  </a>
-         <a href= index.php?action=create&controller=vote&idproposition=' .
-            $idPropositionURL . '><img class="vote" src="..\web\images\button_vote.png"></a></p>'
-        ;
+        $idPropositionURL . '>'.$i.' : ' . $titreHTML . '  </a>';
+        foreach ($votants as $votant) {
+            if (isset($_SESSION['user']) && $_SESSION['user']['id'] == $votant->getId()) {
+                echo '<a href= index.php?action=create&controller=vote&idproposition=' .
+                    $idPropositionURL . '><img class="vote" src="..\web\images\button_vote.png"></a>';
+            }
+        }
+        echo '</p>';
         $i = $i + 1;
     }
     ?>

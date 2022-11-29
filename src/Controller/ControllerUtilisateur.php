@@ -4,6 +4,8 @@ namespace App\Vote\Controller;
 
 use App\Vote\Config\FormConfig;
 use App\Vote\Model\HTTP\Session;
+use App\Vote\Model\Repository\PropositionRepository;
+use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
 
 class ControllerUtilisateur
@@ -30,7 +32,7 @@ class ControllerUtilisateur
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);
         }
-        ControllerAccueil::home();
+        self::connexion();
     }
 
     public static function connected()
@@ -55,15 +57,18 @@ class ControllerUtilisateur
     {
         session_start();
         $utilisateur = ((new UtilisateurRepository))->select($_SESSION['user']['id']);
+        $questions = (new QuestionRepository())->selectWhere($_SESSION['user']['id'], '*', 'idorganisateur');
+        $propositions = (new PropositionRepository())->selectWhere($_SESSION['user']['id'], '*', 'idresponsable');
         Controller::afficheVue('view.php', ['pagetitle' => "Profil",
-            "cheminVueBody" => "Utilisateurs/detail.php", "Utilisateur" => $utilisateur]);
+            "cheminVueBody" => "Utilisateurs/detail.php", "Utilisateur" => $utilisateur,
+            "questions" => $questions, "propositions" => $propositions]);
     }
 
     public static function create()
     {
         Controller::afficheVue('view.php',
             ["pagetitle" => "Inscription",
-                "cheminVueBody" => "Utilisateurs/create.php"]);
+                "cheminVueBody" => "Utilisateurs/created.php"]);
     }
 
     public static function search()

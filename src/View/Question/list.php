@@ -1,6 +1,6 @@
 <div class="barreHaut">
-    <a class="rechercher" href="">Rechercher une question</a>
-    <a class="creer" href="index.php?action=create&controller=question">Créer votre question</a>
+    <a class="bouton" href="">Rechercher une question</a>
+    <a class="bouton" href="index.php?action=create&controller=question">Créer votre question</a>
 </div>
 
 <div class="selection">
@@ -35,16 +35,18 @@
             <a href= index.php?action=read&controller=question&idQuestion=' .
             $idQuestionURL . '> ' . $titreHTML . ' : </a>
             <a href="">par ' . $organisateur . ' </a >';
-        if (isset($_SESSION['user']) && $_SESSION['user']['id'] == $organisateur) {
-            echo '<a href = index.php?action=update&controller=question&idQuestion=' .
-                $idQuestionURL . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >
+        if ($calendrier->getDebutEcriture() > $date){
+            if (isset($_SESSION['user']) && $_SESSION['user']['id'] == $organisateur) {
+                echo '<a href = index.php?action=update&controller=question&idQuestion=' .
+                    $idQuestionURL . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >
+
             <a href = index.php?action=delete&controller=question&idQuestion=' .
-                $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a >';
-        }
-        if (isset($_SESSION['user']) && Responsable::estResponsable($question, $_SESSION['user']['id']))
-        {
-            if ($calendrier->getDebutEcriture() <= $date && $calendrier->getFinEcriture() >= $date) {
-                echo '<a href = index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '>Créer une proposition</a>';
+                    $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a >';
+            }
+            if (isset($_SESSION['user']) && Responsable::estResponsable($question, $_SESSION['user']['id'])) {
+                if ($calendrier->getDebutEcriture() <= $date && $calendrier->getFinEcriture() >= $date) {
+                    echo '<a href = index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '>Créer une proposition</a>';
+                }
             }
         }
 

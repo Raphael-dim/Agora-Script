@@ -28,7 +28,7 @@ class VotantRepository extends AbstractRepository
 
     protected function getNomsColonnes(): array
     {
-        return array("idquestion", "idutilisateur");
+            return array("idquestion", "idutilisateur");
 
     }
 }

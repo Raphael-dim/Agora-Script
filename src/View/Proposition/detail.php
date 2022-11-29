@@ -13,26 +13,26 @@ use App\Vote\Model\DataObject\Question;
 <h2>Titre question : <?= $question->getTitre() ?></h2>
 <h2>Description question : <?= $question->getDescription() ?></h2>
 
-    <?php
+<?php
 
-    $i = 1;
-    foreach ($sections as $section) {
-        $propSection = (new PropositionSectionRepository())->selectWhere($section->getId(),'*','idsection','Proposition_section');
-        //var_dump($propSection);
-        foreach ($propSection as $propSec) {
-            $contenu = $propSec->getContenu();
-        }
-        echo '<h2>Section n°' . $i . '</h2>';
-        echo '<p>Titre : ' . $section->getTitre() . ' </p > ';
-        echo '<p>Description : ' . $section->getDescription() . ' </p > ';
-        echo '
+$i = 1;
+foreach ($sections as $section) {
+    $propSection = (new PropositionSectionRepository())->selectWhere($section->getId(), '*', 'idsection', 'Proposition_section');
+    //var_dump($propSection);
+    foreach ($propSection as $propSec) {
+        $contenu = $propSec->getContenu();
+    }
+    echo '<h2>Section n°' . $i . '</h2>';
+    echo '<p>Titre : ' . $section->getTitre() . ' </p > ';
+    echo '<p>Description : ' . $section->getDescription() . ' </p > ';
+    echo '
     <p>
         <label for=contenu_id> Contenu</label > :
-        '. $contenu .'
+        ' . $contenu . '
     </p> ';
-        $i=$i+1;
-    }
-    ?>
+    $i = $i + 1;
+}
+?>
 
 
 

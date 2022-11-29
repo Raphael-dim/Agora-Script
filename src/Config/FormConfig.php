@@ -2,7 +2,7 @@
 
 namespace App\Vote\Config;
 
-use MongoDB\Driver\Session;
+use App\Vote\Model\HTTP\Session;
 
 class FormConfig
 {
@@ -10,7 +10,7 @@ class FormConfig
 
 
     static public function startSession(){
-        session_start();
+        Session::getInstance();
         if (isset($_SESSION[FormConfig::$arr])){
             unset($_SESSION[FormConfig::$arr]);
         }
