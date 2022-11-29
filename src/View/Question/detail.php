@@ -24,6 +24,19 @@
     ?>
 </div>
 
+<!--<div>
+    <h2>Co-auteurs : </h2>
+    <?php
+    if (is_array($coauteurs)) {
+        foreach ($coauteurs as $coauteur) {
+            echo "<p>" . htmlspecialchars($coauteur->getUtilisateur()->getIdentifiant()) . "</p>";
+        }
+    } else {
+        echo "<p>" . htmlspecialchars($coauteurs->getUtilisateur()->getIdentifiant()) . "</p>";
+    }
+    ?>
+</div>//-->
+
 <div>
     <h2>Votants : </h2>
     <?php

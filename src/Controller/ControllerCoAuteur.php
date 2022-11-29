@@ -24,13 +24,15 @@ class ControllerCoAuteur
         FormConfig::startSession();
         //session_start();
         FormConfig::setArr('SessionCoAuteur');
-        if(!isset($_SESSION[FormConfig::$arr]['co-auteur'])){
+        //if(!isset($_SESSION[FormConfig::$arr]['co-auteur'])){
             $tests = (new CoAuteurRepository())->selectWhere($_GET['idQuestion'],'*','idquestion',"CoAuteur");
+            if(empty($tests)){
+                $_SESSION[FormConfig::$arr]['co-auteur'] = array();
+            }
             foreach ($tests as $test){
                 $_SESSION[FormConfig::$arr]['co-auteur'][] = $test->getUtilisateur()->getIdentifiant();
-
             }
-        }
+        //}
         if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row" != "") {
             $row = $_POST['row'];
             $keyword = $_POST['keyword'];
@@ -50,11 +52,15 @@ class ControllerCoAuteur
         FormConfig::setArr('SessionCoAuteur');
         $questions = (new QuestionRepository())->selectAll();
         $coAuteurs = $_SESSION[FormConfig::$arr]['co-auteur'];
-        var_dump($_SESSION[FormConfig::$arr]);
+        //var_dump($_SESSION[FormConfig::$arr]);
 
         foreach ($coAuteurs as $coAuteur) {
-            $utilisateur = new CoAuteur((new QuestionRepository())->select($_GET["idQuestion"]),(new UtilisateurRepository())->select($coAuteur));
-            $responsableBD = (new CoAuteurRepository())->sauvegarder($utilisateur);
+            if(is_null((new CoAuteurRepository())->select($coAuteur))){
+                $utilisateur = new CoAuteur((new QuestionRepository())->select($_GET["idQuestion"]),(new UtilisateurRepository())->select($coAuteur));
+                $responsableBD = (new CoAuteurRepository())->sauvegarder($utilisateur);
+            }else{
+                $utilisateur =(new CoAuteurRepository())->delete($coAuteur);
+            }
         }
 
         Controller::afficheVue('view.php', ["pagetitle" => "Co-auteurs désigné",
