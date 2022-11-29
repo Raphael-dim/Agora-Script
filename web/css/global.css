@@ -236,14 +236,14 @@ textarea {
     background-color: #dff5f4;
     font-size: 17px;
     text-decoration: none;
-    border-radius: 15px;
+    border-radius: 8px;
     transition: 0.3s;
     color: #012e49;
 }
 
 .bouton:hover {
-    color: #ffffff;
-    background-color: #ff5b6a;
+    /*color: #ffffff;*/
+    background-color: #ffcbbf;
     border-color: #dff5f4;
 }
 
@@ -277,6 +277,19 @@ textarea {
     width: 35%;
     height: auto;
     background: white;
+}
+
+.nav *, form .nav {
+    background-color: #dff5f4;
+    font-size: 17px;
+    border-radius: 15px;
+    transition: 0.3s;
+}
+
+.nav *:hover, form .nav:hover {
+    color: white;
+    background-color: #1a3341;
+    border-color: #dff5f4;
 }
 
 #form_search > #keyword_input {

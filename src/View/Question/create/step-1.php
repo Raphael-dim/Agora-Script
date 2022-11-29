@@ -10,8 +10,8 @@ if (isset($_GET['idQuestion']) or isset($_SESSION[FormConfig::$arr]['idQuestion'
         if ($question == null) {
             \App\Vote\Controller\ControllerAccueil::erreur();
         } else {
+            $_SESSION['SessionQuestion']['idQuestion'] = $_GET['idQuestion'];
             FormConfig::initialiserSessions($question);
-            $_SESSION[FormConfig::$arr]['idQuestion'] = $question->getId();
         }
     }
 

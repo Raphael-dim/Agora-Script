@@ -29,7 +29,7 @@ class ControllerQuestion
      */
     public static function create()
     {
-        echo (Session::getInstance()->contient('user'));
+        echo(Session::getInstance()->contient('user'));
         if (isset($_SESSION['user']['id'])) {
             FormConfig::setArr('SessionQuestion');
             FormConfig::startSession();
@@ -295,7 +295,7 @@ class ControllerQuestion
                 $utilisateur->setIdentifiant($nouvResponsables[$i]);
                 $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
             }
-            if (!in_array($ancResponsables[$i], $nouvResponsables)) {
+            if ($i > count($ancResponsables) && !in_array($ancResponsables[$i], $nouvResponsables)) {
                 (new ResponsableRepository())->delete($ancResponsables[$i]);
             }
         }
@@ -316,7 +316,7 @@ class ControllerQuestion
                 $utilisateur->setIdentifiant($nouvVotants[$i]);
                 $votantBD = (new VotantRepository())->sauvegarder($utilisateur);
             }
-            if (!in_array($ancVotants[$i], $nouvVotants)) {
+            if ($i > count($ancVotants) && !in_array($ancVotants[$i], $nouvVotants)) {
                 (new VotantRepository())->delete($ancVotants[$i]);
             }
         }
