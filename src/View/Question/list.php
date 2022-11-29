@@ -48,6 +48,7 @@
             echo ' | Début de la phase de vote : ' . $calendrier->getDebutVote();
 
         }
+
         if ($date > $calendrier->getDebutEcriture() && $date < $calendrier->getFinVote()) {
             echo '<a href = index.php?action=readAll&controller=proposition&idQuestion=' . $idQuestionURL . ' >Liste des propositions</a>';
         }
@@ -55,6 +56,8 @@
             isset($_SESSION['user']) && Responsable::estResponsable($question, $_SESSION['user']['id'])
             && !Responsable::aCreeProposition($question, $_SESSION['user']['id'])) {
             echo '<a href = index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '>Créer une proposition</a>';
+
+
         }
 
         echo '</p>';
