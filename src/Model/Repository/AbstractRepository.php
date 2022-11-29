@@ -118,7 +118,6 @@ abstract class AbstractRepository
         $values = array(
             "motclef" => $motclef . '%',
         );
-
         $pdoStatement->execute($values);
 
         foreach ($pdoStatement as $donneesFormatTableau) {
