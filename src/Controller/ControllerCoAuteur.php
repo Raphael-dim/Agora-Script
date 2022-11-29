@@ -21,8 +21,9 @@ class ControllerCoAuteur
 
     public static function create()
     {
+        //FormConfig::startSession();
         session_start();
-        //FormConfig::setArr('SessionCoAuteur');
+        FormConfig::setArr('SessionCoAuteur');
         if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row" != "") {
             $row = $_POST['row'];
             $keyword = $_POST['keyword'];
@@ -38,7 +39,6 @@ class ControllerCoAuteur
     public static function created()
     {
         session_start();
-        //FormConfig::setArr('SessionCoAuteur');
         $questions = (new QuestionRepository())->selectAll();
         $coAuteurs = $_SESSION[FormConfig::$arr]['co-auteur'];
         var_dump($_GET);

@@ -1,8 +1,9 @@
 <?php
 
 use App\Vote\Config\FormConfig as FormConfig;
-$_SESSION[FormConfig::$arr]['type'] = 'co-auteur';
-FormConfig::postSession();
+$_SESSION[FormConfig::$arr]['type'] = "co-auteur";
+//$_SESSION[FormConfig::$arr]['co-auteur'] = array();
+//var_dump($_SESSION[FormConfig::$arr]);
 
 if (array_key_exists('user', $_POST)) {
     adduser($_POST["user"]);
@@ -10,6 +11,7 @@ if (array_key_exists('user', $_POST)) {
 if (array_key_exists('delete', $_POST)) {
     removeuser($_POST["delete"]);
 }
+FormConfig::postSession();
 
 function adduser(string $id): void
 {
@@ -20,7 +22,6 @@ function adduser(string $id): void
 
 function removeuser(string $id): void
 {
-
     if (($key = array_search($id, $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']])) !== false) {
         unset($_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']][$key]);
     }
@@ -30,5 +31,5 @@ function removeuser(string $id): void
 require_once "../src/View/Utilisateurs/select.php";
 ?>
 <form method="post" class="nav" action=index.php?action=created&controller=coauteur&idQuestion=9>
-    <input type="submit" name=next value="Suivant"/>
+    <input type="submit" name=next value="Valider"/>
 </form>
