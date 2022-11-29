@@ -43,7 +43,6 @@ class ControllerVote
                 "cheminVueBody" => "proposition/list.php"]);
         } else if (isset($_POST["confirm"])) {
             Session::getInstance();
-            $proposition = (new PropositionRepository())->select($_GET['idproposition']);
             $votant = (new VotantRepository())->select($_SESSION['user']['id']);
             $vote = new Vote($votant, $proposition);
             (new VoteRepository())->sauvegarder($vote);
@@ -54,8 +53,5 @@ class ControllerVote
                     'question' => $question,
                     'sections' => $sections]);
         }
-
     }
-
-
 }
