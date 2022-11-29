@@ -48,7 +48,8 @@ class ControllerProposition
         $question = $proposition->getQuestion();
         $sections = $question->getSections();
         $idProposition = $_GET['idProposition'];
-        Controller::afficheVue('view.php', ["question" => $question,
+        Controller::afficheVue('view.php', [
+            "question" => $question,
             "idProposition" => $idProposition,
             "proposition" => $proposition,
             "sections" => $sections,
