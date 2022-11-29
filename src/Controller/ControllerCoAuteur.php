@@ -21,9 +21,16 @@ class ControllerCoAuteur
 
     public static function create()
     {
-        //FormConfig::startSession();
-        session_start();
+        FormConfig::startSession();
+        //session_start();
         FormConfig::setArr('SessionCoAuteur');
+        if(!isset($_SESSION[FormConfig::$arr]['co-auteur'])){
+            $tests = (new CoAuteurRepository())->selectWhere($_GET['idQuestion'],'*','idquestion',"CoAuteur");
+            foreach ($tests as $test){
+                $_SESSION[FormConfig::$arr]['co-auteur'][] = $test->getUtilisateur()->getIdentifiant();
+
+            }
+        }
         if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row" != "") {
             $row = $_POST['row'];
             $keyword = $_POST['keyword'];
@@ -38,10 +45,12 @@ class ControllerCoAuteur
 
     public static function created()
     {
-        session_start();
+        FormConfig::startSession();
+        //session_start();
+        FormConfig::setArr('SessionCoAuteur');
         $questions = (new QuestionRepository())->selectAll();
         $coAuteurs = $_SESSION[FormConfig::$arr]['co-auteur'];
-        var_dump($_GET);
+        var_dump($_SESSION[FormConfig::$arr]);
 
         foreach ($coAuteurs as $coAuteur) {
             $utilisateur = new CoAuteur((new QuestionRepository())->select($_GET["idQuestion"]),(new UtilisateurRepository())->select($coAuteur));
@@ -51,6 +60,7 @@ class ControllerCoAuteur
         Controller::afficheVue('view.php', ["pagetitle" => "Co-auteurs désigné",
                                                     "cheminVueBody" => "CoAuteur/created.php",
                                                     "questions" => $questions]);
+        //session_destroy();
     }
 
 }
