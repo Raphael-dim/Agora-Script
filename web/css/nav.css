@@ -60,10 +60,6 @@ ul[id="Menu"] li a:hover {
     transition: opacity 0.2s linear;
 }
 
-ul[id="Menu"] li a:hover {
-    opacity: 80%;
-    border-radius: 2px;
-}
 
 ul[id="Menu"] li {
     display: inline;
@@ -87,7 +83,7 @@ ul[id="Menu"] li {
         background-size: 80%;
     }
     #Menu:hover{
-        background-color: #fd6d76;
+        background-color: var(--background2);
     }
 
    #Menu > li{
@@ -103,6 +99,11 @@ ul[id="Menu"] li {
         height: auto;
     }
 
+    #Menu> li:hover >a{
+        color:white;
+        opacity:0.9;
+    }
+
     ul[id="Menu"] li.grosmenu{
         padding:0;
         margin:0;
@@ -111,7 +112,7 @@ ul[id="Menu"] li {
     ul[id="Menu"] li.grosmenu > a {
         margin-top:60px;
         position:relative;
-        background:var(--details);
+        background:var(--background2);
         margin:0;
         padding: 10px;
         height:0;
@@ -119,4 +120,6 @@ ul[id="Menu"] li {
         font-size: 17px;
         line-height: 22px;
     }
+
+s
 }
