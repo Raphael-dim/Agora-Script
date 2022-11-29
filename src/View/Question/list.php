@@ -23,6 +23,7 @@
 <ul class="questions">
     <?php
 
+    use App\Vote\Model\DataObject\CoAuteur;
     use App\Vote\Model\DataObject\Responsable;
 
     $date = date("Y-m-d H:i:s");
@@ -44,10 +45,12 @@
                     $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a >';
             }
         }
-        if (isset($_SESSION['user']) && Responsable::estResponsable($question, $_SESSION['user']['id'])) {
+        if (isset($_SESSION['user']) && (Responsable::estResponsable($question, $_SESSION['user']['id']) || CoAuteur::estCoAuteur($question, $_SESSION['user']['id']))) {
             if ($calendrier->getDebutEcriture() <= $date && $calendrier->getFinEcriture() >= $date) {
                 echo '<a href = index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '>Créer une proposition</a>';
-                echo '<a href = index.php?action=create&controller=coauteur&idQuestion=' . $idQuestionURL . '>Désigner des co-auteurs</a>';
+                if(!CoAuteur::estCoAuteur($question, $_SESSION['user']['id'])){
+                    echo '<a href = index.php?action=create&controller=coauteur&idQuestion=' . $idQuestionURL . '>Désigner des co-auteurs</a>';
+                }
             }
         }
 

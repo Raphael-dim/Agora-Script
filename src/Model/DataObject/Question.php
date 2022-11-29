@@ -2,6 +2,7 @@
 
 namespace App\Vote\Model\DataObject;
 
+use App\Vote\Model\Repository\CoAuteurRepository;
 use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\SectionRepository;
 use App\Vote\Model\Repository\ResponsableRepository;
@@ -140,6 +141,11 @@ class Question extends AbstractDataObject
     public function getResponsables(): array
     {
         return (new ResponsableRepository())->selectWhere($this->id, '*', "idQuestion", "Responsables");
+    }
+
+    public function getCoAuteur(): array
+    {
+        return (new CoAuteurRepository())->selectWhere($this->id, '*', "idQuestion", "CoAuteur");
     }
 
     public function getVotants(): array

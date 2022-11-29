@@ -34,7 +34,16 @@ class CoAuteur extends AbstractDataObject
         return $this->utilisateur;
     }
 
-
+    public static function estCoAuteur($question, $utilisateur) : bool
+    {
+        $coAuteurs = $question->getCoAuteur();
+        foreach ($coAuteurs as $coAuteur){
+            if ($coAuteur->getUtilisateur()->getIdentifiant() == $utilisateur){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public function formatTableau(): array
     {
