@@ -47,6 +47,7 @@
         if (isset($_SESSION['user']) && Responsable::estResponsable($question, $_SESSION['user']['id'])) {
             if ($calendrier->getDebutEcriture() <= $date && $calendrier->getFinEcriture() >= $date) {
                 echo '<a href = index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '>Créer une proposition</a>';
+                echo '<a href = index.php?action=create&controller=coauteur&idQuestion=' . $idQuestionURL . '>Désigner des co-auteurs</a>';
             }
         }
 

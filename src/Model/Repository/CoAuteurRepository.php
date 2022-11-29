@@ -2,15 +2,16 @@
 
 namespace App\Vote\Model\Repository;
 
+use App\Vote\Model\DataObject\CoAuteur;
+
 class CoAuteurRepository extends AbstractRepository
 {
     protected function construire(array $coAuteurTableau): CoAuteur
     {
-        $coAuteur = new CoAuteur(
+        return new CoAuteur(
             (new QuestionRepository())->select($coAuteurTableau['idquestion']),
             (new UtilisateurRepository())->select($coAuteurTableau['idutilisateur'])
         );
-        return $coAuteurTableau;
     }
 
     protected function getNomTable(): string
