@@ -392,7 +392,8 @@ textarea {
     }
 
     .listes {
-        height: 50px;
+        min-height: 50px;
+        height: auto;
     }
 
     #acceuil_search_form > h1 {
@@ -449,4 +450,5 @@ textarea {
     max-width: 50px;
     filter: none;
 }
+
 

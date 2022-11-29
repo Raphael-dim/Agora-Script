@@ -53,7 +53,7 @@ class ControllerProposition
             "idProposition" => $idProposition,
             "proposition" => $proposition,
             "sections" => $sections,
-            "pagetitle" => "Detail question",
+            "pagetitle" => "Detail proposition",
             "cheminVueBody" => "Proposition/detail.php"]);
     }
 

@@ -16,6 +16,7 @@ use App\Vote\Model\DataObject\Question;
 <?php
 
 $i = 1;
+echo '<h1>Titre de la proposition : ' . $proposition->getTitre() . '</h1>';
 foreach ($sections as $section) {
     $propSection = (new PropositionSectionRepository())->selectWhere($section->getId(), '*', 'idsection', 'Proposition_section');
     //var_dump($propSection);

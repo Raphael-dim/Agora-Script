@@ -43,14 +43,20 @@
             <a href = index.php?action=delete&controller=question&idQuestion=' .
                     $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a >';
             }
+            echo ' | Début de la phase d\'écriture : ' . $calendrier->getDebutEcriture();
+        } else if ($date < $calendrier->getDebutVote()) {
+            echo ' | Début de la phase de vote : ' . $calendrier->getDebutVote();
+
         }
-        if (isset($_SESSION['user']) && Responsable::estResponsable($question, $_SESSION['user']['id'])) {
-            if ($calendrier->getDebutEcriture() <= $date && $calendrier->getFinEcriture() >= $date) {
-                echo '<a href = index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '>Créer une proposition</a>';
-            }
+        if ($date > $calendrier->getDebutEcriture() && $date < $calendrier->getFinVote()) {
+            echo '<a href = index.php?action=readAll&controller=proposition&idQuestion=' . $idQuestionURL . ' >Liste des propositions</a>';
+        }
+        if ($calendrier->getDebutEcriture() <= $date && $calendrier->getFinEcriture() >= $date &&
+            isset($_SESSION['user']) && Responsable::estResponsable($question, $_SESSION['user']['id'])
+            && !Responsable::aCreeProposition($question, $_SESSION['user']['id'])) {
+            echo '<a href = index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '>Créer une proposition</a>';
         }
 
-        echo '<a href = index.php?action=readAll&controller=proposition&idQuestion=' . $idQuestionURL . ' >Liste des propositions</a>';
         echo '</p>';
 
     }
