@@ -206,6 +206,7 @@ textarea {
 }
 
 .selection > input[type=checkbox]:after {
+    filter: invert(1);
     font-size: 1.5em;
     content: "+";
 }
