@@ -33,7 +33,7 @@ foreach ($utilisateurs as $utilisateur) {
     $nom = htmlspecialchars($utilisateur->getNom());
     $prenom = htmlspecialchars($utilisateur->getPrenom());
     $identifiant = $utilisateur->getIdentifiant();
-    if (in_array($identifiant, $_SESSION[FormConfig::$arr]['responsables'])) {
+    if (in_array($identifiant, $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']])) {
         $disable = "disabled";
     } else {
         $disable = "";

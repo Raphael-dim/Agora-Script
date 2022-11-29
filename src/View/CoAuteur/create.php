@@ -5,7 +5,7 @@ $_SESSION[FormConfig::$arr]['type'] = "co-auteur";
 //$_SESSION[FormConfig::$arr]['co-auteur'] = array();
 //var_dump($_SESSION[FormConfig::$arr]);
 $idquestion = $_GET['idQuestion'];
-var_dump($idquestion);
+//var_dump($idquestion);
 
 if (array_key_exists('user', $_POST)) {
     adduser($_POST["user"]);
