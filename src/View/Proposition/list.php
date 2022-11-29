@@ -1,19 +1,24 @@
-
-<ul class="propositions">
+<ul class="questions">
     <?php
-    $i=1;
+
+    use App\Vote\Model\DataObject\Votant;
+
+    $i = 1;
+    $aVote = Votant::aVote($propositions, $_SESSION['user']['id']);
     foreach ($propositions as $proposition) {
+        if ($aVote == $proposition->getId()) {
+            echo '<h2>Vous avez déjà voté pour cette proposition.</h2>';
+        }
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
         echo '<p class = "listes">
             <a href= index.php?action=read&controller=proposition&idProposition=' .
-        $idPropositionURL . '>'.$i.' : ' . $titreHTML . '  </a>';
-        foreach ($votants as $votant) {
-            if (isset($_SESSION['user']) && $_SESSION['user']['id'] == $votant->getId()) {
-                echo '<a href= index.php?action=create&controller=vote&idproposition=' .
-                    $idPropositionURL . '><img class="vote" src="..\web\images\button_vote.png"></a>';
-            }
+            $idPropositionURL . '>' . $i . ' : ' . $titreHTML . '  </a>';
+        if (isset($_SESSION['user']) && Votant::estVotant($question, $_SESSION['user']['id']) && $aVote == null) {
+            echo '<a class="vote" href= index.php?action=create&controller=vote&idproposition=' .
+                $idPropositionURL . '>Voter</a>';
         }
+        echo 'Nombre de votes : ' . $proposition->getNbVotes();
         echo '</p>';
         $i = $i + 1;
     }

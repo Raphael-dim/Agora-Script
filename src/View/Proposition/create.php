@@ -30,14 +30,14 @@ use App\Vote\Model\DataObject\Question;
         echo '<p>Titre : ' . $section->getTitre() . ' </p > ';
         echo '<p>Description : ' . $section->getDescription() . ' </p > ';
         echo '
-    <p>
+    <p class="champ">
         <label for=contenu_id> Contenu</label > :
-        <textarea name=contenu' . $section->getId() .' id = contenu_id maxlength=1500 rows = 8 cols = 80 required ></textarea >
+        <textarea name=contenu' . $section->getId() . ' id = contenu_id maxlength=1500 rows = 8 cols = 80 required ></textarea >
         <label for=max_id>1400 caractères maximum</label>
     </p> ';
     }
     ?>
-    <input type="submit" value="Suivant"/>
+    <input type="submit" value="Suivant" CLASS="nav"/>
 </form>
 
 

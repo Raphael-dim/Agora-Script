@@ -6,6 +6,7 @@ use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Proposition;
 use App\Vote\Model\DataObject\PropositionSection;
 use App\Vote\Model\DataObject\Responsable;
+use App\Vote\Model\HTTP\Session;
 use App\Vote\Model\Repository\AuteurRepository;
 use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\PropositionRepository;
@@ -20,7 +21,7 @@ class ControllerProposition
 
     public static function create()
     {
-        session_start();
+        Session::getInstance();
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         if ($question == null) {
             ControllerAccueil::erreur();
@@ -35,7 +36,7 @@ class ControllerProposition
 //        }
             else {
                 Controller::afficheVue('view.php', ["pagetitle" => "Accueil",
-                    "cheminVueBody" => "Proposition/created.php",
+                    "cheminVueBody" => "Proposition/create.php",
                     "question" => $question]);
             }
         }
@@ -48,11 +49,11 @@ class ControllerProposition
         $sections = $question->getSections();
         $idProposition = $_GET['idProposition'];
         Controller::afficheVue('view.php', ["question" => $question,
-                "idProposition" => $idProposition,
-                "proposition" => $proposition,
-                "sections" => $sections,
-                "pagetitle" => "Detail question",
-                "cheminVueBody" => "Proposition/detail.php"]);
+            "idProposition" => $idProposition,
+            "proposition" => $proposition,
+            "sections" => $sections,
+            "pagetitle" => "Detail question",
+            "cheminVueBody" => "Proposition/detail.php"]);
     }
 
     public static function readAll()
@@ -63,7 +64,7 @@ class ControllerProposition
         Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
             "votants" => $votants,
             "cheminVueBody" => "Proposition/list.php",
-            "propositions" => $propositions]);
+            "propositions" => $propositions, "question" => $question]);
     }
 
 
@@ -72,7 +73,7 @@ class ControllerProposition
         session_start();
         $question = (new QuestionRepository())->select($_GET["idQuestion"]);
         $responsable = (new ResponsableRepository())->select($_SESSION['user']['id']);
-        $proposition = new Proposition($_POST['titre'], $responsable, $question);
+        $proposition = new Proposition($_POST['titre'], $responsable, $question, 0);
         $propositionBD = (new PropositionRepository())->sauvegarder($proposition);
         $proposition->setId($propositionBD);
         $sections = $question->getSections();

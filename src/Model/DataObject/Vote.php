@@ -30,7 +30,7 @@ class Vote extends AbstractDataObject
     public function formatTableau(): array
     {
         return array(
-            "idvotantTag" => $this->votant->getId(),
+            "idvotantTag" => $this->votant->getIdentifiant(),
             "idpropositionTag" => $this->proposition->getId()
     );
     }
