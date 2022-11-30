@@ -67,7 +67,7 @@ main p {
 
 main p a {
     color: #000000;
-    text-decoration: none;
+    /*text-decoration: none;*/
 }
 
 .attention {
