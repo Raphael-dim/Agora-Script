@@ -26,6 +26,7 @@ class ControllerVote
         $question = $proposition->getQuestion();
         $propositions = (new PropositionRepository())->selectWhere($question->getId(), '*',
             'idquestion', 'Propositions');
+
         $votants = $question->getVotants();
         $sections = $question->getSections();
 
@@ -33,6 +34,7 @@ class ControllerVote
         if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
             Controller::afficheVue('view.php', ['pagetitle' => 'Vote',
                 "message" => 'Voulez vous vraiment voter pour cette proposition ?',
+                "proposition"=>$proposition,
                 "question" => $question,
                 'proposition' => $proposition,
                 "sections" => $sections,
@@ -42,6 +44,7 @@ class ControllerVote
             Controller::afficheVue('view.php', ["propositions" => $propositions,
                 "votants" => $votants,
                 'question' => $question,
+
                 "pagetitle" => "Liste des propositions",
                 "cheminVueBody" => "proposition/list.php"]);
         } else if (isset($_POST["confirm"])) {
@@ -51,6 +54,7 @@ class ControllerVote
             (new VoteRepository())->sauvegarder($vote);
             Controller::afficheVue('view.php',
                 ['vote' => $vote,
+                    'proposition'=>$proposition,
                     'pagetitle' => 'Vote confirmé',
                     'cheminVueBody' => 'Vote/created.php',
                     'question' => $question,
