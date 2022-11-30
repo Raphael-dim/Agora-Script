@@ -24,7 +24,9 @@ class ControllerVote
 
         $proposition = (new PropositionRepository())->select($_GET['idproposition']);
         $question = $proposition->getQuestion();
-        $propositions = (new PropositionRepository())->selectWhere($question->getId(),'*','idquestion');
+        $propositions = (new PropositionRepository())->selectWhere($question->getId(), '*',
+            'idquestion', 'Propositions');
+
         $votants = $question->getVotants();
         $sections = $question->getSections();
 
@@ -34,13 +36,15 @@ class ControllerVote
                 "message" => 'Voulez vous vraiment voter pour cette proposition ?',
                 "proposition"=>$proposition,
                 "question" => $question,
+                'proposition' => $proposition,
                 "sections" => $sections,
                 "id" => $_GET['idproposition'],
                 'cheminVueBody' => 'vote/confirmVote.php']);
         } else if (isset($_POST["cancel"])) {
             Controller::afficheVue('view.php', ["propositions" => $propositions,
                 "votants" => $votants,
-                "question"=>$question,
+                'question' => $question,
+
                 "pagetitle" => "Liste des propositions",
                 "cheminVueBody" => "proposition/list.php"]);
         } else if (isset($_POST["confirm"])) {
@@ -54,6 +58,7 @@ class ControllerVote
                     'pagetitle' => 'Vote confirmé',
                     'cheminVueBody' => 'Vote/created.php',
                     'question' => $question,
+                    'proposition' => $proposition,
                     'sections' => $sections]);
         }
     }
