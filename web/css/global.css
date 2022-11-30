@@ -256,8 +256,7 @@ textarea {
     margin-left: auto;
     margin-right: auto;
     width: auto;
-    height: auto;
-    /*background-color: #f1f4f8;*/
+    height: 50px;
     font-size: 17px;
     text-decoration: none;
     border-radius: 8px;
@@ -279,6 +278,10 @@ textarea {
     width: 100%;
     vertical-align: middle;
     display: flex;
+}
+
+.barreHaut:first-child{
+    padding-left: 20%;
 }
 
 
@@ -416,6 +419,10 @@ textarea {
         transform: translateY(0%);
         height: 40px;
         width: 40px;
+    }
+
+    .barreHaut:first-child{
+        padding-left: 10%;
     }
 }
 

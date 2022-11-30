@@ -1,5 +1,10 @@
 <div class="barreHaut">
-    <a class="bouton" href="">Rechercher une question</a>
+    <form method="post" action="index.php?controller=question&action=readKeyword">
+            <p>
+                <label for="motclef"></label><input type="text" placeholder="" name="keyword" id="motclef" required/>
+                <input type="image" alt = "Submit" src="../web/images/search.png" value="Envoyer" class = "search"/>
+            </p>
+    </form>
     <a class="bouton" href="index.php?action=create&controller=question">Créer votre question</a>
 </div>
 

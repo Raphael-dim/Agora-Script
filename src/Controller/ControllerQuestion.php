@@ -354,6 +354,16 @@ class ControllerQuestion
         }
     }
 
+    public static function readKeyword(): void
+    {
+        $keyword = $_POST['keyword'];
+        $questions = (new QuestionRepository())->selectKeyword($keyword, 'titre');
+        Controller::afficheVue('view.php',
+            ["questions" => $questions,
+                "pagetitle" => "Liste des questions",
+                "cheminVueBody" => "Question/list.php"]);
+    }
+
 
     private static function afficheVue(string $cheminVue, array $parametres = []): void
     {
