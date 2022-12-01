@@ -17,9 +17,13 @@
             <a href= index.php?action=read&controller=proposition&idProposition=' .
             $idPropositionURL . '>' . $i . ' : ' . $titreHTML . '  </a>';
         if ($date >= $calendrier->getDebutVote() && $date < $calendrier->getFinVote() &&
-            isset($_SESSION['user']) && Votant::estVotant($question, $_SESSION['user']['id']) && $aVote == null) {
+            isset($_SESSION['user']) && Votant::estVotant($question, $_SESSION['user']['id'])
+            && $proposition->getId() != $aVote) {
             echo '<a class="vote" href= index.php?action=create&controller=vote&idproposition=' .
                 $idPropositionURL . '>Voter</a>';
+        }else if($proposition->getId() == $aVote){
+            echo '<a class="vote" href= index.php?action=delete&controller=vote&idproposition=' .
+            $idPropositionURL . '>Supprimer le vote</a>';
         }
         echo 'Nombre de votes : ' . $proposition->getNbVotes();
         echo '</p>';

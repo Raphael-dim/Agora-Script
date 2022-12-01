@@ -1,3 +1,6 @@
+*{
+    font-family: Georgia;
+}
 
 main > h1, h2 {
     animation-duration: 0.5s;
@@ -90,21 +93,6 @@ main p a {
     background: #012e49;
 }
 
-.listes > a {
-    margin-left: 10px;
-    padding: 0;
-}
-
-.listes {
-    height: 50px;
-    margin: 0;
-    padding: 0;
-}
-
-.listes * {
-    display: inline-block;
-    vertical-align: middle;
-}
 
 h1, h2, h3 {
     margin-left: 15px;
@@ -152,14 +140,49 @@ span {
 }
 
 .questions .listes {
-    /*max-width: 1000px;*/
+    border-radius: 7px;
+    border-width: 1px;
+    border-color: black;
+    border-style: solid;
+    background-color: #dff5f4;
+    vertical-align: middle;
+    display: inline-block;
+    height: 250px;
+    width: 250px;
     margin: 20px;
 }
 
-.questions .listes * {
-    width: auto;
-    margin-right: 20px;
+.liste:hover{
+
 }
+
+.listes .titre{
+    font-size: 20px;
+}
+
+.questions .listes > * {
+    color: #012134;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#action{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.listes a {
+    text-decoration: none;
+    margin-left: 10px;
+    padding: 0;
+}
+
+.listes {
+    list-style: none;
+    height: 50px;
+}
+
 
 li, a {
     margin-left: 20px;
