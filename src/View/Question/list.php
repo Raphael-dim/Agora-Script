@@ -1,9 +1,9 @@
 <div class="barreHaut">
     <form method="post" action="index.php?controller=question&action=readKeyword">
-            <p>
-                <label for="motclef"></label><input type="text" placeholder="" name="keyword" id="motclef" required/>
-                <input type="image" alt = "Submit" src="../web/images/search.png" value="Envoyer" class = "search"/>
-            </p>
+        <p>
+            <label for="motclef"></label><input type="text" placeholder="" name="keyword" id="motclef" required/>
+            <input type="image" alt="Submit" src="../web/images/search.png" value="Envoyer" class="search"/>
+        </p>
     </form>
     <a class="bouton" href="index.php?action=create&controller=question">Créer votre question</a>
 </div>
@@ -37,21 +37,21 @@
         $idQuestionURL = rawurlencode($question->getId());
         $organisateur = htmlspecialchars($question->getOrganisateur()->getIdentifiant());
         $titreHTML = htmlspecialchars($question->getTitre());
-        echo '<p class = "listes">
-            <a href= index.php?action=read&controller=question&idQuestion=' .
+        echo '<li class = "listes">
+            <a class=titre href= index.php?action=read&controller=question&idQuestion=' .
             $idQuestionURL . '> ' . $titreHTML . ' : </a>
             <a href="">par ' . $organisateur . ' </a >';
+        echo '<p id="description">'.$question->getDescription().'</p>';
         if ($calendrier->getDebutEcriture() > $date) {
             if (isset($_SESSION['user']) && $_SESSION['user']['id'] == $organisateur) {
-                echo '<a href = index.php?action=update&controller=question&idQuestion=' .
-                    $idQuestionURL . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >
-
-            <a href = index.php?action=delete&controller=question&idQuestion=' .
-                    $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a >';
+                echo '<div id="action" "><a href = index.php?action=update&controller=question&idQuestion=' .
+                        $idQuestionURL . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >
+                     <a href = index.php?action=delete&controller=question&idQuestion=' .
+                        $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a></div>';
             }
-            echo ' | Début de la phase d\'écriture : ' . $calendrier->getDebutEcriture();
+            echo '<p>Début de la phase d\'écriture : ' . $calendrier->getDebutEcriture() . '</p>';
         } else if ($date < $calendrier->getDebutVote()) {
-            echo ' | Début de la phase de vote : ' . $calendrier->getDebutVote();
+            echo '<p>Début de la phase de vote : ' . $calendrier->getDebutVote() . '</p>';
 
         }
 
@@ -65,10 +65,9 @@
             echo '<a href = index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '>Créer une proposition</a>';
 
 
-
         }
 
-        echo '</p>';
+        echo '</li>';
 
     }
     ?>
