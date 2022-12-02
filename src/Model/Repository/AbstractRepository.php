@@ -154,7 +154,6 @@ abstract class AbstractRepository
 
     public function selectWhere($clef, $rowSelect = '*', $whereCondition = null, $nomTable = null): array
     {
-
         $ADonnees = array();
         if (is_null($nomTable)) {
             $sql = 'SELECT ' . $rowSelect . ' from ' . $this->getNomTable();
@@ -163,21 +162,38 @@ abstract class AbstractRepository
         }
         if (is_null($whereCondition)) {
             $sql = $sql . ' WHERE ' . $this->getNomClePrimaire() . ' =:clef';
-        } else {
+        } else if (!is_array($whereCondition)) {
             $sql = $sql . ' WHERE ' . $whereCondition . ' =:clef';
-
+        } else {
+            $nbCases = sizeof($whereCondition);
+            $i = 0;
+            foreach ($whereCondition as $where) {
+                if ($i == 0) {
+                    $sql = $sql . ' WHERE ';
+                }
+                $sql = $sql . $where . ' =:clef' . $i . ' ';
+                if ($i != $nbCases - 1) {
+                    $sql = $sql . 'AND ';
+                } else {
+                    $sql = $sql . ';';
+                }
+                $i++;
+            }
         }
-
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
-
-        $values = array(
-            "clef" => $clef,
-        );
-        $pdoStatement->execute($values);
+        if (!is_array($clef)) {
+            $values = array(
+                "clef" => $clef,
+            );
+            $pdoStatement->execute($values);
+        } else {
+            $pdoStatement->execute($clef);
+        }
         foreach ($pdoStatement as $donneesFormatTableau) {
             $ADonnees[] = $this::construire(json_decode(json_encode($donneesFormatTableau), true));
         }
+
         return $ADonnees;
     }
 

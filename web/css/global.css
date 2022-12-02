@@ -82,7 +82,7 @@ main p a {
 }
 
 .vote {
-    max-width: 65px;
+    /*max-width: 65px;*/
 }
 
 .delete {
@@ -249,7 +249,7 @@ textarea {
     justify-items: center;
 }
 
-.vote {
+#vote {
     padding: 5px;
     margin-left: auto;
     margin-right: auto;
@@ -266,7 +266,7 @@ textarea {
     color: #ffffff;
 }
 
-.vote:hover {
+#vote:hover {
     color: #012134;
     background-color: #f1f4f8;
     border-color: rgba(69, 190, 187, 0.6);
