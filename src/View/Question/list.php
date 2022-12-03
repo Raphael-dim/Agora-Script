@@ -1,22 +1,17 @@
-
 <?php
-    if (isset($_GET['selection'])){
-        if($_GET['selection'] == 'ecriture'){
-            echo "<h1>Nos questions en phase d'<strong id ='color-orange'>écriture</strong></h1>";
-        }
-        else if($_GET['selection'] == 'vote'){
-            echo "<h1>Nos questions en phase de <strong id ='color-yellow'>vote</strong></h1>";
-        }
-        else if($_GET['selection'] == 'terminees'){
-            echo "<h1>Nos questions <strong id ='color-green'>terminées</strong></h1>";
-        }
-        else{
-            echo "<h1>Consultez nos <strong id ='color-grey'>questions </strong> et trouvez des réponses</h1>";
-        }
-    }
-    else{
+if (isset($_GET['selection'])) {
+    if ($_GET['selection'] == 'ecriture') {
+        echo "<h1>Nos questions en phase d'<strong id ='color-orange'>écriture</strong></h1>";
+    } else if ($_GET['selection'] == 'vote') {
+        echo "<h1>Nos questions en phase de <strong id ='color-yellow'>vote</strong></h1>";
+    } else if ($_GET['selection'] == 'terminees') {
+        echo "<h1>Nos questions <strong id ='color-green'>terminées</strong></h1>";
+    } else {
         echo "<h1>Consultez nos <strong id ='color-grey'>questions </strong> et trouvez des réponses</h1>";
     }
+} else {
+    echo "<h1>Consultez nos <strong id ='color-grey'>questions </strong> et trouvez des réponses</h1>";
+}
 ?>
 
 <div class="barreHaut">
@@ -31,16 +26,16 @@
 
 <div class="selection">
     <ul>
-        <li class="phases" id  ="all">
+        <li class="phases" id="all">
             <a href="index.php?action=readAll&selection=toutes&controller=question">Toutes</a>
         </li>
-        <li class="phases" id  ="ecriture">
+        <li class="phases" id="ecriture">
             <a href="index.php?action=readAll&selection=ecriture&controller=question">En phase d'écriture</a>
         </li>
-        <li class="phases" id  ="vote">
+        <li class="phases" id="vote">
             <a href="index.php?action=readAll&selection=vote&controller=question">En phase de vote</a>
         </li>
-        <li class="phases" id  ="termine">
+        <li class="phases" id="termine">
             <a href="index.php?action=readAll&selection=terminees&controller=question">Terminées</a>
         </li>
     </ul>
@@ -63,17 +58,13 @@
 
         if ($date < $calendrier->getDebutEcriture()) {
             echo '<li class="listes" id = "status_cree">';
-        }
-        else if ($date <$calendrier->getFinEcriture() && $date>$calendrier->getDebutEcriture()){
+        } else if ($date < $calendrier->getFinEcriture() && $date > $calendrier->getDebutEcriture()) {
             echo '<li class="listes" id = "status_ecriture">';
-        }
-        else if ($date <$calendrier->getFinVote() && $date>$calendrier->getDebutVote()){
+        } else if ($date < $calendrier->getFinVote() && $date > $calendrier->getDebutVote()) {
             echo '<li class="listes" id = "status_vote">';
-        }
-        else if ($date> $calendrier->getFinVote()){
+        } else if ($date > $calendrier->getFinVote()) {
             echo '<li class="listes" id = "status_termine">';
-        }
-        else{
+        } else {
             echo '<li class="listes" id = "status_attente">';
         }
 
@@ -81,13 +72,13 @@
             <a class=titre href= index.php?action=read&controller=question&idQuestion=' .
             $idQuestionURL . '> ' . $titreHTML . ' </a>
             <a href="" id = "auteur">par ' . $organisateur . ' </a >';
-        echo '<p id="description">'.$question->getDescription().'</p>';
+        echo '<p id="description">' . $question->getDescription() . '</p>';
         if ($calendrier->getDebutEcriture() > $date) {
             if (isset($_SESSION['user']) && $_SESSION['user']['id'] == $organisateur) {
                 echo '<div id="action" "><a href = index.php?action=update&controller=question&idQuestion=' .
-                        $idQuestionURL . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >
+                    $idQuestionURL . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >
                      <a href = index.php?action=delete&controller=question&idQuestion=' .
-                        $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a></div>';
+                    $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a></div>';
             }
             echo '<p>Début de la phase d\'écriture : ' . $calendrier->getDebutEcriture() . '</p>';
         } else if ($date < $calendrier->getDebutVote()) {

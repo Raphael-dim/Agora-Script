@@ -51,14 +51,59 @@
     </div>
     <div class="calendrier">
         <h2>Calendrier : </h2>
-        <p><?= htmlspecialchars($question->getCalendrier()->getDebutEcriture()) ?></p>
-        <span class="vertical-line"></span>
-        <p><?=htmlspecialchars($question->getCalendrier()->getFinEcriture()) ?></p>
-        <span class="vertical-line"></span>
-        <p><?= htmlspecialchars($question->getCalendrier()->getDebutVote()) ?></p>
-        <span class="vertical-line"></span>
-        <p><?= htmlspecialchars($question->getCalendrier()->getFinVote()) ?></p>
 
+        <div class="légende">
+            <p style="background: red; color: white">Phase d'écriture des propositions</p>
+            <p style="background: green; color: white">Phase de vote</p>
+        </div>
+        <?php
+        $date = date("d/m/Y à H:i:s");
+        $cercle = '<div id="cercle"></div>';
+        if ($date < $question->getCalendrier()->getDebutEcriture()) {
+            echo $cercle;
+        }
+        echo '<span class="vertical-line-petite"></span>';
+        if ($date < $question->getCalendrier()->getDebutEcriture()) {
+            echo $cercle;
+        }
+        ?>
+        <p><?= htmlspecialchars($question->getCalendrier()->getDebutEcriture()) ?></p>
+        <?php
+        if ($date > $question->getCalendrier()->getDebutEcriture() && $date < $question->getCalendrier()->getFinEcriture()) {
+            echo '<span class="vertical-line-petite" style="background: red"></span>';
+            echo $cercle;
+            echo '<span class="vertical-line-petite" style="background: red"></span>';
+        } else {
+            echo '<span class="vertical-line" style="background: red"></span>';
+        }
+        ?>
+        <p><?= htmlspecialchars($question->getCalendrier()->getFinEcriture()) ?></p>
+        <?php
+        if ($date > $question->getCalendrier()->getFinEcriture() && $date < $question->getCalendrier()->getDebutVote()) {
+            echo '<span class="vertical-line-petite" style="background: " ></span>';
+            echo $cercle;
+            echo '<span class="vertical-line-petite" style="background: "></span>';
+        } else {
+            echo '<span class="vertical-line" style="background: "></span>';
+        }
+        ?>
+        <p><?= htmlspecialchars($question->getCalendrier()->getDebutVote()) ?></p>
+        <?php
+        if ($date > $question->getCalendrier()->getDebutVote() && $date < $question->getCalendrier()->getFinVote()) {
+            echo '<span class="vertical-line-petite" style="background: green"></span>';
+            echo $cercle;
+            echo '<span class="vertical-line-petite" style="background: green"></span>';
+        } else {
+            echo '<span class="vertical-line" style="background: green"></span>';
+        }
+        ?>
+        <p><?= htmlspecialchars($question->getCalendrier()->getFinVote()) ?></p>
+        <?php
+        echo '<span class="vertical-line-petite"></span>';
+        if ($date > $question->getCalendrier()->getFinVote()) {
+            echo $cercle;
+        }
+        ?>
     </div>
 </div>
 
