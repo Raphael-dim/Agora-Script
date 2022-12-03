@@ -1,3 +1,24 @@
+
+<?php
+    if (isset($_GET['selection'])){
+        if($_GET['selection'] == 'ecriture'){
+            echo "<h1>Nos questions en phase d'<strong id ='color-orange'>écriture</strong></h1>";
+        }
+        else if($_GET['selection'] == 'vote'){
+            echo "<h1>Nos questions en phase de <strong id ='color-yellow'>vote</strong></h1>";
+        }
+        else if($_GET['selection'] == 'terminees'){
+            echo "<h1>Nos questions <strong id ='color-green'>terminées</strong></h1>";
+        }
+        else{
+            echo "<h1>Consultez nos <strong id ='color-grey'>questions </strong> et trouvez des réponses</h1>";
+        }
+    }
+    else{
+        echo "<h1>Consultez nos <strong id ='color-grey'>questions </strong> et trouvez des réponses</h1>";
+    }
+?>
+
 <div class="barreHaut">
     <form method="post" action="index.php?controller=question&action=readKeyword">
         <p>
