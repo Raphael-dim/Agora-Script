@@ -92,9 +92,7 @@ class ControllerQuestion
      */
     public static function form(): void
     {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
+        Session::getInstance();
         FormConfig::setArr('SessionQuestion');
         $view = "";
         $step = $_GET['step'] ?? 1;
