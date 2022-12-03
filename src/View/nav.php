@@ -5,9 +5,7 @@
         <li class="grosmenu" ><a href = "index.php?action=create&controller=question">Créer une question</a></li>
         <li class="grosmenu" ><a href = "index.php?action=readAll&controller=question">Liste des questions</a></li>
         <?php
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
+
         if(isset($_SESSION['user'])){
             echo "<li class='grosmenu'><a href = 'index.php?action=read&controller=utilisateur'>".$_SESSION['user']['id']."</a></li>";
         }else{

@@ -59,7 +59,8 @@ main {
     width: 85%;
     margin: auto;
     padding-top: 100px;
-    background: var(--background2);
+
+    background: #2b7a96;
     min-height:100vh;
     height:100%;
     opacity: 0.99;
@@ -89,7 +90,7 @@ main p a {
 
 
 .vote {
-    max-width: 65px;
+    /*max-width: 65px;*/
 }
 
 
@@ -317,7 +318,7 @@ textarea {
     color:black;
 }
 
-.vote {
+#vote {
     padding: 5px;
     margin-left: auto;
     margin-right: auto;
@@ -334,7 +335,7 @@ textarea {
     color: #ffffff;
 }
 
-.vote:hover {
+#vote:hover {
     color: #012134;
     background-color: #f1f4f8;
     border-color: rgba(69, 190, 187, 0.6);
@@ -554,6 +555,39 @@ textarea {
 
 
 
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert-info {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+.alert-warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}
+
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+
+
 /* Titres */
 h1{
     text-align: center;
@@ -597,5 +631,6 @@ h1>strong#color-orange{
     transform: rotate(-2deg);
     -webkit-transform: rotate(-2deg);
 }
+
 
 

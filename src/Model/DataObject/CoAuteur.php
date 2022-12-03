@@ -2,54 +2,20 @@
 
 namespace App\Vote\Model\DataObject;
 
-class CoAuteur extends AbstractDataObject
+class CoAuteur extends Utilisateur
 {
-    private Question $question;
-    private Utilisateur $utilisateur;
+    private Proposition $proposition;
 
-    /**
-     * @param int $id
-     * @param string $titre
-     * @param int $nbSections
-     */
-    public function __construct(Question $question, Utilisateur $utilisateur)
+    public function __construct(Proposition $proposition)
     {
-        $this->question = $question;
-        $this->utilisateur = $utilisateur;
-    }
-
-    /**
-     * @return Question
-     */
-    public function getQuestion(): Question
-    {
-        return $this->question;
-    }
-
-    /**
-     * @return Utilisateur
-     */
-    public function getUtilisateur(): Utilisateur
-    {
-        return $this->utilisateur;
-    }
-
-    public static function estCoAuteur($question, $utilisateur) : bool
-    {
-        $coAuteurs = $question->getCoAuteur();
-        foreach ($coAuteurs as $coAuteur){
-            if ($coAuteur->getUtilisateur()->getIdentifiant() == $utilisateur){
-                return true;
-            }
-        }
-        return false;
+        $this->$proposition = $proposition;
     }
 
     public function formatTableau(): array
     {
         return array(
-            "idquestionTag" => $this->question->getId(),
-            "idutilisateurTag" => $this->utilisateur->getIdentifiant(),
+            "idproposition" => $this->proposition->getId(),
+            "idutilisateurTag" => $this->getIdentifiant(),
         );
     }
 }
