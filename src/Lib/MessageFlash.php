@@ -31,9 +31,9 @@ class MessageFlash
 // Attention : la lecture doit détruire le message
     public static function lireMessages(string $type): array
     {
-        $messages = Session::getInstance()->lire($type);
-        Session::getInstance()->supprimerMsgFlash();
-        return $messages;
+        $message = $_SESSION[self::$cleFlash][$type];
+        Session::getInstance()->supprimerMsgFlash($type);
+         return $message;
     }
 
     public static function lireTousMessages(): array

@@ -25,12 +25,11 @@
     if (!Session::getInstance()->contient('_messagesFlash')) {
         new MessageFlash();
     }
-    $i = 0;
-    foreach (MessageFlash::lireTousMessages() as $messages) {
+    foreach (MessageFlash::lireTousMessages() as $cle => $messagess) {
+        $messages = MessageFlash::lireMessages($cle);
         foreach ($messages as $message) {
-            echo '<div class="alert alert-' . $i . '">' . $message . '</div>';
+            echo '<div class="alert alert-' . $cle . '">' . $message . '</div>';
         }
-        $i++;
     }
     require __DIR__ . "/{$cheminVueBody}";
     ?>
