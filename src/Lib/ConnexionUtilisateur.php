@@ -14,8 +14,8 @@ class ConnexionUtilisateur
 
     public static function estConnecte(): bool
     {
-// À compléter
-    }
+    }// À compléter
+
 
     public static function deconnecter(): void
     {
