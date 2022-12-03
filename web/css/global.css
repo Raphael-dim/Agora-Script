@@ -634,3 +634,19 @@ h1>strong#color-orange{
 
 
 
+
+
+.detail_question div {
+    vertical-align: middle;
+    display: inline-block;
+}
+.infos{
+    width: 60%;
+}
+
+.vertical-line{
+    margin-left: 10%;
+    border-left: 2px solid #000;
+    display: inline-block;
+    height: 100px;
+}
