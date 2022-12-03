@@ -4,6 +4,7 @@ require_once '../src/Lib/Psr4AutoloaderClass.php';
 
 use App\Vote\Controller\ControllerAccueil;
 use App\Vote\Model\DatabaseConnection as Model;
+use App\Vote\Model\HTTP\Session;
 
 /*
  * Chargement du namespace
@@ -15,7 +16,7 @@ $loader->register();
 
 $pagetitle = "index";
 
-
+Session::getInstance();
 
 /*
  * On verifie que le controlleur est défini

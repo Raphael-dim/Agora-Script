@@ -305,7 +305,7 @@ textarea {
 #ecriture.phases>a{
     background : #FFC55C;
 }
-#vote.phases>a{
+li#vote.phases>a{
     background : #FDE541;
 }
 #termine.phases>a{
@@ -318,7 +318,7 @@ textarea {
     color:black;
 }
 
-#vote {
+a#vote {
     padding: 5px;
     margin-left: auto;
     margin-right: auto;
@@ -335,7 +335,7 @@ textarea {
     color: #ffffff;
 }
 
-#vote:hover {
+a#vote:hover {
     color: #012134;
     background-color: #f1f4f8;
     border-color: rgba(69, 190, 187, 0.6);
