@@ -11,4 +11,10 @@ class Controller
         extract($parametres); // Crée des variables à partir du tableau $parametres
         require "../src/View/$cheminVue"; // Charge la vue
     }
+
+    public static function redirect($url)
+    {
+        header("Location: $url");
+        exit();
+    }
 }

@@ -1,6 +1,9 @@
 <?php
 
-namespace App\Covoiturage\Lib;
+namespace App\Vote\Lib;
+
+use App\Vote\Model\HTTP\Session;
+use http\Message;
 
 class MessageFlash
 {
@@ -9,25 +12,33 @@ class MessageFlash
     private static string $cleFlash = "_messagesFlash";
 
 // $type parmi "success", "info", "warning" ou "danger"
+    public function __construct()
+    {
+        Session::getInstance()->enregistrer(self::$cleFlash, array('success' => array(),
+            'info' => array(), 'warning' => array(), 'danger' => array()));
+    }
+
     public static function ajouter(string $type, string $message): void
     {
-// À compléter
+        Session::getInstance()->enregistrerMsgFlash($type, $message);
     }
 
     public static function contientMessage(string $type): bool
     {
-// À compléter
+        return count(Session::getInstance()->lire($type)) != 0;
     }
 
 // Attention : la lecture doit détruire le message
     public static function lireMessages(string $type): array
     {
-// À compléter
+        $messages = Session::getInstance()->lire($type);
+        Session::getInstance()->supprimerMsgFlash();
+        return $messages;
     }
 
     public static function lireTousMessages(): array
     {
-// À compléter
+        return Session::getInstance()->lire(self::$cleFlash);
     }
 
 }

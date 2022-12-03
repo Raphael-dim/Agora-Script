@@ -31,7 +31,8 @@ abstract class AbstractRepository
         }
         $sql = substr($sql, 0, -2);
         $sql = $sql . ")";
-        if (get_class($object) == Question::class || get_class($object) == Proposition::class || get_class($object) == Section::class || get_class($object) == Calendrier::class) {
+        if (get_class($object) == Question::class || get_class($object) == Proposition::class
+            || get_class($object) == Section::class || get_class($object) == Calendrier::class) {
             $sql = $sql . " RETURNING " . $this->getNomClePrimaire();
         }
         $sql = $sql . ";";

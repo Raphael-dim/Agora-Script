@@ -14,9 +14,6 @@ class Responsable extends Utilisateur
         $this->question = $question;
     }
 
-    /**
-     * @return Question
-     */
     public function getQuestion(): Question
     {
         return $this->question;

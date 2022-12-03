@@ -8,10 +8,11 @@ class CoAuteurRepository extends AbstractRepository
 {
     protected function construire(array $coAuteurTableau): CoAuteur
     {
-        return new CoAuteur(
-            (new QuestionRepository())->select($coAuteurTableau['idquestion']),
-            (new UtilisateurRepository())->select($coAuteurTableau['idutilisateur'])
+        $coAuteur =  new CoAuteur(
+            (new PropositionRepository())->select($coAuteurTableau['idproposition']),
         );
+        $coAuteur->setIdentifiant($coAuteurTableau['idauteur']);
+        return $coAuteur;
     }
 
     protected function getNomTable(): string
@@ -26,7 +27,7 @@ class CoAuteurRepository extends AbstractRepository
 
     protected function getNomsColonnes(): array
     {
-        return array("idutilisateur", "idquestion");
+        return array("idauteur", "idproposition");
 
     }
 }
