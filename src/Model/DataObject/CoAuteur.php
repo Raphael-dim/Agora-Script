@@ -6,16 +6,18 @@ class CoAuteur extends AbstractDataObject
 {
     private Question $question;
     private Utilisateur $utilisateur;
+    private Utilisateur $responsable;
 
     /**
      * @param int $id
      * @param string $titre
      * @param int $nbSections
      */
-    public function __construct(Question $question, Utilisateur $utilisateur)
+    public function __construct(Question $question, Utilisateur $utilisateur, Utilisateur $responsable)
     {
         $this->question = $question;
         $this->utilisateur = $utilisateur;
+        $this->responsable = $responsable;
     }
 
     /**
@@ -34,11 +36,19 @@ class CoAuteur extends AbstractDataObject
         return $this->utilisateur;
     }
 
-    public static function estCoAuteur($question, $utilisateur) : bool
+    /**
+     * @return Responsable
+     */
+    public function getResponsable(): Utilisateur
+    {
+        return $this->responsable;
+    }
+
+    public static function estCoAuteur($question, $utilisateur, $responsable) : bool
     {
         $coAuteurs = $question->getCoAuteur();
         foreach ($coAuteurs as $coAuteur){
-            if ($coAuteur->getUtilisateur()->getIdentifiant() == $utilisateur){
+            if ($coAuteur->getUtilisateur()->getIdentifiant() == $utilisateur && $coAuteur->getResponsable()->getIdentifiant() == $responsable){
                 return true;
             }
         }

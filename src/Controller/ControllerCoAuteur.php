@@ -52,11 +52,11 @@ class ControllerCoAuteur
         FormConfig::setArr('SessionCoAuteur');
         $questions = (new QuestionRepository())->selectAll();
         $coAuteurs = $_SESSION[FormConfig::$arr]['co-auteur'];
-        //var_dump($_SESSION[FormConfig::$arr]);
+        var_dump($_SESSION);
 
         foreach ($coAuteurs as $coAuteur) {
             if(is_null((new CoAuteurRepository())->select($coAuteur))){
-                $utilisateur = new CoAuteur((new QuestionRepository())->select($_GET["idQuestion"]),(new UtilisateurRepository())->select($coAuteur));
+                $utilisateur = new CoAuteur((new QuestionRepository())->select($_GET["idQuestion"]),(new UtilisateurRepository())->select($coAuteur),);
                 $responsableBD = (new CoAuteurRepository())->sauvegarder($utilisateur);
             }else{
                 $utilisateur =(new CoAuteurRepository())->delete($coAuteur);

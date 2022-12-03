@@ -89,4 +89,37 @@ class ControllerProposition
             "cheminVueBody" => "Proposition/created.php",
             "questions" => $questions]);
     }
+
+    public static function update()
+    {
+        session_start();
+        $propositionSections = (new PropositionSectionRepository())->selectWhere($_GET['idProposition'], '*', 'idproposition');
+        $proposition = (new PropositionRepository())->select($_GET['idProposition']);
+        Controller::afficheVue('view.php', ["pagetitle" => "Modifier la proposition",
+            "cheminVueBody" => "Proposition/update.php",
+            "propositionSections" => $propositionSections, "proposition" => $proposition]);
+    }
+
+    public static function updated()
+    {
+        session_start();
+        $responsable = (new ResponsableRepository())->select($_SESSION['user']['id']);
+        $propositionSections = (new PropositionSectionRepository())->selectWhere($_GET['idProposition'], '*', 'idproposition');
+        $proposition = (new PropositionRepository())->select($_GET["idProposition"]);
+        $question = $proposition->getQuestion();
+        //var_dump($proposition->getQuestion());
+        $sections = $question->getSections();
+        //var_dump($question->getSections());
+        (new PropositionSectionRepository())->delete($_GET["idProposition"]);
+        foreach ($sections as $section) {
+            $propositionSection = new PropositionSection((new PropositionRepository())->select($_GET["idProposition"]), $section, $_POST['contenu' . $section->getId()]);
+            echo "tessst";
+            //(new PropositionSectionRepository())->delete($_GET["idProposition"]);
+            (new PropositionSectionRepository())->sauvegarder($propositionSection);
+        }
+        Controller::afficheVue('view.php', ["pagetitle" => "Accueil",
+            "cheminVueBody" => "Proposition/updated.php",
+            "responsable" => $responsable,
+            "question" => $question]);
+    }
 }
