@@ -19,14 +19,12 @@ class Question extends AbstractDataObject
     private Calendrier $calendrier;
 
 
-    public function __construct(string $titre, string $description, string $creation,
+    public function __construct(string     $titre, string $description, string $creation,
                                 Calendrier $calendrier, Utilisateur $organisateur)
     {
         $this->titre = $titre;
         $this->description = $description;
-
         $this->creation = $creation;
-
         $this->calendrier = $calendrier;
         $this->organisateur = $organisateur;
     }
@@ -153,7 +151,7 @@ class Question extends AbstractDataObject
         return (new VotantRepository())->selectWhere($this->id, '*', "idQuestion", "Votants");
     }
 
-    public function getPropositions() :array
+    public function getPropositions(): array
     {
         return (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion", 'Propositions');
     }
