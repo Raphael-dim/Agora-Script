@@ -1,30 +1,31 @@
 <div class="barreHaut">
     <form method="post" action="index.php?controller=question&action=readKeyword">
-            <p>
-                <label for="motclef"></label><input type="text" placeholder="" name="keyword" id="motclef" required/>
-                <input type="image" alt = "Submit" src="../web/images/search.png" value="Envoyer" class = "search"/>
-            </p>
+        <p>
+            <label for="motclef"></label><input type="text" placeholder="" name="keyword" id="motclef" required/>
+            <input type="image" alt="Submit" src="../web/images/search.png" value="Envoyer" class="search"/>
+        </p>
     </form>
     <a class="bouton" href="index.php?action=create&controller=question">Créer votre question</a>
 </div>
 
 <div class="selection">
-    <input type="checkbox" name="filtres"/> <label for="filtres">filtres</label>
     <ul>
-        <li class="phases">
+        <li class="phases" id  ="all">
             <a href="index.php?action=readAll&selection=toutes&controller=question">Toutes</a>
         </li>
-        <li class="phases">
+        <li class="phases" id  ="ecriture">
             <a href="index.php?action=readAll&selection=ecriture&controller=question">En phase d'écriture</a>
         </li>
-        <li class="phases">
+        <li class="phases" id  ="vote">
             <a href="index.php?action=readAll&selection=vote&controller=question">En phase de vote</a>
         </li>
-        <li class="phases">
+        <li class="phases" id  ="termine">
             <a href="index.php?action=readAll&selection=terminees&controller=question">Terminées</a>
         </li>
     </ul>
 </div>
+
+
 <ul class="questions">
     <?php
 
@@ -37,21 +38,39 @@
         $idQuestionURL = rawurlencode($question->getId());
         $organisateur = htmlspecialchars($question->getOrganisateur()->getIdentifiant());
         $titreHTML = htmlspecialchars($question->getTitre());
-        echo '<p class = "listes">
-            <a href= index.php?action=read&controller=question&idQuestion=' .
-            $idQuestionURL . '> ' . $titreHTML . ' : </a>
-            <a href="">par ' . $organisateur . ' </a >';
+
+
+        if ($date < $calendrier->getDebutEcriture()) {
+            echo '<li class="listes" id = "status_cree">';
+        }
+        else if ($date <$calendrier->getFinEcriture() && $date>$calendrier->getDebutEcriture()){
+            echo '<li class="listes" id = "status_ecriture">';
+        }
+        else if ($date <$calendrier->getFinVote() && $date>$calendrier->getDebutVote()){
+            echo '<li class="listes" id = "status_vote">';
+        }
+        else if ($date> $calendrier->getFinVote()){
+            echo '<li class="listes" id = "status_termine">';
+        }
+        else{
+            echo '<li class="listes" id = "status_attente">';
+        }
+
+        echo '
+            <a class=titre href= index.php?action=read&controller=question&idQuestion=' .
+            $idQuestionURL . '> ' . $titreHTML . ' </a>
+            <a href="" id = "auteur">par ' . $organisateur . ' </a >';
+        echo '<p id="description">'.$question->getDescription().'</p>';
         if ($calendrier->getDebutEcriture() > $date) {
             if (isset($_SESSION['user']) && $_SESSION['user']['id'] == $organisateur) {
-                echo '<a href = index.php?action=update&controller=question&idQuestion=' .
-                    $idQuestionURL . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >
-
-            <a href = index.php?action=delete&controller=question&idQuestion=' .
-                    $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a >';
+                echo '<div id="action" "><a href = index.php?action=update&controller=question&idQuestion=' .
+                        $idQuestionURL . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >
+                     <a href = index.php?action=delete&controller=question&idQuestion=' .
+                        $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a></div>';
             }
-            echo ' | Début de la phase d\'écriture : ' . $calendrier->getDebutEcriture();
+            echo '<p>Début de la phase d\'écriture : ' . $calendrier->getDebutEcriture() . '</p>';
         } else if ($date < $calendrier->getDebutVote()) {
-            echo ' | Début de la phase de vote : ' . $calendrier->getDebutVote();
+            echo '<p>Début de la phase de vote : ' . $calendrier->getDebutVote() . '</p>';
 
         }
 
@@ -65,10 +84,9 @@
             echo '<a href = index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '>Créer une proposition</a>';
 
 
-
         }
 
-        echo '</p>';
+        echo '</li>';
 
     }
     ?>
