@@ -2,6 +2,7 @@
     <?php
 
     use App\Vote\Model\DataObject\CoAuteur;
+    use App\Vote\Model\DataObject\Responsable;
     use App\Vote\Model\DataObject\Votant;
 
     $i = 1;
@@ -26,10 +27,10 @@
             echo '<a class="vote" href= index.php?action=delete&controller=vote&idproposition=' .
             $idPropositionURL . '>Supprimer le vote</a>';
         }
-        //if(!CoAuteur::estCoAuteur($question, $_SESSION['user']['id'],$proposition->getResponsable()->getIdentifiant())){
+        if(!CoAuteur::estCoAuteur($_SESSION['user']['id'],$proposition->getIdentifiant()) || $proposition->getResponsable()->getIdentifiant() == $_SESSION['user']['id']){
             echo '<a href = index.php?action=update&controller=proposition&idProposition=' .
                 $proposition->getId() . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >';
-        //}
+        }
         echo 'Nombre de votes : ' . $proposition->getNbVotes();
         echo '</p>';
         $i++;

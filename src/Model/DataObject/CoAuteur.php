@@ -2,30 +2,30 @@
 
 namespace App\Vote\Model\DataObject;
 
+use App\Vote\Model\Repository\CoAuteurRepository;
+
 class CoAuteur extends AbstractDataObject
 {
-    private Question $question;
     private Utilisateur $utilisateur;
-    private Utilisateur $responsable;
+    private Proposition $proposition;
 
     /**
      * @param int $id
      * @param string $titre
      * @param int $nbSections
      */
-    public function __construct(Question $question, Utilisateur $utilisateur, Utilisateur $responsable)
+    public function __construct(Utilisateur $utilisateur, Proposition $proposition)
     {
-        $this->question = $question;
         $this->utilisateur = $utilisateur;
-        $this->responsable = $responsable;
+        $this->proposition = $proposition;
     }
 
     /**
      * @return Question
      */
-    public function getQuestion(): Question
+    public function getProposition(): Proposition
     {
-        return $this->question;
+        return $this->proposition;
     }
 
     /**
@@ -36,19 +36,11 @@ class CoAuteur extends AbstractDataObject
         return $this->utilisateur;
     }
 
-    /**
-     * @return Responsable
-     */
-    public function getResponsable(): Utilisateur
+    public static function estCoAuteur($utilisateur, $proposition) : bool
     {
-        return $this->responsable;
-    }
-
-    public static function estCoAuteur($question, $utilisateur, $responsable) : bool
-    {
-        $coAuteurs = $question->getCoAuteur();
-        foreach ($coAuteurs as $coAuteur){
-            if ($coAuteur->getUtilisateur()->getIdentifiant() == $utilisateur && $coAuteur->getResponsable()->getIdentifiant() == $responsable){
+        $coAuteurs = (new CoAuteurRepository())->select($utilisateur);
+        foreach($coAuteurs as $coAuteur){
+            if($coAuteur->getProposition()->getId() == $proposition->getId()){
                 return true;
             }
         }

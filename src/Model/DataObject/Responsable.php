@@ -3,6 +3,7 @@
 namespace App\Vote\Model\DataObject;
 
 use App\Vote\Model\Repository\AbstractRepository;
+use App\Vote\Model\Repository\CoAuteurRepository;
 use App\Vote\Model\Repository\PropositionRepository;
 
 class Responsable extends Utilisateur

@@ -143,11 +143,6 @@ class Question extends AbstractDataObject
         return (new ResponsableRepository())->selectWhere($this->id, '*', "idQuestion", "Responsables");
     }
 
-    public function getCoAuteur(): array
-    {
-        return (new CoAuteurRepository())->selectWhere($this->id, '*', "idQuestion", "CoAuteur");
-    }
-
     public function getVotants(): array
     {
         return (new VotantRepository())->selectWhere($this->id, '*', "idQuestion", "Votants");

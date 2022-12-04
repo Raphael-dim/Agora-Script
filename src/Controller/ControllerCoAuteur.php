@@ -22,10 +22,9 @@ class ControllerCoAuteur
     public static function create()
     {
         FormConfig::startSession();
-        //session_start();
         FormConfig::setArr('SessionCoAuteur');
         //if(!isset($_SESSION[FormConfig::$arr]['co-auteur'])){
-            $tests = (new CoAuteurRepository())->selectWhere($_GET['idQuestion'],'*','idquestion',"CoAuteur");
+            $tests = (new CoAuteurRepository())->selectWhere($_GET['idProposition'],'*','idproposition',"Co-Auteurs");
             if(empty($tests)){
                 $_SESSION[FormConfig::$arr]['co-auteur'] = array();
             }
@@ -55,11 +54,11 @@ class ControllerCoAuteur
         var_dump($_SESSION);
 
         foreach ($coAuteurs as $coAuteur) {
-            if(is_null((new CoAuteurRepository())->select($coAuteur))){
-                $utilisateur = new CoAuteur((new QuestionRepository())->select($_GET["idQuestion"]),(new UtilisateurRepository())->select($coAuteur),);
-                $responsableBD = (new CoAuteurRepository())->sauvegarder($utilisateur);
+            $utilisateur = new CoAuteur((new UtilisateurRepository())->select($coAuteur),(new PropositionRepository())->select($_GET["idProposition"]));
+            if(is_null((new CoAuteurRepository())->selectWhere([$coAuteur,$_GET["idProposition"]],'*',["idutilisateur","idproposition"]))){
+                (new CoAuteurRepository())->sauvegarder($utilisateur);
             }else{
-                $utilisateur =(new CoAuteurRepository())->delete($coAuteur);
+                (new CoAuteurRepository())->delete($utilisateur);
             }
         }
 
