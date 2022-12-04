@@ -4,6 +4,7 @@ namespace App\Vote\Controller;
 
 
 use App\Vote\Config\FormConfig;
+use App\Vote\Lib\MessageFlash;
 use App\Vote\Model\DatabaseConnection as DatabaseConnection;
 use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Question;
@@ -29,7 +30,7 @@ class ControllerQuestion
      */
     public static function create()
     {
-        echo(Session::getInstance()->contient('user'));
+        Session::getInstance();
         if (isset($_SESSION['user']['id'])) {
             FormConfig::setArr('SessionQuestion');
             FormConfig::startSession();
@@ -91,9 +92,7 @@ class ControllerQuestion
      */
     public static function form(): void
     {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
+        Session::getInstance();
         FormConfig::setArr('SessionQuestion');
         $view = "";
         $step = $_GET['step'] ?? 1;
@@ -213,13 +212,12 @@ class ControllerQuestion
 
         $questions = (new QuestionRepository())->selectAll();
 
+        MessageFlash::ajouter('success', 'La question a bien été crée');
         Controller::afficheVue('view.php',
             ["questions" => $questions,
                 "pagetitle" => "Question crée",
-                "cheminVueBody" => "Question/created.php"]);
-
+                "cheminVueBody" => "Question/list.php"]);
         FormConfig::startSession();
-
     }
 
     public static function update(): void

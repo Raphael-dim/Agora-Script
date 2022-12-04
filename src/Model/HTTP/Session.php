@@ -36,6 +36,17 @@ class Session
         $_SESSION[$name] = $value;
     }
 
+    public function enregistrerMsgFlash(string $type, mixed $value): void
+    {
+        $_SESSION['_messagesFlash'][$type][] = $value;
+    }
+
+    public function supprimerMsgFlash($type): void
+    {
+        unset($_SESSION['_messagesFlash'][$type]);
+        $_SESSION['_messagesFlash'][$type] = array();
+    }
+
     public function lire(string $name): mixed
     {
         return $_SESSION[$name];

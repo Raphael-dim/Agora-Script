@@ -4,6 +4,7 @@ namespace App\Vote\Model\DataObject;
 
 
 use Cassandra\Date;
+use DateTime;
 
 class Calendrier extends AbstractDataObject
 {
@@ -29,10 +30,11 @@ class Calendrier extends AbstractDataObject
 
     /**
      * @return string
+     * @throws \Exception
      */
     public function getDebutEcriture(): string
     {
-        return $this->debutEcriture;
+        return (new DateTime($this->debutEcriture))->format('d/m/Y à H:i:s');
     }
 
     /**
@@ -45,10 +47,11 @@ class Calendrier extends AbstractDataObject
 
     /**
      * @return string
+     * @throws \Exception
      */
     public function getFinEcriture(): string
     {
-        return $this->finEcriture;
+        return (new DateTime($this->finEcriture))->format('d/m/Y à H:i:s');
     }
 
     /**
@@ -64,7 +67,7 @@ class Calendrier extends AbstractDataObject
      */
     public function getDebutVote(): string
     {
-        return $this->debutVote;
+        return (new DateTime($this->debutVote))->format('d/m/Y à H:i:s');
     }
 
     /**
@@ -80,7 +83,7 @@ class Calendrier extends AbstractDataObject
      */
     public function getFinVote(): string
     {
-        return $this->finVote;
+        return (new DateTime($this->finVote))->format('d/m/Y à H:i:s');
     }
 
     /**

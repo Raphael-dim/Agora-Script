@@ -3,6 +3,9 @@
 namespace App\Vote\Controller;
 
 use App\Vote\Config\FormConfig;
+use App\Vote\Lib\MessageFlash;
+use App\Vote\Lib\MotDePasse;
+use App\Vote\Model\DataObject\Utilisateur;
 use App\Vote\Model\HTTP\Session;
 use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\QuestionRepository;
@@ -23,23 +26,20 @@ class ControllerUtilisateur
     {
         Controller::afficheVue('view.php',
             ["pagetitle" => "Connexion",
-                "cheminVueBody" => "Utilisateurs/connexion.php"]);
+                "cheminVueBody" => "Utilisateurs/formulaireConnexion.php"]);
     }
 
     public static function disconnected()
     {
-        session_start();
+        Session::getInstance();
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);
         }
         self::connexion();
     }
 
-    public static function connected()
+    public static function connecter()
     {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
         $mdp = $_POST['mdp'];
         $id = $_POST['identifiant'];
         $utilisateur = ((new UtilisateurRepository())->select($id));
@@ -47,15 +47,19 @@ class ControllerUtilisateur
         if (!isset($utilisateur)) {
             Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         } else {
-            $_SESSION['user'] = array();
-            $_SESSION['user']['id'] = $id;
-            ControllerAccueil::home();
+            if (!MotDePasse::verifier($mdp, $utilisateur->getMdpHache())) {
+                MessageFlash::ajouter('warning', 'Mot de passe incorrect');
+                Controller::redirect('index.php?controller=utilisateur&action=connexion');
+            }else{
+                Session::getInstance()->enregistrer('user', array('id' => $utilisateur->getIdentifiant()));
+                ControllerAccueil::home();
+            }
         }
     }
 
     public static function read()
     {
-        session_start();
+        Session::getInstance();
         $utilisateur = ((new UtilisateurRepository))->select($_SESSION['user']['id']);
         $questions = (new QuestionRepository())->selectWhere($_SESSION['user']['id'], '*', 'idorganisateur');
         $propositions = (new PropositionRepository())->selectWhere($_SESSION['user']['id'], '*', 'idresponsable');
@@ -68,7 +72,19 @@ class ControllerUtilisateur
     {
         Controller::afficheVue('view.php',
             ["pagetitle" => "Inscription",
-                "cheminVueBody" => "Utilisateurs/created.php"]);
+                "cheminVueBody" => "Utilisateurs/create.php"]);
+    }
+
+    public static function created()
+    {
+        if ($_POST['mdp'] != $_POST['mdp2']) {
+            ControllerAccueil::erreur();
+        }
+        $utilisateur = Utilisateur::construireDepuisFormulaire($_POST);
+        (new UtilisateurRepository())->sauvegarder($utilisateur);
+        Controller::afficheVue('view.php',
+            ["pagetitle" => "Compte crée",
+                "cheminVueBody" => "Utilisateurs/formulaireConnexion.php"]);
     }
 
     public static function search()

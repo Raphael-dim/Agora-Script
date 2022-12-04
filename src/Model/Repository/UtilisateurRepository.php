@@ -12,7 +12,8 @@ class UtilisateurRepository extends AbstractRepository
         return new Utilisateur(
             $utilisateurTableau["identifiant"],
             $utilisateurTableau["nom"],
-            $utilisateurTableau["prenom"]
+            $utilisateurTableau["prenom"],
+            $utilisateurTableau["mdp"]
         );
     }
 
@@ -28,6 +29,6 @@ class UtilisateurRepository extends AbstractRepository
 
     protected function getNomsColonnes(): array
     {
-        return array("identifiant", "nom", "prenom");
+        return array("identifiant", "nom", "prenom", "mdp");
     }
 }

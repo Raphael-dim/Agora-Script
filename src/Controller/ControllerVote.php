@@ -18,48 +18,62 @@ class ControllerVote
 
     public static function create(): void
     {
-
         Session::getInstance();
-
-
         $proposition = (new PropositionRepository())->select($_GET['idproposition']);
         $question = $proposition->getQuestion();
+        $votant = (new VotantRepository())->select($_SESSION['user']['id']);
+        $vote = new Vote($votant, $proposition);
+        (new VoteRepository())->sauvegarder($vote);
         $propositions = (new PropositionRepository())->selectWhere($question->getId(), '*',
             'idquestion', 'Propositions');
+        Controller::afficheVue('view.php', [
+            "pagetitle" => "Liste des propositions",
+            "cheminVueBody" => "proposition/list.php",
+            "propositions" => $propositions,
+            'question' => $question
+        ]);
+    }
 
-        $votants = $question->getVotants();
-        $sections = $question->getSections();
+    public static function update()
+    {
+        Session::getInstance();
+        $proposition = (new PropositionRepository())->select($_GET['idpropositionAnc']);
+        $question = $proposition->getQuestion();
+        $votant = (new VotantRepository())->select($_SESSION['user']['id']);
+        $vote = (new VoteRepository())->selectWhere(array('clef0' => $proposition->getId(),
+            'clef1' => $votant->getIdentifiant()), '*',
+            array('idproposition', 'idvotant'), 'Votes');
 
+        (new VoteRepository())->delete($vote[0]->getIdvote());
 
-        if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
-            Controller::afficheVue('view.php', ['pagetitle' => 'Vote',
-                "message" => 'Voulez vous vraiment voter pour cette proposition ?',
-                "proposition"=>$proposition,
-                "question" => $question,
-                'proposition' => $proposition,
-                "sections" => $sections,
-                "id" => $_GET['idproposition'],
-                'cheminVueBody' => 'vote/confirmVote.php']);
-        } else if (isset($_POST["cancel"])) {
-            Controller::afficheVue('view.php', ["propositions" => $propositions,
-                "votants" => $votants,
-                'question' => $question,
+        $proposition = (new PropositionRepository())->select($_GET['idproposition']);
+        $vote = new Vote($votant, $proposition);
 
-                "pagetitle" => "Liste des propositions",
-                "cheminVueBody" => "proposition/list.php"]);
-        } else if (isset($_POST["confirm"])) {
-            Session::getInstance();
-            $votant = (new VotantRepository())->select($_SESSION['user']['id']);
-            $vote = new Vote($votant, $proposition);
-            (new VoteRepository())->sauvegarder($vote);
-            Controller::afficheVue('view.php',
-                ['vote' => $vote,
-                    'proposition'=>$proposition,
-                    'pagetitle' => 'Vote confirmé',
-                    'cheminVueBody' => 'Vote/created.php',
-                    'question' => $question,
-                    'proposition' => $proposition,
-                    'sections' => $sections]);
-        }
+        (new VoteRepository())->sauvegarder($vote);
+        $propositions = $question->getPropositions();
+        Controller::afficheVue('view.php', [
+            "pagetitle" => "Liste des propositions",
+            "cheminVueBody" => "proposition/list.php",
+            "propositions" => $propositions,
+            'question' => $question]);
+    }
+
+    public static function delete()
+    {
+        Session::getInstance();
+        $proposition = (new PropositionRepository())->select($_GET['idproposition']);
+        $question = $proposition->getQuestion();
+        $votant = (new VotantRepository())->select($_SESSION['user']['id']);
+        $vote = (new VoteRepository())->selectWhere(array('clef0' => $proposition->getId(),
+            'clef1' => $votant->getIdentifiant()), '*',
+            array('idproposition', 'idvotant'), 'Votes');
+
+        (new VoteRepository())->delete($vote[0]->getIdvote());
+        $propositions = $question->getPropositions();
+        Controller::afficheVue('view.php', [
+            "pagetitle" => "Liste des propositions",
+            "cheminVueBody" => "proposition/list.php",
+            "propositions" => $propositions,
+            'question' => $question]);
     }
 }
