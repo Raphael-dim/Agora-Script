@@ -6,7 +6,7 @@
         <p> <?= htmlspecialchars($question->getDescription()) ?></p>
 
 
-        <div>
+        <div class="responsables">
             <h2>Responsables : </h2>
             <?php
             if (is_array($responsables)) {
@@ -33,6 +33,7 @@
             ?>
         </div>
 
+
         <h2>Sections : </h2>
         <?php
         $i = 1;
@@ -52,10 +53,6 @@
     <div class="calendrier">
         <h2>Calendrier : </h2>
 
-        <div class="légende">
-            <p style="background: red; color: white">Phase d'écriture des propositions</p>
-            <p style="background: green; color: white">Phase de vote</p>
-        </div>
         <?php
         $date = date("d/m/Y à H:i:s");
         $cercle = '<div id="cercle"></div>';
@@ -67,17 +64,21 @@
             echo $cercle;
         }
         ?>
-        <p><?= htmlspecialchars($question->getCalendrier()->getDebutEcriture()) ?></p>
+        <p style="background: #CE16169B; color: white">Début d'écriture des propositions : <br>
+            <?= htmlspecialchars($question->getCalendrier()->getDebutEcriture()) ?></p>
         <?php
         if ($date > $question->getCalendrier()->getDebutEcriture() && $date < $question->getCalendrier()->getFinEcriture()) {
-            echo '<span class="vertical-line-petite" style="background: red"></span>';
+            echo '<span class="vertical-line-petite" style="background: rgba(206,22,22,0.61)"></span>';
             echo $cercle;
-            echo '<span class="vertical-line-petite" style="background: red"></span>';
+            ?>
+
+            <?php
+            echo '<span class="vertical-line-petite" style="background: #CE16169B"></span>';
         } else {
-            echo '<span class="vertical-line" style="background: red"></span>';
-        }
-        ?>
-        <p><?= htmlspecialchars($question->getCalendrier()->getFinEcriture()) ?></p>
+            echo '<span class="vertical-line" style="background: #CE16169B"></span>';
+        } ?>
+        <p style="background: #CE16169B; color: white">Fin d'écriture des propositions : <br>
+            <?= htmlspecialchars($question->getCalendrier()->getFinEcriture()) ?></p>
         <?php
         if ($date > $question->getCalendrier()->getFinEcriture() && $date < $question->getCalendrier()->getDebutVote()) {
             echo '<span class="vertical-line-petite" style="background: " ></span>';
@@ -87,17 +88,18 @@
             echo '<span class="vertical-line" style="background: "></span>';
         }
         ?>
-        <p><?= htmlspecialchars($question->getCalendrier()->getDebutVote()) ?></p>
+        <p style="background : rgba(65,112,56,0.76); color: white">Début des votes : <br>
+            <?= htmlspecialchars($question->getCalendrier()->getDebutVote()) ?></p>
         <?php
         if ($date > $question->getCalendrier()->getDebutVote() && $date < $question->getCalendrier()->getFinVote()) {
-            echo '<span class="vertical-line-petite" style="background: green"></span>';
+            echo '<span class="vertical-line-petite" style="background: rgba(65,112,56,0.76);"></span>';
             echo $cercle;
-            echo '<span class="vertical-line-petite" style="background: green"></span>';
+            echo '<span class="vertical-line-petite" style="background: rgba(65,112,56,0.76);"></span>';
         } else {
-            echo '<span class="vertical-line" style="background: green"></span>';
-        }
-        ?>
-        <p><?= htmlspecialchars($question->getCalendrier()->getFinVote()) ?></p>
+            echo '<span class="vertical-line" style="background: rgba(65,112,56,0.76);"></span>';
+        } ?>
+        <p style="background: rgba(65,112,56,0.76); color: white">Fin des votes : <br>
+            <?= htmlspecialchars($question->getCalendrier()->getFinVote()) ?></p>
         <?php
         echo '<span class="vertical-line-petite"></span>';
         if ($date > $question->getCalendrier()->getFinVote()) {

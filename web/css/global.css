@@ -70,7 +70,7 @@ main {
 
 
 main p {
-    border-radius: 15px;
+    border-radius: 10px;
     background: #dff5f4;
     padding: 10px;
     margin: 7px;
@@ -646,6 +646,11 @@ h1 > strong#color-orange {
     display: inline-block;
 }
 
+div p {
+    width: auto;
+}
+
+
 .infos {
     width: 60%;
 }
@@ -656,30 +661,27 @@ h1 > strong#color-orange {
 }
 
 .vertical-line {
-    border-left: 2px solid #000;
     display: inline-block;
     width: 7px;
     height: 100px;
 }
 
 .vertical-line-petite {
-    border-left: 2px solid #000;
-    display: inline-block;
+    display: flex;
+    margin-left: 50%;
     height: 45px;
     width: 7px;
 }
 
 #cercle {
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
+    margin-left: 7px;
     width: 30px;
     height: 30px;
     border-radius: 20px;
     background: #ffffff;
 }
 
-.légende{
-    display: inline-block;
 
+.responsables {
+    width: 100%;
 }
