@@ -3,16 +3,13 @@
     <a href='index.php?action=disconnected&controller=utilisateur'>
         <img class="sortie" src="..\web\images\logo_sortie.png" alt="Déconnexion"></a>
 </div>
-<ul>
-    <li>
-        <p><a href="">Modifier le mot de passe</a></p>
-    </li>
-    <li>
-        <p><a href="">Modifier le nom d'utilisateur</a></p>
-    </li>
-</ul>
+<div style="margin-bottom: 60px">
+    <a class="lien"
+       href="index.php?controller=utilisateur&action=update&idUtilisateur=<?= $utilisateur->getIdentifiant() ?>">
+        Modifier les informations</a>
+</div>
 <h2>Mes questions : </h2>
-<ul class="listes_sans_puces">
+<ul class=" listes_sans_puces">
     <?php foreach ($questions as $question) {
         echo '<li><p><a href = index.php?controller=question&action=read&idQuestion=' . $question->getId() . '>
     ' . $question->getTitre() . '</a></p></li>';

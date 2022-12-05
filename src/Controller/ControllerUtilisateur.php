@@ -51,7 +51,7 @@ class ControllerUtilisateur
             if (!MotDePasse::verifier($mdp, $utilisateur->getMdpHache())) {
                 MessageFlash::ajouter('warning', 'Mot de passe incorrect');
                 Controller::redirect('index.php?controller=utilisateur&action=connexion');
-            }else{
+            } else {
                 Session::getInstance()->enregistrer('user', array('id' => $utilisateur->getIdentifiant()));
                 ControllerAccueil::home();
             }
@@ -79,13 +79,15 @@ class ControllerUtilisateur
     public static function created()
     {
         if ($_POST['mdp'] != $_POST['mdp2']) {
-            ControllerAccueil::erreur();
+            MessageFlash::ajouter('warning', 'Les mots de passes sont différents');
+            Controller::redirect('index.php?controller=utilisateur&action=create');
+        } else {
+            $utilisateur = Utilisateur::construireDepuisFormulaire($_POST);
+            (new UtilisateurRepository())->sauvegarder($utilisateur);
+            Controller::afficheVue('view.php',
+                ["pagetitle" => "Compte crée",
+                    "cheminVueBody" => "Utilisateurs/formulaireConnexion.php"]);
         }
-        $utilisateur = Utilisateur::construireDepuisFormulaire($_POST);
-        (new UtilisateurRepository())->sauvegarder($utilisateur);
-        Controller::afficheVue('view.php',
-            ["pagetitle" => "Compte crée",
-                "cheminVueBody" => "Utilisateurs/formulaireConnexion.php"]);
     }
 
     public static function search()
@@ -117,5 +119,41 @@ class ControllerUtilisateur
                 "cheminVueBody" => "Utilisateurs/step-4.php"]);
     }
 
+    public static function update()
+    {
+        $utilisateur = (new UtilisateurRepository())->select($_GET['idUtilisateur']);
+        Controller::afficheVue('view.php',
+            ["utilisateur" => $utilisateur,
+                "pagetitle" => "Modifier les informations",
+                "cheminVueBody" => "Utilisateurs/update.php"]
+        );
+    }
 
+    public static function updated()
+    {
+        $utilisateur = (new UtilisateurRepository())->select($_POST['identifiant']);
+        if (!MotDePasse::verifier($_POST['ancienMDP'], $utilisateur->getMdpHache())) {
+            MessageFlash::ajouter('warning', 'L\'ancien mot de passe n\'est pas valide');
+            Controller::redirect('index.php?controller=utilisateur&action=update&idUtilisateur=' . $utilisateur->getIdentifiant());
+        }
+        if ($_POST['mdp'] != $_POST['mdp2']) {
+            MessageFlash::ajouter('warning', 'Les mots de passes sont différents');
+            Controller::redirect('index.php?controller=utilisateur&action=update&idUtilisateur=' . $utilisateur->getIdentifiant());
+        } else {
+            $utilisateur->setNom($_POST['nom']);
+            $utilisateur->setPrenom($_POST['prenom']);
+            $utilisateur->setMdpHache($_POST['mdp']);
+            (new UtilisateurRepository())->update($utilisateur);
+            $questions = (new QuestionRepository())->selectWhere($utilisateur->getIdentifiant(), '*', 'idorganisateur');
+            $propositions = (new PropositionRepository())->selectWhere($utilisateur->getIdentifiant(), '*', 'idresponsable');
+            MessageFlash::ajouter('success', 'Vos informations ont été mises à jour');
+            Controller::afficheVue('view.php',
+                ["pagetitle" => "Compte mis à jour",
+                    "utilisateur" => $utilisateur,
+                    "questions" => $questions,
+                    "propositions" => $propositions,
+                    "cheminVueBody" => "Utilisateurs/detail.php"]);
+        }
+
+    }
 }

@@ -10,7 +10,7 @@
             <input class="InputAddOn-field" type="password" value="" placeholder="" name="mdp" id="mdp_id" required>
         </p>
         <p>
-            <input type="submit" value="Connexion">
+            <input type="submit" value="Connexion" class="nav">
         </p>
         <p>
             <a href="index.php?controller=utilisateur&action=create">Pas encore de compte ?</a>

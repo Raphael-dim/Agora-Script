@@ -687,5 +687,19 @@ div p {
 
 .profil {
     filter: invert(0.9);
-    max-width: 40px;
+    max-width: 37px;
+}
+
+
+.lien {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #dff5f4;
+    text-decoration: underline;
+}
+
+.lien:hover {
+    border: solid 1px white ;
+    background-color: #1a3341;
+    color: white;
 }
