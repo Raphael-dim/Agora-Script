@@ -48,7 +48,7 @@ if (isset($_GET['selection'])) {
     use App\Vote\Model\DataObject\CoAuteur;
     use App\Vote\Model\DataObject\Responsable;
 
-    $date = date("Y-m-d H:i:s");
+    $date = date('d/m/Y à H:i:s');
     foreach ($questions as $question) {
         $calendrier = $question->getCalendrier();
         $idQuestionURL = rawurlencode($question->getId());
@@ -90,6 +90,7 @@ if (isset($_GET['selection'])) {
         if ($date > $calendrier->getDebutEcriture() && $date < $calendrier->getFinVote()) {
             echo '<a href = index.php?action=readAll&controller=proposition&idQuestion=' . $idQuestionURL . ' >Liste des propositions</a>';
         }
+
         if ($calendrier->getDebutEcriture() <= $date && $calendrier->getFinEcriture() >= $date &&
             isset($_SESSION['user']) && Responsable::estResponsable($question, $_SESSION['user']['id'])
             && !Responsable::aCreeProposition($question, $_SESSION['user']['id'])) {

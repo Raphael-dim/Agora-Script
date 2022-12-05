@@ -11,23 +11,23 @@ class CoAuteurRepository extends AbstractRepository
     protected function construire(array $coAuteurTableau): CoAuteur
     {
         return new CoAuteur(
-            (new UtilisateurRepository())->select($coAuteurTableau['idutilisateur']),
+            (new UtilisateurRepository())->select($coAuteurTableau['idauteur']),
             (new PropositionRepository())->select($coAuteurTableau['idproposition']),
         );
     }
 
     protected function getNomTable(): string
     {
-        return "Co-Auteurs";
+        return "Coauteurs";
     }
 
     protected function getNomClePrimaire(): string
     {
-        return "idutilisateur";
+        return "idauteur";
     }
 
     protected function getNomsColonnes(): array
     {
-        return array("idutilisateur", "idproposition");
+        return array("idauteur", "idproposition");
     }
 }

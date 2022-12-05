@@ -39,6 +39,7 @@ class CoAuteur extends AbstractDataObject
     public static function estCoAuteur($utilisateur, $proposition) : bool
     {
         $coAuteurs = (new CoAuteurRepository())->select($utilisateur);
+        if(!$coAuteurs) return false;
         foreach($coAuteurs as $coAuteur){
             if($coAuteur->getProposition()->getId() == $proposition->getId()){
                 return true;
@@ -50,8 +51,8 @@ class CoAuteur extends AbstractDataObject
     public function formatTableau(): array
     {
         return array(
-            "idquestionTag" => $this->question->getId(),
-            "idutilisateurTag" => $this->utilisateur->getIdentifiant(),
+            "idauteurTag" => $this->utilisateur->getIdentifiant(),
+            "idpropositionTag" => $this->proposition->getId(),
         );
     }
 }
