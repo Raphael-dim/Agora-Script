@@ -1,5 +1,5 @@
 <div class="barre_utilisateur">
-    <h1><?= $Utilisateur->getNom() ?></h1>
+    <h1>Profil de <?= $utilisateur->getPrenom() ?> <?= $utilisateur->getNom() ?></h1>
     <a href='index.php?action=disconnected&controller=utilisateur'>
         <img class="sortie" src="..\web\images\logo_sortie.png" alt="Déconnexion"></a>
 </div>

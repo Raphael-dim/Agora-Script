@@ -45,7 +45,8 @@ class ControllerUtilisateur
         $utilisateur = ((new UtilisateurRepository())->select($id));
 
         if (!isset($utilisateur)) {
-            Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+            MessageFlash::ajouter('warning', 'Utilisateur introuvable');
+            Controller::redirect('index.php?controller=utilisateur&action=connexion');
         } else {
             if (!MotDePasse::verifier($mdp, $utilisateur->getMdpHache())) {
                 MessageFlash::ajouter('warning', 'Mot de passe incorrect');
@@ -64,7 +65,7 @@ class ControllerUtilisateur
         $questions = (new QuestionRepository())->selectWhere($_SESSION['user']['id'], '*', 'idorganisateur');
         $propositions = (new PropositionRepository())->selectWhere($_SESSION['user']['id'], '*', 'idresponsable');
         Controller::afficheVue('view.php', ['pagetitle' => "Profil",
-            "cheminVueBody" => "Utilisateurs/detail.php", "Utilisateur" => $utilisateur,
+            "cheminVueBody" => "Utilisateurs/detail.php", "utilisateur" => $utilisateur,
             "questions" => $questions, "propositions" => $propositions]);
     }
 

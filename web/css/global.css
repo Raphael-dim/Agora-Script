@@ -681,7 +681,11 @@ div p {
     background: #ffffff;
 }
 
-
 .responsables {
     width: 100%;
+}
+
+.profil {
+    filter: invert(0.9);
+    max-width: 40px;
 }
