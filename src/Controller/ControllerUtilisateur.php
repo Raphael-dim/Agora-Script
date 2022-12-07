@@ -32,8 +32,7 @@ class ControllerUtilisateur
     public static function disconnected()
     {
         $user = Session::getInstance()->lire('user');
-        $utilisateur = (new UtilisateurRepository())->select($_GET['idUtilisateur']);
-        if (is_null($user) || $user['id'] != $utilisateur->getIdentifiant()) {
+        if (is_null($user)) {
             MessageFlash::ajouter("warning", "Vous pouvez pas vous déconnecter sans être connecté");
             Controller::redirect("index.php?action=connexion&controller=utilisateur");
         }
@@ -94,7 +93,7 @@ class ControllerUtilisateur
             $utilisateur = Utilisateur::construireDepuisFormulaire($_POST);
             (new UtilisateurRepository())->sauvegarder($utilisateur);
             MessageFlash::ajouter("success", "Le compte a bien crée");
-            Controller::redirect("index.php?controller=utilisateur&action=formulaireConnexion");
+            Controller::redirect("index.php?controller=utilisateur&action=connexion");
         }
     }
 

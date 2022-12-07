@@ -18,13 +18,13 @@
 <main>
     <?php
 
-    use App\Vote\Controller\Controller;
     use App\Vote\Lib\MessageFlash;
     use App\Vote\Model\HTTP\Session;
 
     if (!Session::getInstance()->contient('_messagesFlash')) {
         new MessageFlash();
     }
+    var_dump(MessageFlash::lireTousMessages());
     foreach (MessageFlash::lireTousMessages() as $cle => $messagess) {
         $messages = MessageFlash::lireMessages($cle);
         foreach ($messages as $message) {
