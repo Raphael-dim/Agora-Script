@@ -91,6 +91,7 @@ class ControllerQuestion
     {
         Session::getInstance();
         FormConfig::setArr('SessionQuestion');
+        var_dump($_SESSION['SessionQuestion']);
         $view = "";
         $step = $_GET['step'] ?? 1;
         $params = array();
@@ -230,7 +231,7 @@ class ControllerQuestion
             ControllerAccueil::erreur();
         } else {
             FormConfig::setArr('SessionQuestion');
-            FormConfig::startSession();
+            FormConfig::initialiserSessions($question);
             self::afficheVue('view.php', ["pagetitle" => "Modifier une question",
                 "cheminVueBody" => "question/create/step-1.php",
                 "idQuestion" => $_GET['idQuestion']]);
