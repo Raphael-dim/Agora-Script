@@ -91,7 +91,6 @@ class ControllerQuestion
     {
         Session::getInstance();
         FormConfig::setArr('SessionQuestion');
-        var_dump($_SESSION['SessionQuestion']);
         $view = "";
         $step = $_GET['step'] ?? 1;
         $params = array();
