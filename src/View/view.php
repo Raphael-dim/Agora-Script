@@ -24,7 +24,6 @@
     if (!Session::getInstance()->contient('_messagesFlash')) {
         new MessageFlash();
     }
-    var_dump(MessageFlash::lireTousMessages());
     foreach (MessageFlash::lireTousMessages() as $cle => $messagess) {
         $messages = MessageFlash::lireMessages($cle);
         foreach ($messages as $message) {

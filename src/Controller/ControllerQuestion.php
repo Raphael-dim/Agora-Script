@@ -5,15 +5,12 @@ namespace App\Vote\Controller;
 
 use App\Vote\Config\FormConfig;
 use App\Vote\Lib\MessageFlash;
-use App\Vote\Model\DatabaseConnection as DatabaseConnection;
 use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Question;
 use App\Vote\Model\DataObject\Responsable;
 use App\Vote\Model\DataObject\Section;
-use App\Vote\Model\DataObject\Utilisateur;
 use App\Vote\Model\DataObject\Votant;
 use App\Vote\Model\HTTP\Session;
-use App\Vote\Model\Repository\AuteurRepository;
 use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\ResponsableRepository;
@@ -28,7 +25,7 @@ class ControllerQuestion
      * Réinitialise les variables de session et
      * lance le formulaire de création
      */
-    public static function create()
+    public static function create(): void
     {
         if (isset(Session::getInstance()->lire('user')['id'])) {
             FormConfig::setArr('SessionQuestion');
@@ -40,7 +37,7 @@ class ControllerQuestion
         }
     }
 
-    public static function read()
+    public static function read(): void
     {
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $propositions = $question->getPropositions();
@@ -211,8 +208,6 @@ class ControllerQuestion
             }
         }
 
-        $questions = (new QuestionRepository())->selectAll();
-
         MessageFlash::ajouter('success', 'La question a bien été crée');
         Controller::redirect("index.php?controller=question&action=readAll");
         FormConfig::startSession();
@@ -327,7 +322,6 @@ class ControllerQuestion
         }
 
 
-        $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
         MessageFlash::ajouter('success', 'La question a bien été modifiée');
         Controller::redirect("index.php?controller=question&action=readAll");
 
@@ -355,7 +349,6 @@ class ControllerQuestion
             (new QuestionRepository())->delete($_GET['idQuestion']);
             $calendrier = $question->getCalendrier();
             (new CalendrierRepository())->delete($calendrier->getId());
-            $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
             MessageFlash::ajouter('success', 'La question a bien été supprimée');
             Controller::redirect("index.php?controller=question&action=readAll");
         }
