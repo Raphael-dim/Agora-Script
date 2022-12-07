@@ -58,7 +58,7 @@ class ControllerUtilisateur
                 Controller::redirect('index.php?controller=utilisateur&action=connexion');
             } else {
                 Session::getInstance()->enregistrer('user', array('id' => $utilisateur->getIdentifiant()));
-                ControllerAccueil::home();
+                Controller::redirect("index.php?controller=accueil&action=home");
             }
         }
     }
@@ -145,14 +145,14 @@ class ControllerUtilisateur
     public static function updated()
     {
         $user = Session::getInstance()->lire('user');
-        $utilisateur = (new UtilisateurRepository())->select($_GET['idUtilisateur']);
+        $utilisateur = (new UtilisateurRepository())->select($_POST['identifiant']);
         if (is_null($user) || $user['id'] != $utilisateur->getIdentifiant()) {
             MessageFlash::ajouter("warning", "Connectez-vous à votre compte pour le modifier.");
             Controller::redirect("index.php?action=connexion&controller=utilisateur");
         }
         $user = Session::getInstance()->lire('user');
         if (is_null($user) || $user['id'] != $utilisateur->getIdentifiant()) {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier un compte qui ne vous appartient pas.");
             Controller::redirect("index.php?action=readAll&controller=question");
         }
         if (!MotDePasse::verifier($_POST['ancienMDP'], $utilisateur->getMdpHache())) {
@@ -167,15 +167,8 @@ class ControllerUtilisateur
             $utilisateur->setPrenom($_POST['prenom']);
             $utilisateur->setMdpHache($_POST['mdp']);
             (new UtilisateurRepository())->update($utilisateur);
-            $questions = (new QuestionRepository())->selectWhere($utilisateur->getIdentifiant(), '*', 'idorganisateur');
-            $propositions = (new PropositionRepository())->selectWhere($utilisateur->getIdentifiant(), '*', 'idresponsable');
             MessageFlash::ajouter('success', 'Vos informations ont été mises à jour');
-            Controller::afficheVue('view.php',
-                ["pagetitle" => "Compte mis à jour",
-                    "utilisateur" => $utilisateur,
-                    "questions" => $questions,
-                    "propositions" => $propositions,
-                    "cheminVueBody" => "Utilisateurs/detail.php"]);
+            Controller::redirect("index.php?controller=utilisateur&action=read&idUtilisateur=" . $utilisateur->getIdentifiant());
         }
 
     }

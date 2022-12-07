@@ -37,7 +37,7 @@ class Calendrier extends AbstractDataObject
         if ($bool){
             return (new DateTime($this->debutEcriture))->format('Y-m-d H:i');
         }
-        return (new DateTime($this->debutEcriture))->format('d/m/Y à H:i:s');
+        return (new DateTime($this->debutEcriture))->format('d-m-Y à H:i:s');
     }
 
     /**
