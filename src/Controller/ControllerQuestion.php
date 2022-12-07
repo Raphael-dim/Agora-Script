@@ -218,6 +218,7 @@ class ControllerQuestion
         FormConfig::startSession();
     }
 
+<<<<<<<<< Temporary merge branch 1
     public static function update(): void
     {
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
@@ -230,13 +231,15 @@ class ControllerQuestion
             ControllerAccueil::erreur();
         } else {
             FormConfig::setArr('SessionQuestion');
-            FormConfig::startSession();
+            FormConfig::initialiserSessions($question);
             self::afficheVue('view.php', ["pagetitle" => "Modifier une question",
                 "cheminVueBody" => "question/create/step-1.php",
                 "idQuestion" => $_GET['idQuestion']]);
         }
     }
 
+=========
+>>>>>>>>> Temporary merge branch 2
     public static function updated(): void
     {
         $user = Session::getInstance()->lire('user');
@@ -332,6 +335,25 @@ class ControllerQuestion
         Controller::redirect("index.php?controller=question&action=readAll");
 
         FormConfig::startSession();
+    }
+
+    public static function update(): void
+    {
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        $user = Session::getInstance()->lire('user');
+        if (is_null($user) || $user['id'] != $question->getOrganisateur()->getIdentifiant()) {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
+            Controller::redirect("index.php?action=readAll&controller=question");
+        }
+        if (!isset($_SESSION['user']) || $_SESSION['user']['id'] != $question->getOrganisateur()->getIdentifiant()) {
+            ControllerAccueil::erreur();
+        } else {
+            FormConfig::setArr('SessionQuestion');
+            FormConfig::startSession();
+            self::afficheVue('view.php', ["pagetitle" => "Modifier une question",
+                "cheminVueBody" => "question/create/step-1.php",
+                "idQuestion" => $_GET['idQuestion']]);
+        }
     }
 
 
