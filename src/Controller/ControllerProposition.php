@@ -2,6 +2,7 @@
 
 namespace App\Vote\Controller;
 
+use App\Vote\Lib\MessageFlash;
 use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Proposition;
 use App\Vote\Model\DataObject\PropositionSection;
@@ -21,24 +22,23 @@ class ControllerProposition
 
     public static function create()
     {
-        Session::getInstance();
+        $user = Session::getInstance()->lire('user');
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        if ($question == null) {
-            ControllerAccueil::erreur();
-        } else {
-            $date = date("Y/m/d H:i:s");
-            $calendrier = $question->getCalendrier();
-            if (!isset($_SESSION['user']) || !Responsable::estResponsable($question, $_SESSION['user']['id'])) {
-                ControllerAccueil::erreur();
-            }
-//        else if ($calendrier->getDebutEcriture() > $date || $calendrier->getFinEcriture() < $date) {
-//            ControllerAccueil::erreur();
-//        }
-            else {
-                Controller::afficheVue('view.php', ["pagetitle" => "Accueil",
-                    "cheminVueBody" => "Proposition/create.php",
-                    "question" => $question]);
-            }
+        $date = date("d/m/Y à H:i:s");
+        $calendrier = $question->getCalendrier();
+        if (!isset($user) || !Responsable::estResponsable($question, $user['id'])) {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition, 
+            vous n'êtes pas responsable pour cette question.");
+        }
+        if ($calendrier->getDebutEcriture() > $date || $calendrier->getFinEcriture() < $date) {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition tant 
+            que la phase d'écriture n'a pas débuté.");            Controller::redirect("index.php?controller=question&action=readAll");
+
+        }
+        else {
+            Controller::afficheVue('view.php', ["pagetitle" => "Accueil",
+                "cheminVueBody" => "Proposition/create.php",
+                "question" => $question]);
         }
     }
 

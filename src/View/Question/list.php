@@ -48,7 +48,7 @@ if (isset($_GET['selection'])) {
     use App\Vote\Model\DataObject\CoAuteur;
     use App\Vote\Model\DataObject\Responsable;
 
-    $date = date("Y-m-d H:i:s");
+    $date = date("d-m-Y à H:i:s");
     foreach ($questions as $question) {
         $calendrier = $question->getCalendrier();
         $idQuestionURL = rawurlencode($question->getId());
