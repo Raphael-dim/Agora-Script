@@ -213,6 +213,7 @@ class ControllerQuestion
         FormConfig::startSession();
     }
 
+
     public static function update(): void
     {
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
@@ -231,6 +232,7 @@ class ControllerQuestion
                 "idQuestion" => $_GET['idQuestion']]);
         }
     }
+
 
     public static function updated(): void
     {

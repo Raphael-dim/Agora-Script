@@ -32,6 +32,18 @@ main > h1, h2 {
     }
 }
 
+@keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+    50%{
+        opacity:1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
 :root {
     background-image: url("../images/fond2.jpg");
     background-position: center;
@@ -564,12 +576,21 @@ a#vote:hover {
     filter: none;
 }
 
+.pileflash{
+    position: absolute;
+    top:75px;
+    right:2px;
+    z-index:100;
+}
 
 .alert {
     padding: 15px;
     margin-bottom: 20px;
     border: 1px solid transparent;
     border-radius: 4px;
+    animation:slidein 0.5s, fadeout 5.5s;
+    opacity:0;
+    margin:1px;
 }
 
 .alert-success {
