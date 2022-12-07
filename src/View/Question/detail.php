@@ -62,10 +62,7 @@
         $cercle = '<div id="cercle"></div>';
         if ($date < $question->getCalendrier()->getDebutEcriture()) {
             echo $cercle;
-        }
-
-        if ($date < $question->getCalendrier()->getDebutEcriture()) {
-            echo $cercle;
+            echo '<span class="vertical-line-petite" style="background: grey"></span>';
         }
         ?>
 
