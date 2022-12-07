@@ -48,13 +48,12 @@ if (isset($_GET['selection'])) {
     use App\Vote\Model\DataObject\CoAuteur;
     use App\Vote\Model\DataObject\Responsable;
 
-    $date = date("Y-m-d H:i:s");
+    $date = date('d/m/Y à H:i:s');
     foreach ($questions as $question) {
         $calendrier = $question->getCalendrier();
         $idQuestionURL = rawurlencode($question->getId());
         $organisateur = htmlspecialchars($question->getOrganisateur()->getIdentifiant());
         $titreHTML = htmlspecialchars($question->getTitre());
-
 
         if ($date < $calendrier->getDebutEcriture()) {
             echo '<li class="listes" id = "status_cree">';
