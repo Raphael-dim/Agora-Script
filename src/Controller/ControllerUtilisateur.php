@@ -31,6 +31,12 @@ class ControllerUtilisateur
 
     public static function disconnected()
     {
+        $user = Session::getInstance()->lire('user');
+        $utilisateur = (new UtilisateurRepository())->select($_GET['idUtilisateur']);
+        if (is_null($user) || $user['id'] != $utilisateur->getIdentifiant()) {
+            MessageFlash::ajouter("warning", "Vous pouvez pas vous déconnecter sans être connecté");
+            Controller::redirect("index.php?action=connexion&controller=utilisateur");
+        }
         Session::getInstance();
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);
@@ -81,12 +87,14 @@ class ControllerUtilisateur
         if ($_POST['mdp'] != $_POST['mdp2']) {
             MessageFlash::ajouter('warning', 'Les mots de passes sont différents');
             Controller::redirect('index.php?controller=utilisateur&action=create');
+        } else if (Utilisateur::identifiantExiste($_POST['identifiant'])) {
+            MessageFlash::ajouter('warning', 'Cet identifiant existe déjà');
+            Controller::redirect('index.php?controller=utilisateur&action=create');
         } else {
             $utilisateur = Utilisateur::construireDepuisFormulaire($_POST);
             (new UtilisateurRepository())->sauvegarder($utilisateur);
-            Controller::afficheVue('view.php',
-                ["pagetitle" => "Compte crée",
-                    "cheminVueBody" => "Utilisateurs/formulaireConnexion.php"]);
+            MessageFlash::ajouter("success", "Le compte a bien crée");
+            Controller::redirect("index.php?controller=utilisateur&action=formulaireConnexion");
         }
     }
 
@@ -121,17 +129,33 @@ class ControllerUtilisateur
 
     public static function update()
     {
+        $user = Session::getInstance()->lire('user');
         $utilisateur = (new UtilisateurRepository())->select($_GET['idUtilisateur']);
-        Controller::afficheVue('view.php',
-            ["utilisateur" => $utilisateur,
-                "pagetitle" => "Modifier les informations",
-                "cheminVueBody" => "Utilisateurs/update.php"]
-        );
+        if (is_null($user) || $user['id'] != $utilisateur->getIdentifiant()) {
+            MessageFlash::ajouter("warning", "Connectez-vous à votre compte pour le modifier.");
+            Controller::redirect("index.php?action=connexion&controller=utilisateur");
+        } else {
+            Controller::afficheVue('view.php',
+                ["utilisateur" => $utilisateur,
+                    "pagetitle" => "Modifier les informations",
+                    "cheminVueBody" => "Utilisateurs/update.php"]
+            );
+        }
     }
 
     public static function updated()
     {
-        $utilisateur = (new UtilisateurRepository())->select($_POST['identifiant']);
+        $user = Session::getInstance()->lire('user');
+        $utilisateur = (new UtilisateurRepository())->select($_GET['idUtilisateur']);
+        if (is_null($user) || $user['id'] != $utilisateur->getIdentifiant()) {
+            MessageFlash::ajouter("warning", "Connectez-vous à votre compte pour le modifier.");
+            Controller::redirect("index.php?action=connexion&controller=utilisateur");
+        }
+        $user = Session::getInstance()->lire('user');
+        if (is_null($user) || $user['id'] != $utilisateur->getIdentifiant()) {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
+            Controller::redirect("index.php?action=readAll&controller=question");
+        }
         if (!MotDePasse::verifier($_POST['ancienMDP'], $utilisateur->getMdpHache())) {
             MessageFlash::ajouter('warning', 'L\'ancien mot de passe n\'est pas valide');
             Controller::redirect('index.php?controller=utilisateur&action=update&idUtilisateur=' . $utilisateur->getIdentifiant());
