@@ -793,3 +793,22 @@ input:valid + span:after {
     padding-left: 5px;
 }
 
+.footer {
+    background-color: rgba(49, 49, 59, 0.86);
+    vertical-align: middle;
+    height: 60px;
+    border-radius: 5px;
+    list-style: none;
+    display: flex;
+}
+
+.footer li {
+    /*background-color: rgba(77, 69, 69, 0.56);*/
+    padding: 15px;
+    margin: auto;
+}
+
+.footer li:hover{
+    color: black;
+}
+
