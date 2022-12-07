@@ -22,7 +22,7 @@
             <input class="InputAddOn-field" type="password" value="" placeholder="" name="mdp2" id="mdp2_id" required>
         </p>
         <p>
-            <input type="submit" value="Inscription">
+            <input type="submit" value="Inscription" class="nav">
         </p>
     </fieldset>
 </form>

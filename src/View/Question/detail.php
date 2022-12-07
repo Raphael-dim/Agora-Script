@@ -5,6 +5,7 @@
         <h1><strong  id ='color-grey'>Description</strong></h1>
         <p> <?= htmlspecialchars($question->getDescription()) ?></p>
 
+
         <div id = "participants">
             <div id = "responsables">
                 <h1><strong  id ='color-yellow'>Responsables</strong></h1>
@@ -33,7 +34,9 @@
                 ?>
             </div>
         </div>
+
         <h1><strong  id ='color-orange'>Sections</strong></h1>
+
         <?php
         $i = 1;
         foreach ($sections as $Section) {
@@ -52,10 +55,8 @@
     <div class="calendrier">
         <h1><strong  id ='color-green'>Calendrier</strong></h1>
 
-        <div class="légende">
-            <p style="background: #FFC55C; color: white">Phase d'écriture des propositions</p>
-            <p style="background: #FDE541; color: white">Phase de vote</p>
-        </div>
+
+
         <?php
         $date = date("d/m/Y à H:i:s");
         $cercle = '<div id="cercle"></div>';
@@ -67,17 +68,23 @@
             echo $cercle;
         }
         ?>
-        <p class = "cal"  id = "ecriture_debut"><?= htmlspecialchars($question->getCalendrier()->getDebutEcriture()) ?></p>
+
+        <p style="background: #CE16169B; color: white"  class = "cal"  id = "ecriture_debut" >Début d'écriture des propositions : <br>
+            <?= htmlspecialchars($question->getCalendrier()->getDebutEcriture()) ?></p>
         <?php
         if ($date > $question->getCalendrier()->getDebutEcriture() && $date < $question->getCalendrier()->getFinEcriture()) {
-            echo '<span class="vertical-line-petite" style="background: orange"></span>';
+            echo '<span class="vertical-line-petite" style="background: rgba(206,22,22,0.61)"></span>';
             echo $cercle;
-            echo '<span class="vertical-line-petite" style="background: orange"></span>';
+            ?>
+
+            <?php
+            echo '<span class="vertical-line-petite" style="background: #CE16169B"></span>';
         } else {
-            echo '<span class="vertical-line" style="background: orange"></span>';
-        }
-        ?>
-        <p class = "cal"  id = "ecriture_fin"><?= htmlspecialchars($question->getCalendrier()->getFinEcriture()) ?></p>
+            echo '<span class="vertical-line" style="background: #CE16169B"></span>';
+        } ?>
+        <p style="background: #CE16169B; color: white" class = "cal"  id = "ecriture_fin">Fin d'écriture des propositions : <br>
+            <?= htmlspecialchars($question->getCalendrier()->getFinEcriture()) ?></p>
+
         <?php
         if ($date > $question->getCalendrier()->getFinEcriture() && $date < $question->getCalendrier()->getDebutVote()) {
             echo '<span class="vertical-line-petite" style="background:grey " ></span>';
@@ -87,17 +94,21 @@
             echo '<span class="vertical-line" style="background:grey "></span>';
         }
         ?>
-        <p class = "cal"  id = "vote_debut"><?= htmlspecialchars($question->getCalendrier()->getDebutVote()) ?></p>
+
+        <p style="background : rgba(65,112,56,0.76); color: white" class = "cal"  id = "vote_debut">Début des votes : <br>
+            <?= htmlspecialchars($question->getCalendrier()->getDebutVote()) ?></p>
         <?php
         if ($date > $question->getCalendrier()->getDebutVote() && $date < $question->getCalendrier()->getFinVote()) {
-            echo '<span class="vertical-line-petite" style="background: yellow"></span>';
+            echo '<span class="vertical-line-petite" style="background: rgba(65,112,56,0.76);"></span>';
             echo $cercle;
-            echo '<span class="vertical-line-petite" style="background: yellow"></span>';
+            echo '<span class="vertical-line-petite" style="background: rgba(65,112,56,0.76);"></span>';
         } else {
-            echo '<span class="vertical-line" style="background: yellow"></span>';
-        }
-        ?>
-        <p class = "cal" id = "vote_fin"><?= htmlspecialchars($question->getCalendrier()->getFinVote()) ?></p>
+            echo '<span class="vertical-line" style="background: rgba(65,112,56,0.76);"></span>';
+        } ?>
+        <p style="background: rgba(65,112,56,0.76); color: white"  class = "cal" id = "vote_fin">Fin des votes : <br>
+            <?= htmlspecialchars($question->getCalendrier()->getFinVote()) ?></p>
+
+      
         <?php
         echo '<span class="vertical-line-petite" style="background:grey "></span>';
         if ($date > $question->getCalendrier()->getFinVote()) {
