@@ -8,6 +8,9 @@
     $date = date("Y-m-d H:i:s");
     $aVote = Votant::aVote($propositions, $_SESSION['user']['id']);
     $aVoteURL = rawurlencode($aVote);
+    if (sizeof($propositions) == 0){
+        echo '<h2>Il n\'y a pas encore de propositions.</h2>';
+    }
     foreach ($propositions as $proposition) {
         if ($aVote == $proposition->getId()) {
             echo '<h2>Vous avez voté pour cette proposition.</h2>';

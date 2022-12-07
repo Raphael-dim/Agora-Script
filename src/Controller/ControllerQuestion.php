@@ -324,7 +324,7 @@ class ControllerQuestion
                 $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
             }
         }
-        for($i=0; $i<sizeof($ancResponsables);$i++){
+        for ($i = 0; $i < sizeof($ancResponsables); $i++) {
             if (!in_array($ancResponsables[$i], $nouvResponsables)) {
                 (new ResponsableRepository())->delete($ancResponsables[$i]);
             }
@@ -348,7 +348,7 @@ class ControllerQuestion
             }
         }
 
-        for($i=0; $i<sizeof($ancVotants);$i++){
+        for ($i = 0; $i < sizeof($ancVotants); $i++) {
             if (!in_array($ancVotants[$i], $nouvVotants)) {
                 (new VotantRepository())->delete($ancVotants[$i]);
             }
@@ -365,7 +365,7 @@ class ControllerQuestion
         $user = Session::getInstance()->lire('user');
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         if (is_null($user) || $user['id'] != $question->getOrganisateur()->getIdentifiant()) {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas supprimer une question dont vous n'êtes par l'organisateur.");
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas supprimer une question dont vous n'êtes par l'organisateur.");
             Controller::redirect("index.php?action=readAll&controller=question");
         }
         if (!isset($_SESSION['user']) || $_SESSION['user']['id'] != $question->getOrganisateur()->getIdentifiant()) {

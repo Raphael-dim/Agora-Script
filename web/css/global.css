@@ -36,8 +36,8 @@ main > h1, h2 {
     from {
         opacity: 1;
     }
-    50%{
-        opacity:1;
+    50% {
+        opacity: 1;
     }
     to {
         opacity: 0;
@@ -71,7 +71,6 @@ main {
     width: 85%;
     margin: auto;
     padding-top: 100px;
-
     background: rgba(25, 63, 86, 0.82);
     min-height: 100vh;
     height: 100%;
@@ -79,7 +78,6 @@ main {
     z-index: -1;
     overflow: hidden;
 }
-
 
 main p {
     border-radius: 10px;
@@ -142,8 +140,8 @@ span {
 }
 
 .search {
-    height: 20px;
-    width: 20px;
+    height: 27px;
+    width: 27px;
     background: lightgrey;
     padding: 2px;
 }
@@ -283,8 +281,8 @@ textarea {
     height: 500px;
     border-radius: 10px;
     vertical-align: middle;
-    border: solid black 1px;
-    background: #dff5f4;
+    /*border: solid black 1px;*/
+    /*background: rgba(223, 245, 244, 0.51);*/
     padding: 0;
 }
 
@@ -306,6 +304,7 @@ textarea {
     justify-content: space-between;
     display: block;
     margin: 15px;
+    text-decoration: none;
     justify-items: center;
     padding: 4px;
     background: #dff5f4;
@@ -337,11 +336,6 @@ li#vote.phases > a {
 }
 
 
-.phases, a {
-    text-decoration: none;
-    color: black;
-}
-
 a#vote {
     padding: 5px;
     margin-left: auto;
@@ -369,24 +363,24 @@ a#vote:hover {
 
 .bouton {
     padding: 5px;
-    margin-left: auto;
+    margin-left: 15px;
+    margin-top: 15px;
     margin-right: auto;
     width: auto;
     height: 50px;
-    font-size: 17px;
-    text-decoration: none;
+    font-size: 18px;
     border-radius: 8px;
+    text-decoration: none;
     transition: 0.3s;
     border-style: solid;
-    border-color: #f1f4f8;
-    border-width: 1px;
-    color: black;
+    border-color: rgba(1, 46, 73, 0.98);
+    border-width: 2px;
+    color: #000e17;
 }
 
 .bouton:hover {
-    color: #012134;
-    background-color: #f1f4f8;
-    border-color: rgba(69, 190, 187, 0.6);
+    color: #d8dae0;
+    background-color: rgba(1, 46, 73, 0.88);
     border-width: 2px;
 }
 
@@ -394,7 +388,7 @@ a#vote:hover {
     width: 18%;
     position: fixed;
     right: 9%;
-    height: 500px;
+    height: 100px;
     border-radius: 10px;
     vertical-align: middle;
     border: solid black 1px;
@@ -576,11 +570,11 @@ a#vote:hover {
     filter: none;
 }
 
-.pileflash{
+.pileflash {
     position: absolute;
-    top:75px;
-    right:2px;
-    z-index:100;
+    top: 75px;
+    right: 2px;
+    z-index: 100;
 }
 
 .alert {
@@ -588,9 +582,9 @@ a#vote:hover {
     margin-bottom: 20px;
     border: 1px solid transparent;
     border-radius: 4px;
-    animation:slidein 0.5s, fadeout 5.5s;
-    opacity:0;
-    margin:1px;
+    animation: slidein 0.5s, fadeout 5.5s;
+    opacity: 0;
+    margin: 1px;
 }
 
 .alert-success {
@@ -617,8 +611,6 @@ a#vote:hover {
     border-color: #ebccd1;
 }
 
-
-/* Titres */
 h1 {
     text-align: center;
 }
@@ -682,19 +674,19 @@ div p {
 }
 
 .vertical-line {
-    display:inline-block;
+    display: inline-block;
 
     width: 7px;
     height: 100px;
-    z-index:-1;
+    z-index: -1;
 }
 
 .vertical-line-petite {
-    display:inline-block;
+    display: inline-block;
     display: inline-block;
     height: 45px;
     width: 7px;
-    z-index:-1;
+    z-index: -1;
 }
 
 #cercle {
@@ -718,34 +710,36 @@ div p {
 
 .lien {
     padding: 10px;
+    color: #012134;
+    font-size: 18px;
     border-radius: 5px;
     background-color: #dff5f4;
-    text-decoration: underline;
+    /*text-decoration: none;*/
 }
 
 .lien:hover {
-    border: solid 1px white ;
+    border: solid 1px white;
     background-color: #1a3341;
     color: white;
 }
 
-.légende{
+.légende {
     display: inline-block;
 }
 
-.cal{
-    color:white;
-    position:relative;
-    left:150px;
-    background:none;
-    padding:0;
-    border:none;
-    margin:0;
-    top:0px;
+.cal {
+    color: white;
+    position: relative;
+    left: 150px;
+    background: none;
+    padding: 0;
+    border: none;
+    margin: 0;
+    top: 0px;
 }
 
-.cal::after{
-    content : "";
+.cal::after {
+    content: "";
     margin-left: auto;
     margin-right: auto;
     display: block;
@@ -753,29 +747,49 @@ div p {
     height: 15px;
     border-radius: 20px;
     background: #ffffff;
-    position:absolute;
-    left:-35px;
-    top:10px;
-    z-index:1;
+    position: absolute;
+    left: -35px;
+    top: 10px;
+    z-index: 1;
 }
 
-#participants>*{
-    width:45%;
+#participants > * {
+    width: 45%;
 }
 
-#participants>*>p{
-    background:#dff5f4;
-    border:none;
+#participants > * > p {
+    background: #dff5f4;
+    border: none;
     border-radius: 0;
-    padding:2px;
-    margin:0;
-}
-#participants{
-    display:inline-block;
-    width:100%;
-}
-#participants>#votants{
-    float:right;
+    padding: 2px;
+    margin: 0;
 }
 
+#participants {
+    display: inline-block;
+    width: 100%;
+}
+
+#participants > #votants {
+    float: right;
+}
+
+input {
+    height: 25px;
+    font-size: 18px;
+}
+
+input:invalid + span:after {
+    position: absolute;
+    content: '✖';
+    color: red;
+    padding-left: 5px;
+}
+
+input:valid + span:after {
+    position: absolute;
+    content: '✓';
+    color: green;
+    padding-left: 5px;
+}
 
