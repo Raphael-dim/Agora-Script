@@ -60,6 +60,7 @@ class FormConfig
         $_SESSION[FormConfig::$arr]['finEcriture'] = $calendrier->getFinEcriture(true);
         $_SESSION[FormConfig::$arr]['debutVote'] = $calendrier->getDebutVote(true);
         $_SESSION[FormConfig::$arr]['finVote'] = $calendrier->getFinVote(true);
+        $_SESSION[FormConfig::$arr]['idQuestion'] = $question->getId();
         for ($i = 1; $i <= count($tabSections); $i++) {
             $_SESSION[FormConfig::$arr]['titre' . $i] = $tabSections[$i - 1]->getTitre();
             $_SESSION[FormConfig::$arr]['description' . $i] = $tabSections[$i - 1]->getDescription();
