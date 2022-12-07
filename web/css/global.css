@@ -661,19 +661,25 @@ div p {
 }
 
 .vertical-line {
-    display: inline-block;
+    display:inline-block;
+
     width: 7px;
     height: 100px;
+    z-index:-1;
 }
 
 .vertical-line-petite {
+    display:inline-block;
     display: inline-block;
     height: 45px;
     width: 7px;
+    z-index:-1;
 }
 
 #cercle {
-    margin-left: 7px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
     width: 30px;
     height: 30px;
     border-radius: 20px;
@@ -709,11 +715,12 @@ div p {
 .cal{
     color:white;
     position:relative;
-    left:100px;
+    left:150px;
     background:none;
     padding:0;
     border:none;
     margin:0;
+    top:0px;
 }
 
 .cal::after{
@@ -726,11 +733,12 @@ div p {
     border-radius: 20px;
     background: #ffffff;
     position:absolute;
-    left:27px;
-    top:0;
+    left:-35px;
+    top:10px;
+    z-index:1;
 }
 
-#participants>*{x
+#participants>*{
     width:45%;
 }
 
