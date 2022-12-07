@@ -667,8 +667,7 @@ div p {
 }
 
 .vertical-line-petite {
-    display: flex;
-    margin-left: 50%;
+    display: inline-block;
     height: 45px;
     width: 7px;
 }
@@ -703,3 +702,52 @@ div p {
     background-color: #1a3341;
     color: white;
 }
+
+.légende{
+    display: inline-block;
+}
+
+.cal{
+    color:white;
+    position:relative;
+    left:100px;
+    background:none;
+    padding:0;
+    border:none;
+    margin:0;
+}
+
+.cal::after{
+    content : "";
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 15px;
+    height: 15px;
+    border-radius: 20px;
+    background: #ffffff;
+    position:absolute;
+    left:27px;
+    top:0;
+}
+
+#participants>*{x
+    width:45%;
+}
+
+#participants>*>p{
+    background:#dff5f4;
+    border:none;
+    border-radius: 0;
+    padding:2px;
+    margin:0;
+}
+#participants{
+    display:inline-block;
+    width:100%;
+}
+#participants>#votants{
+    float:right;
+}
+
+
