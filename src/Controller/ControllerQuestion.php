@@ -216,14 +216,21 @@ class ControllerQuestion
 
     public static function update(): void
     {
+        $date = date('d-m-Y à H:i:s');
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        $bool = true;
+        $calendrier = $question->getCalendrier();
+        if ($date > $calendrier->getDebutEcriture()) {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont la phase d'écriture a déjà commencée.");
+            $bool = false;
+        }
         $user = Session::getInstance()->lire('user');
         if (is_null($user) || $user['id'] != $question->getOrganisateur()->getIdentifiant()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
-            Controller::redirect("index.php?action=readAll&controller=question");
+            $bool = false;
         }
-        if (!isset($_SESSION['user']) || $_SESSION['user']['id'] != $question->getOrganisateur()->getIdentifiant()) {
-            ControllerAccueil::erreur();
+        if (!$bool) {
+            Controller::redirect("index.php?action=readAll&controller=question");
         } else {
             FormConfig::setArr('SessionQuestion');
             FormConfig::startSession();
@@ -238,12 +245,26 @@ class ControllerQuestion
     {
 
         $user = Session::getInstance()->lire('user');
+
+        $date = date('d-m-Y à H:i:s');
+        $bool = true;
+
         FormConfig::setArr('SessionQuestion');
         Session::getInstance();
         var_dump($_SESSION);
+
         $question = (new QuestionRepository())->select($_SESSION[FormConfig::$arr]['idQuestion']);
+        $calendrier = $question->getCalendrier();
+        if ($date > $calendrier->getDebutEcriture()) {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont la phase d'écriture a déjà commencée.");
+            $bool = false;
+        }
+        $user = Session::getInstance()->lire('user');
         if (is_null($user) || $user['id'] != $question->getOrganisateur()->getIdentifiant()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
+            $bool = false;
+        }
+        if (!$bool) {
             Controller::redirect("index.php?action=readAll&controller=question");
         }
         FormConfig::setArr('SessionQuestion');
