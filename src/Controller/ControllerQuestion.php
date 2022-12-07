@@ -236,7 +236,11 @@ class ControllerQuestion
 
     public static function updated(): void
     {
+
         $user = Session::getInstance()->lire('user');
+        FormConfig::setArr('SessionQuestion');
+        Session::getInstance();
+        var_dump($_SESSION);
         $question = (new QuestionRepository())->select($_SESSION[FormConfig::$arr]['idQuestion']);
         if (is_null($user) || $user['id'] != $question->getOrganisateur()->getIdentifiant()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
@@ -282,6 +286,7 @@ class ControllerQuestion
 
         $responsables = $question->getResponsables();
         $ancResponsables = array();
+
         foreach ($responsables as $responsable) {
             $ancResponsables[] = $responsable->getIdentifiant();
         }
@@ -297,7 +302,9 @@ class ControllerQuestion
                 $utilisateur->setIdentifiant($nouvResponsables[$i]);
                 $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
             }
-            if ($i > count($ancResponsables) && !in_array($ancResponsables[$i], $nouvResponsables)) {
+        }
+        for($i=0; $i<sizeof($ancResponsables);$i++){
+            if (!in_array($ancResponsables[$i], $nouvResponsables)) {
                 (new ResponsableRepository())->delete($ancResponsables[$i]);
             }
         }
@@ -318,11 +325,13 @@ class ControllerQuestion
                 $utilisateur->setIdentifiant($nouvVotants[$i]);
                 $votantBD = (new VotantRepository())->sauvegarder($utilisateur);
             }
-            if ($i > count($ancVotants) && !in_array($ancVotants[$i], $nouvVotants)) {
+        }
+
+        for($i=0; $i<sizeof($ancVotants);$i++){
+            if (!in_array($ancVotants[$i], $nouvVotants)) {
                 (new VotantRepository())->delete($ancVotants[$i]);
             }
         }
-
 
         MessageFlash::ajouter('success', 'La question a bien été modifiée');
         Controller::redirect("index.php?controller=question&action=readAll");
