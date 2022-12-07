@@ -26,16 +26,24 @@ class ControllerProposition
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $date = date("d/m/Y à H:i:s");
         $calendrier = $question->getCalendrier();
+        $bool = true;
         if (!isset($user) || !Responsable::estResponsable($question, $user['id'])) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition, 
             vous n'êtes pas responsable pour cette question.");
+            $bool = false;
         }
         if ($calendrier->getDebutEcriture() > $date || $calendrier->getFinEcriture() < $date) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition tant 
-            que la phase d'écriture n'a pas débuté.");            Controller::redirect("index.php?controller=question&action=readAll");
-
+            que la phase d'écriture n'a pas débuté.");
+            $bool = false;
         }
-        else {
+        if (Responsable::aCreeProposition($question, $user['id'])) {
+            MessageFlash::ajouter("warning", "Vous avez déjà crée une proposition pour cette question.");
+            $bool = false;
+        }
+        if (!$bool) {
+            Controller::redirect("index.php?controller=question&action=readAll");
+        } else {
             Controller::afficheVue('view.php', ["pagetitle" => "Accueil",
                 "cheminVueBody" => "Proposition/create.php",
                 "question" => $question]);
@@ -71,9 +79,28 @@ class ControllerProposition
 
     public static function created()
     {
-        session_start();
+        $user = Session::getInstance()->lire('user');
         $question = (new QuestionRepository())->select($_GET["idQuestion"]);
-        $responsable = (new ResponsableRepository())->select($_SESSION['user']['id']);
+        $date = date("d/m/Y à H:i:s");
+        $bool = true;
+        if (!isset($user) || !Responsable::estResponsable($question, $user['id'])) {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition, 
+            vous n'êtes pas responsable pour cette question.");
+            $bool = false;
+        }
+        if ($question->getCalendrier()->getDebutEcriture() > $date || $question->getCalendrier()->getFinEcriture() < $date) {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition tant 
+            que la phase d'écriture n'a pas débuté.");
+            $bool = false;
+        }
+        if (Responsable::aCreeProposition($question, $user['id'])) {
+            MessageFlash::ajouter("warning", "Vous avez déjà crée une proposition pour cette question.");
+            $bool = false;
+        }
+        if (!$bool) {
+            Controller::redirect("index.php?controller=question&action=readAll");
+        }
+        $responsable = (new ResponsableRepository())->select($user['id']);
         $proposition = new Proposition($_POST['titre'], $responsable, $question, 0);
         $propositionBD = (new PropositionRepository())->sauvegarder($proposition);
         $proposition->setId($propositionBD);
@@ -84,9 +111,7 @@ class ControllerProposition
 
         }
 
-        $questions = (new QuestionRepository())->selectAll();
-        Controller::afficheVue('view.php', ["pagetitle" => "Accueil",
-            "cheminVueBody" => "Proposition/created.php",
-            "questions" => $questions]);
+        MessageFlash::ajouter("success", "La proposition a bien été crée.");
+        Controller::redirect("index.php?controller=question&action=readAll");
     }
 }
