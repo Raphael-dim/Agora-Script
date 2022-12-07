@@ -4,6 +4,7 @@ namespace App\Vote\Model\DataObject;
 
 use App\Vote\Lib\MotDePasse;
 use App\Vote\Model\Repository\AbstractRepository;
+use App\Vote\Model\Repository\UtilisateurRepository;
 
 class Utilisateur extends AbstractDataObject
 {
@@ -65,6 +66,17 @@ class Utilisateur extends AbstractDataObject
     public function setPrenom(string $prenom): void
     {
         $this->prenom = $prenom;
+    }
+
+    public static function identifiantExiste($identifiant): bool
+    {
+        $utilisateurs = (new UtilisateurRepository())->selectAll();
+        foreach ($utilisateurs as $utilisateur) {
+            if ($utilisateur->getIdentifiant() == $identifiant) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function formatTableau(): array

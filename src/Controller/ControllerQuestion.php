@@ -30,21 +30,18 @@ class ControllerQuestion
      */
     public static function create()
     {
-        Session::getInstance();
-        if (isset($_SESSION['user']['id'])) {
+        if (isset(Session::getInstance()->lire('user')['id'])) {
             FormConfig::setArr('SessionQuestion');
             FormConfig::startSession();
             self::form();
         } else {
-            echo "test";
-
-            ControllerUtilisateur::connexion();
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas créer une question si vous n'êtes pas connecté.");
+            Controller::redirect("index.php?action=connexion&controller=utilisateur");
         }
     }
 
     public static function read()
     {
-
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $propositions = $question->getPropositions();
         $sections = $question->getSections();
@@ -158,7 +155,11 @@ class ControllerQuestion
      */
     public static function created(): void
     {
-        Session::getInstance();
+        $user = Session::getInstance()->lire('user');
+        if (is_null($user)) {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas créer une question si vous n'êtes pas connecté.");
+            Controller::redirect("index.php?action=readAll&controller=question");
+        }
         FormConfig::setArr('SessionQuestion');
         $calendrier = new Calendrier($_SESSION[FormConfig::$arr]['debutEcriture'], $_SESSION[FormConfig::$arr]['finEcriture'], $_SESSION[FormConfig::$arr]['debutVote'], $_SESSION[FormConfig::$arr]['finVote']);
         $calendierBD = (new CalendrierRepository())->sauvegarder($calendrier);
@@ -213,17 +214,18 @@ class ControllerQuestion
         $questions = (new QuestionRepository())->selectAll();
 
         MessageFlash::ajouter('success', 'La question a bien été crée');
-        Controller::afficheVue('view.php',
-            ["questions" => $questions,
-                "pagetitle" => "Question crée",
-                "cheminVueBody" => "Question/list.php"]);
+        Controller::redirect("index.php?controller=question&action=readAll");
         FormConfig::startSession();
     }
 
     public static function update(): void
     {
-        Session::getInstance();
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        $user = Session::getInstance()->lire('user');
+        if (is_null($user) || $user['id'] != $question->getOrganisateur()->getIdentifiant()) {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
+            Controller::redirect("index.php?action=readAll&controller=question");
+        }
         if (!isset($_SESSION['user']) || $_SESSION['user']['id'] != $question->getOrganisateur()->getIdentifiant()) {
             ControllerAccueil::erreur();
         } else {
@@ -237,9 +239,13 @@ class ControllerQuestion
 
     public static function updated(): void
     {
-        Session::getInstance();
-        FormConfig::setArr('SessionQuestion');
+        $user = Session::getInstance()->lire('user');
         $question = (new QuestionRepository())->select($_SESSION[FormConfig::$arr]['idQuestion']);
+        if (is_null($user) || $user['id'] != $question->getOrganisateur()->getIdentifiant()) {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
+            Controller::redirect("index.php?action=readAll&controller=question");
+        }
+        FormConfig::setArr('SessionQuestion');
         $question->setTitre($_SESSION[FormConfig::$arr]['Titre']);
         $question->setDescription($_SESSION[FormConfig::$arr]['Description']);
         (new QuestionRepository())->update($question);
@@ -322,9 +328,8 @@ class ControllerQuestion
 
 
         $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
-        self::afficheVue('view.php', ["pagetitle" => "Question modifiée",
-            "cheminVueBody" => "question/updated.php",
-            "questions" => $questions]);
+        MessageFlash::ajouter('success', 'La question a bien été modifiée');
+        Controller::redirect("index.php?controller=question&action=readAll");
 
         FormConfig::startSession();
     }
@@ -332,8 +337,12 @@ class ControllerQuestion
 
     public static function delete(): void
     {
-        Session::getInstance();
+        $user = Session::getInstance()->lire('user');
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        if (is_null($user) || $user['id'] != $question->getOrganisateur()->getIdentifiant()) {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas supprimer une question dont vous n'êtes par l'organisateur.");
+            Controller::redirect("index.php?action=readAll&controller=question");
+        }
         if (!isset($_SESSION['user']) || $_SESSION['user']['id'] != $question->getOrganisateur()->getIdentifiant()) {
             ControllerAccueil::erreur();
         } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
@@ -348,8 +357,8 @@ class ControllerQuestion
             $calendrier = $question->getCalendrier();
             (new CalendrierRepository())->delete($calendrier->getId());
             $questions = (new QuestionRepository())->selectAll(); //appel au modèle pour gerer la BD
-            self::afficheVue('view.php', ["pagetitle" => "Question supprimée", "cheminVueBody" => "question/deleted.php", "questions" => $questions]);
-        }
+            MessageFlash::ajouter('success', 'La question a bien été supprimée');
+            Controller::redirect("index.php?controller=question&action=readAll");        }
     }
 
     public static function readKeyword(): void

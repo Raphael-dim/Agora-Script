@@ -49,7 +49,10 @@ class Session
 
     public function lire(string $name): mixed
     {
-        return $_SESSION[$name];
+        if (isset($_SESSION[$name])) {
+            return $_SESSION[$name];
+        }
+        return null;
     }
 
     public function supprimer($name): void
