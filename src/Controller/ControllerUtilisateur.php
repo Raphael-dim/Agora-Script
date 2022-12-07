@@ -58,6 +58,7 @@ class ControllerUtilisateur
                 Controller::redirect('index.php?controller=utilisateur&action=connexion');
             } else {
                 Session::getInstance()->enregistrer('user', array('id' => $utilisateur->getIdentifiant()));
+                MessageFlash::ajouter('success', 'Vous êtes connecté');
                 Controller::redirect("index.php?controller=accueil&action=home");
             }
         }
