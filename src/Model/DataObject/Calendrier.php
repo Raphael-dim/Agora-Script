@@ -32,9 +32,12 @@ class Calendrier extends AbstractDataObject
      * @return string
      * @throws \Exception
      */
-    public function getDebutEcriture(): string
+    public function getDebutEcriture($bool = false): string
     {
-        return (new DateTime($this->debutEcriture))->format('d/m/Y à H:i:s');
+        if ($bool){
+            return (new DateTime($this->debutEcriture))->format('Y-m-d H:i');
+        }
+        return (new DateTime($this->debutEcriture))->format('d-m-Y à H:i:s');
     }
 
     /**
@@ -49,8 +52,11 @@ class Calendrier extends AbstractDataObject
      * @return string
      * @throws \Exception
      */
-    public function getFinEcriture(): string
+    public function getFinEcriture($bool = false): string
     {
+        if ($bool){
+            return (new DateTime($this->finEcriture))->format('Y-m-d H:i');
+        }
         return (new DateTime($this->finEcriture))->format('d/m/Y à H:i:s');
     }
 
@@ -65,9 +71,15 @@ class Calendrier extends AbstractDataObject
     /**
      * @return string
      */
-    public function getDebutVote(): string
+    public function getDebutVote($bool = false): string
     {
-        return (new DateTime($this->debutVote))->format('d/m/Y à H:i:s');
+        if ($bool){
+            return (new DateTime($this->debutVote))->format('Y-m-d H:i');
+        }
+        else{
+            return (new DateTime($this->debutVote))->format('d/m/Y à H:i:s');
+        }
+
     }
 
     /**
@@ -81,8 +93,11 @@ class Calendrier extends AbstractDataObject
     /**
      * @return string
      */
-    public function getFinVote(): string
+    public function getFinVote($bool = false): string
     {
+        if ($bool){
+            return (new DateTime($this->finVote))->format('Y-m-d H:i');
+        }
         return (new DateTime($this->finVote))->format('d/m/Y à H:i:s');
     }
 

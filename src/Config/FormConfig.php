@@ -56,10 +56,11 @@ class FormConfig
         $_SESSION[FormConfig::$arr]['Titre'] = $question->getTitre();
         $_SESSION[FormConfig::$arr]['Description'] = $question->getDescription();
         $_SESSION[FormConfig::$arr]['nbSections'] = count($question->getSections());
-        $_SESSION[FormConfig::$arr]['debutEcriture'] = $calendrier->getDebutEcriture();
-        $_SESSION[FormConfig::$arr]['finEcriture'] = $calendrier->getFinEcriture();
-        $_SESSION[FormConfig::$arr]['debutVote'] = $calendrier->getDebutVote();
-        $_SESSION[FormConfig::$arr]['finVote'] = $calendrier->getFinVote();
+        $_SESSION[FormConfig::$arr]['debutEcriture'] = $calendrier->getDebutEcriture(true);
+        $_SESSION[FormConfig::$arr]['finEcriture'] = $calendrier->getFinEcriture(true);
+        $_SESSION[FormConfig::$arr]['debutVote'] = $calendrier->getDebutVote(true);
+        $_SESSION[FormConfig::$arr]['finVote'] = $calendrier->getFinVote(true);
+        $_SESSION[FormConfig::$arr]['idQuestion'] = $question->getId();
         for ($i = 1; $i <= count($tabSections); $i++) {
             $_SESSION[FormConfig::$arr]['titre' . $i] = $tabSections[$i - 1]->getTitre();
             $_SESSION[FormConfig::$arr]['description' . $i] = $tabSections[$i - 1]->getDescription();
@@ -112,5 +113,10 @@ class FormConfig
     public static function testDates($Adates)
     {
 
+    }
+
+    public static function formatDate($date){
+        $date = explode("-",$date);
+        echo $date;
     }
 }

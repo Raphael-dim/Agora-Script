@@ -32,6 +32,18 @@ main > h1, h2 {
     }
 }
 
+@keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+    50%{
+        opacity:1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
 :root {
     background-image: url("../images/fond2.jpg");
     background-position: center;
@@ -70,7 +82,7 @@ main {
 
 
 main p {
-    border-radius: 15px;
+    border-radius: 10px;
     background: #dff5f4;
     padding: 10px;
     margin: 7px;
@@ -564,12 +576,21 @@ a#vote:hover {
     filter: none;
 }
 
+.pileflash{
+    position: absolute;
+    top:75px;
+    right:2px;
+    z-index:100;
+}
 
 .alert {
     padding: 15px;
     margin-bottom: 20px;
     border: 1px solid transparent;
     border-radius: 4px;
+    animation:slidein 0.5s, fadeout 5.5s;
+    opacity:0;
+    margin:1px;
 }
 
 .alert-success {
@@ -646,6 +667,11 @@ h1 > strong#color-orange {
     display: inline-block;
 }
 
+div p {
+    width: auto;
+}
+
+
 .infos {
     width: 60%;
 }
@@ -656,17 +682,19 @@ h1 > strong#color-orange {
 }
 
 .vertical-line {
-    border-left: 2px solid #000;
-    display: inline-block;
+    display:inline-block;
+
     width: 7px;
     height: 100px;
+    z-index:-1;
 }
 
 .vertical-line-petite {
-    border-left: 2px solid #000;
+    display:inline-block;
     display: inline-block;
     height: 45px;
     width: 7px;
+    z-index:-1;
 }
 
 #cercle {
@@ -679,7 +707,75 @@ h1 > strong#color-orange {
     background: #ffffff;
 }
 
+.responsables {
+    width: 100%;
+}
+
+.profil {
+    filter: invert(0.9);
+    max-width: 37px;
+}
+
+.lien {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #dff5f4;
+    text-decoration: underline;
+}
+
+.lien:hover {
+    border: solid 1px white ;
+    background-color: #1a3341;
+    color: white;
+}
+
 .légende{
     display: inline-block;
-
 }
+
+.cal{
+    color:white;
+    position:relative;
+    left:150px;
+    background:none;
+    padding:0;
+    border:none;
+    margin:0;
+    top:0px;
+}
+
+.cal::after{
+    content : "";
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 15px;
+    height: 15px;
+    border-radius: 20px;
+    background: #ffffff;
+    position:absolute;
+    left:-35px;
+    top:10px;
+    z-index:1;
+}
+
+#participants>*{
+    width:45%;
+}
+
+#participants>*>p{
+    background:#dff5f4;
+    border:none;
+    border-radius: 0;
+    padding:2px;
+    margin:0;
+}
+#participants{
+    display:inline-block;
+    width:100%;
+}
+#participants>#votants{
+    float:right;
+}
+
+

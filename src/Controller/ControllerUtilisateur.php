@@ -31,6 +31,11 @@ class ControllerUtilisateur
 
     public static function disconnected()
     {
+        $user = Session::getInstance()->lire('user');
+        if (is_null($user)) {
+            MessageFlash::ajouter("warning", "Vous pouvez pas vous déconnecter sans être connecté");
+            Controller::redirect("index.php?action=connexion&controller=utilisateur");
+        }
         Session::getInstance();
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);
@@ -45,14 +50,16 @@ class ControllerUtilisateur
         $utilisateur = ((new UtilisateurRepository())->select($id));
 
         if (!isset($utilisateur)) {
-            Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+            MessageFlash::ajouter('warning', 'Utilisateur introuvable');
+            Controller::redirect('index.php?controller=utilisateur&action=connexion');
         } else {
             if (!MotDePasse::verifier($mdp, $utilisateur->getMdpHache())) {
                 MessageFlash::ajouter('warning', 'Mot de passe incorrect');
                 Controller::redirect('index.php?controller=utilisateur&action=connexion');
-            }else{
+            } else {
                 Session::getInstance()->enregistrer('user', array('id' => $utilisateur->getIdentifiant()));
-                ControllerAccueil::home();
+                MessageFlash::ajouter('success', 'Vous êtes connecté');
+                Controller::redirect("index.php?controller=accueil&action=home");
             }
         }
     }
@@ -64,7 +71,7 @@ class ControllerUtilisateur
         $questions = (new QuestionRepository())->selectWhere($_SESSION['user']['id'], '*', 'idorganisateur');
         $propositions = (new PropositionRepository())->selectWhere($_SESSION['user']['id'], '*', 'idresponsable');
         Controller::afficheVue('view.php', ['pagetitle' => "Profil",
-            "cheminVueBody" => "Utilisateurs/detail.php", "Utilisateur" => $utilisateur,
+            "cheminVueBody" => "Utilisateurs/detail.php", "utilisateur" => $utilisateur,
             "questions" => $questions, "propositions" => $propositions]);
     }
 
@@ -78,13 +85,17 @@ class ControllerUtilisateur
     public static function created()
     {
         if ($_POST['mdp'] != $_POST['mdp2']) {
-            ControllerAccueil::erreur();
+            MessageFlash::ajouter('warning', 'Les mots de passes sont différents');
+            Controller::redirect('index.php?controller=utilisateur&action=create');
+        } else if (Utilisateur::identifiantExiste($_POST['identifiant'])) {
+            MessageFlash::ajouter('warning', 'Cet identifiant existe déjà');
+            Controller::redirect('index.php?controller=utilisateur&action=create');
+        } else {
+            $utilisateur = Utilisateur::construireDepuisFormulaire($_POST);
+            (new UtilisateurRepository())->sauvegarder($utilisateur);
+            MessageFlash::ajouter("success", "Le compte a bien crée");
+            Controller::redirect("index.php?controller=utilisateur&action=connexion");
         }
-        $utilisateur = Utilisateur::construireDepuisFormulaire($_POST);
-        (new UtilisateurRepository())->sauvegarder($utilisateur);
-        Controller::afficheVue('view.php',
-            ["pagetitle" => "Compte crée",
-                "cheminVueBody" => "Utilisateurs/formulaireConnexion.php"]);
     }
 
     public static function search()
@@ -116,5 +127,50 @@ class ControllerUtilisateur
                 "cheminVueBody" => "Utilisateurs/step-4.php"]);
     }
 
+    public static function update()
+    {
+        $user = Session::getInstance()->lire('user');
+        $utilisateur = (new UtilisateurRepository())->select($_GET['idUtilisateur']);
+        if (is_null($user) || $user['id'] != $utilisateur->getIdentifiant()) {
+            MessageFlash::ajouter("warning", "Connectez-vous à votre compte pour le modifier.");
+            Controller::redirect("index.php?action=connexion&controller=utilisateur");
+        } else {
+            Controller::afficheVue('view.php',
+                ["utilisateur" => $utilisateur,
+                    "pagetitle" => "Modifier les informations",
+                    "cheminVueBody" => "Utilisateurs/update.php"]
+            );
+        }
+    }
 
+    public static function updated()
+    {
+        $user = Session::getInstance()->lire('user');
+        $utilisateur = (new UtilisateurRepository())->select($_POST['identifiant']);
+        if (is_null($user) || $user['id'] != $utilisateur->getIdentifiant()) {
+            MessageFlash::ajouter("warning", "Connectez-vous à votre compte pour le modifier.");
+            Controller::redirect("index.php?action=connexion&controller=utilisateur");
+        }
+        $user = Session::getInstance()->lire('user');
+        if (is_null($user) || $user['id'] != $utilisateur->getIdentifiant()) {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier un compte qui ne vous appartient pas.");
+            Controller::redirect("index.php?action=readAll&controller=question");
+        }
+        if (!MotDePasse::verifier($_POST['ancienMDP'], $utilisateur->getMdpHache())) {
+            MessageFlash::ajouter('warning', 'L\'ancien mot de passe n\'est pas valide');
+            Controller::redirect('index.php?controller=utilisateur&action=update&idUtilisateur=' . $utilisateur->getIdentifiant());
+        }
+        if ($_POST['mdp'] != $_POST['mdp2']) {
+            MessageFlash::ajouter('warning', 'Les mots de passes sont différents');
+            Controller::redirect('index.php?controller=utilisateur&action=update&idUtilisateur=' . $utilisateur->getIdentifiant());
+        } else {
+            $utilisateur->setNom($_POST['nom']);
+            $utilisateur->setPrenom($_POST['prenom']);
+            $utilisateur->setMdpHache($_POST['mdp']);
+            (new UtilisateurRepository())->update($utilisateur);
+            MessageFlash::ajouter('success', 'Vos informations ont été mises à jour');
+            Controller::redirect("index.php?controller=utilisateur&action=read&idUtilisateur=" . $utilisateur->getIdentifiant());
+        }
+
+    }
 }

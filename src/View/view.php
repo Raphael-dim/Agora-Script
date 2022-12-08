@@ -18,10 +18,9 @@
 <main>
     <?php
 
-    use App\Vote\Controller\Controller;
     use App\Vote\Lib\MessageFlash;
     use App\Vote\Model\HTTP\Session;
-
+    echo '<div class = "pileflash" >';
     if (!Session::getInstance()->contient('_messagesFlash')) {
         new MessageFlash();
     }
@@ -31,6 +30,7 @@
             echo '<div class="alert alert-' . $cle . '">' . $message . '</div>';
         }
     }
+    echo '</div>';
     require __DIR__ . "/{$cheminVueBody}";
     ?>
 </main>
