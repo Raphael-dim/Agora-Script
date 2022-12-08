@@ -40,6 +40,10 @@ class ControllerQuestion
 
     public static function read(): void
     {
+        if (!isset($_GET['idQuestion'])) {
+            MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
+            Controller::redirect('index.php?controller=question&action=readAll');
+        }
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $propositions = $question->getPropositions();
         $sections = $question->getSections();
@@ -216,6 +220,10 @@ class ControllerQuestion
 
     public static function update(): void
     {
+        if (!isset($_GET['idQuestion'])) {
+            MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
+            Controller::redirect('index.php?controller=question&action=readAll');
+        }
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $bool = true;
         if ($question->getPhase() != 'debut') {
@@ -241,15 +249,10 @@ class ControllerQuestion
 
     public static function updated(): void
     {
-
-
-        $date = date('d-m-Y à H:i:s');
         $bool = true;
-
         FormConfig::setArr('SessionQuestion');
         Session::getInstance();
         var_dump($_SESSION);
-
         $question = (new QuestionRepository())->select($_SESSION[FormConfig::$arr]['idQuestion']);
         if ($question->getPhase() != 'debut') {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont la phase d'écriture a déjà commencée.");
@@ -358,6 +361,10 @@ class ControllerQuestion
 
     public static function delete(): void
     {
+        if (!isset($_GET['idQuestion'])) {
+            MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
+            Controller::redirect('index.php?controller=question&action=readAll');
+        }
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         if (!ConnexionUtilisateur::estConnecte() ||
             ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant()) {

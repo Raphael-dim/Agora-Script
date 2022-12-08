@@ -17,7 +17,8 @@ if (isset($_GET['selection'])) {
 <div class="barreHaut">
     <form method="post" action="index.php?controller=question&action=readKeyword">
         <p>
-            <label for="motclef"></label><input type="text" placeholder="" height = 10 name="keyword" id="motclef" required/>
+            <label for="motclef"></label><input type="text" placeholder="" height=10 name="keyword" id="motclef"
+                                                required/>
             <input type="image" alt="Submit" src="../web/images/search.png" value="Envoyer" class="search"/>
         </p>
     </form>
@@ -45,10 +46,9 @@ if (isset($_GET['selection'])) {
 <ul class="questions">
     <?php
 
-    use App\Vote\Model\DataObject\CoAuteur;
+    use App\Vote\Lib\ConnexionUtilisateur;
     use App\Vote\Model\DataObject\Responsable;
 
-    $date = date("d-m-Y à H:i:s");
     foreach ($questions as $question) {
         $calendrier = $question->getCalendrier();
         $idQuestionURL = rawurlencode($question->getId());
@@ -56,13 +56,13 @@ if (isset($_GET['selection'])) {
         $titreHTML = htmlspecialchars($question->getTitre());
 
 
-        if ($date < $calendrier->getDebutEcriture()) {
+        if ($question->getPhase() == 'debut') {
             echo '<li class="listes" id = "status_cree">';
-        } else if ($date < $calendrier->getFinEcriture() && $date > $calendrier->getDebutEcriture()) {
+        } else if ($question->getPhase() == 'ecriture') {
             echo '<li class="listes" id = "status_ecriture">';
-        } else if ($date < $calendrier->getFinVote() && $date > $calendrier->getDebutVote()) {
+        } else if ($question->getPhase() == 'vote') {
             echo '<li class="listes" id = "status_vote">';
-        } else if ($date > $calendrier->getFinVote()) {
+        } else if ($question->getPhase() == 'fini') {
             echo '<li class="listes" id = "status_termine">';
         } else {
             echo '<li class="listes" id = "status_attente">';
@@ -73,33 +73,28 @@ if (isset($_GET['selection'])) {
             $idQuestionURL . '> ' . $titreHTML . ' </a>
             <a href="" id = "auteur">par ' . $organisateur . ' </a >';
         echo '<p id="description">' . $question->getDescription() . '</p>';
-        if ($calendrier->getDebutEcriture() > $date) {
-            if (isset($_SESSION['user']) && $_SESSION['user']['id'] == $organisateur) {
+        if ($question->getPhase() == 'debut') {
+            if (ConnexionUtilisateur::estConnecte() &&
+                ConnexionUtilisateur::getLoginUtilisateurConnecte() == $organisateur) {
                 echo '<div id="action" "><a href = index.php?action=update&controller=question&idQuestion=' .
                     $idQuestionURL . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >
                      <a href = index.php?action=delete&controller=question&idQuestion=' .
                     $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a></div>';
             }
             echo '<p>Début de la phase d\'écriture : ' . $calendrier->getDebutEcriture() . '</p>';
-        } else if ($date < $calendrier->getDebutVote()) {
+        } else if ($question->getPhase() != 'vote' || $question->getPhase() == 'fini') {
             echo '<p>Début de la phase de vote : ' . $calendrier->getDebutVote() . '</p>';
 
         }
-
-
-        if ($date > $calendrier->getDebutEcriture() && $date < $calendrier->getFinVote()) {
+        if ($question->getPhase() == 'ecriture') {
             echo '<a href = index.php?action=readAll&controller=proposition&idQuestion=' . $idQuestionURL . ' >Liste des propositions</a>';
         }
-        if ($calendrier->getDebutEcriture() <= $date && $calendrier->getFinEcriture() >= $date &&
-            isset($_SESSION['user']) && Responsable::estResponsable($question, $_SESSION['user']['id'])
+        if ($question->getPhase() == 'ecriture' && ConnexionUtilisateur::estConnecte() &&
+            Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())
             && !Responsable::aCreeProposition($question, $_SESSION['user']['id'])) {
             echo '<a href = index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '>Créer une proposition</a>';
-
-
         }
-
         echo '</li>';
-
     }
     ?>
 </ul>

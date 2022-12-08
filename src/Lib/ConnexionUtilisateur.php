@@ -11,7 +11,7 @@ class ConnexionUtilisateur
 
     public static function connecter(string $loginUtilisateur): void
     {
-// À compléter
+        Session::getInstance()->enregistrer('user', array('id' => $loginUtilisateur));
     }
 
     public static function estConnecte(): bool
@@ -22,7 +22,9 @@ class ConnexionUtilisateur
 
     public static function deconnecter(): void
     {
-// À compléter
+        if (isset($_SESSION['user'])) {
+            unset($_SESSION['user']);
+        }
     }
 
     public static function getLoginUtilisateurConnecte(): ?string
