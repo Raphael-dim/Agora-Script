@@ -141,11 +141,6 @@ class Question extends AbstractDataObject
         return (new ResponsableRepository())->selectWhere($this->id, '*', "idQuestion", "Responsables");
     }
 
-    public function getCoAuteur(): array
-    {
-        return (new CoAuteurRepository())->selectWhere($this->id, '*', "idQuestion", "CoAuteur");
-    }
-
     public function getVotants(): array
     {
         return (new VotantRepository())->selectWhere($this->id, '*', "idQuestion", "Votants");
@@ -154,6 +149,25 @@ class Question extends AbstractDataObject
     public function getPropositions(): array
     {
         return (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion", 'Propositions');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function getPhase(): string
+    {
+        $date = date('d-m-Y à H:i:s');
+        if ($date < $this->calendrier->getDebutEcriture()) {
+            return 'debut';
+        } else if ($date > $this->calendrier->getDebutEcriture() && $date < $this->calendrier->getFinEcriture()) {
+            return 'ecriture';
+        } else if ($date > $this->calendrier->getFinEcriture() && $date < $this->calendrier->getDebutVote()) {
+            return 'entre';
+        } else if ($date > $this->calendrier->getDebutVote() && $date < $this->calendrier->getFinVote()) {
+            return 'vote';
+        } else {
+            return 'fini';
+        }
     }
 
 

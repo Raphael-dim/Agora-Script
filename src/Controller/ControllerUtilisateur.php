@@ -2,7 +2,7 @@
 
 namespace App\Vote\Controller;
 
-use App\Vote\Config\FormConfig;
+use App\Vote\Lib\ConnexionUtilisateur;
 use App\Vote\Lib\MessageFlash;
 use App\Vote\Lib\MotDePasse;
 use App\Vote\Model\DataObject\Utilisateur;
@@ -31,16 +31,14 @@ class ControllerUtilisateur
 
     public static function disconnected()
     {
-        $user = Session::getInstance()->lire('user');
-        if (is_null($user)) {
+        if (!ConnexionUtilisateur::estConnecte()) {
             MessageFlash::ajouter("warning", "Vous pouvez pas vous déconnecter sans être connecté");
             Controller::redirect("index.php?action=connexion&controller=utilisateur");
         }
         Session::getInstance();
-        if (isset($_SESSION['user'])) {
-            unset($_SESSION['user']);
-        }
-        self::connexion();
+        ConnexionUtilisateur::deconnecter();
+        MessageFlash::ajouter("success", "Vous avez été déconnecté");
+        Controller::redirect('index.php?controller=utilisateur&action=connexion');
     }
 
     public static function connecter()
@@ -57,7 +55,8 @@ class ControllerUtilisateur
                 MessageFlash::ajouter('warning', 'Mot de passe incorrect');
                 Controller::redirect('index.php?controller=utilisateur&action=connexion');
             } else {
-                Session::getInstance()->enregistrer('user', array('id' => $utilisateur->getIdentifiant()));
+                ConnexionUtilisateur::connecter($utilisateur->getIdentifiant());
+                MessageFlash::ajouter('success', 'Vous êtes connecté');
                 Controller::redirect("index.php?controller=accueil&action=home");
             }
         }
@@ -128,9 +127,9 @@ class ControllerUtilisateur
 
     public static function update()
     {
-        $user = Session::getInstance()->lire('user');
         $utilisateur = (new UtilisateurRepository())->select($_GET['idUtilisateur']);
-        if (is_null($user) || $user['id'] != $utilisateur->getIdentifiant()) {
+        if (!ConnexionUtilisateur::estConnecte() ||
+            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $utilisateur->getIdentifiant()) {
             MessageFlash::ajouter("warning", "Connectez-vous à votre compte pour le modifier.");
             Controller::redirect("index.php?action=connexion&controller=utilisateur");
         } else {
@@ -144,14 +143,12 @@ class ControllerUtilisateur
 
     public static function updated()
     {
-        $user = Session::getInstance()->lire('user');
         $utilisateur = (new UtilisateurRepository())->select($_POST['identifiant']);
-        if (is_null($user) || $user['id'] != $utilisateur->getIdentifiant()) {
+        if (!ConnexionUtilisateur::estConnecte()) {
             MessageFlash::ajouter("warning", "Connectez-vous à votre compte pour le modifier.");
             Controller::redirect("index.php?action=connexion&controller=utilisateur");
         }
-        $user = Session::getInstance()->lire('user');
-        if (is_null($user) || $user['id'] != $utilisateur->getIdentifiant()) {
+        if (ConnexionUtilisateur::getLoginUtilisateurConnecte() != $utilisateur->getIdentifiant()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier un compte qui ne vous appartient pas.");
             Controller::redirect("index.php?action=readAll&controller=question");
         }

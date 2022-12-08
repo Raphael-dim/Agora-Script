@@ -3,31 +3,31 @@
 namespace App\Vote\Model\Repository;
 
 use App\Vote\Model\DataObject\CoAuteur;
+use App\Vote\Model\DataObject\Responsable;
+use App\Vote\Model\DataObject\Utilisateur;
 
 class CoAuteurRepository extends AbstractRepository
 {
     protected function construire(array $coAuteurTableau): CoAuteur
     {
-        $coAuteur =  new CoAuteur(
+        return new CoAuteur(
+            (new UtilisateurRepository())->select($coAuteurTableau['idauteur']),
             (new PropositionRepository())->select($coAuteurTableau['idproposition']),
         );
-        $coAuteur->setIdentifiant($coAuteurTableau['idauteur']);
-        return $coAuteur;
     }
 
     protected function getNomTable(): string
     {
-        return "CoAuteur";
+        return "Coauteurs";
     }
 
     protected function getNomClePrimaire(): string
     {
-        return "idutilisateur";
+        return "idauteur";
     }
 
     protected function getNomsColonnes(): array
     {
         return array("idauteur", "idproposition");
-
     }
 }

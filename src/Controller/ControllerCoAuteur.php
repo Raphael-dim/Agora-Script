@@ -16,7 +16,7 @@ use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\ResponsableRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
 
-class ControllerCoAuteur
+class   ControllerCoAuteur
 {
 
     public static function create()
@@ -25,7 +25,7 @@ class ControllerCoAuteur
         //session_start();
         FormConfig::setArr('SessionCoAuteur');
         //if(!isset($_SESSION[FormConfig::$arr]['co-auteur'])){
-            $tests = (new CoAuteurRepository())->selectWhere($_GET['idQuestion'],'*','idquestion',"CoAuteur");
+            $tests = (new CoAuteurRepository())->selectWhere($_GET['idQuestion'],'*','idquestion',"Coauteurs");
             if(empty($tests)){
                 $_SESSION[FormConfig::$arr]['co-auteur'] = array();
             }

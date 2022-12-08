@@ -2,12 +2,14 @@
     <fieldset>
         <legend>formulaire de connexion :</legend>
         <p>
-            Identifiant de connexion :
+            <label for="id">Identifiant de connexion :</label>
             <input type="text" placeholder="" name="identifiant" id="id" required>
+            <span class="validity"></span>
         </p>
         <p class="InputAddOn">
             <label class="InputAddOn-item" for="mdp_id">Mot de passe&#42;</label>
             <input class="InputAddOn-field" type="password" value="" placeholder="" name="mdp" id="mdp_id" required>
+            <span class="validity"></span>
         </p>
         <p>
             <input type="submit" value="Connexion" class="nav">

@@ -103,7 +103,8 @@ class Proposition extends AbstractDataObject
             "idquestionTag" => $this->question->getId(),
             "idresponsableTag" => $this->responsable->getIdentifiant(),
             "titreTag" => $this->titre,
-            "nbVotesTag" => $this->nbVotes
+            "nbvotesTag" => $this->nbVotes,
+            "idpropositionTag" => $this->id
         );
     }
 }
