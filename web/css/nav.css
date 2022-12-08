@@ -65,6 +65,16 @@ ul[id="Menu"] li {
     display: inline;
 }
 
+.profil {
+    filter: invert(0.9);
+    position:absolute !important;
+    right:100px;
+    width:auto !important;
+}
+.profil>img{
+    min-width:34px ;
+}
+
 
 @media screen and (max-width: 1000px) {
     nav{
