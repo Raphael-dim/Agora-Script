@@ -30,7 +30,7 @@ class ControllerProposition
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $bool = true;
         if (!ConnexionUtilisateur::estConnecte() ||
-            !Responsable::estResponsable($question, $user['id'])) {
+            !Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition, 
             vous n'êtes pas responsable pour cette question.");
             $bool = false;
@@ -40,7 +40,7 @@ class ControllerProposition
             que la phase d'écriture n'a pas débuté.");
             $bool = false;
         }
-        if (Responsable::aCreeProposition($question, $user['id'])) {
+        if (Responsable::aCreeProposition($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
             MessageFlash::ajouter("warning", "Vous avez déjà crée une proposition pour cette question.");
             $bool = false;
         }
