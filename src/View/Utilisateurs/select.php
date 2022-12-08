@@ -1,5 +1,7 @@
 <?php
+
 use App\Vote\Config\FormConfig as FormConfig;
+
 require "../src/View/Utilisateurs/searchselect.php";
 if (!isset($utilisateurs)) {
     $utilisateurs = [];

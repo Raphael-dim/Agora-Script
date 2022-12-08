@@ -2,43 +2,41 @@
 
 namespace App\Vote\Controller;
 
+use App\Vote\Lib\ConnexionUtilisateur;
 use App\Vote\Lib\MessageFlash;
 use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\CoAuteur;
 use App\Vote\Model\DataObject\Proposition;
 use App\Vote\Model\DataObject\PropositionSection;
 use App\Vote\Model\DataObject\Responsable;
-use App\Vote\Model\HTTP\Session;
-use App\Vote\Model\Repository\AuteurRepository;
-use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\PropositionSectionRepository;
 use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\ResponsableRepository;
-use App\Vote\Model\Repository\SectionRepository;
-use App\Vote\Model\Repository\UtilisateurRepository;
 
 class ControllerProposition
 {
 
     public static function create()
     {
-        $user = Session::getInstance()->lire('user');
+        if (!isset($_GET['idQuestion'])) {
+            MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
+            Controller::redirect('index.php?controller=question&action=readAll');
+        }
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        $date = date("d/m/Y à H:i:s");
-        $calendrier = $question->getCalendrier();
         $bool = true;
-        if (!isset($user) || !Responsable::estResponsable($question, $user['id'])) {
+        if (!ConnexionUtilisateur::estConnecte() ||
+            !Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition, 
             vous n'êtes pas responsable pour cette question.");
             $bool = false;
         }
-        if ($calendrier->getDebutEcriture() > $date || $calendrier->getFinEcriture() < $date) {
+        if ($question->getPhase() != 'ecriture') {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition tant 
             que la phase d'écriture n'a pas débuté.");
             $bool = false;
         }
-        if (Responsable::aCreeProposition($question, $user['id'])) {
+        if (Responsable::aCreeProposition($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
             MessageFlash::ajouter("warning", "Vous avez déjà crée une proposition pour cette question.");
             $bool = false;
         }
@@ -68,6 +66,10 @@ class ControllerProposition
 
     public static function readAll()
     {
+        if (!isset($_GET['idQuestion'])) {
+            MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
+            Controller::redirect('index.php?controller=question&action=readAll');
+        }
         $propositions = (new PropositionRepository())->selectWhere($_GET['idQuestion'], '*', 'idquestion');
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $votants = $question->getVotants();
@@ -80,28 +82,30 @@ class ControllerProposition
 
     public static function created()
     {
-        $user = Session::getInstance()->lire('user');
+        if (!isset($_GET['idQuestion'])) {
+            MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
+            Controller::redirect('index.php?controller=question&action=readAll');
+        }
         $question = (new QuestionRepository())->select($_GET["idQuestion"]);
-        $date = date("d/m/Y à H:i:s");
         $bool = true;
-        if (!isset($user) || !Responsable::estResponsable($question, $user['id'])) {
+        if (!ConnexionUtilisateur::estConnecte() || !Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition, 
             vous n'êtes pas responsable pour cette question.");
             $bool = false;
         }
-        if ($question->getCalendrier()->getDebutEcriture() > $date || $question->getCalendrier()->getFinEcriture() < $date) {
+        if ($question->getPhase() != 'ecriture') {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition tant 
             que la phase d'écriture n'a pas débuté.");
             $bool = false;
         }
-        if (Responsable::aCreeProposition($question, $user['id'])) {
+        if (Responsable::aCreeProposition($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
             MessageFlash::ajouter("warning", "Vous avez déjà crée une proposition pour cette question.");
             $bool = false;
         }
         if (!$bool) {
             Controller::redirect("index.php?controller=question&action=readAll");
         }
-        $responsable = (new ResponsableRepository())->select($user['id']);
+        $responsable = (new ResponsableRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
         $proposition = new Proposition($_POST['titre'], $responsable, $question, 0);
         $propositionBD = (new PropositionRepository())->sauvegarder($proposition);
         $proposition->setId($propositionBD);
