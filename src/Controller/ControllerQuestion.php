@@ -3,6 +3,7 @@
 namespace App\Vote\Controller;
 
 
+use App\Vote\Lib\ConnexionUtilisateur;
 use App\Vote\Config\FormConfig;
 use App\Vote\Lib\MessageFlash;
 use App\Vote\Model\DataObject\Calendrier;
@@ -27,7 +28,7 @@ class ControllerQuestion
      */
     public static function create(): void
     {
-        if (isset(Session::getInstance()->lire('user')['id'])) {
+        if (ConnexionUtilisateur::estConnecte()) {
             FormConfig::setArr('SessionQuestion');
             FormConfig::startSession();
             self::form();
@@ -152,8 +153,7 @@ class ControllerQuestion
      */
     public static function created(): void
     {
-        $user = Session::getInstance()->lire('user');
-        if (is_null($user)) {
+        if (!ConnexionUtilisateur::estConnecte()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas créer une question si vous n'êtes pas connecté.");
             Controller::redirect("index.php?action=readAll&controller=question");
         }
@@ -216,16 +216,14 @@ class ControllerQuestion
 
     public static function update(): void
     {
-        $date = date('d-m-Y à H:i:s');
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $bool = true;
-        $calendrier = $question->getCalendrier();
-        if ($date > $calendrier->getDebutEcriture()) {
+        if ($question->getPhase() != 'debut') {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont la phase d'écriture a déjà commencée.");
             $bool = false;
         }
-        $user = Session::getInstance()->lire('user');
-        if (is_null($user) || $user['id'] != $question->getOrganisateur()->getIdentifiant()) {
+        if (!ConnexionUtilisateur::estConnecte() ||
+            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
             $bool = false;
         }
@@ -244,7 +242,6 @@ class ControllerQuestion
     public static function updated(): void
     {
 
-        $user = Session::getInstance()->lire('user');
 
         $date = date('d-m-Y à H:i:s');
         $bool = true;
@@ -254,13 +251,12 @@ class ControllerQuestion
         var_dump($_SESSION);
 
         $question = (new QuestionRepository())->select($_SESSION[FormConfig::$arr]['idQuestion']);
-        $calendrier = $question->getCalendrier();
-        if ($date > $calendrier->getDebutEcriture()) {
+        if ($question->getPhase() != 'debut') {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont la phase d'écriture a déjà commencée.");
             $bool = false;
         }
-        $user = Session::getInstance()->lire('user');
-        if (is_null($user) || $user['id'] != $question->getOrganisateur()->getIdentifiant()) {
+        if (!ConnexionUtilisateur::estConnecte() ||
+            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
             $bool = false;
         }
@@ -362,14 +358,11 @@ class ControllerQuestion
 
     public static function delete(): void
     {
-        $user = Session::getInstance()->lire('user');
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        if (is_null($user) || $user['id'] != $question->getOrganisateur()->getIdentifiant()) {
-            MessageFlash::ajouter("danger", "Vous ne pouvez pas supprimer une question dont vous n'êtes par l'organisateur.");
-            Controller::redirect("index.php?action=readAll&controller=question");
-        }
-        if (!isset($_SESSION['user']) || $_SESSION['user']['id'] != $question->getOrganisateur()->getIdentifiant()) {
-            ControllerAccueil::erreur();
+        if (!ConnexionUtilisateur::estConnecte() ||
+            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant()) {
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
+            Controller::redirect('index.php?controller=question&action=readAll');
         } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
             self::afficheVue('view.php', ["pagetitle" => "Question modifiée",
                 "cheminVueBody" => "confirm.php",

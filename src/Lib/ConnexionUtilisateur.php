@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Covoiturage\Lib;
+namespace App\Vote\Lib;
+
+use App\Vote\Model\HTTP\Session;
 
 class ConnexionUtilisateur
 {
@@ -14,6 +16,7 @@ class ConnexionUtilisateur
 
     public static function estConnecte(): bool
     {
+        return isset(Session::getInstance()->lire('user')['id']);
     }// À compléter
 
 
@@ -24,6 +27,6 @@ class ConnexionUtilisateur
 
     public static function getLoginUtilisateurConnecte(): ?string
     {
-// À compléter
+        return Session::getInstance()->lire('user')['id'];
     }
 }
