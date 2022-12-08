@@ -49,7 +49,6 @@ class Calendrier extends AbstractDataObject
     }
 
     /**
-     * @return string
      * @throws \Exception
      */
     public function getFinEcriture($bool = false): string
@@ -57,7 +56,7 @@ class Calendrier extends AbstractDataObject
         if ($bool){
             return (new DateTime($this->finEcriture))->format('Y-m-d H:i');
         }
-        return (new DateTime($this->finEcriture))->format('d/m/Y à H:i:s');
+        return (new DateTime($this->finEcriture))->format('d-m-Y à H:i:s');
     }
 
     /**
@@ -77,7 +76,7 @@ class Calendrier extends AbstractDataObject
             return (new DateTime($this->debutVote))->format('Y-m-d H:i');
         }
         else{
-            return (new DateTime($this->debutVote))->format('d/m/Y à H:i:s');
+            return (new DateTime($this->debutVote))->format('d-m-Y à H:i:s');
         }
 
     }
@@ -98,7 +97,7 @@ class Calendrier extends AbstractDataObject
         if ($bool){
             return (new DateTime($this->finVote))->format('Y-m-d H:i');
         }
-        return (new DateTime($this->finVote))->format('d/m/Y à H:i:s');
+        return (new DateTime($this->finVote))->format('d-m-Y à H:i:s');
     }
 
     /**

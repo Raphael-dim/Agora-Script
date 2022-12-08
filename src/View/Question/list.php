@@ -82,16 +82,16 @@ if (isset($_GET['selection'])) {
                     $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a></div>';
             }
             echo '<p>Début de la phase d\'écriture : ' . $calendrier->getDebutEcriture() . '</p>';
-        } else if ($question->getPhase() != 'vote' || $question->getPhase() == 'fini') {
+        } else if ($question->getPhase() != 'vote' && $question->getPhase() != 'fini') {
             echo '<p>Début de la phase de vote : ' . $calendrier->getDebutVote() . '</p>';
 
         }
-        if ($question->getPhase() == 'ecriture') {
+        if ($question->getPhase() == 'ecriture' || $question->getPhase() == 'vote') {
             echo '<a href = index.php?action=readAll&controller=proposition&idQuestion=' . $idQuestionURL . ' >Liste des propositions</a>';
         }
         if ($question->getPhase() == 'ecriture' && ConnexionUtilisateur::estConnecte() &&
             Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())
-            && !Responsable::aCreeProposition($question, $_SESSION['user']['id'])) {
+            && !Responsable::aCreeProposition($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
             echo '<a href = index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '>Créer une proposition</a>';
         }
         echo '</li>';

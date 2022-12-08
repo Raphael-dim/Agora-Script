@@ -1,6 +1,7 @@
 <ul class="questions">
     <?php
 
+    use App\Vote\Lib\ConnexionUtilisateur;
     use App\Vote\Model\DataObject\Votant;
 
     $i = 1;
@@ -8,7 +9,7 @@
     $date = date("Y-m-d H:i:s");
     $aVote = Votant::aVote($propositions, $_SESSION['user']['id']);
     $aVoteURL = rawurlencode($aVote);
-    if (sizeof($propositions) == 0){
+    if (sizeof($propositions) == 0) {
         echo '<h2>Il n\'y a pas encore de propositions.</h2>';
     }
     foreach ($propositions as $proposition) {
@@ -20,8 +21,8 @@
         echo '<p class = "listes">
             <a href= index.php?action=read&controller=proposition&idProposition=' .
             $idPropositionURL . '>' . $i . ' : ' . $titreHTML . '  </a>';
-        if ($date >= $calendrier->getDebutVote() && $date < $calendrier->getFinVote() &&
-            isset($_SESSION['user']) && Votant::estVotant($question, $_SESSION['user']['id'])
+        if ($question->getPhase() == 'vote' && ConnexionUtilisateur::estConnecte()
+            && Votant::estVotant($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())
             && $aVote != $proposition->getId()) {
             if (is_null($aVote)) {
                 echo '<a id="vote" href= index.php?action=create&controller=vote&idproposition=' .

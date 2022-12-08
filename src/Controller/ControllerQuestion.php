@@ -355,7 +355,6 @@ class ControllerQuestion
 
         MessageFlash::ajouter('success', 'La question a bien été modifiée');
         Controller::redirect("index.php?controller=question&action=readAll");
-
         FormConfig::startSession();
     }
 
@@ -396,11 +395,9 @@ class ControllerQuestion
                 "cheminVueBody" => "Question/list.php"]);
     }
 
-
     private static function afficheVue(string $cheminVue, array $parametres = []): void
     {
         extract($parametres); // Crée des variables à partir du tableau $paramètres
         require "../src/view/$cheminVue"; // Charge la vue
     }
-
 }

@@ -156,6 +156,9 @@ class Question extends AbstractDataObject
         return (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion", 'Propositions');
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getPhase(): string
     {
         $date = date('d-m-Y à H:i:s');
