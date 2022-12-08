@@ -10,12 +10,12 @@ main > h1, h2 {
 @keyframes slidein {
     from {
         opacity: 0;
-        transform: translate(100%);
+        transform: translateX(100%);
     }
 
     to {
         opacity: 1;
-        transform: translate(0%);
+        transform: translateX(0%);
     }
 }
 
@@ -32,15 +32,22 @@ main > h1, h2 {
     }
 }
 
-@keyframes fadeout {
+@keyframes fadeinout {
     from {
-        opacity: 1;
+        opacity: 0;
+        transform: translateY(0%);
+        transform: translateX(100%);
     }
-    50%{
-        opacity:1;
+    15%{
+        opacity: 1;
+        transform: translateY(0%);
+        transform: translateX(0%);
+    }
+    90%{
+        transform: translateY(0%);
     }
     to {
-        opacity: 0;
+        transform: translateY(-150%);
     }
 }
 
@@ -577,7 +584,7 @@ a#vote:hover {
 }
 
 .pileflash{
-    position: absolute;
+    position:fixed;
     top:75px;
     right:2px;
     z-index:100;
@@ -588,9 +595,9 @@ a#vote:hover {
     margin-bottom: 20px;
     border: 1px solid transparent;
     border-radius: 4px;
-    animation:slidein 0.5s, fadeout 5.5s;
-    opacity:0;
+    animation:fadeinout 5.5s;
     margin:1px;
+    transform: translateY(-150%);
 }
 
 .alert-success {
@@ -711,10 +718,6 @@ div p {
     width: 100%;
 }
 
-.profil {
-    filter: invert(0.9);
-    max-width: 37px;
-}
 
 .lien {
     padding: 10px;
