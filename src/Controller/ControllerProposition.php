@@ -8,15 +8,10 @@ use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Proposition;
 use App\Vote\Model\DataObject\PropositionSection;
 use App\Vote\Model\DataObject\Responsable;
-use App\Vote\Model\HTTP\Session;
-use App\Vote\Model\Repository\AuteurRepository;
-use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\PropositionSectionRepository;
 use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\ResponsableRepository;
-use App\Vote\Model\Repository\SectionRepository;
-use App\Vote\Model\Repository\UtilisateurRepository;
 
 class ControllerProposition
 {

@@ -49,7 +49,7 @@ class ControllerQuestion
         $sections = $question->getSections();
         $responsables = $question->getResponsables();
         $votants = $question->getVotants();
-        self::afficheVue('view.php', ["question" => $question,
+        Controller::afficheVue('view.php', ["question" => $question,
             "sections" => $sections,
             "responsables" => $responsables,
             "propositions" => $propositions,
@@ -240,7 +240,7 @@ class ControllerQuestion
         } else {
             FormConfig::setArr('SessionQuestion');
             FormConfig::startSession();
-            self::afficheVue('view.php', ["pagetitle" => "Modifier une question",
+            Controller::afficheVue('view.php', ["pagetitle" => "Modifier une question",
                 "cheminVueBody" => "question/create/step-1.php",
                 "idQuestion" => $_GET['idQuestion']]);
         }
@@ -289,7 +289,7 @@ class ControllerQuestion
                 if ($sectionBD != null) {
                     $section->setId($sectionBD);
                 } else {
-                    self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+                    Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
                 }
             } else {
                 $ancSections[$i]->setTitre($nouvSections[$i]['titre']);
@@ -370,7 +370,7 @@ class ControllerQuestion
             MessageFlash::ajouter("danger", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
             Controller::redirect('index.php?controller=question&action=readAll');
         } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
-            self::afficheVue('view.php', ["pagetitle" => "Question modifiée",
+            Controller::afficheVue('view.php', ["pagetitle" => "Question modifiée",
                 "cheminVueBody" => "confirm.php",
                 "message" => "Êtes vous sûr de vouloir supprimer cette question?",
                 "id" => $_GET['idQuestion']]);
@@ -395,9 +395,26 @@ class ControllerQuestion
                 "cheminVueBody" => "Question/list.php"]);
     }
 
-    private static function afficheVue(string $cheminVue, array $parametres = []): void
+    public static function result(): void
     {
-        extract($parametres); // Crée des variables à partir du tableau $paramètres
-        require "../src/view/$cheminVue"; // Charge la vue
+        $bool = true;
+        if (!isset($_GET['idQuestion'])) {
+            MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
+            $bool = false;
+        }
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        if ($question->getPhase() != 'fini') {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas consulter la page des résultats pour l'instant.");
+            $bool = false;
+        }
+        if (!$bool) {
+            Controller::redirect('index.php?controller=question&action=readAll');
+        }
+        $propositions = $question->getPropositions();
+        Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
+            'cheminVueBody' => "Question/resultat.php",
+            'propositions' => $propositions]);
     }
+
+
 }
