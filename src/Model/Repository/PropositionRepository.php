@@ -30,6 +30,6 @@ class PropositionRepository extends AbstractRepository
 
     protected function getNomsColonnes(): array
     {
-        return array( "idquestion", "idresponsable", "titre", "nbVotes");
+        return array( "idquestion", "idresponsable", "titre", "nbvotes");
     }
 }

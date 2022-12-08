@@ -4,6 +4,7 @@ namespace App\Vote\Controller;
 
 use App\Vote\Lib\MessageFlash;
 use App\Vote\Model\DataObject\Calendrier;
+use App\Vote\Model\DataObject\CoAuteur;
 use App\Vote\Model\DataObject\Proposition;
 use App\Vote\Model\DataObject\PropositionSection;
 use App\Vote\Model\DataObject\Responsable;
@@ -117,34 +118,40 @@ class ControllerProposition
 
     public static function update()
     {
-        session_start();
-        $propositionSections = (new PropositionSectionRepository())->selectWhere($_GET['idProposition'], '*', 'idproposition');
+        //session_start();
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
-        Controller::afficheVue('view.php', ["pagetitle" => "Modifier la proposition",
-            "cheminVueBody" => "Proposition/update.php",
-            "propositionSections" => $propositionSections, "proposition" => $proposition]);
+        if(CoAuteur::estCoAuteur($_SESSION['user']['id'],$proposition->getId()) || $proposition->getResponsable()->getIdentifiant() == $_SESSION['user']['id']){
+            $propositionSections = (new PropositionSectionRepository())->selectWhere($_GET['idProposition'], '*', 'idproposition');
+            Controller::afficheVue('view.php', ["pagetitle" => "Modifier la proposition",
+                "cheminVueBody" => "Proposition/update.php",
+                "propositionSections" => $propositionSections, "proposition" => $proposition]);
+        }else{
+            Controller::afficheVue('view.php', ["pagetitle" => "Modifier la proposition",
+                "cheminVueBody" => "Accueil/erreur.php"]);
+        }
+
     }
 
     public static function updated()
     {
-        session_start();
+        //session_start();
         $responsable = (new ResponsableRepository())->select($_SESSION['user']['id']);
-        $propositionSections = (new PropositionSectionRepository())->selectWhere($_GET['idProposition'], '*', 'idproposition');
         $proposition = (new PropositionRepository())->select($_GET["idProposition"]);
+        $propositions = (new PropositionRepository())->selectWhere($responsable->getQuestion()->getId(), '*', 'idquestion');
         $question = $proposition->getQuestion();
-        //var_dump($proposition->getQuestion());
         $sections = $question->getSections();
-        //var_dump($question->getSections());
         (new PropositionSectionRepository())->delete($_GET["idProposition"]);
+        $prop = new Proposition($_POST['titre'],$proposition->getResponsable(),$proposition->getQuestion(),$proposition->getNbVotes());
+        $prop->setId($_GET["idProposition"]);
+        (new PropositionRepository())->update($prop);
         foreach ($sections as $section) {
             $propositionSection = new PropositionSection((new PropositionRepository())->select($_GET["idProposition"]), $section, $_POST['contenu' . $section->getId()]);
-            echo "tessst";
-            //(new PropositionSectionRepository())->delete($_GET["idProposition"]);
             (new PropositionSectionRepository())->sauvegarder($propositionSection);
         }
         Controller::afficheVue('view.php', ["pagetitle" => "Accueil",
             "cheminVueBody" => "Proposition/updated.php",
             "responsable" => $responsable,
-            "question" => $question]);
+            "question" => $question,
+            "propositions" => $propositions]);
     }
 }

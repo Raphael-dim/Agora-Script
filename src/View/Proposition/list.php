@@ -34,11 +34,12 @@
             echo '<a id="vote" href= index.php?action=delete&controller=vote&idproposition=' .
                 $idPropositionURL . '>Supprimer le vote</a>';
         }
-        if(CoAuteur::estCoAuteur($_SESSION['user']['id'],$proposition->getId())){
+        if(CoAuteur::estCoAuteur($_SESSION['user']['id'],$proposition->getId()) || $proposition->getResponsable()->getIdentifiant() == $_SESSION['user']['id']){
             echo '<a href = index.php?action=update&controller=proposition&idProposition=' .
                 $proposition->getId() . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >';
 
-        }else if($proposition->getResponsable()->getIdentifiant() == $_SESSION['user']['id']){
+        }
+        if($proposition->getResponsable()->getIdentifiant() == $_SESSION['user']['id']){
             echo '<a id="vote" href= index.php?action=create&controller=coauteur&idProposition=' .
                 $idPropositionURL . '>Désigner des co-auteurs</a>';
         }
