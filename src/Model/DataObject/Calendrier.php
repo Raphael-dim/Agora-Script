@@ -4,6 +4,7 @@ namespace App\Vote\Model\DataObject;
 
 
 use Cassandra\Date;
+use DateInterval;
 use DateTime;
 
 class Calendrier extends AbstractDataObject
@@ -34,7 +35,7 @@ class Calendrier extends AbstractDataObject
      */
     public function getDebutEcriture($bool = false): string
     {
-        if ($bool){
+        if ($bool) {
             return (new DateTime($this->debutEcriture))->format('Y-m-d H:i');
         }
         return (new DateTime($this->debutEcriture))->format('d-m-Y à H:i:s');
@@ -53,7 +54,7 @@ class Calendrier extends AbstractDataObject
      */
     public function getFinEcriture($bool = false): string
     {
-        if ($bool){
+        if ($bool) {
             return (new DateTime($this->finEcriture))->format('Y-m-d H:i');
         }
         return (new DateTime($this->finEcriture))->format('d-m-Y à H:i:s');
@@ -69,13 +70,13 @@ class Calendrier extends AbstractDataObject
 
     /**
      * @return string
+     * @throws \Exception
      */
     public function getDebutVote($bool = false): string
     {
-        if ($bool){
+        if ($bool) {
             return (new DateTime($this->debutVote))->format('Y-m-d H:i');
-        }
-        else{
+        } else {
             return (new DateTime($this->debutVote))->format('d-m-Y à H:i:s');
         }
 
@@ -91,10 +92,11 @@ class Calendrier extends AbstractDataObject
 
     /**
      * @return string
+     * @throws \Exception
      */
     public function getFinVote($bool = false): string
     {
-        if ($bool){
+        if ($bool) {
             return (new DateTime($this->finVote))->format('Y-m-d H:i');
         }
         return (new DateTime($this->finVote))->format('d-m-Y à H:i:s');
@@ -122,6 +124,27 @@ class Calendrier extends AbstractDataObject
     public function setId(int $id): void
     {
         $this->id = $id;
+    }
+
+    public static function diff(DateInterval $interval): string
+    {
+        $res = "";
+        if ($interval->y != 0) {
+            $res = $res . $interval->y . ' année, ';
+        }
+        if ($interval->m != 0) {
+            $res = $res . $interval->m . ' mois, ';
+        }
+        if ($interval->d != 0) {
+            $res = $res . $interval->d . ' jours, ';
+        }
+        if ($interval->h != 0) {
+            $res = $res . $interval->h . ' heures, ';
+        }
+        if ($interval->i != 0) {
+            $res = $res . $interval->i . ' minutes';
+        }
+        return $res;
     }
 
 
