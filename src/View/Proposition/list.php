@@ -1,6 +1,7 @@
 <ul class="questions">
     <?php
 
+    use App\Vote\Config\FormConfig;
     use App\Vote\Model\DataObject\CoAuteur;
     use App\Vote\Model\DataObject\Responsable;
     use App\Vote\Model\DataObject\Votant;

@@ -172,7 +172,7 @@ class ControllerProposition
             $step = $_GET['step'];
             switch ($step) {
                 case 1:
-                    $_SESSION[FormConfig::$arr]['co-auteur'] = array();
+                    unset($_SESSION[FormConfig::$arr]['co-auteur']);
                     $propositionSections = (new PropositionSectionRepository())->selectWhere($_GET['idProposition'], '*', 'idproposition');
                     Controller::afficheVue('view.php', ["pagetitle" => "Accueil",
                         "cheminVueBody" => "Proposition/update.php",
@@ -183,14 +183,15 @@ class ControllerProposition
                     $tests = (new CoAuteurRepository())->selectWhere($_GET['idProposition'], '*', 'idproposition', "Coauteurs");
                     if (!isset($_SESSION[FormConfig::$arr]['co-auteur'])) {
                         $_SESSION[FormConfig::$arr]['co-auteur'] = array();
-                    }
-                    if (!empty($tests)) {
-                        foreach ($tests as $test) {
-                            if ($_SESSION[FormConfig::$arr]['co-auteur'] == $test->getUtilisateur()->getIdentifiant()) {
-                                $_SESSION[FormConfig::$arr]['co-auteur'][] = $test->getUtilisateur()->getIdentifiant();
+                        if (!empty($tests)) {
+                            foreach ($tests as $test) {
+                                if ($_SESSION[FormConfig::$arr]['co-auteur'] != $test->getUtilisateur()->getIdentifiant()) {
+                                    $_SESSION[FormConfig::$arr]['co-auteur'][] = $test->getUtilisateur()->getIdentifiant();
+                                }
                             }
                         }
                     }
+                    var_dump($_SESSION[FormConfig::$arr]['co-auteur']);
                     if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row" != "") {
                         $row = $_POST['row'];
                         $keyword = $_POST['keyword'];
@@ -233,7 +234,7 @@ class ControllerProposition
             $sections = $question->getSections();
             (new PropositionSectionRepository())->delete($_GET["idProposition"]);
             $coAuteursSelec = $_SESSION[FormConfig::$arr]['co-auteur'];
-            //var_dump($coAuteursSelec);
+            var_dump($coAuteursSelec);
 
             $coAuteurs = (new CoAuteurRepository())->selectWhere($_GET["idProposition"],'*',"idproposition");
 
@@ -251,6 +252,7 @@ class ControllerProposition
                 $propositionSection = new PropositionSection((new PropositionRepository())->select($_GET["idProposition"]), $section, $_SESSION[FormConfig::$arr]['contenu' . $section->getId()]);
                 (new PropositionSectionRepository())->sauvegarder($propositionSection);
             }
+            unset($_SESSION[FormConfig::$arr]['co-auteur']);
             MessageFlash::ajouter("success", "La proposition a bien été modifié.");
             Controller::redirect("index.php?controller=proposition&action=readAll&idQuestion=" . $proposition->getQuestion()->getId());
         }
