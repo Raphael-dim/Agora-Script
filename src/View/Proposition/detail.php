@@ -19,7 +19,7 @@ $i = 1;
 echo '<h1>Titre de la proposition : ' . $proposition->getTitre() . '</h1>';
     echo'<div id = "participants" class="detail_question">';
     echo'<div>';
-        echo'<h1><strong  id ="color-yellow">Auteurs</strong></h1>';
+        echo'<h1><strong  id ="color-yellow">Auteur</strong></h1>';
 
             if (!is_null($proposition->getResponsable())) {
                 echo "<p>" . htmlspecialchars($proposition->getResponsable()->getIdentifiant()) . "</p>";

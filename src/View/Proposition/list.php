@@ -9,12 +9,21 @@
     $i = 1;
     $calendrier = $question->getCalendrier();
     $date = date('d/m/Y à H:i:s');
-    $aVote = Votant::aVote($propositions, $_SESSION['user']['id']);
+    if(isset($_SESSION['user'])){
+        $aVote = Votant::aVote($propositions, $_SESSION['user']['id']);
+    }else{
+        $aVote = null;
+    }
+
+
     $aVoteURL = rawurlencode($aVote);
     foreach ($propositions as $proposition) {
-        if ($aVote == $proposition->getId()) {
-            echo '<h2>Vous avez voté pour cette proposition.</h2>';
+        if(!is_null($aVote)){
+            if ($aVote == $proposition->getId()) {
+                echo '<h2>Vous avez voté pour cette proposition.</h2>';
+            }
         }
+
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
         echo '<p class = "listes">
@@ -34,10 +43,12 @@
             echo '<a id="vote" href= index.php?action=delete&controller=vote&idproposition=' .
                 $idPropositionURL . '>Supprimer le vote</a>';
         }
-        if(CoAuteur::estCoAuteur($_SESSION['user']['id'],$proposition->getId()) || $proposition->getResponsable()->getIdentifiant() == $_SESSION['user']['id']){
-            echo '<a href = index.php?action=update&controller=proposition&step=1&idProposition=' .
-                $proposition->getId() . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >';
+        if(isset($_SESSION['user'])){
+            if(CoAuteur::estCoAuteur($_SESSION['user']['id'],$proposition->getId()) || $proposition->getResponsable()->getIdentifiant() == $_SESSION['user']['id']){
+                echo '<a href = index.php?action=update&controller=proposition&step=1&idProposition=' .
+                    $proposition->getId() . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >';
 
+            }
         }
         echo 'Nombre de votes : ' . $proposition->getNbVotes();
         echo '</p>';
