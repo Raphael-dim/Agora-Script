@@ -4,10 +4,12 @@ use App\Vote\Config\FormConfig as FormConfig;
 
 if (isset($_POST['next'])) {
     if ($_GET['action'] == "create") {
-        //FormConfig::postSession();
-        FormConfig::redirect('index.php?controller=proposition&step=2&action=create&idQuestion' . $_GET['idQuestion']);
+            FormConfig::redirect('index.php?controller=proposition&step=2&action=create&idQuestion' . $_GET['idQuestion']);
     } else if($_GET['action'] == "update"){
         FormConfig::postSession();
+        if(CoAuteur::estCoAuteur()){
+            FormConfig::redirect('index.php?controller=proposition&action=updated&idProposition' . $_GET['idQuestion']);
+        }
         FormConfig::redirect("index.php?controller=proposition&step=2&action=update&idQuestion" . $_GET['idQuestion']);
     }
 }

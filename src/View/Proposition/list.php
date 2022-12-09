@@ -45,7 +45,7 @@
                 $idPropositionURL . '>Supprimer le vote</a>';
         }
         if(isset($_SESSION['user'])){
-            if(CoAuteur::estCoAuteur($_SESSION['user']['id'],$proposition->getId()) || $proposition->getResponsable()->getIdentifiant() == $_SESSION['user']['id']){
+            if(CoAuteur::estCoAuteur($_SESSION['user']['id'],$proposition) || $proposition->getResponsable()->getIdentifiant() == $_SESSION['user']['id']){
                 echo '<a href = index.php?action=update&controller=proposition&step=1&idProposition=' .
                     $proposition->getId() . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >';
 

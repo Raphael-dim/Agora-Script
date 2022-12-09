@@ -233,26 +233,27 @@ class ControllerProposition
         }else{
             $sections = $question->getSections();
             (new PropositionSectionRepository())->delete($_GET["idProposition"]);
-            $coAuteursSelec = $_SESSION[FormConfig::$arr]['co-auteur'];
-            var_dump($coAuteursSelec);
-
-            $coAuteurs = (new CoAuteurRepository())->selectWhere($_GET["idProposition"],'*',"idproposition");
-
-            foreach ($coAuteurs as $coAut){
-                (new CoAuteurRepository())->deleteSpecific($coAut);
-            }
-            foreach ($coAuteursSelec as $coAutSelec){
-                $aut = new CoAuteur((new UtilisateurRepository())->select($coAutSelec),(new PropositionRepository())->select($_GET["idProposition"]));
-                (new CoAuteurRepository())->sauvegarder($aut);
-            }
-            $prop = new Proposition($_SESSION[FormConfig::$arr]['titre'],$proposition->getResponsable(),$proposition->getQuestion(),$proposition->getNbVotes());
-            $prop->setId($_GET["idProposition"]);
-            (new PropositionRepository())->update($prop);
             foreach ($sections as $section) {
                 $propositionSection = new PropositionSection((new PropositionRepository())->select($_GET["idProposition"]), $section, $_SESSION[FormConfig::$arr]['contenu' . $section->getId()]);
                 (new PropositionSectionRepository())->sauvegarder($propositionSection);
             }
-            unset($_SESSION[FormConfig::$arr]['co-auteur']);
+            $prop = new Proposition($_SESSION[FormConfig::$arr]['titre'],$proposition->getResponsable(),$proposition->getQuestion(),$proposition->getNbVotes());
+            $prop->setId($_GET["idProposition"]);
+            (new PropositionRepository())->update($prop);
+
+            if(!CoAuteur::estCoAuteur($_SESSION['user']['id'],$proposition)){
+                $coAuteursSelec = $_SESSION[FormConfig::$arr]['co-auteur'];
+                $coAuteurs = (new CoAuteurRepository())->selectWhere($_GET["idProposition"],'*',"idproposition");
+                foreach ($coAuteurs as $coAut){
+                    (new CoAuteurRepository())->deleteSpecific($coAut);
+                }
+                foreach ($coAuteursSelec as $coAutSelec){
+                    $aut = new CoAuteur((new UtilisateurRepository())->select($coAutSelec),(new PropositionRepository())->select($_GET["idProposition"]));
+                    (new CoAuteurRepository())->sauvegarder($aut);
+                }
+                unset($_SESSION[FormConfig::$arr]['co-auteur']);
+            }
+
             MessageFlash::ajouter("success", "La proposition a bien été modifié.");
             Controller::redirect("index.php?controller=proposition&action=readAll&idQuestion=" . $proposition->getQuestion()->getId());
         }
