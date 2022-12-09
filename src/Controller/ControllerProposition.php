@@ -234,7 +234,7 @@ class ControllerProposition
         }else{
             (new PropositionSectionRepository())->delete($_GET["idProposition"]);
             $coAuteursSelec = $_SESSION[FormConfig::$arr]['co-auteur'];
-            var_dump($coAuteursSelec);
+            //var_dump($coAuteursSelec);
 
             $coAuteurs = (new CoAuteurRepository())->selectWhere($_GET["idProposition"],'*',"idproposition");
 

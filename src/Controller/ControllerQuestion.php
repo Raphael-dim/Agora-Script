@@ -251,7 +251,7 @@ class ControllerQuestion
 
         FormConfig::setArr('SessionQuestion');
         Session::getInstance();
-        var_dump($_SESSION);
+        //var_dump($_SESSION);
 
         $question = (new QuestionRepository())->select($_SESSION[FormConfig::$arr]['idQuestion']);
         $calendrier = $question->getCalendrier();
