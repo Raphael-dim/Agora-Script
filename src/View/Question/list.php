@@ -93,7 +93,7 @@ if (isset($_GET['selection'])) {
         if ($calendrier->getDebutEcriture() <= $date && $calendrier->getFinEcriture() >= $date &&
             isset($_SESSION['user']) && Responsable::estResponsable($question, $_SESSION['user']['id'])
             && !Responsable::aCreeProposition($question, $_SESSION['user']['id'])) {
-            echo '<a href = index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '>Créer une proposition</a>';
+            echo '<a href = index.php?action=create&controller=proposition&step=1&idQuestion=' . $idQuestionURL . '>Créer une proposition</a>';
 
 
         }

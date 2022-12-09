@@ -35,13 +35,9 @@
                 $idPropositionURL . '>Supprimer le vote</a>';
         }
         if(CoAuteur::estCoAuteur($_SESSION['user']['id'],$proposition->getId()) || $proposition->getResponsable()->getIdentifiant() == $_SESSION['user']['id']){
-            echo '<a href = index.php?action=update&controller=proposition&idProposition=' .
+            echo '<a href = index.php?action=update&controller=proposition&step=1&idProposition=' .
                 $proposition->getId() . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >';
 
-        }
-        if($proposition->getResponsable()->getIdentifiant() == $_SESSION['user']['id']){
-            echo '<a id="vote" href= index.php?action=create&controller=coauteur&idProposition=' .
-                $idPropositionURL . '>Désigner des co-auteurs</a>';
         }
         echo 'Nombre de votes : ' . $proposition->getNbVotes();
         echo '</p>';

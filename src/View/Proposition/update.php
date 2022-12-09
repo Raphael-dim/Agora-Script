@@ -12,7 +12,7 @@ use App\Vote\Model\DataObject\Question;
 <h2>Description : <?= $proposition->getQuestion()->getDescription() ?></h2>
 <h3><i>* Veuillez remplir le formulaire ci-dessous, un titre pour votre proposition ainsi qu'un contenu pour chaque
         section.</i></h3>
-<form method="post" action=index.php?controller=proposition&action=updated&idProposition=<?= $_GET['idProposition']?>>
+<form method="post" action=index.php?controller=proposition&action=update&step=2&idProposition=<?= $_GET['idProposition']?>>
 
     <p>
         <label for="titre_id">Titre de votre proposition
