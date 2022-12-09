@@ -21,23 +21,20 @@ echo '<h1>Titre de la proposition : ' . $proposition->getTitre() . '</h1>';
     echo'<div>';
         echo'<h1><strong  id ="color-yellow">Auteurs</strong></h1>';
 
-            if (is_array($proposition->getResponsable())) {
-                foreach ($proposition->getResponsable() as $responsable) {
-                    echo "<p>" . htmlspecialchars($proposition->getResponsable()->getIdentifiant()) . "</p>";
-                }
-            } else {
+            if (!is_null($proposition->getResponsable())) {
                 echo "<p>" . htmlspecialchars($proposition->getResponsable()->getIdentifiant()) . "</p>";
             }
+
         echo '</div>';
     echo'<div id="votants">';
         echo'<h1><strong  id ="color-yellow">Co-Auteurs</strong></h1>';
         if(!is_null($coAuts)) {
-            if (is_array($coAuts->getUtilisateur())) {
-                foreach ($coAuts->getUtilisateur() as $coAut) {
-                    echo "<p>" . htmlspecialchars($coAut->getIdentifiant()) . "</p>";
+            if (is_array($coAuts)) {
+                foreach ($coAuts as $coAut) {
+                    echo "<p>" . htmlspecialchars($coAut->getUtilisateur()->getIdentifiant()) . "</p>";
                 }
             } else {
-                echo "<p>" . htmlspecialchars($coAut->getIdentifiant()) . "</p>";
+                echo "<p>" . htmlspecialchars($coAuts->getIdentifiant()) . "</p>";
             }
         }else{
             echo "<p>Aucun co-auteur</p>";

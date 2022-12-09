@@ -77,7 +77,8 @@ class ControllerProposition
     {
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         $question = $proposition->getQuestion();
-        $coAuts = (new CoAuteurRepository())->select($_GET['idProposition']);
+        $coAuts = (new CoAuteurRepository())->selectWhere($_GET['idProposition'],'*','idproposition',"Coauteurs");
+        //var_dump((new CoAuteurRepository())->selectAll());
         $sections = $question->getSections();
         $idProposition = $_GET['idProposition'];
         Controller::afficheVue('view.php', [
@@ -209,11 +210,8 @@ class ControllerProposition
     {
         //session_start();
         FormConfig::setArr('SessionProposition');
-        $responsable = (new ResponsableRepository())->select($_SESSION['user']['id']);
         $proposition = (new PropositionRepository())->select($_GET["idProposition"]);
-        $propositions = (new PropositionRepository())->selectWhere($responsable->getQuestion()->getId(), '*', 'idquestion');
         $question = $proposition->getQuestion();
-        $sections = $question->getSections();
 
         $user = Session::getInstance()->lire('user');
         $date = date('d-m-Y à H:i:s');
@@ -232,6 +230,7 @@ class ControllerProposition
         if (!$bool) {
             Controller::redirect("index.php?controller=proposition&action=readAll&idQuestion=" . $proposition->getQuestion()->getId());
         }else{
+            $sections = $question->getSections();
             (new PropositionSectionRepository())->delete($_GET["idProposition"]);
             $coAuteursSelec = $_SESSION[FormConfig::$arr]['co-auteur'];
             //var_dump($coAuteursSelec);
@@ -253,7 +252,7 @@ class ControllerProposition
                 (new PropositionSectionRepository())->sauvegarder($propositionSection);
             }
             MessageFlash::ajouter("success", "La proposition a bien été modifié.");
-            Controller::redirect("index.php?controller=proposition&action=readAll");
+            Controller::redirect("index.php?controller=proposition&action=readAll&idQuestion=" . $proposition->getQuestion()->getId());
         }
     }
 }
