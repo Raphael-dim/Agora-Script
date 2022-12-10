@@ -87,7 +87,6 @@ class ControllerVote
             array('idproposition', 'idvotant'), 'Votes');
 
         (new VoteRepository())->delete($vote[0]->getIdvote());
-        $propositions = $question->getPropositions();
         Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
 
     }
