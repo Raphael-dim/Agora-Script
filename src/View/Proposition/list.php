@@ -19,8 +19,7 @@
         echo '<p class = "listes">
             <a href= index.php?action=read&controller=proposition&idProposition=' .
             $idPropositionURL . '>' . $i . ' : ' . $titreHTML . '  </a>';
-        if ($date >= $calendrier->getDebutVote() && $date < $calendrier->getFinVote()
-            && ConnexionUtilisateur::estConnecte()
+        if ($question->getPhase() == 'vote' && ConnexionUtilisateur::estConnecte()
             && Votant::estVotant($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())
             && $aVote != $proposition->getId()) {
             if (is_null($aVote)) {
