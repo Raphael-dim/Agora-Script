@@ -213,7 +213,7 @@ span {
     animation-name: slideinbottom;
 }
 
-#description {
+.description {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     display: -webkit-box;
@@ -230,27 +230,27 @@ span {
     word-break: break-all;
 }
 
-#status_cree.listes {
+.status_cree.listes {
     border-top: 10px solid red;
 }
 
-#status_ecriture.listes {
+.status_ecriture.listes {
     border-top: 10px solid orange;
 }
 
-#status_vote.listes {
+.status_vote.listes {
     border-top: 10px solid yellow;
 }
 
-#status_attente.listes {
+.status_attente.listes {
     border-top: 10px solid grey;
 }
 
-#status_termine.listes {
+.status_termine.listes {
     border-top: 10px solid green;
 }
 
-.listes > #auteur {
+.listes > .auteur {
     float: right;
     margin-right: 5px;
     margin-bottom: 2px;
@@ -635,7 +635,7 @@ h1 > strong#color-blue {
     -webkit-transform: rotate(-3deg);
 }
 
-h1 > strong#color-grey {
+h1 > strong.color-grey {
     background: lightgrey;
     transform: rotate(-4deg);
     -webkit-transform: rotate(-4deg);
@@ -647,7 +647,7 @@ h1 > strong#color-green {
     -webkit-transform: rotate(4deg);
 }
 
-h1 > strong#color-yellow {
+h1 > strong.color-yellow {
     background: #ffff98;
     transform: rotate(3deg);
     -webkit-transform: rotate(3deg);

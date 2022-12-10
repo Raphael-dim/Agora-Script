@@ -56,13 +56,13 @@ if (isset($_POST['titre'])) {
 
 <h3><i>* Veuillez remplir le formulaire ci-dessous, un titre pour votre proposition ainsi qu'un contenu pour chaque
         section.</i></h3>
-<form method="post"?>
+<form method="post">
 
     <p>
-        <label for="titre_id">Titre de votre proposition
-            <input type="text" maxlength="500" size="80" value="<?= FormConfig::TextField('titre')?>" name="titre">
+        <label>Titre de votre proposition
+            <input type="text" maxlength="500" id="titre_id" size="80" value="<?= FormConfig::TextField('titre')?>" name="titre">
         </label>
-        <label for="max_id">480 caractères maximum</label>
+        <label>480 caractères maximum</label>
     </p>
     <h2>Désigner les co-auteurs qui vous aideront à rédiger votre proposition :</h2>
 
@@ -78,11 +78,11 @@ if (isset($_POST['titre'])) {
     <p class="champ">
         <label for=contenu_id> Contenu</label > :
         <textarea name=contenu' . $section->getId() . ' id = contenu_id maxlength=1500 rows = 8 cols = 80 >'. FormConfig::TextField('contenu'.$section->getId()) .'</textarea >
-        <label for=max_id>1400 caractères maximum</label>
+        <label>1400 caractères maximum</label>
     </p> ';
     }
     ?>
-    <input type="submit" name="next" value="Suivant" CLASS="nav"/>
+    <input type="submit" name="next" value="Suivant" CLASS="nav">
 </form>
 
 

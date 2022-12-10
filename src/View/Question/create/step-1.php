@@ -41,13 +41,13 @@ if (isset($_POST['Titre'])) {
         <label for="titre_id">Titre</label> :
         <input type="text" placeholder="L'oeuf ou la poule ? " size="78" maxlength="70" name="Titre" id="titre_id"
                value="<?= FormConfig::TextField('Titre') ?>"
-               required/>
-        <label for="max_id">70 caractères maximum</label>
+               required>
+        <label>70 caractères maximum</label>
     </p>
     <p class ="champ">
         <label for="description_id">Description : </label>
         <textarea id="description_id" maxlength="350" name="Description" rows="7" cols="50" required><?= FormConfig::TextField('Description'); ?></textarea>
-        <label for="max_id">350 caractères maximum</label>
+        <label>350 caractères maximum</label>
     </p>
     <p>
         <label for="nbSections_select">Nombre de sections</label>
@@ -60,7 +60,7 @@ if (isset($_POST['Titre'])) {
         </select>
     </p>
 
-    <input type="submit" value="Suivant" class="nav"/>
+    <input type="submit" value="Suivant" class="nav">
 </form>
 
 <?php

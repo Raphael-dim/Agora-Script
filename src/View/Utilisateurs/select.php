@@ -27,8 +27,8 @@ if (isset($_POST["keyword"])) {
 
     }
     ?>
-    <input type="hidden" name="row" value="nom"/>
-    <input type="hidden" name="keyword" value="<?php echo $keyword ?>"/>
+    <input type="hidden" name="row" value="nom">
+    <input type="hidden" name="keyword" value="<?php echo $keyword ?>">
 </form>
 <?php
 foreach ($utilisateurs as $utilisateur) {
@@ -44,9 +44,9 @@ foreach ($utilisateurs as $utilisateur) {
 
                     <form method= post>
                         <p><button type = submit value = "' . $identifiant . '" name = "user">' . $nom . ' ' . $prenom . '</button></p>
-                        <input type ="hidden" name = "row" value = "nom" />
+                        <input type ="hidden" name = "row" value = "nom" >
 
-                        <input type = "hidden" name = "keyword" value ="' . $keyword . '"/> 
+                        <input type = "hidden" name = "keyword" value ="' . $keyword . '"> 
        
                         
 

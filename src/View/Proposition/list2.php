@@ -10,26 +10,25 @@
     foreach ($propositions as $proposition) {
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
-        echo '<form>';
-        echo '<p class = "listes">
-                <a href= index.php?action=read&controller=proposition&idProposition=' .
-            $idPropositionURL . '>' . $i . ' : ' . $titreHTML . '  </a>';
+        echo '<li class = "listes">
+                <a href= "index.php?action=read&controller=proposition&idProposition=' .
+            $idPropositionURL . '">' . $i . ' : ' . $titreHTML . '  </a>';
         if ($question->getPhase() == 'vote' && ConnexionUtilisateur::estConnecte()
             && Votant::estVotant($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())
         ) {
             $valeur = Votant::aVote($proposition, ConnexionUtilisateur::getLoginUtilisateurConnecte());
             if (!is_null($valeur)) {
                 for ($val = 1; $val <= $valeur; $val++) {
-                    echo '<a id=vote style="background:#a94442" href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
+                    echo '<a id=vote style="background:#a94442" href="index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '">
                         <img src=../web/images/coeur_logo.png alt=""></a>';
                 }
                 for ($val = $valeur + 1; $val <= 5; $val++) {
-                    echo '<a id=vote href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
+                    echo '<a id=vote href="index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '">
                         <img style="filter: invert(100%)" src=../web/images/coeur_logo.png alt=""></a>';
                 }
             } else {
                 for ($val = 1; $val <= 5; $val++) {
-                    echo '<a id=vote href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
+                    echo '<a id=vote href="index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '">
                         <img src=../web/images/coeur_logo.png alt=""></a>';
                 }
             }
@@ -42,15 +41,14 @@
 
         }
         if ($proposition->getResponsable()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
-            echo '<a id = "vote" href = index.php?action=create&controller=coauteur&idProposition=' .
-                $idPropositionURL . ' > Désigner des co - auteurs </a > ';
+            echo '<a id = "vote" href = "index.php?action=create&controller=coauteur&idProposition=' .
+                $idPropositionURL . ' "> Désigner des co - auteurs </a > ';
         }
         echo '<br > ';
         echo 'Nombre de votes : ' . $proposition->getNbVotes();
-        echo ' </p> ';
+        echo ' </li> ';
         $i++;
     }
     ?>
-    </form>
 
 </ul>

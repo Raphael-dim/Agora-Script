@@ -3,23 +3,23 @@ if (isset($_GET['selection'])) {
     if ($_GET['selection'] == 'ecriture') {
         echo "<h1>Nos questions en phase d'<strong id ='color-orange'>écriture</strong></h1>";
     } else if ($_GET['selection'] == 'vote') {
-        echo "<h1>Nos questions en phase de <strong id ='color-yellow'>vote</strong></h1>";
+        echo "<h1>Nos questions en phase de <strong class ='color-yellow'>vote</strong></h1>";
     } else if ($_GET['selection'] == 'terminees') {
         echo "<h1>Nos questions <strong id ='color-green'>terminées</strong></h1>";
     } else {
-        echo "<h1>Consultez nos <strong id ='color-grey'>questions </strong> et trouvez des réponses</h1>";
+        echo "<h1>Consultez nos <strong class ='color-grey'>questions </strong> et trouvez des réponses</h1>";
     }
 } else {
-    echo "<h1>Consultez nos <strong id ='color-grey'>questions </strong> et trouvez des réponses</h1>";
+    echo "<h1>Consultez nos <strong class ='color-grey'>questions </strong> et trouvez des réponses</h1>";
 }
 ?>
 
 <div class="barreHaut">
     <form method="post" action="index.php?controller=question&action=readKeyword">
         <p>
-            <label for="motclef"></label><input type="text" placeholder="" height=10 name="keyword" id="motclef"
-                                                required/>
-            <input type="image" alt="Submit" src="../web/images/search.png" value="Envoyer" class="search"/>
+            <label for="motclef"></label><input type="text" placeholder="" name="keyword" id="motclef"
+                                                required>
+            <input type="image" alt="Submit" src="../web/images/search.png" class="search">
         </p>
     </form>
     <a class="bouton" href="index.php?action=create&controller=question">Créer votre question</a>
@@ -59,30 +59,31 @@ if (isset($_GET['selection'])) {
 
 
         if ($question->getPhase() == 'debut') {
-            echo '<li class="listes" id = "status_cree">';
+            echo '<li class="listes status_cree">';
         } else if ($question->getPhase() == 'ecriture') {
-            echo '<li class="listes" id = "status_ecriture">';
+            echo '<li class="listes status_ecriture">';
         } else if ($question->getPhase() == 'vote') {
-            echo '<li class="listes" id = "status_vote">';
+            echo '<li class="listes status_vote">';
         } else if ($question->getPhase() == 'fini') {
-            echo '<li class="listes" id = "status_termine">';
+            echo '<li class="listes status_termine">';
         } else {
-            echo '<li class="listes" id = "status_attente">';
+            echo '<li class="listes status_attente">';
         }
 
         echo '
           
-            <a class=titre href= index.php?action=read&controller=question&idQuestion=' .
-            $idQuestionURL . '> ' . $titreHTML . ' </a>
-            <a href="" id = "auteur">par ' . $organisateur . ' </a >';
-        echo '<p id="description">' . $question->getDescription() . '</p>';
+            <a class=titre href="index.php?action=read&controller=question&idQuestion=' .
+            $idQuestionURL . '"> ' . $titreHTML . ' </a>
+            <a href="" class = "auteur">par ' . $organisateur . ' </a >';
+        echo '<p 
+class="description">' . $question->getDescription() . '</p>';
         if ($question->getPhase() == 'debut') {
             if (ConnexionUtilisateur::estConnecte() &&
                 ConnexionUtilisateur::getLoginUtilisateurConnecte() == $organisateur) {
-                echo '<div id="action" "><a href = index.php?action=update&controller=question&idQuestion=' .
-                    $idQuestionURL . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a >
-                     <a href = index.php?action=delete&controller=question&idQuestion=' .
-                    $idQuestionURL . ' ><img class="delete" src = "..\web\images\delete.png" ></a></div>';
+                echo '<div id="action" "><a href ="index.php?action=update&controller=question&idQuestion=' .
+                    $idQuestionURL . '"><img class="modifier" src = "..\web\images\modifier.png" ></a >
+                     <a href ="index.php?action=delete&controller=question&idQuestion=' .
+                    $idQuestionURL . '"><img class="delete" src = "..\web\images\delete.png" ></a></div>';
             }
             $interval = (new DateTime($date))->diff(new DateTime($calendrier->getDebutEcriture(true)));
             echo '<p>Début de la phase d\'écriture dans : ' . Calendrier::diff($interval) . '</p>';
@@ -94,15 +95,15 @@ if (isset($_GET['selection'])) {
             echo '<p>Fin de la phase de vote dans : ' . Calendrier::diff($interval) . '</p>';
         }
         if ($question->getPhase() != 'debut' && $question->getPhase() != 'fini') {
-            echo '<a href = index.php?action=readAll&controller=proposition&idQuestion=' . $idQuestionURL . ' >Liste des propositions</a>';
+            echo '<a href ="index.php?action=readAll&controller=proposition&idQuestion=' . $idQuestionURL . '">Liste des propositions</a>';
         }
         if ($question->getPhase() == 'ecriture' && ConnexionUtilisateur::estConnecte() &&
             Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())
             && !Responsable::aCreeProposition($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
-            echo '<a href = index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '>Créer une proposition</a>';
+            echo '<a href ="index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '">Créer une proposition</a>';
         }
         if ($question->getPhase() == 'fini') {
-            echo '<a href= index.php?controller=question&action=result&idQuestion=' . $idQuestionURL . '>Page de résultat</a>';
+            echo '<a href="index.php?controller=question&action=result&idQuestion=' . $idQuestionURL . '">Page de résultat</a>';
         }
         echo ' </li > ';
     }
