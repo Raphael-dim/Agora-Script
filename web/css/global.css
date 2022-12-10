@@ -431,6 +431,8 @@ a#vote:hover {
 }
 
 .nav *, form .nav {
+    height: 35px;
+    width: auto;
     background-color: #dff5f4;
     font-size: 17px;
     border-radius: 15px;
