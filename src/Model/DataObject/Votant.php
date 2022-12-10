@@ -33,16 +33,16 @@ class Votant extends Utilisateur
         return false;
     }
 
-
-    public static function aVote($propositions, $utilisateur): ?int
+    public static function aVote($proposition, $utilisateur): ?int
     {
-        $votes = (new VoteRepository())->selectWhere($utilisateur, '*', 'idvotant', 'Votes');
-        foreach ($votes as $vote) {
-            if (in_array($vote->getProposition(), $propositions)) {
-                return $vote->getProposition()->getId();
-            }
+        $vote = (new VoteRepository())->selectWhere(array('clef0' => $proposition->getId(),
+            'clef1' => $utilisateur), '*',
+            array('idproposition', 'idvotant'), 'Votes');
+        if (isset($vote[0])) {
+            return $vote[0]->getValeur();
+        } else {
+            return null;
         }
-        return null;
     }
 
     public function formatTableau(): array

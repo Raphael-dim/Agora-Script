@@ -249,15 +249,10 @@ class ControllerQuestion
 
     public static function updated(): void
     {
-
-        $user = Session::getInstance()->lire('user');
-
-        $date = date('d-m-Y à H:i:s');
         $bool = true;
-
         FormConfig::setArr('SessionQuestion');
         Session::getInstance();
-        var_dump($_SESSION);
+        // var_dump($_SESSION);
         $question = (new QuestionRepository())->select($_SESSION[FormConfig::$arr]['idQuestion']);
         if ($question->getPhase() != 'debut') {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont la phase d'écriture a déjà commencée.");
@@ -360,7 +355,6 @@ class ControllerQuestion
 
         MessageFlash::ajouter('success', 'La question a bien été modifiée');
         Controller::redirect("index.php?controller=question&action=readAll");
-
         FormConfig::startSession();
     }
 
@@ -421,5 +415,6 @@ class ControllerQuestion
             'cheminVueBody' => "Question/resultat.php",
             'propositions' => $propositions]);
     }
+
 
 }

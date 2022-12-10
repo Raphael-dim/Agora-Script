@@ -38,13 +38,13 @@ main > h1, h2 {
         transform: translateY(0%);
         transform: translateX(100%);
     }
-    15%{
+    15% {
         opacity: 1;
         transform: translateY(0%);
         transform: translateX(0%);
     }
 
-    90%{
+    90% {
         transform: translateY(0%);
     }
     to {
@@ -104,12 +104,6 @@ main p a {
 .attention {
     max-width: 45px;
 }
-
-
-.vote {
-    /*max-width: 65px;*/
-}
-
 
 #utilisateurs {
     background: #012e49;
@@ -345,11 +339,12 @@ li#vote.phases > a {
 
 
 a#vote {
+    display: inline-block;
     padding: 5px;
     margin-left: auto;
     margin-right: auto;
     width: auto;
-    height: auto;
+    height: 35px;
     background-color: #012e49;
     font-size: 17px;
     text-decoration: none;
@@ -367,7 +362,6 @@ a#vote:hover {
     border-color: rgba(69, 190, 187, 0.6);
     border-width: 2px;
 }
-
 
 .bouton {
     padding: 5px;
@@ -431,6 +425,8 @@ a#vote:hover {
 }
 
 .nav *, form .nav {
+    height: 35px;
+    width: auto;
     background-color: #dff5f4;
     font-size: 17px;
     border-radius: 15px;
@@ -579,19 +575,20 @@ a#vote:hover {
 }
 
 
-.pileflash{
-    position:fixed;
-    top:75px;
-    right:2px;
-    z-index:100;
+.pileflash {
+    position: fixed;
+    top: 75px;
+    right: 2px;
+    z-index: 100;
+}
 
 .alert {
     padding: 15px;
     margin-bottom: 20px;
     border: 1px solid transparent;
     border-radius: 4px;
-    animation:fadeinout 5.5s;
-    margin:1px;
+    animation: fadeinout 5.5s;
+    margin: 1px;
     transform: translateY(-150%);
 }
 
@@ -778,8 +775,8 @@ div p {
     float: right;
 }
 
-input {
-    height: 25px;
+input, textarea, select {
+    /*height: 25px;*/
     font-size: 18px;
 }
 
@@ -812,7 +809,7 @@ input:valid + span:after {
     margin: auto;
 }
 
-.footer li:hover{
+.footer li:hover {
     color: black;
 }
 

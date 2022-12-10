@@ -34,6 +34,9 @@ nav:hover {
 nav:hover >#Menu{
     margin-top:-0.5%;
 }
+nav:hover .profil{
+    top:15px;
+}
 
 ul[id="Menu"] li.grosmenu {
 
@@ -68,8 +71,10 @@ ul[id="Menu"] li {
 .profil {
     filter: invert(0.9);
     position:absolute !important;
+    top:10px;
     right:100px;
     width:auto !important;
+    transition: ease-in-out 0.5s;
 }
 .profil>img{
     min-width:34px ;
@@ -77,6 +82,8 @@ ul[id="Menu"] li {
 
 
 @media screen and (max-width: 1000px) {
+
+
     nav{
         opacity:1;
     }
@@ -130,4 +137,12 @@ ul[id="Menu"] li {
         font-size: 17px;
         line-height: 22px;
     }
+
+    .profil{
+        right:50px;
+    }
+    nav:hover .profil{
+        top:10px;
+    }
+
 }

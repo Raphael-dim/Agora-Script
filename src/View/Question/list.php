@@ -49,7 +49,7 @@ if (isset($_GET['selection'])) {
     use App\Vote\Model\DataObject\Calendrier;
     use App\Vote\Model\DataObject\Responsable;
 
-    $date = date("d-m-Y H:i:s");
+    $date = date("d-m-Y H:i");
     foreach ($questions as $question) {
         $calendrier = $question->getCalendrier();
         $idQuestionURL = rawurlencode($question->getId());
@@ -70,6 +70,7 @@ if (isset($_GET['selection'])) {
         }
 
         echo '
+          
             <a class=titre href= index.php?action=read&controller=question&idQuestion=' .
             $idQuestionURL . '> ' . $titreHTML . ' </a>
             <a href="" id = "auteur">par ' . $organisateur . ' </a >';
@@ -84,7 +85,7 @@ if (isset($_GET['selection'])) {
             }
             $interval = (new DateTime($date))->diff(new DateTime($calendrier->getDebutEcriture(true)));
             echo '<p>Début de la phase d\'écriture dans : ' . Calendrier::diff($interval) . '</p>';
-        } else if ($question->getPhase() != 'vote' && $question->getPhase() != 'fini') {
+        } else if ($question->getPhase() != 'ecriture' && $question->getPhase() != 'fini') {
             $interval = (new DateTime($date))->diff(new DateTime($calendrier->getDebutVote(true)));
             echo '<p>Début de la phase de vote dans : ' . Calendrier::diff($interval) . '</p>';
         } else if ($question->getPhase() == 'vote') {

@@ -2,6 +2,7 @@
 
 namespace App\Vote\Model\DataObject;
 
+use App\Vote\Model\Repository\CoAuteurRepository;
 use App\Vote\Model\Repository\PropositionSectionRepository;
 
 class Proposition extends AbstractDataObject
@@ -84,6 +85,10 @@ class Proposition extends AbstractDataObject
         return $this->responsable;
     }
 
+    public function  getCoAuteurs(): array{
+        return (new CoAuteurRepository())->selectWhere($this->id,'*','idproposition',"Coauteurs");
+    }
+
     /**
      * @return Question
      */
@@ -94,7 +99,7 @@ class Proposition extends AbstractDataObject
 
     public function getContenus()
     {
-        return (new PropositionSectionRepository())->select($this->question->getId());
+        return (new PropositionSectionRepository())->selectWhere($this->getId(), '*', 'idproposition', 'Proposition_section');
     }
 
     public function formatTableau($update = false): array
