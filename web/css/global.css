@@ -431,6 +431,8 @@ a#vote:hover {
 }
 
 .nav *, form .nav {
+    height: 35px;
+    width: auto;
     background-color: #dff5f4;
     font-size: 17px;
     border-radius: 15px;
@@ -579,11 +581,12 @@ a#vote:hover {
 }
 
 
-.pileflash{
-    position:fixed;
-    top:75px;
-    right:2px;
-    z-index:100;
+.pileflash {
+    position: fixed;
+    top: 75px;
+    right: 2px;
+    z-index: 100;
+}
 
 .alert {
     padding: 15px;
@@ -778,8 +781,8 @@ div p {
     float: right;
 }
 
-input {
-    height: 25px;
+input, textarea, select{
+    /*height: 25px;*/
     font-size: 18px;
 }
 

@@ -2,10 +2,9 @@
     <?php
 
     use App\Vote\Config\FormConfig;
+    use App\Vote\Lib\ConnexionUtilisateur;
     use App\Vote\Model\DataObject\CoAuteur;
-    use App\Vote\Model\DataObject\Responsable;
     use App\Vote\Model\DataObject\Votant;
-    use App\Vote\Model\Repository\CoAuteurRepository;
 
     $i = 1;
     $calendrier = $question->getCalendrier();
@@ -16,6 +15,7 @@
         $aVote = null;
     }
 
+    $aVote = Votant::aVote($propositions, $_SESSION['user']['id']);
 
     $aVoteURL = rawurlencode($aVote);
     foreach ($propositions as $proposition) {
@@ -30,8 +30,8 @@
         echo '<p class = "listes">
             <a href= index.php?action=read&controller=proposition&idProposition=' .
             $idPropositionURL . '>' . $i . ' : ' . $titreHTML . '  </a>';
-        if ($date >= $calendrier->getDebutVote() && $date < $calendrier->getFinVote() &&
-            isset($_SESSION['user']) && Votant::estVotant($question, $_SESSION['user']['id'])
+        if ($question->getPhase() == 'vote' && ConnexionUtilisateur::estConnecte()
+            && Votant::estVotant($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())
             && $aVote != $proposition->getId()) {
             if (is_null($aVote)) {
                 echo '<a id="vote" href= index.php?action=create&controller=vote&idproposition=' .
@@ -44,6 +44,7 @@
             echo '<a id="vote" href= index.php?action=delete&controller=vote&idproposition=' .
                 $idPropositionURL . '>Supprimer le vote</a>';
         }
+
         if(isset($_SESSION['user'])){
             if(CoAuteur::estCoAuteur($_SESSION['user']['id'],$proposition) || $proposition->getResponsable()->getIdentifiant() == $_SESSION['user']['id']){
                 echo '<a href = index.php?action=update&controller=proposition&step=1&idProposition=' .
