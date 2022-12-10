@@ -131,21 +131,25 @@ class Question extends AbstractDataObject
         $this->titre = $titre;
     }
 
+    /* On obtient les sections pour une question*/
     public function getSections(): array
     {
         return (new SectionRepository())->selectWhere($this->id, '*', "idQuestion", "Sections");
     }
 
+    /* On obtient les responsables pour une question*/
     public function getResponsables(): array
     {
         return (new ResponsableRepository())->selectWhere($this->id, '*', "idQuestion", "Responsables");
     }
 
+    /* On obtient les votants pour une question*/
     public function getVotants(): array
     {
         return (new VotantRepository())->selectWhere($this->id, '*', "idQuestion", "Votants");
     }
 
+    /* On obtient les propositions pour une question*/
     public function getPropositions(): array
     {
         return (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion", 'Propositions');
@@ -154,6 +158,7 @@ class Question extends AbstractDataObject
     /**
      * @throws \Exception
      */
+    /* On obtient la phase en cours pour une question*/
     public function getPhase(): string
     {
         $date = date('Y-m-d H:i');

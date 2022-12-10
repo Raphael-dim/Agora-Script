@@ -20,6 +20,7 @@ class Responsable extends Utilisateur
         return $this->question;
     }
 
+    /* On vérifie si l'utilisateur est responsable pour une question*/
     public static function estResponsable($question, $utilisateur): bool
     {
         $responsables = $question->getResponsables();
@@ -31,6 +32,7 @@ class Responsable extends Utilisateur
         return false;
     }
 
+    /* On vérifie si le responsable a déjà crée une proposition pour une question*/
     public static function aCreeProposition($question, $utilisateur): bool
     {
         $propositions = (new PropositionRepository())->selectWhere($utilisateur, '*',
