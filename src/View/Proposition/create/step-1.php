@@ -1,17 +1,28 @@
 <?php
 
 use App\Vote\Config\FormConfig as FormConfig;
-use App\Vote\Model\Repository\QuestionRepository;
-use App\Vote\Model\DataObject\Question;
 
-
+if (isset($_POST['next'])) {
+    if ($_GET['action'] == "create") {
+            FormConfig::redirect('index.php?controller=proposition&step=2&action=create&idQuestion' . $_GET['idQuestion']);
+    } else if($_GET['action'] == "update"){
+        FormConfig::postSession();
+        if(CoAuteur::estCoAuteur()){
+            FormConfig::redirect('index.php?controller=proposition&action=updated&idProposition' . $_GET['idQuestion']);
+        }
+        FormConfig::redirect("index.php?controller=proposition&step=2&action=update&idQuestion" . $_GET['idQuestion']);
+    }
+}
 ?>
 
 <h1>Création d'une proposition</h1>
 
 <h2>Titre : <?= $question->getTitre() ?></h2>
 <h2>Description : <?= $question->getDescription() ?></h2>
-<form method="post" action=index.php?controller=proposition&action=created&idQuestion=<?= $question->getId() ?>>
+
+<h3><i>* Veuillez remplir le formulaire ci-dessous, un titre pour votre proposition ainsi qu'un contenu pour chaque
+        section.</i></h3>
+<form method="post" action=index.php?controller=proposition&action=created&idQuestion=<?= $question->getId() ?>
 
     <p>
         <label for="titre_id">Titre de votre proposition
@@ -37,7 +48,7 @@ use App\Vote\Model\DataObject\Question;
     </p> ';
     }
     ?>
-    <input type="submit" value="Suivant" CLASS="nav"/>
+    <input type="submit" name="next" value="Suivant" CLASS="nav"/>
 </form>
 
 

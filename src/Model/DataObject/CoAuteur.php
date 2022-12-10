@@ -38,10 +38,16 @@ class CoAuteur extends AbstractDataObject
 
     public static function estCoAuteur($utilisateur, $proposition) : bool
     {
-        $coAuteurs = (new CoAuteurRepository())->select($utilisateur);
+        $coAuteurs = (new CoAuteurRepository())->selectWhere($utilisateur,"*","idauteur");
         if(!$coAuteurs) return false;
-        foreach($coAuteurs as $coAuteur){
-            if($coAuteur->getProposition()->getId() == $proposition->getId()){
+        if(is_array($coAuteurs)){
+            foreach($coAuteurs as $coAuteur){
+                if($coAuteur->getProposition()->getId() == $proposition->getId()){
+                    return true;
+                }
+            }
+        }else{
+            if($coAuteurs->getProposition()->getId() == $proposition->getId()){
                 return true;
             }
         }

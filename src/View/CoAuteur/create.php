@@ -2,10 +2,8 @@
 
 use App\Vote\Config\FormConfig as FormConfig;
 $_SESSION[FormConfig::$arr]['type'] = "co-auteur";
-//$_SESSION[FormConfig::$arr]['co-auteur'] = array();
-//var_dump($_SESSION[FormConfig::$arr]);
 $idproposition = $_GET['idProposition'];
-//var_dump($idquestion);
+
 
 if (array_key_exists('user', $_POST)) {
     adduser($_POST["user"]);

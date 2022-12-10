@@ -70,6 +70,28 @@ abstract class AbstractRepository
     }
 
     /*
+     * Supprime la ligne de la base de données grâce à la clef primaire
+     */
+    public function deleteSpecific(AbstractDataObject $object)
+    {
+        $sql = "DELETE FROM " . $this->getNomTable() . " WHERE ";
+        $i = 0;
+        foreach ($this->getNomsColonnes() as $colonne) {
+            $sql = $sql . $colonne . " =:" . $colonne . "Tag";
+            if($i != sizeof($this->getNomsColonnes())-1){
+                $sql = $sql . " AND ";
+            }
+            $i = $i+1;
+        }
+        $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
+        try {
+            $pdoStatement->execute($object->formatTableau(true));
+        } catch (PDOException $e) {
+            echo($e->getMessage());
+        }
+    }
+
+    /*
      * met à jour l'objet dans la base de données
      */
     public function update(AbstractDataObject $object)

@@ -97,13 +97,17 @@ class Proposition extends AbstractDataObject
         return (new PropositionSectionRepository())->select($this->question->getId());
     }
 
-    public function formatTableau(): array
+    public function formatTableau($update = false): array
     {
-        return array(
+        $tab = array(
             "idquestionTag" => $this->question->getId(),
             "idresponsableTag" => $this->responsable->getIdentifiant(),
             "titreTag" => $this->titre,
             "nbvotesTag" => $this->nbVotes,
         );
+        if ($update) {
+            $tab["idpropositionTag"] = $this->id;
+        }
+        return $tab;
     }
 }

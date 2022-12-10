@@ -42,7 +42,7 @@ class   ControllerCoAuteur
             $params = array();
         }
         Controller::afficheVue('view.php',  array_merge(["pagetitle" => "Désigner un co-auteur",
-            "cheminVueBody" => "CoAuteur/create.php"], $params));
+            "cheminVueBody" => "CoAuteur/step-1.php"], $params));
     }
 
     public static function created()
