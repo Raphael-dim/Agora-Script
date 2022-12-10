@@ -72,21 +72,20 @@ create or replace table Utilisateurs
     primary key,
     nom         varchar(30) null,
     prenom      varchar(30) null,
-    email       varchar(60) null,
     mdp         varchar(64) null
 );
 
-create or replace table `Co-auteurs`
+create or replace table Coauteurs
 (
     idauteur      varchar(30) not null,
     idproposition int         not null,
     primary key (idproposition, idauteur),
     constraint `Co-auteurs_Propositions_idproposition_fk`
-        foreign key (idproposition) references Propositions (idproposition)
-            on update cascade on delete cascade,
+    foreign key (idproposition) references Propositions (idproposition)
+    on update cascade on delete cascade,
     constraint `Co-auteurs_Utilisateurs_identifiant_fk`
-        foreign key (idauteur) references Utilisateurs (identifiant)
-            on update cascade on delete cascade
+    foreign key (idauteur) references Utilisateurs (identifiant)
+    on update cascade on delete cascade
 );
 
 create or replace table Responsables
@@ -118,6 +117,7 @@ create or replace table Votes
 (
     idvotant      varchar(30) not null,
     idproposition int         not null,
+    valeurvote    int         null,
     idvote        int auto_increment,
     primary key (idvotant, idproposition),
     constraint idvote
@@ -142,36 +142,3 @@ create or replace definer = dimeckr@`%` trigger tr_maj_nbVotes_INSERT
 UPDATE Propositions
 SET nbvotes = nbvotes + 1
 WHERE idproposition = NEW.idproposition;
-
-create or replace definer = dimeckr@`%` view questions_ecriture as
-select `q`.`idquestion`     AS `idquestion`,
-       `q`.`titre`          AS `titre`,
-       `q`.`description`    AS `description`,
-       `q`.`idorganisateur` AS `idorganisateur`,
-       `q`.`idcalendrier`   AS `idcalendrier`,
-       `q`.`creation`       AS `creation`
-from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
-where (select current_timestamp() AS `current_timestamp`) > `c`.`debutecriture`
-  and (select current_timestamp() AS `current_timestamp`) < `c`.`finecriture`;
-
-create or replace definer = dimeckr@`%` view questions_termines as
-select `q`.`idquestion`     AS `idquestion`,
-       `q`.`titre`          AS `titre`,
-       `q`.`description`    AS `description`,
-       `q`.`idorganisateur` AS `idorganisateur`,
-       `q`.`idcalendrier`   AS `idcalendrier`,
-       `q`.`creation`       AS `creation`
-from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
-where (select current_timestamp() AS `current_timestamp`) > `c`.`finvote`;
-
-create or replace definer = dimeckr@`%` view questions_vote as
-select `q`.`idquestion`     AS `idquestion`,
-       `q`.`titre`          AS `titre`,
-       `q`.`description`    AS `description`,
-       `q`.`idorganisateur` AS `idorganisateur`,
-       `q`.`idcalendrier`   AS `idcalendrier`,
-       `q`.`creation`       AS `creation`
-from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
-where (select current_timestamp() AS `current_timestamp`) > `c`.`debutvote`
-  and (select current_timestamp() AS `current_timestamp`) < `c`.`finvote`;
-

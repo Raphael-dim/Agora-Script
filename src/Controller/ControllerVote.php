@@ -5,14 +5,9 @@ namespace App\Vote\Controller;
 
 use App\Vote\Lib\ConnexionUtilisateur;
 use App\Vote\Lib\MessageFlash;
-use App\Vote\Model\DataObject\Proposition;
 use App\Vote\Model\DataObject\Votant;
 use App\Vote\Model\DataObject\Vote;
-use App\Vote\Model\HTTP\Session;
-use App\Vote\Model\Repository\CalendrierRepository;
-
 use App\Vote\Model\Repository\PropositionRepository;
-use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\VotantRepository;
 use App\Vote\Model\Repository\VoteRepository;
 
