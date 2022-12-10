@@ -1,32 +1,66 @@
 <?php
 
 use App\Vote\Config\FormConfig as FormConfig;
+use App\Vote\Lib\ConnexionUtilisateur;
+use App\Vote\Model\DataObject\Responsable;
+use App\Vote\Model\Repository\PropositionRepository;
 
-if (isset($_POST['next'])) {
-    if ($_GET['action'] == "create") {
-            FormConfig::redirect('index.php?controller=proposition&step=2&action=create&idQuestion' . $_GET['idQuestion']);
-    } else if($_GET['action'] == "update"){
-        FormConfig::postSession();
-        if(CoAuteur::estCoAuteur()){
-            FormConfig::redirect('index.php?controller=proposition&action=updated&idProposition' . $_GET['idQuestion']);
-        }
-        FormConfig::redirect("index.php?controller=proposition&step=2&action=update&idQuestion" . $_GET['idQuestion']);
-    }
+
+if(!isset($_GET['idQuestion'])){
+    $idQuestion = $question->getId();
+}else{
+    $idQuestion = $_GET['idQuestion'];
 }
+
+if (isset($_GET['idProposition']) or isset($_SESSION[FormConfig::$arr]['idProposition']) ) {
+    echo "<h1>Modification de la Proposition</h1>";
+    if (isset($_GET['idProposition'])) {
+        $proposition = (new PropositionRepository())->select($_GET['idProposition']);
+        if ($proposition == null) {
+            \App\Vote\Controller\ControllerAccueil::erreur();
+        } else {
+            $_SESSION[FormConfig::$arr]['idProposition'] = $_GET['idProposition'];
+            FormConfig::initialiserSessionsProposition($proposition);
+        }
+    }
+
+} else {
+    echo "<h1>Création d'une Proposition</h1>";
+}
+
+if (isset($_SESSION[FormConfig::$arr]['idProposition'])){
+    (new PropositionRepository())->select($_SESSION[FormConfig::$arr]['idProposition'])->getResponsable()->getIdentifiant();
+}
+if (isset($_POST['titre'])) {
+    FormConfig::postSession();
+    $_SESSION[FormConfig::$arr]['step'][1] = 1;
+    if (!isset($_SESSION[FormConfig::$arr]['co-auteur'])) {
+        $_SESSION[FormConfig::$arr]['co-auteur'] = array();
+    }
+    if (isset($_SESSION[FormConfig::$arr]['idProposition'])){
+        if ((new PropositionRepository())->select($_SESSION[FormConfig::$arr]['idProposition'])->getResponsable()->getIdentifiant() != ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
+            FormConfig::redirect('index.php?controller=proposition&action=updated');
+        }
+    }
+    FormConfig::redirect("index.php?controller=proposition&action=form&step=2&idQuestion=".$idQuestion);
+
+}
+
+
 ?>
 
-<h1>Création d'une proposition</h1>
+
 
 <h2>Titre : <?= $question->getTitre() ?></h2>
 <h2>Description : <?= $question->getDescription() ?></h2>
 
 <h3><i>* Veuillez remplir le formulaire ci-dessous, un titre pour votre proposition ainsi qu'un contenu pour chaque
         section.</i></h3>
-<form method="post" action=index.php?controller=proposition&action=created&idQuestion=<?= $question->getId() ?>
+<form method="post"?>
 
     <p>
         <label for="titre_id">Titre de votre proposition
-            <input type="text" maxlength="500" size="80" value="" name="titre">
+            <input type="text" maxlength="500" size="80" value="<?= FormConfig::TextField('titre')?>" name="titre">
         </label>
         <label for="max_id">480 caractères maximum</label>
     </p>
@@ -43,7 +77,7 @@ if (isset($_POST['next'])) {
         echo '
     <p class="champ">
         <label for=contenu_id> Contenu</label > :
-        <textarea name=contenu' . $section->getId() . ' id = contenu_id maxlength=1500 rows = 8 cols = 80 ></textarea >
+        <textarea name=contenu' . $section->getId() . ' id = contenu_id maxlength=1500 rows = 8 cols = 80 >'. FormConfig::TextField('contenu'.$section->getId()) .'</textarea >
         <label for=max_id>1400 caractères maximum</label>
     </p> ';
     }

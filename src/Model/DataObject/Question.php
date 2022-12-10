@@ -156,14 +156,14 @@ class Question extends AbstractDataObject
      */
     public function getPhase(): string
     {
-        $date = date('d-m-Y à H:i:s');
-        if ($date < $this->calendrier->getDebutEcriture()) {
+        $date = date('Y-m-d H:i');
+        if ($date < $this->calendrier->getDebutEcriture(true)) {
             return 'debut';
-        } else if ($date > $this->calendrier->getDebutEcriture() && $date < $this->calendrier->getFinEcriture()) {
+        } else if ($date > $this->calendrier->getDebutEcriture(true) && $date < $this->calendrier->getFinEcriture(true)) {
             return 'ecriture';
-        } else if ($date > $this->calendrier->getFinEcriture() && $date < $this->calendrier->getDebutVote()) {
+        } else if ($date > $this->calendrier->getFinEcriture(true) && $date < $this->calendrier->getDebutVote(true)) {
             return 'entre';
-        } else if ($date > $this->calendrier->getDebutVote() && $date < $this->calendrier->getFinVote()) {
+        } else if ($date > $this->calendrier->getDebutVote(true) && $date < $this->calendrier->getFinVote(true)) {
             return 'vote';
         } else {
             return 'fini';

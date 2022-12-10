@@ -2,7 +2,9 @@
 
 namespace App\Vote\Config;
 
+use App\Vote\Model\DataObject\PropositionSection;
 use App\Vote\Model\HTTP\Session;
+use App\Vote\Model\Repository\PropositionRepository;
 
 class FormConfig
 {
@@ -76,6 +78,24 @@ class FormConfig
         foreach ($votants as $votant) {
             $_SESSION[FormConfig::$arr]['votants'][] = $votant->getIdentifiant();
         }
+    }
+
+    static public function initialiserSessionsProposition($proposition): void{
+        $titre = $proposition->getTitre();
+        $_SESSION[FormConfig::$arr]['titre'] = $titre;
+
+        $contenus = $proposition->getContenus();
+
+        foreach ($contenus as $contenu){
+            $_SESSION[FormConfig::$arr]['contenu'.$contenu->getSection()->getId()] = $contenu->getContenu();
+        }
+
+        $coauteurs = $proposition->getCoAuteurs();
+        $_SESSION[FormConfig::$arr]['co-auteur'] = array();
+        foreach ($coauteurs as $coauteur){
+            $_SESSION[FormConfig::$arr]['co-auteur'][] = $coauteur->getUtilisateur()->getIdentifiant();
+        }
+
     }
 
     /*

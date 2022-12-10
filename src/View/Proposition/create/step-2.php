@@ -1,26 +1,24 @@
 <?php
 
 use App\Vote\Config\FormConfig as FormConfig;
+use App\Vote\Model\DataObject\Responsable;
+
 $_SESSION[FormConfig::$arr]['type'] = "co-auteur";
 
-if (isset($_POST['next'])) {
 
-    if ($_GET['action'] == "create") {
+if (isset($_POST['next'])) {
+    if (isset($_SESSION[FormConfig::$arr]['idProposition'])) {
+        FormConfig::redirect('index.php?controller=proposition&action=updated');
+    } else {
         FormConfig::postSession();
-        FormConfig::redirect('index.php?controller=proposition&action=created&idQuestion=' . $_POST['idQuestion']);
-    } else if($_GET['action'] == "update"){
-        FormConfig::postSession();
-        FormConfig::redirect("index.php?controller=proposition&action=updated&idProposition=" . $_GET['idProposition']);
-    }
-}else if(isset($_POST['previous'])){
-    if ($_GET['action'] == "create") {
-        FormConfig::postSession();
-        FormConfig::redirect('index.php?controller=proposition&action=create&step=2&idQuestion=' . $_POST['idQuestion']);
-    } else if($_GET['action'] == "update"){
-        FormConfig::postSession();
-        FormConfig::redirect("index.php?controller=proposition&action=update&step=2&idProposition=" . $_GET['idProposition']);
+        FormConfig::redirect("index.php?controller=proposition&action=created&idQuestion=".$_GET['idQuestion']);
     }
 }
+else if (isset($_POST['previous'])) {
+    FormConfig::postSession();
+    FormConfig::redirect("index.php?controller=proposition&action=form&step=1&idQuestion=".$_GET['idQuestion']);
+}
+
 
 if (array_key_exists('user', $_POST)) {
     adduser($_POST["user"]);
@@ -28,7 +26,6 @@ if (array_key_exists('user', $_POST)) {
 if (array_key_exists('delete', $_POST)) {
     removeuser($_POST["delete"]);
 }
-FormConfig::postSession();
 
 function adduser(string $id): void
 {
