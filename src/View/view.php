@@ -20,6 +20,7 @@
 
     use App\Vote\Lib\MessageFlash;
     use App\Vote\Model\HTTP\Session;
+
     echo '<div class = "pileflash" >';
     if (!Session::getInstance()->contient('_messagesFlash')) {
         new MessageFlash();
@@ -35,9 +36,14 @@
     ?>
 </main>
 <footer>
-    <p>
-        Site de vote des Prog'Raleur
-    </p>
+    <ul class="footer">
+        <li>
+            <a href="index.php?controller=accueil&action=credits">Crédits</a>
+        </li>
+        <li>
+            <a>Nous contacter</a>
+        </li>
+    </ul>
 </footer>
 </body>
 </html>

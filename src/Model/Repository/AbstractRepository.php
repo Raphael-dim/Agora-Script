@@ -134,12 +134,12 @@ abstract class AbstractRepository
     public function selectKeyword($motclef, $row)
     {
         $ADonnees = array();
-        $sql = 'SELECT * from ' . $this->getNomTable() . ' WHERE LOWER(' . $row . ') LIKE LOWER(:motclef) ';
+        $sql = 'SELECT * from ' . $this->getNomTable() . ' WHERE ' . $row . ' LIKE :motclef';
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
 
         $values = array(
-            "motclef" => $motclef . '%',
+            "motclef" => '%' . $motclef . '%',
         );
         $pdoStatement->execute($values);
 
