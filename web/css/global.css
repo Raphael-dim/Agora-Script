@@ -579,11 +579,12 @@ a#vote:hover {
 }
 
 
-.pileflash{
-    position:fixed;
-    top:75px;
-    right:2px;
-    z-index:100;
+.pileflash {
+    position: fixed;
+    top: 75px;
+    right: 2px;
+    z-index: 100;
+}
 
 .alert {
     padding: 15px;
