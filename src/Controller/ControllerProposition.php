@@ -91,8 +91,8 @@ class ControllerProposition
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $votants = $question->getVotants();
         Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
+            "cheminVueBody" => "Proposition/list.php",
             "votants" => $votants,
-            "cheminVueBody" => "Proposition/list2.php",
             "propositions" => $propositions, "question" => $question]);
     }
 

@@ -20,78 +20,50 @@ class ControllerVote
 {
     public static function choix(): void
     {
-        if ($_GET['valeur'] > 5 || $_GET['valeur'] < 0) {
+
+        if (!isset($_GET['valeur']) || $_GET['valeur'] > 5 || $_GET['valeur'] < 0) {
             MessageFlash::ajouter('warning', "Valeur de vote invalide");
             Controller::redirect('index.php?controller=accueil');
         }
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
-        $valeur = Votant::aVote($proposition, ConnexionUtilisateur::getLoginUtilisateurConnecte());
-        if (!is_null($valeur) && $valeur == $_GET['valeur']) {
-            Controller::redirect('index.php?controller=vote&action=delete&idproposition=' . $_GET['idProposition']);
+        $question = $proposition->getQuestion();
+        $vote = Votant::aVote($proposition, ConnexionUtilisateur::getLoginUtilisateurConnecte());
+        if (!is_null($vote) && $vote->getValeur() == $_GET['valeur']) {
+            MessageFlash::ajouter("success", "Votre vote a été supprimé");
+            Controller::redirect('index.php?controller=vote&action=delete&idProposition=' . $_GET['idProposition']);
+        } else if (!is_null($vote)) {
+            $vote->setValeur($_GET['valeur']);
+            (new VoteRepository())->update($vote);
+            MessageFlash::ajouter("success", "Votre vote a été modifié");
+            Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
         } else {
-            $question = $proposition->getQuestion();
-
             $votant = (new VotantRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
             $vote = new Vote($votant, $proposition, $_GET['valeur']);
             $voteBD = (new VoteRepository())->sauvegarder($vote);
-            $votes[] = $vote;
-            $propositions = (new PropositionRepository())->selectWhere($question->getId(), '*',
-                'idquestion', 'Propositions');
-            Controller::afficheVue('view.php', [
-                "pagetitle" => "Liste des propositions",
-                "cheminVueBody" => "proposition/list2.php",
-                "propositions" => $propositions,
-                "proposition" => $proposition,
-                "question" => $question,
-                "votes" => $votes
-            ]);
+            MessageFlash::ajouter("success", "Votre vote a été pris en compte");
+            Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
+
         }
-    }
-
-
-    public static function create(): void
-    {
-        $proposition = (new PropositionRepository())->select($_GET['idproposition']);
-        $question = $proposition->getQuestion();
-        $votant = (new VotantRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
-        $vote = new Vote($votant, $proposition);
-        (new VoteRepository())->sauvegarder($vote);
-        $propositions = (new PropositionRepository())->selectWhere($question->getId(), '*',
-            'idquestion', 'Propositions');
-        Controller::afficheVue('view.php', [
-            "pagetitle" => "Liste des propositions",
-            "cheminVueBody" => "proposition/list.php",
-            "propositions" => $propositions,
-            'question' => $question
-        ]);
     }
 
     public static function update()
     {
-        $proposition = (new PropositionRepository())->select($_GET['idpropositionAnc']);
         $question = $proposition->getQuestion();
         $votant = (new VotantRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
         $vote = (new VoteRepository())->selectWhere(array('clef0' => $proposition->getId(),
             'clef1' => $votant->getIdentifiant()), '*',
             array('idproposition', 'idvotant'), 'Votes');
-
         (new VoteRepository())->delete($vote[0]->getIdvote());
-
-        $proposition = (new PropositionRepository())->select($_GET['idproposition']);
+        $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         $vote = new Vote($votant, $proposition);
-
         (new VoteRepository())->sauvegarder($vote);
-        $propositions = $question->getPropositions();
-        Controller::afficheVue('view.php', [
-            "pagetitle" => "Liste des propositions",
-            "cheminVueBody" => "proposition/list.php",
-            "propositions" => $propositions,
-            'question' => $question]);
+        Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
+
     }
 
     public static function delete()
     {
-        $proposition = (new PropositionRepository())->select($_GET['idproposition']);
+        $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         $question = $proposition->getQuestion();
         $votant = (new VotantRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
         $vote = (new VoteRepository())->selectWhere(array('clef0' => $proposition->getId(),
@@ -99,11 +71,7 @@ class ControllerVote
             array('idproposition', 'idvotant'), 'Votes');
 
         (new VoteRepository())->delete($vote[0]->getIdvote());
-        $propositions = $question->getPropositions();
-        Controller::afficheVue('view.php', [
-            "pagetitle" => "Liste des propositions",
-            "cheminVueBody" => "proposition/list.php",
-            "propositions" => $propositions,
-            'question' => $question]);
+        Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
+
     }
 }

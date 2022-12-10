@@ -62,12 +62,16 @@ class Vote extends AbstractDataObject
         return $this->proposition;
     }
 
-    public function formatTableau(): array
+    public function formatTableau($update = false): array
     {
-        return array(
+        $tab = array(
             "idvotantTag" => $this->votant->getIdentifiant(),
             "idpropositionTag" => $this->proposition->getId(),
             "valeurvoteTag" => $this->valeur
         );
+        if ($update) {
+            $tab["idvoteTag"] = $this->id;
+        }
+        return $tab;
     }
 }
