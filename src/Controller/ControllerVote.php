@@ -27,7 +27,7 @@ class ControllerVote
             $bool = false;
         }
         if (!$bool) {
-            Controller::redirect('index.php?controller=vote&action=delete&idProposition=' . $_GET['idProposition']);
+            Controller::redirect('index.php?controller=vote&action=readAll&idQuestion=' . $question->getId());
         }
         if (!isset($_GET['valeur']) || $_GET['valeur'] > 5 || $_GET['valeur'] < 0) {
             MessageFlash::ajouter('warning', "Valeur de vote invalide");
@@ -41,16 +41,18 @@ class ControllerVote
         $question = $proposition->getQuestion();
         $vote = Votant::aVote($proposition, ConnexionUtilisateur::getLoginUtilisateurConnecte());
         if (!is_null($vote) && $vote->getValeur() == $_GET['valeur']) {
+            MessageFlash::ajouter('success', 'Vote supprimé');
             Controller::redirect('index.php?controller=vote&action=delete&idproposition=' . $_GET['idProposition']);
         } else if (!is_null($vote)) {
             $vote->setValeur($_GET['valeur']);
             (new VoteRepository())->update($vote);
+            MessageFlash::ajouter('success', 'Vote mis à jour');
             Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
         } else {
             $votant = (new VotantRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
             $vote = new Vote($votant, $proposition, $_GET['valeur']);
             $voteBD = (new VoteRepository())->sauvegarder($vote);
-            $votes[] = $vote;
+            MessageFlash::ajouter('success', 'Vote pris en compte');
             Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
 
         }
