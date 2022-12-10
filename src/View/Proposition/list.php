@@ -7,7 +7,6 @@
 
     $i = 1;
     $calendrier = $question->getCalendrier();
-    $date = date('d/m/Y à H:i:s');
     $aVote = Votant::aVote($propositions, $_SESSION['user']['id']);
     $aVoteURL = rawurlencode($aVote);
     foreach ($propositions as $proposition) {
