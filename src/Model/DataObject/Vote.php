@@ -7,6 +7,23 @@ class Vote extends AbstractDataObject
     private int $id;
     private Votant $votant;
     private Proposition $proposition;
+    private int $valeur;
+
+    /**
+     * @return int
+     */
+    public function getValeur(): int
+    {
+        return $this->valeur;
+    }
+
+    /**
+     * @param int $valeur
+     */
+    public function setValeur(int $valeur): void
+    {
+        $this->valeur = $valeur;
+    }
 
     public function getIdvote(): int
     {
@@ -28,10 +45,11 @@ class Vote extends AbstractDataObject
         $this->votant = $votant;
     }
 
-    public function __construct(Votant $votant, Proposition $proposition)
+    public function __construct(Votant $votant, Proposition $proposition, int $valeur)
     {
         $this->votant = $votant;
         $this->proposition = $proposition;
+        $this->valeur = $valeur;
     }
 
     public function setId(int $id): void
@@ -48,7 +66,8 @@ class Vote extends AbstractDataObject
     {
         return array(
             "idvotantTag" => $this->votant->getIdentifiant(),
-            "idpropositionTag" => $this->proposition->getId()
+            "idpropositionTag" => $this->proposition->getId(),
+            "valeurvoteTag" => $this->valeur
         );
     }
 }

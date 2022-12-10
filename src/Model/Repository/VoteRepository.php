@@ -17,7 +17,8 @@ class VoteRepository extends AbstractRepository
     {
         $vote = new Vote(
             (new VotantRepository())->select($voteFormatTableau['idvotant']),
-            (new PropositionRepository())->select($voteFormatTableau['idproposition'])
+            (new PropositionRepository())->select($voteFormatTableau['idproposition']),
+            $voteFormatTableau['valeurvote']
         );
         $vote->setId($voteFormatTableau["idvote"]);
         return $vote;
@@ -32,7 +33,8 @@ class VoteRepository extends AbstractRepository
     {
         return array(
             "idvotant",
-            "idproposition"
+            "idproposition",
+            "valeurvote"
         );
     }
 }

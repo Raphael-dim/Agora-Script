@@ -6,13 +6,13 @@
         <li class="grosmenu"><a href="index.php?action=readAll&controller=question">Liste des questions</a></li>
 
     </ul>
-        <?php
+    <?php
 
-        if (isset($_SESSION['user'])) {
-            echo "<a class=profil href='index.php?action=read&controller=utilisateur'>
+    if (isset($_SESSION['user'])) {
+        echo "<a class=profil href='index.php?action=read&controller=utilisateur'>
                                         <img src='images/profil.png' alt='Profil'></a>";
-        } else {
-            echo "<a href = 'index.php?action=connexion&controller=utilisateur'>Connexion</a>";
-        } ?>
+    } else {
+        echo "<a href = 'index.php?action=connexion&controller=utilisateur'>Connexion</a>";
+    } ?>
 
 </nav>

@@ -95,7 +95,7 @@ class ControllerProposition
         $votants = $question->getVotants();
         Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
             "votants" => $votants,
-            "cheminVueBody" => "Proposition/list.php",
+            "cheminVueBody" => "Proposition/list2.php",
             "propositions" => $propositions, "question" => $question]);
     }
 

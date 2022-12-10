@@ -35,6 +35,7 @@ abstract class AbstractRepository
             || get_class($object) == Section::class || get_class($object) == Calendrier::class) {
             $sql = $sql . " RETURNING " . $this->getNomClePrimaire();
         }
+        echo $sql;
         $sql = $sql . ";";
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
