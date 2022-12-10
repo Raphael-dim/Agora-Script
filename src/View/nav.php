@@ -7,8 +7,8 @@
         <?php
 
         if (isset($_SESSION['user'])) {
-            echo "<li class='grosmenu'><a href='index.php?action=read&controller=utilisateur'>
-                                        <img class=profil src='images/profil.png' alt='Profil'></a></li>";
+            echo "<li class='grosmenu'><a class=profil href='index.php?action=read&controller=utilisateur'>
+                                        <img src='images/profil.png' alt='Profil'></a></li>";
         } else {
             echo "<li class='grosmenu' ><a href = 'index.php?action=connexion&controller=utilisateur'>Connexion</a></li>";
         } ?>

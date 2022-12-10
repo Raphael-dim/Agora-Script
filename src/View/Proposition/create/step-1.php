@@ -19,9 +19,10 @@ if (isset($_POST['next'])) {
 
 <h2>Titre : <?= $question->getTitre() ?></h2>
 <h2>Description : <?= $question->getDescription() ?></h2>
+
 <h3><i>* Veuillez remplir le formulaire ci-dessous, un titre pour votre proposition ainsi qu'un contenu pour chaque
         section.</i></h3>
-<form method="post">
+<form method="post" action=index.php?controller=proposition&action=created&idQuestion=<?= $question->getId() ?>
 
     <p>
         <label for="titre_id">Titre de votre proposition
@@ -29,6 +30,8 @@ if (isset($_POST['next'])) {
         </label>
         <label for="max_id">480 caractères maximum</label>
     </p>
+    <h2>Désigner les co-auteurs qui vous aideront à rédiger votre proposition :</h2>
+
     <?php
     $sections = $question->getSections();
     $i = 0;
@@ -40,7 +43,7 @@ if (isset($_POST['next'])) {
         echo '
     <p class="champ">
         <label for=contenu_id> Contenu</label > :
-        <textarea name=contenu' . $section->getId() . ' id = contenu_id maxlength=1500 rows = 8 cols = 80 required ></textarea >
+        <textarea name=contenu' . $section->getId() . ' id = contenu_id maxlength=1500 rows = 8 cols = 80 ></textarea >
         <label for=max_id>1400 caractères maximum</label>
     </p> ';
     }

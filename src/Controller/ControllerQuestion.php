@@ -3,6 +3,7 @@
 namespace App\Vote\Controller;
 
 
+use App\Vote\Lib\ConnexionUtilisateur;
 use App\Vote\Config\FormConfig;
 use App\Vote\Lib\MessageFlash;
 use App\Vote\Model\DataObject\Calendrier;
@@ -27,7 +28,7 @@ class ControllerQuestion
      */
     public static function create(): void
     {
-        if (isset(Session::getInstance()->lire('user')['id'])) {
+        if (ConnexionUtilisateur::estConnecte()) {
             FormConfig::setArr('SessionQuestion');
             FormConfig::startSession();
             self::form();
@@ -39,12 +40,16 @@ class ControllerQuestion
 
     public static function read(): void
     {
+        if (!isset($_GET['idQuestion'])) {
+            MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
+            Controller::redirect('index.php?controller=question&action=readAll');
+        }
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $propositions = $question->getPropositions();
         $sections = $question->getSections();
         $responsables = $question->getResponsables();
         $votants = $question->getVotants();
-        self::afficheVue('view.php', ["question" => $question,
+        Controller::afficheVue('view.php', ["question" => $question,
             "sections" => $sections,
             "responsables" => $responsables,
             "propositions" => $propositions,
@@ -152,8 +157,7 @@ class ControllerQuestion
      */
     public static function created(): void
     {
-        $user = Session::getInstance()->lire('user');
-        if (is_null($user)) {
+        if (!ConnexionUtilisateur::estConnecte()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas créer une question si vous n'êtes pas connecté.");
             Controller::redirect("index.php?action=readAll&controller=question");
         }
@@ -216,16 +220,18 @@ class ControllerQuestion
 
     public static function update(): void
     {
-        $date = date('d-m-Y à H:i:s');
+        if (!isset($_GET['idQuestion'])) {
+            MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
+            Controller::redirect('index.php?controller=question&action=readAll');
+        }
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $bool = true;
-        $calendrier = $question->getCalendrier();
-        if ($date > $calendrier->getDebutEcriture()) {
+        if ($question->getPhase() != 'debut') {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont la phase d'écriture a déjà commencée.");
             $bool = false;
         }
-        $user = Session::getInstance()->lire('user');
-        if (is_null($user) || $user['id'] != $question->getOrganisateur()->getIdentifiant()) {
+        if (!ConnexionUtilisateur::estConnecte() ||
+            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
             $bool = false;
         }
@@ -234,7 +240,7 @@ class ControllerQuestion
         } else {
             FormConfig::setArr('SessionQuestion');
             FormConfig::startSession();
-            self::afficheVue('view.php', ["pagetitle" => "Modifier une question",
+            Controller::afficheVue('view.php', ["pagetitle" => "Modifier une question",
                 "cheminVueBody" => "question/create/step-1.php",
                 "idQuestion" => $_GET['idQuestion']]);
         }
@@ -243,24 +249,17 @@ class ControllerQuestion
 
     public static function updated(): void
     {
-
-        $user = Session::getInstance()->lire('user');
-
-        $date = date('d-m-Y à H:i:s');
         $bool = true;
-
         FormConfig::setArr('SessionQuestion');
         Session::getInstance();
-        //var_dump($_SESSION);
-
+        // var_dump($_SESSION);
         $question = (new QuestionRepository())->select($_SESSION[FormConfig::$arr]['idQuestion']);
-        $calendrier = $question->getCalendrier();
-        if ($date > $calendrier->getDebutEcriture()) {
+        if ($question->getPhase() != 'debut') {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont la phase d'écriture a déjà commencée.");
             $bool = false;
         }
-        $user = Session::getInstance()->lire('user');
-        if (is_null($user) || $user['id'] != $question->getOrganisateur()->getIdentifiant()) {
+        if (!ConnexionUtilisateur::estConnecte() ||
+            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
             $bool = false;
         }
@@ -290,7 +289,7 @@ class ControllerQuestion
                 if ($sectionBD != null) {
                     $section->setId($sectionBD);
                 } else {
-                    self::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+                    Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
                 }
             } else {
                 $ancSections[$i]->setTitre($nouvSections[$i]['titre']);
@@ -324,7 +323,7 @@ class ControllerQuestion
                 $responsableBD = (new ResponsableRepository())->sauvegarder($utilisateur);
             }
         }
-        for($i=0; $i<sizeof($ancResponsables);$i++){
+        for ($i = 0; $i < sizeof($ancResponsables); $i++) {
             if (!in_array($ancResponsables[$i], $nouvResponsables)) {
                 (new ResponsableRepository())->delete($ancResponsables[$i]);
             }
@@ -348,7 +347,7 @@ class ControllerQuestion
             }
         }
 
-        for($i=0; $i<sizeof($ancVotants);$i++){
+        for ($i = 0; $i < sizeof($ancVotants); $i++) {
             if (!in_array($ancVotants[$i], $nouvVotants)) {
                 (new VotantRepository())->delete($ancVotants[$i]);
             }
@@ -356,22 +355,22 @@ class ControllerQuestion
 
         MessageFlash::ajouter('success', 'La question a bien été modifiée');
         Controller::redirect("index.php?controller=question&action=readAll");
-
         FormConfig::startSession();
     }
 
     public static function delete(): void
     {
-        $user = Session::getInstance()->lire('user');
-        $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        if (is_null($user) || $user['id'] != $question->getOrganisateur()->getIdentifiant()) {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas supprimer une question dont vous n'êtes par l'organisateur.");
-            Controller::redirect("index.php?action=readAll&controller=question");
+        if (!isset($_GET['idQuestion'])) {
+            MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
+            Controller::redirect('index.php?controller=question&action=readAll');
         }
-        if (!isset($_SESSION['user']) || $_SESSION['user']['id'] != $question->getOrganisateur()->getIdentifiant()) {
-            ControllerAccueil::erreur();
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        if (!ConnexionUtilisateur::estConnecte() ||
+            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant()) {
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
+            Controller::redirect('index.php?controller=question&action=readAll');
         } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
-            self::afficheVue('view.php', ["pagetitle" => "Question modifiée",
+            Controller::afficheVue('view.php', ["pagetitle" => "Question modifiée",
                 "cheminVueBody" => "confirm.php",
                 "message" => "Êtes vous sûr de vouloir supprimer cette question?",
                 "id" => $_GET['idQuestion']]);
@@ -396,11 +395,26 @@ class ControllerQuestion
                 "cheminVueBody" => "Question/list.php"]);
     }
 
-
-    private static function afficheVue(string $cheminVue, array $parametres = []): void
+    public static function result(): void
     {
-        extract($parametres); // Crée des variables à partir du tableau $paramètres
-        require "../src/view/$cheminVue"; // Charge la vue
+        $bool = true;
+        if (!isset($_GET['idQuestion'])) {
+            MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
+            $bool = false;
+        }
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        if ($question->getPhase() != 'fini') {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas consulter la page des résultats pour l'instant.");
+            $bool = false;
+        }
+        if (!$bool) {
+            Controller::redirect('index.php?controller=question&action=readAll');
+        }
+        $propositions = $question->getPropositions();
+        Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
+            'cheminVueBody' => "Question/resultat.php",
+            'propositions' => $propositions]);
     }
+
 
 }

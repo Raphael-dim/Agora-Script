@@ -2,24 +2,30 @@
     <fieldset>
         <legend>Formulaire d'inscription :</legend>
         <p>
-            Nom d'utilisateur :
-            <input type="text" placeholder="" name="identifiant" id="username" required>
+            <label for="username">Identifiant : </label><input type="text" placeholder="" name="identifiant" id="username" required>
+            <span class="validity"></span>
+
         </p>
         <p>
-            Nom :
-            <input type="text" placeholder="" name="nom" id="lastname" required>
+            <label for="lastname">Nom : </label><input type="text" placeholder="" name="nom" id="lastname" required>
+            <span class="validity"></span>
+
         </p>
         <p>
-            Prenom :
-            <input type="text" placeholder="" name="prenom" id="firstname" required>
+            <label for="firstname">Prénom : </label><input type="text" placeholder="" name="prenom" id="firstname" required>
+            <span class="validity"></span>
         </p>
         <p class="InputAddOn">
-            <label class="InputAddOn-item" for="mdp_id">Mot de passe&#42;</label>
+            <label class="InputAddOn-item" for="mdp_id">Mot de passe&#42; : </label>
             <input class="InputAddOn-field" type="password" value="" placeholder="" name="mdp" id="mdp_id" required>
+            <span class="validity"></span>
+
         </p>
         <p class="InputAddOn">
-            <label class="InputAddOn-item" for="mdp2_id">Vérification du mot de passe&#42;</label>
+            <label class="InputAddOn-item" for="mdp2_id">Vérification du mot de passe&#42; : </label>
             <input class="InputAddOn-field" type="password" value="" placeholder="" name="mdp2" id="mdp2_id" required>
+            <span class="validity"></span>
+
         </p>
         <p>
             <input type="submit" value="Inscription" class="nav">

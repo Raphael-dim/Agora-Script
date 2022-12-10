@@ -3,6 +3,7 @@
 namespace App\Vote\Controller;
 
 
+use App\Vote\Lib\ConnexionUtilisateur;
 use App\Vote\Model\DataObject\Proposition;
 use App\Vote\Model\DataObject\Vote;
 use App\Vote\Model\HTTP\Session;
@@ -18,10 +19,9 @@ class ControllerVote
 
     public static function create(): void
     {
-        Session::getInstance();
         $proposition = (new PropositionRepository())->select($_GET['idproposition']);
         $question = $proposition->getQuestion();
-        $votant = (new VotantRepository())->select($_SESSION['user']['id']);
+        $votant = (new VotantRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
         $vote = new Vote($votant, $proposition);
         (new VoteRepository())->sauvegarder($vote);
         $propositions = (new PropositionRepository())->selectWhere($question->getId(), '*',
@@ -36,10 +36,9 @@ class ControllerVote
 
     public static function update()
     {
-        Session::getInstance();
         $proposition = (new PropositionRepository())->select($_GET['idpropositionAnc']);
         $question = $proposition->getQuestion();
-        $votant = (new VotantRepository())->select($_SESSION['user']['id']);
+        $votant = (new VotantRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
         $vote = (new VoteRepository())->selectWhere(array('clef0' => $proposition->getId(),
             'clef1' => $votant->getIdentifiant()), '*',
             array('idproposition', 'idvotant'), 'Votes');
@@ -60,10 +59,9 @@ class ControllerVote
 
     public static function delete()
     {
-        Session::getInstance();
         $proposition = (new PropositionRepository())->select($_GET['idproposition']);
         $question = $proposition->getQuestion();
-        $votant = (new VotantRepository())->select($_SESSION['user']['id']);
+        $votant = (new VotantRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
         $vote = (new VoteRepository())->selectWhere(array('clef0' => $proposition->getId(),
             'clef1' => $votant->getIdentifiant()), '*',
             array('idproposition', 'idvotant'), 'Votes');

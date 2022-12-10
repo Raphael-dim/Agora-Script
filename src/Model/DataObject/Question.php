@@ -151,6 +151,25 @@ class Question extends AbstractDataObject
         return (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion", 'Propositions');
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function getPhase(): string
+    {
+        $date = date('d-m-Y à H:i:s');
+        if ($date < $this->calendrier->getDebutEcriture()) {
+            return 'debut';
+        } else if ($date > $this->calendrier->getDebutEcriture() && $date < $this->calendrier->getFinEcriture()) {
+            return 'ecriture';
+        } else if ($date > $this->calendrier->getFinEcriture() && $date < $this->calendrier->getDebutVote()) {
+            return 'entre';
+        } else if ($date > $this->calendrier->getDebutVote() && $date < $this->calendrier->getFinVote()) {
+            return 'vote';
+        } else {
+            return 'fini';
+        }
+    }
+
 
     public function formatTableau($update = false): array
     {
