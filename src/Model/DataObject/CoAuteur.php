@@ -36,6 +36,13 @@ class CoAuteur extends AbstractDataObject
         return $this->utilisateur;
     }
 
+
+    /**
+     * Renvoie vrai si l'utilisateur est un coAuteur de la proposition, faux sinon
+     * @param  Utilisateur $utilisateur
+     * @param  Proposition $proposition
+     * @return bool
+     */
     public static function estCoAuteur($utilisateur, $proposition) : bool
     {
         $coAuteurs = (new CoAuteurRepository())->selectWhere($utilisateur,"*","idauteur");

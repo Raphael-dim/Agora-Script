@@ -68,6 +68,11 @@ class Utilisateur extends AbstractDataObject
         $this->prenom = $prenom;
     }
 
+    /**
+     * Renvoie vrai si l'identifiant est celui d'un utilisateur existant, faux sinon
+     * @param $identifiant
+     * @return bool
+     */
     public static function identifiantExiste($identifiant): bool
     {
         $utilisateurs = (new UtilisateurRepository())->selectAll();

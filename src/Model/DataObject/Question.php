@@ -156,9 +156,10 @@ class Question extends AbstractDataObject
     }
 
     /**
+     * On obtient la phase en cours pour une question
      * @throws \Exception
+     * @return string
      */
-    /* On obtient la phase en cours pour une question*/
     public function getPhase(): string
     {
         $date = date('Y-m-d H:i');

@@ -25,7 +25,7 @@ class   ControllerCoAuteur
         //session_start();
         FormConfig::setArr('SessionCoAuteur');
         //if(!isset($_SESSION[FormConfig::$arr]['co-auteur'])){
-            $tests = (new CoAuteurRepository())->selectWhere($_GET['idQuestion'],'*','idquestion',"Coauteurs");
+            $tests = (new CoAuteurRepository())->selectWhere($_GET['idProposition'],'*','idproposition',"Coauteurs");
             if(empty($tests)){
                 $_SESSION[FormConfig::$arr]['co-auteur'] = array();
             }

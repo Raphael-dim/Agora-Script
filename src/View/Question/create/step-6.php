@@ -76,13 +76,13 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
         echo '<h3> Section n° ' . $i . '</h3>';
         echo '<p>Titre : ' . htmlspecialchars($Section["titre"]) . '  </p>';
         echo '<p>Description : ' . htmlspecialchars($Section["description"]) . '  </p>';
-        echo '&nbsp';
+        echo '&nbsp;';
         $i++;
     }
     ?>
 </div>
 
 <form method="post" class="nav">
-    <input type="submit" name=previous value="Retour" formnovalidate/>
-    <input type="submit" name=next value="Suivant"/>
+    <input type="submit" name=previous value="Retour" formnovalidate>
+    <input type="submit" name=next value="Suivant">
 </form>
