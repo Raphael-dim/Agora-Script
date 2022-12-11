@@ -262,10 +262,6 @@ li, a {
     color: #dff5f4;
 }
 
-textarea {
-    resize: none;
-}
-
 .champ textarea {
     background-color: white;
 }
