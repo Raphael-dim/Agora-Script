@@ -231,23 +231,23 @@ span {
 }
 
 #status_cree.listes {
-    border-top: 10px solid red;
+    border-top: 15px solid red;
 }
 
 #status_ecriture.listes {
-    border-top: 10px solid orange;
+    border-top: 15px solid #FFC55C;
 }
 
 #status_vote.listes {
-    border-top: 10px solid #F67952D8;
+    border-top: 15px solid #F67952D8;
 }
 
 #status_attente.listes {
-    border-top: 10px solid grey;
+    border-top: 15px solid grey;
 }
 
 #status_termine.listes {
-    border-top: 10px solid green;
+    border-top: 15px solid green;
 }
 
 .listes > #auteur {
@@ -654,13 +654,13 @@ h1 > strong#color-green {
 }
 
 h1 > strong#color-yellow {
-    background: #ffff98;
+    background: #F67952D8;
     transform: rotate(3deg);
     -webkit-transform: rotate(3deg);
 }
 
 h1 > strong#color-orange {
-    background: lightsalmon;
+    background: #FFC55C;
     transform: rotate(-2deg);
     -webkit-transform: rotate(-2deg);
 }
