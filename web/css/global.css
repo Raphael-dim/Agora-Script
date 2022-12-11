@@ -239,7 +239,7 @@ span {
 }
 
 #status_vote.listes {
-    border-top: 10px solid yellow;
+    border-top: 10px solid #F67952D8;
 }
 
 #status_attente.listes {
@@ -292,7 +292,6 @@ textarea {
     padding-inline-start: 0px;
     width: 100%;
     justify-content: center;
-    border: solid #dff5f4 2px;
     list-style-type: none;
 }
 
@@ -330,7 +329,7 @@ textarea {
 }
 
 li#vote.phases > a {
-    background: #FDE541;
+    background: rgba(246, 121, 82, 0.85);
 }
 
 #termine.phases > a {
