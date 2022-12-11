@@ -60,7 +60,7 @@ class Proposition extends AbstractDataObject
     }
 
     /**
-     * @param Utilisateur $responsable
+     * @param Responsable $responsable
      */
     public function setResponsable(Responsable $responsable): void
     {
