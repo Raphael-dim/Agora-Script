@@ -30,14 +30,11 @@ class Calendrier extends AbstractDataObject
     }
 
     /**
+     * La base de donnée gère les dates dans un format différent, il faut donc convertir ce dernier
+     * dans chaque Getter
      * @return string
      * @throws \Exception
      */
-
-    /*La base de donnée gère les dates dans un format différent, il faut donc convertir ce dernier
-    dans chaque Getter*/
-
-
     public function getDebutEcriture($bool = false): string
     {
         if ($bool) {
@@ -132,8 +129,12 @@ class Calendrier extends AbstractDataObject
     }
 
 
-    /* Méthode qui permet d'afficher en détail un interval de date, n'a rien à voir avec l'objet calendrier
-    met en rapport avec le temps, les valeurs à 0 comme les années ne sont pas affichées*/
+    /**
+     * Méthode qui permet d'afficher en détail un interval de date, n'a rien à voir avec l'objet calendrier
+     * mais en rapport avec le temps, les valeurs à 0 comme les années ne sont pas affichées
+     * @param DateInterval $interval
+     * @return string
+     */
 
     public static function diff(DateInterval $interval): string
     {

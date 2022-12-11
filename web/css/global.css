@@ -746,6 +746,12 @@ div p {
     top: 0px;
 }
 
+.suppProp{
+    position : absolute;
+    bottom : 5px;
+    left : 5px;
+}
+
 .cal::after {
     content: "";
     margin-left: auto;
