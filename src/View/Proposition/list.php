@@ -53,6 +53,11 @@
         //        $idPropositionURL . ' > Désigner des co - auteurs </a > ';
         echo '<br > ';
         echo 'Nombre de votes : ' . $proposition->getNbVotes();
+        if(ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte()==$proposition->getResponsable()->getIdentifiant()) {
+            echo '<button class="nav suppProp">
+    <a href=index.php?controller=proposition&action=delete&idProposition=' . $proposition->getId() . '>Supprimer</a>
+            </button>';
+        }
         echo ' </p> ';
         $i++;
     }
