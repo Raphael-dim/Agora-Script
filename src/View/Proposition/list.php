@@ -25,7 +25,7 @@
                 }
                 for ($val = $vote->getValeur() + 1; $val <= 5; $val++) {
                     echo '<a id=vote href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
-                        <img style="filter: invert(100%)" src=../web/images/coeur_logo.png alt=""></a>';
+                        <img src=../web/images/coeur_logo.png alt=""></a>';
                 }
             } else {
                 for ($val = 1; $val <= 5; $val++) {

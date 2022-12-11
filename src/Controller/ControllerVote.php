@@ -58,22 +58,6 @@ class ControllerVote
         }
     }
 
-    public static function update()
-    {
-        $proposition = (new PropositionRepository())->select($_GET['idpropositionAnc']);
-        $question = $proposition->getQuestion();
-        $votant = (new VotantRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
-        $vote = (new VoteRepository())->selectWhere(array('clef0' => $proposition->getId(),
-            'clef1' => $votant->getIdentifiant()), '*',
-            array('idproposition', 'idvotant'), 'Votes');
-        (new VoteRepository())->delete($vote[0]->getIdvote());
-        $proposition = (new PropositionRepository())->select($_GET['idproposition']);
-        $vote = new Vote($votant, $proposition);
-        (new VoteRepository())->sauvegarder($vote);
-        Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
-
-    }
-
     public static function delete()
     {
         $proposition = (new PropositionRepository())->select($_GET['idproposition']);
