@@ -8,7 +8,6 @@ use App\Vote\Lib\MessageFlash;
 use App\Vote\Model\DataObject\Votant;
 use App\Vote\Model\DataObject\Vote;
 use App\Vote\Model\Repository\PropositionRepository;
-use App\Vote\Model\Repository\VotantRepository;
 use App\Vote\Model\Repository\VoteRepository;
 
 class ControllerVote
@@ -37,10 +36,6 @@ class ControllerVote
         }
         if (!$bool) {
             Controller::redirect('index.php?controller=vote&action=readAll&idQuestion=' . $question->getId());
-        }
-        if (!isset($_GET['valeur']) || $_GET['valeur'] > 5 || $_GET['valeur'] < 0) {
-            MessageFlash::ajouter('warning', "Valeur de vote invalide");
-            Controller::redirect('index.php?controller=accueil');
         }
         if (!isset($_GET['valeur']) || $_GET['valeur'] > 5 || $_GET['valeur'] < 0) {
             MessageFlash::ajouter('warning', "Valeur de vote invalide");

@@ -1,11 +1,11 @@
 <?php
 if (isset($_GET['selection'])) {
     if ($_GET['selection'] == 'ecriture') {
-        echo "<h1>Nos questions en phase d'<strong id ='color-orange'>écriture</strong></h1>";
+        echo "<h1>Nos questions en phase d'<strong class ='color-orange'>écriture</strong></h1>";
     } else if ($_GET['selection'] == 'vote') {
         echo "<h1>Nos questions en phase de <strong class ='color-yellow'>vote</strong></h1>";
     } else if ($_GET['selection'] == 'terminees') {
-        echo "<h1>Nos questions <strong id ='color-green'>terminées</strong></h1>";
+        echo "<h1>Nos questions <strong class ='color-green'>terminées</strong></h1>";
     } else {
         echo "<h1>Consultez nos <strong class ='color-grey'>questions </strong> et trouvez des réponses</h1>";
     }
@@ -70,13 +70,10 @@ if (isset($_GET['selection'])) {
             echo '<li class="listes status_attente">';
         }
 
-        echo '
-          
-            <a class=titre href="index.php?action=read&controller=question&idQuestion=' .
+        echo ' <a class=titre href="index.php?action=read&controller=question&idQuestion=' .
             $idQuestionURL . '"> ' . $titreHTML . ' </a>
             <a href="" class = "auteur">par ' . $organisateur . ' </a >';
-        echo '<p 
-class="description">' . $question->getDescription() . '</p>';
+        echo '<p class="description">' . $question->getDescription() . '</p>';
         if ($question->getPhase() == 'debut') {
             if (ConnexionUtilisateur::estConnecte() &&
                 ConnexionUtilisateur::getLoginUtilisateurConnecte() == $organisateur) {
