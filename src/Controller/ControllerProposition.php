@@ -11,6 +11,7 @@ use App\Vote\Model\DataObject\Proposition;
 use App\Vote\Model\DataObject\PropositionSection;
 use App\Vote\Model\DataObject\Responsable;
 use App\Vote\Model\HTTP\Session;
+use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\CoAuteurRepository;
 use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\PropositionSectionRepository;
@@ -91,13 +92,15 @@ class ControllerProposition
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $votants = $question->getVotants();
         Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
+            "cheminVueBody" => "Proposition/list.php",
             "votants" => $votants,
-            "cheminVueBody" => "Proposition/list2.php",
             "propositions" => $propositions, "question" => $question]);
     }
 
     public static function created()
     {
+        /* On vérifie au préalable si l'utilisateur a le droit de créer une proposition pour la question donnée
+        dans l'éventualité où il a tenté de le faire depuis la barre d'adresse. */
         FormConfig::setArr('SessionProposition');
         Session::getInstance();
         $user = Session::getInstance()->lire('user');
@@ -142,6 +145,13 @@ class ControllerProposition
         Controller::redirect("index.php?controller=question&action=readAll");
     }
 
+
+    /**
+     * Met à jour une proposition
+     * Vérifie si l'utilisateur le peut
+     *
+     * @return void
+     */
     public static function update(): void
     {
         if (!isset($_GET['idProposition'])) {
@@ -229,6 +239,39 @@ class ControllerProposition
 
             MessageFlash::ajouter("success", "La proposition a bien été modifié.");
             Controller::redirect("index.php?controller=proposition&action=readAll&idQuestion=" . $proposition->getQuestion()->getId());
+        }
+    }
+
+    /**
+     * Supprime une proposition
+     * Vérifie d'abord si l'utilisateur le peut et affiche ensuite la vue pour confimer la suppression
+     * @return void
+     */
+    public static function delete(): void
+    {
+        /* On vérifie au préalable si l'utilisateur a le droit de supprimer une question
+        dans l'éventualité où il a tenté de le faire depuis la barre d'adresse. */
+
+        if (!isset($_GET['idProposition'])) {
+            MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
+            Controller::redirect('index.php?controller=question&action=readAll');
+        }
+        $proposition = (new PropositionRepository())->select($_GET['idProposition']);
+        if (!ConnexionUtilisateur::estConnecte() ||
+            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $proposition->getResponsable()->getIdentifiant()) {
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas supprimer une proposition dont vous n'êtes pas le responsable.");
+            Controller::redirect('index.php?controller=question&action=readAll');
+        } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
+            Controller::afficheVue('view.php', ["pagetitle" => "Supprimer proposition",
+                "cheminVueBody" => "confirmProp.php",
+                "message" => "Êtes vous sûr de vouloir supprimer cette proposition?",
+                "id" => $_GET['idProposition']]);
+        } else if (isset($_POST["cancel"])) {
+            Controller::redirect('index.php?controller=question&action=readAll');
+        } else if (isset($_POST["confirm"])) {
+            (new PropositionRepository())->delete($_GET['idProposition']);
+            MessageFlash::ajouter('success', 'La proposition a bien été supprimée');
+            Controller::redirect("index.php?controller=question&action=readAll");
         }
     }
 }

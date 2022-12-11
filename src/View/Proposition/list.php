@@ -1,32 +1,25 @@
 <ul class="questions">
     <?php
 
-    use App\Vote\Config\FormConfig;
     use App\Vote\Lib\ConnexionUtilisateur;
+    use App\Vote\Model\DataObject\Calendrier;
     use App\Vote\Model\DataObject\CoAuteur;
     use App\Vote\Model\DataObject\Votant;
 
     $i = 1;
+    $peutVoter = false;
     $calendrier = $question->getCalendrier();
-    $date = date('d/m/Y à H:i:s');
-    if(isset($_SESSION['user'])){
-        $aVote = Votant::aVote($propositions, $_SESSION['user']['id']);
-    }else{
-        $aVote = null;
+    if ($question->getPhase() == 'vote' && ConnexionUtilisateur::estConnecte()
+        && Votant::estVotant($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())
+    ) {
+        $peutVoter = true;
+        $interval = (new DateTime(date("d-m-Y H:i")))->diff(new DateTime($calendrier->getFinVote(true)));
+        echo '<h2>Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
     }
-
-    $aVote = Votant::aVote($propositions, $_SESSION['user']['id']);
-
-    $aVoteURL = rawurlencode($aVote);
     foreach ($propositions as $proposition) {
-        if(!is_null($aVote)){
-            if ($aVote == $proposition->getId()) {
-                echo '<h2>Vous avez voté pour cette proposition.</h2>';
-            }
-        }
-
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
+        echo '<form>';
         echo '<p class = "listes">
             <a href="index.php?action=read&controller=proposition&idProposition=' .
             $idPropositionURL . '">' . $i . ' : ' . $titreHTML . '  </a>';
@@ -52,9 +45,28 @@
 
             }
         }
+
+        //if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition) ||
+        //    $proposition->getResponsable()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
+        //echo ' < a href = index . php ? action = update & controller = proposition & idProposition = ' .
+        //    $proposition->getId() . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a > ';
+
+        //}
+        //if ($proposition->getResponsable()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
+        //    echo '<a id = "vote" href = index.php?action=create&controller=coauteur&idProposition=' .
+        //        $idPropositionURL . ' > Désigner des co - auteurs </a > ';
+        echo '<br > ';
         echo 'Nombre de votes : ' . $proposition->getNbVotes();
-        echo '</p>';
+        if(ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte()==$proposition->getResponsable()->getIdentifiant()) {
+            echo '
+<a class="nav suppProp" href=index.php?controller=proposition&action=delete&idProposition='.$proposition->getId().'>Supprimer</a>
+            ';
+        }
+        echo ' </p> ';
         $i++;
     }
+
     ?>
+    </form>
+
 </ul>

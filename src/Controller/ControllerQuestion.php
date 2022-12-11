@@ -28,6 +28,8 @@ class ControllerQuestion
      */
     public static function create(): void
     {
+
+        /* Il faut obligatoirement être connecté pour créer une question*/
         if (ConnexionUtilisateur::estConnecte()) {
             FormConfig::setArr('SessionQuestion');
             FormConfig::startSession();
@@ -157,6 +159,7 @@ class ControllerQuestion
      */
     public static function created(): void
     {
+        //On vérifie si l'utilisateur est connecté
         if (!ConnexionUtilisateur::estConnecte()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas créer une question si vous n'êtes pas connecté.");
             Controller::redirect("index.php?action=readAll&controller=question");
@@ -220,6 +223,8 @@ class ControllerQuestion
 
     public static function update(): void
     {
+        /* On vérifie au préalable si l'utilisateur a le droit de modifier une question
+        dans l'éventualité où il a tenté de le faire depuis la barre d'adresse. */
         if (!isset($_GET['idQuestion'])) {
             MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
             Controller::redirect('index.php?controller=question&action=readAll');
@@ -249,6 +254,8 @@ class ControllerQuestion
 
     public static function updated(): void
     {
+        /* On vérifie au préalable si l'utilisateur a le droit de modifier une question
+        dans l'éventualité où il a tenté de le faire depuis la barre d'adresse. */
         $bool = true;
         FormConfig::setArr('SessionQuestion');
         Session::getInstance();
@@ -360,6 +367,9 @@ class ControllerQuestion
 
     public static function delete(): void
     {
+        /* On vérifie au préalable si l'utilisateur a le droit de supprimer une question
+        dans l'éventualité où il a tenté de le faire depuis la barre d'adresse. */
+
         if (!isset($_GET['idQuestion'])) {
             MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
             Controller::redirect('index.php?controller=question&action=readAll');
@@ -397,6 +407,9 @@ class ControllerQuestion
 
     public static function result(): void
     {
+        /* On vérifie au préalable si la question est terminée dans l'éventualité où il
+        a tenté d'accéder à cette page depuis la barre d'adresse. */
+
         $bool = true;
         if (!isset($_GET['idQuestion'])) {
             MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");

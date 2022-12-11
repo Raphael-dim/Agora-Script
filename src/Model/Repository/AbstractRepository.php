@@ -13,9 +13,11 @@ use PDOException;
 
 abstract class AbstractRepository
 {
-    /*
+    /**
      * Sauvegarde l'objet dans la base de données
      * en récupérant les colonnes et la table associés à la classe
+     * @param AbstractDataObject $object
+     * @return ?int
      */
     public function sauvegarder(AbstractDataObject $object): ?int
     {
@@ -53,8 +55,9 @@ abstract class AbstractRepository
         return null;
     }
 
-    /*
+    /**
      * Supprime la ligne de la base de données grâce à la clef primaire
+     * @param string $valeurClePrimaire
      */
     public function delete(string $valeurClePrimaire)
     {
@@ -70,8 +73,9 @@ abstract class AbstractRepository
         }
     }
 
-    /*
+    /**
      * Supprime la ligne de la base de données grâce à la clef primaire
+     * @param AbstractDataObject $object
      */
     public function deleteSpecific(AbstractDataObject $object)
     {
@@ -92,8 +96,9 @@ abstract class AbstractRepository
         }
     }
 
-    /*
+    /**
      * met à jour l'objet dans la base de données
+     * @param AbstractDataObject $object
      */
     public function update(AbstractDataObject $object)
     {
@@ -113,8 +118,9 @@ abstract class AbstractRepository
         }
     }
 
-    /*
+    /**
      * Sélectionne toutes les lignes de la table associée à la classe
+     * @return array
      */
     public function selectAll(): array
     {
@@ -129,8 +135,11 @@ abstract class AbstractRepository
     }
 
 
-    /*
+    /**
      * Sélectionne les lignes par rapport à un mot clef
+     * @param string $motclef
+     * @param string $row
+     * @return array
      */
     public function selectKeyword($motclef, $row)
     {
@@ -152,8 +161,10 @@ abstract class AbstractRepository
     }
 
 
-    /*
+    /**
      * Sélectionne une ligne par rapport à la clef primaire
+     * @param string $clef
+     * @return ?AbstractDataObject
      */
 
     public function select($clef): ?AbstractDataObject
@@ -176,6 +187,15 @@ abstract class AbstractRepository
         return $this->construire($data);
     }
 
+    /**
+     * Permet de construire une requete sql grace aux contraintes passées en paramètres
+     * @param $clef             //Clef primaire
+     * @param $rowSelect        //Les colonnes que vous voulez selectionner '*' par défaut si le parametre n'est pas renseigné
+     * @param $whereCondition   //La condition qui sera placée dans le WHERE,
+                                //null par défaut qui sera remplacé dans la requete pas la clé primaire si le parametre n'est pas renseigné
+     * @param $nomTable         //le nom de la table, null par défaut qui sera remplacé dans la requete par la table par défaut
+     * @return array
+     */
     public function selectWhere($clef, $rowSelect = '*', $whereCondition = null, $nomTable = null): array
     {
         $ADonnees = array();

@@ -357,10 +357,17 @@ a#vote {
 }
 
 a#vote:hover {
-    color: #012134;
     background-color: #f1f4f8;
-    border-color: rgba(69, 190, 187, 0.6);
+    border-color: rgb(1, 46, 73);
     border-width: 2px;
+}
+
+a#vote img{
+    filter: invert(85%);
+}
+
+a#vote:hover img {
+    filter: invert(0%);
 }
 
 .bouton {
@@ -737,6 +744,12 @@ div p {
     border: none;
     margin: 0;
     top: 0px;
+}
+
+.suppProp{
+    position : absolute;
+    bottom : 5px;
+    left : 5px;
 }
 
 .cal::after {
