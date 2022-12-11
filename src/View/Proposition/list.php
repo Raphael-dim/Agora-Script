@@ -2,11 +2,20 @@
     <?php
 
     use App\Vote\Lib\ConnexionUtilisateur;
+    use App\Vote\Model\DataObject\Calendrier;
     use App\Vote\Model\DataObject\CoAuteur;
     use App\Vote\Model\DataObject\Votant;
 
     $i = 1;
+    $peutVoter = false;
     $calendrier = $question->getCalendrier();
+    if ($question->getPhase() == 'vote' && ConnexionUtilisateur::estConnecte()
+        && Votant::estVotant($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())
+    ) {
+        $peutVoter = true;
+        $interval = (new DateTime(date("d-m-Y H:i")))->diff(new DateTime($calendrier->getDebutEcriture(true)));
+        echo '<h2>Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
+    }
     foreach ($propositions as $proposition) {
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
@@ -14,9 +23,7 @@
         echo '<p class = "listes">
                 <a href= index.php?action=read&controller=proposition&idProposition=' .
             $idPropositionURL . '>' . $i . ' : ' . $titreHTML . '  </a>';
-        if ($question->getPhase() == 'vote' && ConnexionUtilisateur::estConnecte()
-            && Votant::estVotant($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())
-        ) {
+        if ($peutVoter) {
             $vote = Votant::aVote($proposition, ConnexionUtilisateur::getLoginUtilisateurConnecte());
             if (!is_null($vote)) {
                 for ($val = 1; $val <= $vote->getValeur(); $val++) {
