@@ -19,12 +19,12 @@
             <input type="password" value="" placeholder="" name="ancienMDP" id="mdp_id" required>
         </p>
         <p>
-            <label for="mdp_id">Mot de passe&#42;</label>
-            <input type="password" value="" placeholder="" name="mdp" id="mdp_id" required>
+            <label for="mdp2_id">Mot de passe&#42;</label>
+            <input type="password" value="" placeholder="" name="mdp" id="mdp2_id" required>
         </p>
         <p>
-            <label for="mdp2_id">Vérification du mot de passe&#42;</label>
-            <input type="password" value="" placeholder="" name="mdp2" id="mdp2_id" required>
+            <label for="mdp3_id">Vérification du mot de passe&#42;</label>
+            <input type="password" value="" placeholder="" name="mdp2" id="mdp3_id" required>
         </p>
         <p>
             <input type="submit" value="Mettre à jour" class="nav">
