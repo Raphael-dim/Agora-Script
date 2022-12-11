@@ -28,8 +28,8 @@ class ControllerQuestion
      */
     public static function create(): void
     {
-        /* Il faut obligatoirement être connecté pour créer une question*/
 
+        /* Il faut obligatoirement être connecté pour créer une question*/
         if (ConnexionUtilisateur::estConnecte()) {
             FormConfig::setArr('SessionQuestion');
             FormConfig::startSession();

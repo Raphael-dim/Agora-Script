@@ -98,6 +98,8 @@ class ControllerProposition
 
     public static function created()
     {
+        /* On vérifie au préalable si l'utilisateur a le droit de créer une proposition pour la question donnée
+        dans l'éventualité où il a tenté de le faire depuis la barre d'adresse. */
         FormConfig::setArr('SessionProposition');
         Session::getInstance();
         $user = Session::getInstance()->lire('user');
