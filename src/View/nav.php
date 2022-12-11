@@ -7,11 +7,11 @@
 
         <?php
 
-        if (isset($_SESSION['user'])) {
-            echo "<a class=profil href='index.php?action=read&controller=utilisateur'>
-                                        <img src='images/profil.png' alt='Profil'></a>";
+        if (!isset($_SESSION['user'])) {
+            echo '<li class=grosmenu><a href = index.php?action=connexion&controller=utilisateur>Connexion</a></li></ul>';
         } else {
-            echo '<li class=grosmenu><a href = index.php?action=connexion&controller=utilisateur>Connexion</a></li>';
+            echo "</ul>
+                  <a class=profil href='index.php?action=read&controller=utilisateur'>
+                                        <img src='images/profil.png' alt='Profil'></a>";
         } ?>
-    </ul>
 </nav>
