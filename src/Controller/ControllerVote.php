@@ -15,6 +15,16 @@ class ControllerVote
 {
     public static function choix(): void
     {
+        /* Avant tout chose, on vérifie que l'utilisateur est connecté, qu'il a le droit de voter pour la question,
+        que la question est en phase de vote, et que la valeur saisie dans la barre d'adresse est comprise entre 0 et 5.
+        Ensuite, on récupère l'objet Vote grâce à la méthode aVoté de la classe Votant.php
+        On peut comparer la valeur du vote enregistré avec celle fournie par l'utilisateur, si c'est la même on supprime le vote,
+        sinon on modifie simplement la valeur de l'objet Vote et on enregistre dans la base de donnée.
+        Des triggers permettent de modifier automatiquement la valeur du nombre de votes dans la table proposition.
+        Pour multiplier les appels à la base de donnée, cette méthode gère l'intégralité du système de vote.
+        */
+
+
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         $question = $proposition->getQuestion();
         $bool = true;
@@ -41,34 +51,27 @@ class ControllerVote
         $question = $proposition->getQuestion();
         $vote = Votant::aVote($proposition, ConnexionUtilisateur::getLoginUtilisateurConnecte());
         if (!is_null($vote) && $vote->getValeur() == $_GET['valeur']) {
+            // Supprime un vote
+            $votant = (new VotantRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
+            $vote = (new VoteRepository())->selectWhere(array('clef0' => $proposition->getId(),
+                'clef1' => $votant->getIdentifiant()), '*',
+                array('idproposition', 'idvotant'), 'Votes');
+            (new VoteRepository())->delete($vote[0]->getIdvote());
             MessageFlash::ajouter('success', 'Vote supprimé');
-            Controller::redirect('index.php?controller=vote&action=delete&idproposition=' . $_GET['idProposition']);
+            Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
         } else if (!is_null($vote)) {
+            // Modifie un vote
             $vote->setValeur($_GET['valeur']);
             (new VoteRepository())->update($vote);
             MessageFlash::ajouter('success', 'Vote mis à jour');
             Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
         } else {
+            // Enregistre un vote
             $votant = (new VotantRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
             $vote = new Vote($votant, $proposition, $_GET['valeur']);
             $voteBD = (new VoteRepository())->sauvegarder($vote);
             MessageFlash::ajouter('success', 'Vote pris en compte');
             Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
-
         }
-    }
-
-    public static function delete()
-    {
-        $proposition = (new PropositionRepository())->select($_GET['idproposition']);
-        $question = $proposition->getQuestion();
-        $votant = (new VotantRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
-        $vote = (new VoteRepository())->selectWhere(array('clef0' => $proposition->getId(),
-            'clef1' => $votant->getIdentifiant()), '*',
-            array('idproposition', 'idvotant'), 'Votes');
-
-        (new VoteRepository())->delete($vote[0]->getIdvote());
-        Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
-
     }
 }
