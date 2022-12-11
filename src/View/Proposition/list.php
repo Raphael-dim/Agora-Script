@@ -54,9 +54,9 @@
         echo '<br > ';
         echo 'Nombre de votes : ' . $proposition->getNbVotes();
         if(ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte()==$proposition->getResponsable()->getIdentifiant()) {
-            echo '<button class="nav suppProp">
-    <a href=index.php?controller=proposition&action=delete&idProposition=' . $proposition->getId() . '>Supprimer</a>
-            </button>';
+            echo '
+<a class="nav suppProp" href=index.php?controller=proposition&action=delete&idProposition='.$proposition->getId().'>Supprimer</a>
+            ';
         }
         echo ' </p> ';
         $i++;

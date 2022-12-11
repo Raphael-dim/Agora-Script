@@ -145,6 +145,13 @@ class ControllerProposition
         Controller::redirect("index.php?controller=question&action=readAll");
     }
 
+
+    /**
+     * Met à jour une proposition
+     * Vérifie si l'utilisateur le peut
+     *
+     * @return void
+     */
     public static function update(): void
     {
         if (!isset($_GET['idProposition'])) {
@@ -235,6 +242,11 @@ class ControllerProposition
         }
     }
 
+    /**
+     * Supprime une proposition
+     * Vérifie d'abord si l'utilisateur le peut et affiche ensuite la vue pour confimer la suppression
+     * @return void
+     */
     public static function delete(): void
     {
         /* On vérifie au préalable si l'utilisateur a le droit de supprimer une question
@@ -255,7 +267,7 @@ class ControllerProposition
                 "message" => "Êtes vous sûr de vouloir supprimer cette proposition?",
                 "id" => $_GET['idProposition']]);
         } else if (isset($_POST["cancel"])) {
-            self::readAll();
+            Controller::redirect('index.php?controller=question&action=readAll');
         } else if (isset($_POST["confirm"])) {
             (new PropositionRepository())->delete($_GET['idProposition']);
             MessageFlash::ajouter('success', 'La proposition a bien été supprimée');
