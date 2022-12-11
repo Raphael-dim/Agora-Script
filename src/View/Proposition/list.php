@@ -22,7 +22,6 @@
         echo '<div class=proposition>';
         echo ' <a href= index.php?action=read&controller=proposition&idProposition=' .
             $idPropositionURL . '> <h2>' . $titreHTML . '</h2>   </a>';
-        echo '<a href="" id = "auteur">par ' . $proposition->getResponsable()->getIdentifiant() . ' </a >';
         if ($peutVoter) {
             $vote = Votant::aVote($proposition, ConnexionUtilisateur::getLoginUtilisateurConnecte());
             if (!is_null($vote)) {
@@ -54,6 +53,7 @@
         echo '<br > ';
         echo '<h3>Nombre de votes : ' . $proposition->getNbVotes() . '</h3>';
         $i++;
+        echo '<a href="" id = "auteur">par ' . $proposition->getResponsable()->getIdentifiant() . ' </a >';
         echo '</div>';
     }
     ?>
