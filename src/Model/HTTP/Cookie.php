@@ -4,12 +4,12 @@ namespace App\Vote\Model\HTTP;
 
 class Cookie
 {
-    public static function enregistrer(string $cle, $valeur, ?int $dureeExpiration = null): void
+    public static function enregistrer(string $cle, $valeur, $dureeExpiration = null): void
     {
         if ($dureeExpiration == null) {
             setcookie($cle, serialize($valeur));
         } else {
-            setcookie($cle, serialize($valeur), $dureeExpiration);
+            setcookie($cle, serialize($valeur), time() + $dureeExpiration);
         }
     }
 
