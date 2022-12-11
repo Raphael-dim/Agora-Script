@@ -13,7 +13,7 @@
         && Votant::estVotant($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())
     ) {
         $peutVoter = true;
-        $interval = (new DateTime(date("d-m-Y H:i")))->diff(new DateTime($calendrier->getDebutEcriture(true)));
+        $interval = (new DateTime(date("d-m-Y H:i")))->diff(new DateTime($calendrier->getFinVote(true)));
         echo '<h2>Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
     }
     foreach ($propositions as $proposition) {
