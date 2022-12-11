@@ -19,10 +19,8 @@
     foreach ($propositions as $proposition) {
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
-        echo '<form>';
-        echo '<p class = "listes">
-                <a href= index.php?action=read&controller=proposition&idProposition=' .
-            $idPropositionURL . '>' . $i . ' : ' . $titreHTML . '  </a>';
+        echo ' <a href= index.php?action=read&controller=proposition&idProposition=' .
+            $idPropositionURL . '> <h2>' . $titreHTML . '</h2>   </a>';
         if ($peutVoter) {
             $vote = Votant::aVote($proposition, ConnexionUtilisateur::getLoginUtilisateurConnecte());
             if (!is_null($vote)) {
@@ -52,12 +50,8 @@
         //    echo '<a id = "vote" href = index.php?action=create&controller=coauteur&idProposition=' .
         //        $idPropositionURL . ' > Désigner des co - auteurs </a > ';
         echo '<br > ';
-        echo 'Nombre de votes : ' . $proposition->getNbVotes();
-        echo ' </p> ';
+        echo '<h3>Nombre de votes : ' . $proposition->getNbVotes().'</h3>';
         $i++;
     }
-
     ?>
-    </form>
-
 </ul>
