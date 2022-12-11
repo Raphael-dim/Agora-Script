@@ -42,21 +42,21 @@
             }
         }
 
-        if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition) ||
-            $proposition->getResponsable()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
-            //echo ' < a href = index . php ? action = update & controller = proposition & idProposition = ' .
-            //    $proposition->getId() . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a > ';
+        //if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition) ||
+        //    $proposition->getResponsable()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
+        //echo ' < a href = index . php ? action = update & controller = proposition & idProposition = ' .
+        //    $proposition->getId() . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a > ';
 
-        }
-        if ($proposition->getResponsable()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
-            echo '<a id = "vote" href = index.php?action=create&controller=coauteur&idProposition=' .
-                $idPropositionURL . ' > Désigner des co - auteurs </a > ';
-        }
+        //}
+        //if ($proposition->getResponsable()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
+        //    echo '<a id = "vote" href = index.php?action=create&controller=coauteur&idProposition=' .
+        //        $idPropositionURL . ' > Désigner des co - auteurs </a > ';
         echo '<br > ';
         echo 'Nombre de votes : ' . $proposition->getNbVotes();
         echo ' </p> ';
         $i++;
     }
+
     ?>
     </form>
 
