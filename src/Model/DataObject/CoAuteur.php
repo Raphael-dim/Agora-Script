@@ -45,9 +45,9 @@ class CoAuteur extends AbstractDataObject
      */
     public static function estCoAuteur($utilisateur, $proposition) : bool
     {
-        $coAuteurs = (new CoAuteurRepository())->selectWhere($utilisateur,"*","idauteur");
+        $coAuteurs = (new CoAuteurRepository())->selectWhere(array('clef0' => $utilisateur, 'clef1' => $proposition),"*",array('clef0' => 'idauteur', 'clef1' => 'idproposition'));
         if(!$coAuteurs) return false;
-        if(is_array($coAuteurs)){
+        /*if(is_array($coAuteurs)){
             foreach($coAuteurs as $coAuteur){
                 if($coAuteur->getProposition()->getId() == $proposition->getId()){
                     return true;
@@ -57,8 +57,8 @@ class CoAuteur extends AbstractDataObject
             if($coAuteurs->getProposition()->getId() == $proposition->getId()){
                 return true;
             }
-        }
-        return false;
+        }*/
+        return true;
     }
 
     public function formatTableau(): array

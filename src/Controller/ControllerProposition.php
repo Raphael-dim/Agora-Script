@@ -201,7 +201,7 @@ class ControllerProposition
         $date = date('d-m-Y à H:i:s');
         $bool = true;
         $calendrier = $question->getCalendrier();
-        if (!isset($user) || (!Responsable::estResponsable($proposition->getQuestion(), $user['id']) && !CoAuteur::estCoAuteur($user['id'],$proposition))) {
+        if (!isset($user) || (!Responsable::estResponsable($proposition->getQuestion(), $user['id']) && !CoAuteur::estCoAuteur($user['id'],$_SESSION[FormConfig::$arr]["idProposition"]))) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier cette proposition, 
         vous n'êtes ni responsable ni co-auteur pour cette proposition.");
             $bool = false;

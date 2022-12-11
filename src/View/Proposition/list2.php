@@ -34,10 +34,10 @@
             }
         }
 
-        if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition) ||
+        if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
             $proposition->getResponsable()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
-            //echo ' < a href = index . php ? action = update & controller = proposition & idProposition = ' .
-            //    $proposition->getId() . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a > ';
+            //echo ' <a href ="index.php?action=update&controller=proposition&idProposition = ' .
+            //    $proposition->getId() . '"><img class="modifier" src = "..\web\images\modifier.png" ></a > ';
 
         }
         if ($proposition->getResponsable()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
