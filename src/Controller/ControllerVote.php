@@ -21,7 +21,6 @@ class ControllerVote
         On peut comparer la valeur du vote enregistré avec celle fournie par l'utilisateur, si c'est la même on supprime le vote,
         sinon on modifie simplement la valeur de l'objet Vote et on enregistre dans la base de donnée.
         Des triggers permettent de modifier automatiquement la valeur du nombre de votes dans la table proposition.
-        Pour multiplier les appels à la base de donnée, cette méthode gère l'intégralité du système de vote.
         */
 
 
