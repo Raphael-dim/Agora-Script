@@ -96,7 +96,7 @@ main p {
     padding: 10px;
     /*margin: 7px;*/
     margin: 20px auto 20px auto;
-    border: solid rgba(255, 255, 255, 0.79) 2px;
+    border: solid rgba(255, 255, 255, 0.79) 1px;
 }
 
 
@@ -115,8 +115,11 @@ main p a {
 
 
 h1, h2, h3 {
-    margin-left: 15px;
     color: #dcdcdc;
+}
+
+h3, h2{
+    text-align: center;
 }
 
 
@@ -432,11 +435,13 @@ a#vote:hover img {
     background: white;
 }
 
-.suivant{
-
+#suivant{
+    margin: 10px 100px 10px 50px;
+    float: right;
 }
 
 .nav *, form .nav {
+    margin: 10px 10px 10px 100px;
     height: 35px;
     width: auto;
     background-color: #dff5f4;
