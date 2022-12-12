@@ -38,7 +38,7 @@ class Responsable extends Utilisateur
         $propositions = (new PropositionRepository())->selectWhere($utilisateur, '*',
             'idresponsable', 'Propositions');
         foreach ($propositions as $proposition) {
-            if ($question == $proposition->getQuestion()) {
+            if ($question->getId() == $proposition->getIdQuestion()) {
                 return true;
             }
         }

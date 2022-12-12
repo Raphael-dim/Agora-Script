@@ -9,7 +9,6 @@ class Proposition extends AbstractDataObject
 {
     private int $id;
     private string $titre;
-
     private string $idResponsable;
     private string $idQuestion;
     private int $nbVotes;
@@ -18,6 +17,7 @@ class Proposition extends AbstractDataObject
         /*
         On ne construit pas l'objet proposition avec un objet Responsable et un objet Question pour éviter de
         faire un aller-retour inutile à la base de donnée.
+        Cela permet de construire uniquement si besoin le responsable et la question pour une proposition.
         */
         $this->titre = $titre;
         $this->idResponsable = $idResponsable;
