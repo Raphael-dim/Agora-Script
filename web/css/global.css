@@ -70,7 +70,7 @@ main > h1, h2 {
 
 body {
     background: var(--background);
-    overflow-x: hidden;
+    overflow-x: auto;
 }
 
 main {
@@ -792,9 +792,10 @@ div p {
 }
 
 .propositions{
-    width: 80%;
-    margin: auto;
-    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
 }
 .propositions .listes {
     position: relative;
@@ -804,29 +805,21 @@ div p {
     border-style: solid;
     background-color: #dff5f4;
     vertical-align: middle;
-    display: inline-block;
+    display: flex;
     height: 250px;
     width: 100%;
     margin: 20px;
 }
-imgPremier{
-    width: 600px;
-    height: 1200px;
-    bottom: 50px;
-    right: 100px;
-}
-.premier{
-    display: inline-block;
-    width: 100%;
+.proposition > img{
+    position: absolute;
+    margin-left: 35px;
+    max-width: 70px;
 }
 
-.premier p{
-    display: inline-block;
-}
 .divDePremier{
     width: 50%;
     position: relative;
-    display: block;
+    display: flex;
     padding-right: 0px;
 }
 
@@ -834,18 +827,26 @@ imgPremier{
     display: flex;
 }
 
+.premier{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .deuxieme{
+    margin-top: 100px;
     position : relative;
     display: block;
     width: 50%;
 }
 .troisieme{
-    margin-top: 50px;
+    margin-top: 150px;
     margin-left: 15px;
     position : relative;
     display: block;
     width: 50%;
 }
+
 
 .cal {
     color: white;

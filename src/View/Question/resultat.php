@@ -1,4 +1,5 @@
 <ul class="propositions">
+
     <?php
 
     $i = 1;
@@ -9,15 +10,15 @@
     $idPropositionURL = rawurlencode($propositions[0]->getId());
     $titreHTML = htmlspecialchars($propositions[0]->getTitre());
 
-    echo'<div>
+    echo'<div class="podium">
             <div class="premier">
-                <div class=proposition>
+                <div class="proposition">
                     <a href= index.php?action=read&controller=proposition&idProposition=' .
                     $idPropositionURL . '> <h2>1. ' . $titreHTML . '</h2>   </a>
                     <br>
                     <h3>Nombre de votes : ' . $propositions[0]->getNbVotes() . '</h3>
                     <a href="" id = "auteur">par ' . $propositions[0]->getResponsable()->getIdentifiant() . ' </a >
-                    <img class="imgPremier" src="images/premier.png">
+                    <img src="images/premier.png">
                 </div>
             </div>
              <div class="deuxTrois">
@@ -28,6 +29,7 @@
                         <br>
                         <h3>Nombre de votes : ' . $propositions[1]->getNbVotes() . '</h3>
                         <a href="" id = "auteur">par ' . $propositions[1]->getResponsable()->getIdentifiant() . ' </a >
+                        <img src="images/deuxieme.png">
                         
                 </div>  
                  </div>
@@ -39,23 +41,24 @@
                         <br>
                         <h3>Nombre de votes : ' . $propositions[2]->getNbVotes() . '</h3>
                         <a href="" id = "auteur">par ' . $propositions[2]->getResponsable()->getIdentifiant() . ' </a >
+                        <img src="images/troisieme.png">
                 </div>  
                  </div>
              </div>
          </div>';
 
 
-    foreach ($propositions as $proposition) {
-        /*$idPropositionURL = rawurlencode($proposition->getId());
-        $titreHTML = htmlspecialchars($proposition->getTitre());
+    for ($i=3;$i<count($propositions);$i++) {
+        $idPropositionURL = rawurlencode($propositions[$i]->getId());
+        $titreHTML = htmlspecialchars($propositions[$i]->getTitre());
         echo '<div class=proposition>';
         echo ' <a href= index.php?action=read&controller=proposition&idProposition=' .
             $idPropositionURL . '> <h2>' . $titreHTML . '</h2>   </a>';
         echo '<br > ';
-        echo '<h3>Nombre de votes : ' . $proposition->getNbVotes() . '</h3>';
+        echo '<h3>Nombre de votes : ' . $propositions[$i]->getNbVotes() . '</h3>';
+        echo '<a href="" id = "auteur">par ' . $propositions[$i]->getResponsable()->getIdentifiant() . ' </a >';
+        echo '</div>';
         $i++;
-        echo '<a href="" id = "auteur">par ' . $proposition->getResponsable()->getIdentifiant() . ' </a >';
-        echo '</div>';*/
     }
     ?>
 </ul>
