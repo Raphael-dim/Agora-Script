@@ -440,6 +440,10 @@ a#vote:hover img {
     float: right;
 }
 
+.inscription p {
+    text-align: left;
+}
+
 #precedent {
     float: left;
     margin: 10px 50px 10px 100px;
