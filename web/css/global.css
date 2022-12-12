@@ -528,8 +528,15 @@ a#vote:hover img {
     border-left: 0;
 }
 
+@media screen and (max-width: 1300px) {
+
+    .pageDétail {
+        width: 100%;
+    }
+}
 
 @media screen and (max-width: 1200px) {
+
     .bouton {
         font-size: 17px;
         margin: 1px;
@@ -539,6 +546,16 @@ a#vote:hover img {
 @media screen and (max-width: 1000px) {
     main {
         width: 100%;
+    }
+
+    #participants * {
+
+        display: block;
+        float: none;
+    }
+
+    .detail_question {
+        display: inline-block;
     }
 
     .listes {
@@ -744,7 +761,7 @@ div p {
 }
 
 .calendrier {
-    margin-left: 10%;
+    margin: 2%;
     text-align: center;
 }
 
@@ -798,7 +815,7 @@ div p {
     display: inline-block;
 }
 
-.propositions{
+.propositions {
     margin-top: 30px;
     align-items: center;
     justify-content: center;
@@ -817,41 +834,43 @@ div p {
     width: 100%;
     margin: 20px;
 }
-.proposition > img{
+
+.proposition > img {
     position: absolute;
     margin-left: 35px;
     max-width: 70px;
 }
 
-.divDePremier{
+.divDePremier {
     width: 50%;
     position: relative;
     display: flex;
     padding-right: 0px;
 }
 
-.deuxTrois{
+.deuxTrois {
     display: flex;
 }
 
-.premier{
+.premier {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.deuxieme{
+.deuxieme {
     margin-top: 100px;
-    position : relative;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 50%;
 }
-.troisieme{
+
+.troisieme {
     margin-top: 150px;
     margin-left: 15px;
-    position : relative;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
