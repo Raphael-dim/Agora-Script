@@ -70,7 +70,7 @@ main > h1, h2 {
 
 body {
     background: var(--background);
-    overflow-x: hidden;
+    overflow-x: auto;
 }
 
 main {
@@ -799,10 +799,11 @@ div p {
 }
 
 .propositions{
-    width: 80%;
-    margin: auto;
-    padding: 0;
+    margin-top: 30px;
+    align-items: center;
+    justify-content: center;
 }
+
 .propositions .listes {
     position: relative;
     border-radius: 7px;
@@ -811,24 +812,21 @@ div p {
     border-style: solid;
     background-color: #dff5f4;
     vertical-align: middle;
-    display: inline-block;
+    display: flex;
     height: 250px;
     width: 100%;
     margin: 20px;
 }
-
-.premier{
-    display: inline-block;
-    width: 100%;
+.proposition > img{
+    position: absolute;
+    margin-left: 35px;
+    max-width: 70px;
 }
 
-.premier p{
-    display: inline-block;
-}
 .divDePremier{
     width: 50%;
     position: relative;
-    display: block;
+    display: flex;
     padding-right: 0px;
 }
 
@@ -836,18 +834,30 @@ div p {
     display: flex;
 }
 
+.premier{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .deuxieme{
+    margin-top: 100px;
     position : relative;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 50%;
 }
 .troisieme{
-    margin-top: 50px;
+    margin-top: 150px;
     margin-left: 15px;
     position : relative;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 50%;
 }
+
 
 .cal {
     color: white;
@@ -942,6 +952,8 @@ input:valid + span:after {
     background-color: rgba(255, 255, 255, 0.15);
     text-align: center;
     display: inline-block;
+    align-items: center;
+    justify-content: center;
 }
 
 
