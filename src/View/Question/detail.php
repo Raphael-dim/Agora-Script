@@ -1,14 +1,14 @@
 <div class="detail_question">
     <div class="infos">
-        <h1><strong  id ='color-grey'>Titre</strong></h1>
+        <h1><strong  class ='color-grey'>Titre</strong></h1>
         <p> <?= htmlspecialchars($question->getTitre()) ?></p>
-        <h1><strong  id ='color-grey'>Description</strong></h1>
+        <h1><strong  class ='color-grey'>Description</strong></h1>
         <p> <?= htmlspecialchars($question->getDescription()) ?></p>
 
 
         <div id = "participants">
             <div id = "responsables">
-                <h1><strong  id ='color-yellow'>Responsables</strong></h1>
+                <h1><strong  class ='color-yellow'>Responsables</strong></h1>
                 <?php
                 if (is_array($responsables)) {
                     foreach ($responsables as $responsable) {
@@ -21,7 +21,7 @@
             </div>
 
             <div id = "votants">
-                <h1><strong  id ='color-yellow'>Votants</strong></h1>
+                <h1><strong  class ='color-yellow'>Votants</strong></h1>
                 <?php
                 if (is_array($votants)) {
                     foreach ($votants as $votant) {
@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <h1><strong  id ='color-orange'>Sections</strong></h1>
+        <h1><strong  class ='color-orange'>Sections</strong></h1>
 
         <?php
         $i = 1;
@@ -43,7 +43,7 @@
             echo '<h3> Section n° ' . $i . '</h3>';
             echo '<p> Titre : ' . htmlspecialchars($Section->getTitre()) . '</p>';
             echo '<p> Description : ' . htmlspecialchars($Section->getDescription()) . '</p>';
-            echo '&nbsp';
+            echo '&nbsp;';
             $i++;
         }
         ?>
@@ -53,7 +53,7 @@
         </p>
     </div>
     <div class="calendrier">
-        <h1><strong  id ='color-green'>Calendrier</strong></h1>
+        <h1><strong  class ='color-green'>Calendrier</strong></h1>
 
 
 

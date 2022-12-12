@@ -44,6 +44,6 @@ function removeuser(string $id): void
 require_once "../src/View/Utilisateurs/select.php";
 ?>
 <form method="post" class="nav">
-    <input type="submit" name=previous value="Retour"/>
-    <input type="submit" name=next value="Valider"/>
+    <input type="submit" name=previous value="Retour">
+    <input type="submit" name=next value="Valider">
 </form>

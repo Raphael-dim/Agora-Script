@@ -2,28 +2,32 @@
     <fieldset>
         <legend>Mise à jour de votre compte :</legend>
         <p>
-            Nom d'utilisateur :
+            <label for="username">Identifiant : </label>
             <input type="text" value="<?= $utilisateur->getIdentifiant() ?>" name="identifiant" id="username"
-                   readonly required>
+                                                 readonly required>
         </p>
         <p>
-            Nom :
+            <label for="lastname">Nom : </label>
             <input type="text" value="<?= $utilisateur->getNom() ?>" name="nom" id="lastname" required>
+            <span class="validity"></span>
         </p>
         <p>
-            Prenom :
+            <label for="firstname">Prénom : </label>
             <input type="text" value="<?= $utilisateur->getPrenom() ?>" name="prenom" id="firstname" required>
+            <span class="validity"></span>
+
         </p>
         <p>
-            <label for="mdp_id">Ancien mot de passe&#42;</label>
+            <label for="mdp_id">Ancien mot de passe&#42; : </label>
             <input type="password" value="" placeholder="" name="ancienMDP" id="mdp_id" required>
         </p>
         <p>
-            <label for="mdp_id">Mot de passe&#42;</label>
+            <label for="mdp_id">Mot de passe&#42; : </label>
             <input type="password" value="" placeholder="" name="mdp" id="mdp_id" required>
+
         </p>
         <p>
-            <label for="mdp2_id">Vérification du mot de passe&#42;</label>
+            <label for="mdp2_id">Vérification du mot de passe&#42; : </label>
             <input type="password" value="" placeholder="" name="mdp2" id="mdp2_id" required>
         </p>
         <p>

@@ -169,7 +169,7 @@ span {
     display: inline-block;
     height: 250px;
     width: 100%;
-    margin: 20px;
+    margin: 20px 1px 20px 1px;
 }
 
 .liste:hover {
@@ -230,27 +230,27 @@ span {
     word-break: break-all;
 }
 
-#status_cree.listes {
-    border-top: 10px solid red;
+.status_cree.listes {
+    border-top: 15px solid red;
 }
 
-#status_ecriture.listes {
-    border-top: 10px solid orange;
+.status_ecriture.listes {
+    border-top: 15px solid #FFC55C;
 }
 
-#status_vote.listes {
-    border-top: 10px solid yellow;
+.status_vote.listes {
+    border-top: 15px solid #F67952D8;
 }
 
-#status_attente.listes {
-    border-top: 10px solid grey;
+.status_attente.listes {
+    border-top: 15px solid grey;
 }
 
-#status_termine.listes {
-    border-top: 10px solid green;
+.status_termine.listes {
+    border-top: 15px solid green;
 }
 
-.listes > #auteur {
+.listes > .auteur {
     float: right;
     margin-right: 5px;
     margin-bottom: 2px;
@@ -260,10 +260,6 @@ span {
 li, a {
     margin-left: 20px;
     color: #dff5f4;
-}
-
-textarea {
-    resize: none;
 }
 
 .champ textarea {
@@ -292,7 +288,6 @@ textarea {
     padding-inline-start: 0px;
     width: 100%;
     justify-content: center;
-    border: solid #dff5f4 2px;
     list-style-type: none;
 }
 
@@ -300,18 +295,16 @@ textarea {
     margin: 0;
 }
 
+
 .phases > a {
-    line-height: 48px;
-    margin: auto;
     justify-content: space-between;
     display: block;
     margin: 15px;
     text-decoration: none;
     justify-items: center;
-    padding: 4px;
     background: #dff5f4;
-    padding: 0 35px;
     height: 48px;
+    padding-top: 8px;
     border-radius: 30px;
     color: white;
     text-align: center;
@@ -325,12 +318,16 @@ textarea {
     background: #8699A3;
 }
 
+input, textarea {
+    max-width: 70%;
+}
+
 #ecriture.phases > a {
     background: #FFC55C;
 }
 
 li#vote.phases > a {
-    background: #FDE541;
+    background: rgba(246, 121, 82, 0.85);
 }
 
 #termine.phases > a {
@@ -362,7 +359,7 @@ a#vote:hover {
     border-width: 2px;
 }
 
-a#vote img{
+a#vote img {
     filter: invert(85%);
 }
 
@@ -372,7 +369,7 @@ a#vote:hover img {
 
 .bouton {
     padding: 5px;
-    margin-left: 15px;
+    margin-left: 5px;
     margin-top: 15px;
     margin-right: auto;
     width: auto;
@@ -395,9 +392,9 @@ a#vote:hover img {
 
 .barreHaut {
     width: 18%;
+    height: 120px;
     position: fixed;
     right: 9%;
-    height: 100px;
     border-radius: 10px;
     vertical-align: middle;
     border: solid black 1px;
@@ -512,6 +509,13 @@ a#vote:hover img {
 }
 
 
+@media screen and (max-width: 1200px) {
+    .bouton{
+        font-size: 17px;
+        margin: 1px;
+    }
+}
+
 @media screen and (max-width: 1000px) {
     main {
         width: 100%;
@@ -546,6 +550,24 @@ a#vote:hover img {
 
     .barreHaut:first-child {
         padding-left: 10%;
+    }
+
+    .selection * {
+        margin: auto;
+        max-width: 300px;
+        alignment: center;
+    }
+
+    .selection, .barreHaut {
+        display: contents;
+    }
+
+    .questions{
+        width: 75%;
+    }
+
+    .barreHaut{
+        height: 300px;
     }
 }
 
@@ -636,32 +658,32 @@ h1 > strong {
     text-transform: capitalize;
 }
 
-h1 > strong#color-blue {
+h1 > strong.color-blue {
     background: cornflowerblue;
     transform: rotate(-3deg);
     -webkit-transform: rotate(-3deg);
 }
 
-h1 > strong#color-grey {
+h1 > strong.color-grey {
     background: lightgrey;
     transform: rotate(-4deg);
     -webkit-transform: rotate(-4deg);
 }
 
-h1 > strong#color-green {
+h1 > strong.color-green {
     background: lightgreen;
     transform: rotate(4deg);
     -webkit-transform: rotate(4deg);
 }
 
-h1 > strong#color-yellow {
-    background: #ffff98;
+h1 > strong.color-yellow {
+    background: #F67952D8;
     transform: rotate(3deg);
     -webkit-transform: rotate(3deg);
 }
 
-h1 > strong#color-orange {
-    background: lightsalmon;
+h1 > strong.color-orange {
+    background: #FFC55C;
     transform: rotate(-2deg);
     -webkit-transform: rotate(-2deg);
 }
@@ -797,12 +819,6 @@ div p {
     top: 0px;
 }
 
-.suppProp{
-    position : absolute;
-    bottom : 5px;
-    left : 5px;
-}
-
 .cal::after {
     content: "";
     margin-left: auto;
@@ -875,6 +891,16 @@ input:valid + span:after {
 
 .footer li:hover {
     color: black;
+}
+
+.proposition {
+    border: white solid 1px;
+    border-radius: 5px;
+    padding: 1px 20px 20px 20px;
+    margin: 20px 30px 20px 30px;
+    background-color: rgba(255, 255, 255, 0.15);
+    text-align: center;
+    display: inline-block;
 }
 
 

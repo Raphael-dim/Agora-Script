@@ -42,8 +42,8 @@ class ControllerProposition
         $view = "";
         $step = $_GET['step'] ?? 1;
         $params = array();
-        $params['question'] =  (new QuestionRepository())->select($_GET['idQuestion']);
-        switch($step){
+        $params['question'] = (new QuestionRepository())->select($_GET['idQuestion']);
+        switch ($step) {
             case 1:
                 $view = "step-1";
                 break;
@@ -68,7 +68,7 @@ class ControllerProposition
     {
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         $question = $proposition->getQuestion();
-        $coAuts = (new CoAuteurRepository())->selectWhere($_GET['idProposition'],'*','idproposition',"Coauteurs");
+        $coAuts = (new CoAuteurRepository())->selectWhere($_GET['idProposition'], '*', 'idproposition', "Coauteurs");
         //var_dump((new CoAuteurRepository())->selectAll());
         $sections = $question->getSections();
         $idProposition = $_GET['idProposition'];
@@ -89,7 +89,13 @@ class ControllerProposition
             Controller::redirect('index.php?controller=question&action=readAll');
         }
         $propositions = (new PropositionRepository())->selectWhere($_GET['idQuestion'], '*', 'idquestion');
-        $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        // Au lieu de faire un appel supplémentaire à la base de donnée, on vérifie s'il existe une proposition,
+        // si oui, on récupère la question grâce à l'objet Proposition.
+        if (sizeof($propositions) > 0) {
+            $question = $propositions[0]->getQuestion();
+        } else {
+            $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        }
         $votants = $question->getVotants();
         Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
             "cheminVueBody" => "Proposition/list.php",
@@ -125,14 +131,15 @@ class ControllerProposition
         if (!$bool) {
             Controller::redirect("index.php?controller=question&action=readAll");
         }
-        $responsable = (new ResponsableRepository())->select($user['id']);
+        $responsable = new Responsable($question);
+        $responsable->setIdentifiant(ConnexionUtilisateur::getLoginUtilisateurConnecte());
         $proposition = new Proposition($_SESSION[FormConfig::$arr]['titre'], $responsable, $question, 0);
         $propositionBD = (new PropositionRepository())->sauvegarder($proposition);
 
         $coAuteursSelec = $_SESSION[FormConfig::$arr]['co-auteur'];
         $proposition->setId($propositionBD);
-        foreach ($coAuteursSelec as $coAutSelec){
-            $aut = new CoAuteur((new UtilisateurRepository())->select($coAutSelec),(new PropositionRepository())->select($propositionBD));
+        foreach ($coAuteursSelec as $coAutSelec) {
+            $aut = new CoAuteur((new UtilisateurRepository())->select($coAutSelec), (new PropositionRepository())->select($propositionBD));
             (new CoAuteurRepository())->sauvegarder($aut);
         }
         $sections = $question->getSections();
@@ -163,7 +170,7 @@ class ControllerProposition
         $bool = true;
         $coauteurs = $proposition->getCoAuteurs();
         $coauteursid = array();
-        foreach ($coauteurs as $coauteur){
+        foreach ($coauteurs as $coauteur) {
             $coauteursid[] = $coauteur->getUtilisateur()->getIdentifiant();
         }
 
@@ -171,7 +178,7 @@ class ControllerProposition
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une proposition si vous n'etes pas connecté.");
             $bool = false;
         }
-        if(!in_array(ConnexionUtilisateur::getLoginUtilisateurConnecte(),$coauteursid) && ConnexionUtilisateur::getLoginUtilisateurConnecte() != $proposition->getResponsable()->getIdentifiant() ){
+        if (!in_array(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $coauteursid) && ConnexionUtilisateur::getLoginUtilisateurConnecte() != $proposition->getResponsable()->getIdentifiant()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une proposition dont vous n'êtes pas co-auteur ou représentant.");
             $bool = false;
         }
@@ -189,7 +196,6 @@ class ControllerProposition
     }
 
 
-
     public static function updated()
     {
         //session_start();
@@ -201,7 +207,7 @@ class ControllerProposition
         $date = date('d-m-Y à H:i:s');
         $bool = true;
         $calendrier = $question->getCalendrier();
-        if (!isset($user) || (!Responsable::estResponsable($proposition->getQuestion(), $user['id']) && !CoAuteur::estCoAuteur($user['id'],$proposition))) {
+        if (!isset($user) || (!Responsable::estResponsable($proposition->getQuestion(), $user['id']) && !CoAuteur::estCoAuteur($user['id'], $proposition))) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier cette proposition, 
         vous n'êtes ni responsable ni co-auteur pour cette proposition.");
             $bool = false;
@@ -213,25 +219,25 @@ class ControllerProposition
         }
         if (!$bool) {
             Controller::redirect("index.php?controller=proposition&action=readAll");
-        }else{
+        } else {
             $sections = $question->getSections();
             (new PropositionSectionRepository())->delete($_SESSION[FormConfig::$arr]["idProposition"]);
             foreach ($sections as $section) {
                 $propositionSection = new PropositionSection((new PropositionRepository())->select($_SESSION[FormConfig::$arr]["idProposition"]), $section, $_SESSION[FormConfig::$arr]['contenu' . $section->getId()]);
                 (new PropositionSectionRepository())->sauvegarder($propositionSection);
             }
-            $prop = new Proposition($_SESSION[FormConfig::$arr]['titre'],$proposition->getResponsable(),$proposition->getQuestion(),$proposition->getNbVotes());
+            $prop = new Proposition($_SESSION[FormConfig::$arr]['titre'], $proposition->getResponsable(), $proposition->getQuestion(), $proposition->getNbVotes());
             $prop->setId($_SESSION[FormConfig::$arr]["idProposition"]);
             (new PropositionRepository())->update($prop);
 
-            if(Responsable::estResponsable($question,$_SESSION['user']['id'])){
+            if (Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
                 $coAuteursSelec = $_SESSION[FormConfig::$arr]['co-auteur'];
-                $coAuteurs = (new CoAuteurRepository())->selectWhere($_SESSION[FormConfig::$arr]["idProposition"],'*',"idproposition");
-                foreach ($coAuteurs as $coAut){
+                $coAuteurs = (new CoAuteurRepository())->selectWhere($_SESSION[FormConfig::$arr]["idProposition"], '*', "idproposition");
+                foreach ($coAuteurs as $coAut) {
                     (new CoAuteurRepository())->deleteSpecific($coAut);
                 }
-                foreach ($coAuteursSelec as $coAutSelec){
-                    $aut = new CoAuteur((new UtilisateurRepository())->select($coAutSelec),(new PropositionRepository())->select($_SESSION[FormConfig::$arr]["idProposition"]));
+                foreach ($coAuteursSelec as $coAutSelec) {
+                    $aut = new CoAuteur((new UtilisateurRepository())->select($coAutSelec), (new PropositionRepository())->select($_SESSION[FormConfig::$arr]["idProposition"]));
                     (new CoAuteurRepository())->sauvegarder($aut);
                 }
                 unset($_SESSION[FormConfig::$arr]['co-auteur']);

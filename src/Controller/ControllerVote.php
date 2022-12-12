@@ -8,7 +8,6 @@ use App\Vote\Lib\MessageFlash;
 use App\Vote\Model\DataObject\Votant;
 use App\Vote\Model\DataObject\Vote;
 use App\Vote\Model\Repository\PropositionRepository;
-use App\Vote\Model\Repository\VotantRepository;
 use App\Vote\Model\Repository\VoteRepository;
 
 class ControllerVote
@@ -42,18 +41,13 @@ class ControllerVote
             MessageFlash::ajouter('warning', "Valeur de vote invalide");
             Controller::redirect('index.php?controller=accueil');
         }
-        if (!isset($_GET['valeur']) || $_GET['valeur'] > 5 || $_GET['valeur'] < 0) {
-            MessageFlash::ajouter('warning', "Valeur de vote invalide");
-            Controller::redirect('index.php?controller=accueil');
-        }
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         $question = $proposition->getQuestion();
         $vote = Votant::aVote($proposition, ConnexionUtilisateur::getLoginUtilisateurConnecte());
         if (!is_null($vote) && $vote->getValeur() == $_GET['valeur']) {
             // Supprime un vote
-            $votant = (new VotantRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
             $vote = (new VoteRepository())->selectWhere(array('clef0' => $proposition->getId(),
-                'clef1' => $votant->getIdentifiant()), '*',
+                'clef1' => ConnexionUtilisateur::getLoginUtilisateurConnecte()), '*',
                 array('idproposition', 'idvotant'), 'Votes');
             (new VoteRepository())->delete($vote[0]->getIdvote());
             MessageFlash::ajouter('success', 'Vote supprimé');
@@ -66,7 +60,8 @@ class ControllerVote
             Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
         } else {
             // Enregistre un vote
-            $votant = (new VotantRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
+            $votant = new Votant($question);
+            $votant->setIdentifiant(ConnexionUtilisateur::getLoginUtilisateurConnecte());
             $vote = new Vote($votant, $proposition, $_GET['valeur']);
             $voteBD = (new VoteRepository())->sauvegarder($vote);
             MessageFlash::ajouter('success', 'Vote pris en compte');

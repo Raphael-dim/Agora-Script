@@ -19,10 +19,9 @@
     foreach ($propositions as $proposition) {
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
-        echo '<form>';
-        echo '<p class = "listes">
-                <a href= index.php?action=read&controller=proposition&idProposition=' .
-            $idPropositionURL . '>' . $i . ' : ' . $titreHTML . '  </a>';
+        echo '<div class=proposition>';
+        echo ' <a href= index.php?action=read&controller=proposition&idProposition=' .
+            $idPropositionURL . '> <h2>' . $titreHTML . '</h2>   </a>';
         if ($peutVoter) {
             $vote = Votant::aVote($proposition, ConnexionUtilisateur::getLoginUtilisateurConnecte());
             if (!is_null($vote)) {
@@ -52,17 +51,14 @@
         //    echo '<a id = "vote" href = index.php?action=create&controller=coauteur&idProposition=' .
         //        $idPropositionURL . ' > Désigner des co - auteurs </a > ';
         echo '<br > ';
-        echo 'Nombre de votes : ' . $proposition->getNbVotes();
-        if(ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte()==$proposition->getResponsable()->getIdentifiant()) {
-            echo '
-<a class="nav suppProp" href=index.php?controller=proposition&action=delete&idProposition='.$proposition->getId().'>Supprimer</a>
-            ';
+        echo '<h3>Nombre de votes : ' . $proposition->getNbVotes() . '</h3>';
+        if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getResponsable()->getIdentifiant()) {
+            echo ' <a class="nav suppProp" 
+            href=index.php?controller=proposition&action=delete&idProposition=' . $proposition->getId() . '>Supprimer</a>';
         }
-        echo ' </p> ';
         $i++;
+        echo '<a href="" id = "auteur">par ' . $proposition->getResponsable()->getIdentifiant() . ' </a >';
+        echo '</div>';
     }
-
     ?>
-    </form>
-
 </ul>
