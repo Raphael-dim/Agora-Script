@@ -8,6 +8,7 @@ use App\Vote\Lib\MessageFlash;
 use App\Vote\Model\DataObject\Votant;
 use App\Vote\Model\DataObject\Vote;
 use App\Vote\Model\Repository\PropositionRepository;
+use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\VoteRepository;
 
 class ControllerVote
@@ -22,11 +23,11 @@ class ControllerVote
         Des triggers permettent de modifier automatiquement la valeur du nombre de votes dans la table proposition.
         */
 
-
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
-        $question = $proposition->getQuestion();
+        $question = (new QuestionRepository())->select($proposition->getIdQuestion());
+        $votants = $question->getVotants();
         $bool = true;
-        if (!ConnexionUtilisateur::estConnecte() || !Votant::estVotant($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
+        if (!ConnexionUtilisateur::estConnecte() || !Votant::estVotant($votants, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas voter, vous n'êtes pas votant pour cette question.");
             $bool = false;
         }
@@ -34,38 +35,55 @@ class ControllerVote
             MessageFlash::ajouter("warning", "Vous ne pouvez pas voter tant que la phase de vote n'a pas débuté.");
             $bool = false;
         }
-        if (!$bool) {
-            Controller::redirect('index.php?controller=vote&action=readAll&idQuestion=' . $question->getId());
-        }
         if (!isset($_GET['valeur']) || $_GET['valeur'] > 5 || $_GET['valeur'] < 0) {
             MessageFlash::ajouter('warning', "Valeur de vote invalide");
-            Controller::redirect('index.php?controller=accueil');
+            $bool = false;
         }
-        $proposition = (new PropositionRepository())->select($_GET['idProposition']);
-        $question = $proposition->getQuestion();
-        $vote = Votant::aVote($proposition, ConnexionUtilisateur::getLoginUtilisateurConnecte());
-        if (!is_null($vote) && $vote->getValeur() == $_GET['valeur']) {
-            // Supprime un vote
-            $vote = (new VoteRepository())->selectWhere(array('clef0' => $proposition->getId(),
-                'clef1' => ConnexionUtilisateur::getLoginUtilisateurConnecte()), '*',
-                array('idproposition', 'idvotant'), 'Votes');
-            (new VoteRepository())->delete($vote[0]->getIdvote());
-            MessageFlash::ajouter('success', 'Vote supprimé');
-            Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
-        } else if (!is_null($vote)) {
-            // Modifie un vote
-            $vote->setValeur($_GET['valeur']);
-            (new VoteRepository())->update($vote);
-            MessageFlash::ajouter('success', 'Vote mis à jour');
-            Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
-        } else {
-            // Enregistre un vote
-            $votant = new Votant($question);
-            $votant->setIdentifiant(ConnexionUtilisateur::getLoginUtilisateurConnecte());
-            $vote = new Vote($votant, $proposition, $_GET['valeur']);
-            $voteBD = (new VoteRepository())->sauvegarder($vote);
-            MessageFlash::ajouter('success', 'Vote pris en compte');
-            Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
+        if (!$bool) {
+            $propositions = $question->getPropositions();
+            Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
+                "cheminVueBody" => "Proposition/list.php",
+                "votants" => $votants,
+                "propositions" => $propositions,
+                "question" => $question]);
+        }
+        else{
+            $vote = Votant::aVote($proposition, Votant::getVotes(ConnexionUtilisateur::getLoginUtilisateurConnecte()));
+            if (!is_null($vote) && $vote->getValeur() == $_GET['valeur']) {
+                // Supprime un vote
+                (new VoteRepository())->delete($vote->getIdvote());
+                MessageFlash::ajouter('success', 'Vote supprimé');
+                $propositions = $question->getPropositions();
+                Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
+                    "cheminVueBody" => "Proposition/list.php",
+                    "votants" => $votants,
+                    "propositions" => $propositions,
+                    "question" => $question]);
+            } else if (!is_null($vote)) {
+                // Modifie un vote
+                $vote->setValeur($_GET['valeur']);
+                (new VoteRepository())->update($vote);
+                MessageFlash::ajouter('success', 'Vote mis à jour');
+                $propositions = $question->getPropositions();
+                Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
+                    "cheminVueBody" => "Proposition/list.php",
+                    "votants" => $votants,
+                    "propositions" => $propositions,
+                    "question" => $question]);
+            } else {
+                // Enregistre un vote
+                $votant = new Votant($question);
+                $votant->setIdentifiant(ConnexionUtilisateur::getLoginUtilisateurConnecte());
+                $vote = new Vote($votant, $proposition, $_GET['valeur']);
+                $voteBD = (new VoteRepository())->sauvegarder($vote);
+                $propositions = $question->getPropositions();
+                MessageFlash::ajouter('success', 'Vote pris en compte');
+                Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
+                    "cheminVueBody" => "Proposition/list.php",
+                    "votants" => $votants,
+                    "propositions" => $propositions,
+                    "question" => $question]);
+            }
         }
     }
 }

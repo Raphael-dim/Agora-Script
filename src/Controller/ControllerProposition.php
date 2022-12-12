@@ -91,12 +91,9 @@ class ControllerProposition
         $propositions = (new PropositionRepository())->selectWhere($_GET['idQuestion'], '*', 'idquestion');
         // Au lieu de faire un appel supplémentaire à la base de donnée, on vérifie s'il existe une proposition,
         // si oui, on récupère la question grâce à l'objet Proposition.
-        if (sizeof($propositions) > 0) {
-            $question = $propositions[0]->getQuestion();
-        } else {
-            $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        }
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $votants = $question->getVotants();
+
         Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
             "cheminVueBody" => "Proposition/list.php",
             "votants" => $votants,
