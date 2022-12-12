@@ -735,6 +735,57 @@ div p {
     display: inline-block;
 }
 
+.propositions{
+    width: 80%;
+    margin: auto;
+    padding: 0;
+}
+.propositions .listes {
+    position: relative;
+    border-radius: 7px;
+    border-width: 1px;
+    border-color: black;
+    border-style: solid;
+    background-color: #dff5f4;
+    vertical-align: middle;
+    display: inline-block;
+    height: 250px;
+    width: 100%;
+    margin: 20px;
+}
+
+.premier{
+    display: inline-block;
+    width: 100%;
+}
+
+.premier p{
+    display: inline-block;
+}
+.divDePremier{
+    width: 50%;
+    position: relative;
+    display: block;
+    padding-right: 0px;
+}
+
+.deuxTrois{
+    display: flex;
+}
+
+.deuxieme{
+    position : relative;
+    display: block;
+    width: 50%;
+}
+.troisieme{
+    margin-top: 50px;
+    margin-left: 15px;
+    position : relative;
+    display: block;
+    width: 50%;
+}
+
 .cal {
     color: white;
     position: relative;
