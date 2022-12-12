@@ -29,7 +29,7 @@ if (isset($_GET['idProposition']) or isset($_SESSION[FormConfig::$arr]['idPropos
 }
 
 if (isset($_SESSION[FormConfig::$arr]['idProposition'])){
-    (new PropositionRepository())->select($_SESSION[FormConfig::$arr]['idProposition'])->getResponsable()->getIdentifiant();
+    (new PropositionRepository())->select($_SESSION[FormConfig::$arr]['idProposition'])->getIdResponsable();
 }
 if (isset($_POST['titre'])) {
     FormConfig::postSession();
@@ -38,7 +38,7 @@ if (isset($_POST['titre'])) {
         $_SESSION[FormConfig::$arr]['co-auteur'] = array();
     }
     if (isset($_SESSION[FormConfig::$arr]['idProposition'])){
-        if ((new PropositionRepository())->select($_SESSION[FormConfig::$arr]['idProposition'])->getResponsable()->getIdentifiant() != ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
+        if ((new PropositionRepository())->select($_SESSION[FormConfig::$arr]['idProposition'])->getIdResponsable() != ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
             FormConfig::redirect('index.php?controller=proposition&action=updated');
         }
     }

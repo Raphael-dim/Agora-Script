@@ -175,7 +175,7 @@ class ControllerProposition
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une proposition si vous n'etes pas connecté.");
             $bool = false;
         }
-        if (!in_array(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $coauteursid) && ConnexionUtilisateur::getLoginUtilisateurConnecte() != $proposition->getResponsable()->getIdentifiant()) {
+        if (!in_array(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $coauteursid) && ConnexionUtilisateur::getLoginUtilisateurConnecte() != $proposition->getIdResponsable()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une proposition dont vous n'êtes pas co-auteur ou représentant.");
             $bool = false;
         }
@@ -223,7 +223,7 @@ class ControllerProposition
                 $propositionSection = new PropositionSection((new PropositionRepository())->select($_SESSION[FormConfig::$arr]["idProposition"]), $section, $_SESSION[FormConfig::$arr]['contenu' . $section->getId()]);
                 (new PropositionSectionRepository())->sauvegarder($propositionSection);
             }
-            $prop = new Proposition($_SESSION[FormConfig::$arr]['titre'], $proposition->getResponsable(), $proposition->getQuestion(), $proposition->getNbVotes());
+            $prop = new Proposition($_SESSION[FormConfig::$arr]['titre'], $proposition->getIdResponsable(), $proposition->getQuestion(), $proposition->getNbVotes());
             $prop->setId($_SESSION[FormConfig::$arr]["idProposition"]);
             (new PropositionRepository())->update($prop);
 
@@ -261,7 +261,7 @@ class ControllerProposition
         }
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         if (!ConnexionUtilisateur::estConnecte() ||
-            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $proposition->getResponsable()->getIdentifiant()) {
+            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $proposition->getIdResponsable()) {
             MessageFlash::ajouter("danger", "Vous ne pouvez pas supprimer une proposition dont vous n'êtes pas le responsable.");
             Controller::redirect('index.php?controller=question&action=readAll');
         } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
