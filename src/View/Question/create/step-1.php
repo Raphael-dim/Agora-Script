@@ -60,7 +60,7 @@ if (isset($_POST['Titre'])) {
         </select>
     </p>
 
-    <input type="submit" value="Suivant" class="nav">
+    <input type="submit" value="Suivant" id="suivant"  class="nav">
 </form>
 
 <?php
