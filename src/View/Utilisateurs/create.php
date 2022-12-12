@@ -1,8 +1,9 @@
-<form method="post" action="index.php?controller=utilisateur&action=created">
+<form method="post" action="index.php?controller=utilisateur&action=created" class="inscription">
     <fieldset>
         <legend>Formulaire d'inscription :</legend>
         <p>
-            <label for="username">Identifiant : </label><input type="text" placeholder="" name="identifiant" id="username" required>
+            <label for="username">Identifiant : </label><input type="text" placeholder="" name="identifiant"
+                                                               id="username" required>
             <span class="validity"></span>
 
         </p>
@@ -12,7 +13,8 @@
 
         </p>
         <p>
-            <label for="firstname">Prénom : </label><input type="text" placeholder="" name="prenom" id="firstname" required>
+            <label for="firstname">Prénom : </label><input type="text" placeholder="" name="prenom" id="firstname"
+                                                           required>
             <span class="validity"></span>
         </p>
         <p class="InputAddOn">
@@ -27,8 +29,7 @@
             <span class="validity"></span>
 
         </p>
-        <p>
-            <input type="submit" value="Inscription" class="nav">
-        </p>
+        <input id="precedent" type="submit" value="Inscription" class="nav">
+
     </fieldset>
 </form>

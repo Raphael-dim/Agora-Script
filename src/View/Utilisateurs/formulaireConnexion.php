@@ -11,13 +11,8 @@
             <input class="InputAddOn-field" type="password" value="" placeholder="" name="mdp" id="mdp_id" required>
             <span class="validity"></span>
         </p>
-        <p>
-            <input type="submit" value="Connexion" class="nav">
-        </p>
-        <p>
-            <a href="index.php?controller=utilisateur&action=create">Pas encore de compte ?</a>
-
-        </p>
+            <input type="submit" value="Connexion" id="suivant" class="nav">
+            <a id="precedent" href="index.php?controller=utilisateur&action=create">Pas encore de compte ?</a>
     </fieldset>
 
 </form>

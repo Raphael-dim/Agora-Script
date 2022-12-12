@@ -49,6 +49,6 @@ $nbSection = $_SESSION[FormConfig::$arr]['nbSections'];
 
     ?>
 
-    <input type="submit" name=previous value="Retour" class="nav" formnovalidate>
+    <input type="submit" name=previous value="Retour" id="precedent" class="nav" formnovalidate>
     <input type="submit" name=next value="Suivant" id="suivant"  class="nav">
 </form>
