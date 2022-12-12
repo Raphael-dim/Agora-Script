@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <h1><strong  id ='color-orange'>Sections</strong></h1>
+        <h1><strong  class ='color-orange'>Sections</strong></h1>
 
         <?php
         $i = 1;
@@ -53,7 +53,7 @@
         </p>
     </div>
     <div class="calendrier">
-        <h1><strong  id ='color-green'>Calendrier</strong></h1>
+        <h1><strong  class ='color-green'>Calendrier</strong></h1>
 
 
 

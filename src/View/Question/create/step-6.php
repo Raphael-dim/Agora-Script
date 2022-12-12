@@ -38,19 +38,18 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
 
 
 ?>
-
-<p>Titre : <?= htmlspecialchars($Titre) ?></p>
-<p>Description : <?= htmlspecialchars($Description) ?></p>
+<h1><strong class='color-grey'><?= htmlspecialchars($Titre) ?></strong></h1>
+<h1><strong class='color-grey'><?= htmlspecialchars($Description) ?></strong></h1>
 
 
 <div>
-    <h2>Calendrier</h2>
+    <h1><strong class='color-green'>Calendrier</strong></h1>
     <p>Phase d'écriture : du <?= htmlspecialchars($debutEcriture) ?> au <?= htmlspecialchars($finEcriture) ?></p>
     <p>Phase de vote : du <?= htmlspecialchars($debutVote) ?> au <?= htmlspecialchars($finVote) ?></p>
 </div>
 
 <div>
-    <h2>Responsables</h2>
+    <h1><strong class='color-yellow'>Responsables</strong></h1>
     <?php
     foreach ($_SESSION[FormConfig::$arr]['responsables'] as $responsable) {
         echo "<p> " . htmlspecialchars($responsable) . " </p>";
@@ -59,7 +58,7 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
 </div>
 
 <div>
-    <h2>Votants</h2>
+    <h1><strong class='color-yellow'>Votants</strong></h1>
     <?php
     foreach ($_SESSION[FormConfig::$arr]['votants'] as $votant) {
         echo "<p> " . htmlspecialchars($votant) . " </p>";
@@ -69,7 +68,7 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
 
 
 <div>
-    <h2>Sections</h2>
+    <h1><strong class='color-orange'>Sections</strong></h1>
     <?php
     $i = 1;
     foreach ($_SESSION[FormConfig::$arr]['Sections'] as $Section) {
@@ -83,6 +82,6 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
 </div>
 
 <form method="post" class="nav">
-    <input type="submit" name=previous value="Retour" formnovalidate>
-    <input type="submit" name=next value="Suivant">
+    <input type="submit" name=previous value="Retour" id="precedent" formnovalidate>
+    <input type="submit" name=next value="Suivant" id="suivant">
 </form>

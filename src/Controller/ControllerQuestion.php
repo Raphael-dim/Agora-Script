@@ -423,7 +423,7 @@ class ControllerQuestion
         if (!$bool) {
             Controller::redirect('index.php?controller=question&action=readAll');
         }
-        $propositions = $question->getPropositions();
+        $propositions = $question->getPropositionsTrie();
         Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
             'cheminVueBody' => "Question/resultat.php",
             'propositions' => $propositions]);

@@ -241,6 +241,61 @@ abstract class AbstractRepository
         return $ADonnees;
     }
 
+
+    /**
+     * Permet de construire une requete sql grace aux contraintes passées en paramètres
+     * @param $clef             //Clef primaire
+     * @param $rowSelect        //Les colonnes que vous voulez selectionner '*' par défaut si le parametre n'est pas renseigné
+     * @param $whereCondition   //La condition qui sera placée dans le WHERE,
+    //null par défaut qui sera remplacé dans la requete pas la clé primaire si le parametre n'est pas renseigné
+     * @param $nomTable         //le nom de la table, null par défaut qui sera remplacé dans la requete par la table par défaut
+     * @return array
+     */
+    public function selectWhereTrie($clef, $rowSelect = '*', $whereCondition = null, $nomTable = null): array
+    {
+        $ADonnees = array();
+        if (is_null($nomTable)) {
+            $sql = 'SELECT ' . $rowSelect . ' from ' . $this->getNomTable();
+        } else {
+            $sql = 'SELECT ' . $rowSelect . ' from ' . $nomTable;
+        }
+        if (is_null($whereCondition)) {
+            $sql = $sql . ' WHERE ' . $this->getNomClePrimaire() . ' =:clef';
+        } else if (!is_array($whereCondition)) {
+            $sql = $sql . ' WHERE ' . $whereCondition . ' =:clef';
+        } else {
+            $nbCases = sizeof($whereCondition);
+            $i = 0;
+            foreach ($whereCondition as $where) {
+                if ($i == 0) {
+                    $sql = $sql . ' WHERE ';
+                }
+                $sql = $sql . $where . ' =:clef' . $i . ' ';
+                if ($i != $nbCases - 1) {
+                    $sql = $sql . 'AND ';
+                }
+                $i++;
+            }
+
+        }
+        $sql = $sql . ' ORDER BY nbvotes DESC;';
+        // Préparation de la requête
+        $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
+        if (!is_array($clef)) {
+            $values = array(
+                "clef" => $clef,
+            );
+            $pdoStatement->execute($values);
+        } else {
+            $pdoStatement->execute($clef);
+        }
+        foreach ($pdoStatement as $donneesFormatTableau) {
+            $ADonnees[] = $this::construire(json_decode(json_encode($donneesFormatTableau), true));
+        }
+
+        return $ADonnees;
+    }
+
     protected abstract function getNomTable(): string;
 
     protected abstract function construire(array $objetFormatTableau);

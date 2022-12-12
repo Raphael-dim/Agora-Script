@@ -11,7 +11,7 @@
 <h2>Mes questions : </h2>
 <ul class=" listes_sans_puces">
     <?php foreach ($questions as $question) {
-        echo '<li><p><a href = index.php?controller=question&action=read&idQuestion=' . $question->getId() . '>
+        echo '<li><p><a href = "index.php?controller=question&action=read&idQuestion=' . $question->getId() . '">
     ' . $question->getTitre() . '</a></p></li>';
     }
     ?>
@@ -20,7 +20,7 @@
 <h2>Mes propositions : </h2>
 <ul class="listes_sans_puces">
     <?php foreach ($propositions as $proposition) {
-        echo '<li><p><a href = index.php?controller=proposition&action=read&idProposition=' . $proposition->getId() . '>
+        echo '<li><p><a href = "index.php?controller=proposition&action=read&idProposition=' . $proposition->getId() . '">
     ' . $proposition->getTitre() . '</a></p></li>';
     }
     ?>

@@ -155,6 +155,10 @@ class Question extends AbstractDataObject
         return (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion", 'Propositions');
     }
 
+    public function getPropositionsTrie(){
+        return (new PropositionRepository())->selectWhereTrie($this->id, '*', "idQuestion", 'Propositions');
+    }
+
     /**
      * On obtient la phase en cours pour une question
      * @throws \Exception

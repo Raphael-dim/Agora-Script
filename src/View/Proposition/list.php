@@ -19,30 +19,25 @@
     foreach ($propositions as $proposition) {
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
-        echo '<form>';
-        echo '<p class = "listes">
-            <a href="index.php?action=read&controller=proposition&idProposition=' .
-            $idPropositionURL . '">' . $i . ' : ' . $titreHTML . '  </a>';
-        if ($question->getPhase() == 'vote' && ConnexionUtilisateur::estConnecte()
-            && Votant::estVotant($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())
-            && $aVote != $proposition->getId()) {
-            if (is_null($aVote)) {
-                echo '<a id="vote" href="index.php?action=create&controller=vote&idproposition=' .
-                    $idPropositionURL . '">Voter</a>';
+        echo '<div class=proposition>';
+        echo ' <a href= index.php?action=read&controller=proposition&idProposition=' .
+            $idPropositionURL . '> <h2>' . $titreHTML . '</h2>   </a>';
+        if ($peutVoter) {
+            $vote = Votant::aVote($proposition, ConnexionUtilisateur::getLoginUtilisateurConnecte());
+            if (!is_null($vote)) {
+                for ($val = 1; $val <= $vote->getValeur(); $val++) {
+                    echo '<a id=vote style="background:#a94442" href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
+                        <img src=../web/images/coeur_logo.png alt=""></a>';
+                }
+                for ($val = $vote->getValeur() + 1; $val <= 5; $val++) {
+                    echo '<a id=vote href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
+                        <img src=../web/images/coeur_logo.png alt=""></a>';
+                }
             } else {
-                echo '<a id="vote" href="index.php?action=update&controller=vote&idpropositionAnc=' .
-                    $aVoteURL . '&idproposition=' . $idPropositionURL . '">Voter</a>';
-            }
-        } else if ($proposition->getId() == $aVote) {
-            echo '<a id="vote" href="index.php?action=delete&controller=vote&idproposition=' .
-                $idPropositionURL . '">Supprimer le vote</a>';
-        }
-
-        if(isset($_SESSION['user'])){
-            if(CoAuteur::estCoAuteur($_SESSION['user']['id'],$proposition->getId()) || $proposition->getResponsable()->getIdentifiant() == $_SESSION['user']['id']){
-                echo '<a href = "index.php?action=update&controller=proposition&step=1&idProposition=' .
-                    $proposition->getId() . '"><img class="modifier" src = "..\web\images\modifier.png" ></a >';
-
+                for ($val = 1; $val <= 5; $val++) {
+                    echo '<a id=vote href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
+                        <img src=../web/images/coeur_logo.png alt=""></a>';
+                }
             }
         }
 
@@ -56,17 +51,14 @@
         //    echo '<a id = "vote" href = index.php?action=create&controller=coauteur&idProposition=' .
         //        $idPropositionURL . ' > Désigner des co - auteurs </a > ';
         echo '<br > ';
-        echo 'Nombre de votes : ' . $proposition->getNbVotes();
-        if(ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte()==$proposition->getResponsable()->getIdentifiant()) {
-            echo '
-<a class="nav suppProp" href=index.php?controller=proposition&action=delete&idProposition='.$proposition->getId().'>Supprimer</a>
-            ';
+        echo '<h3>Nombre de votes : ' . $proposition->getNbVotes() . '</h3>';
+        if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getResponsable()->getIdentifiant()) {
+            echo ' <a class="nav suppProp" 
+            href=index.php?controller=proposition&action=delete&idProposition=' . $proposition->getId() . '>Supprimer</a>';
         }
-        echo ' </p> ';
         $i++;
+        echo '<a href="" id = "auteur">par ' . $proposition->getResponsable()->getIdentifiant() . ' </a >';
+        echo '</div>';
     }
-
     ?>
-    </form>
-
 </ul>

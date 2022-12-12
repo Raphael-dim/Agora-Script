@@ -39,7 +39,7 @@ if (isset($_POST['Titre'])) {
 
     <p>
         <label for="titre_id">Titre</label> :
-        <input type="text" placeholder="L'oeuf ou la poule ? " size="78" maxlength="70" name="Titre" id="titre_id"
+        <input type="text" placeholder="L'oeuf ou la poule ? " size="65" maxlength="70" name="Titre" id="titre_id"
                value="<?= FormConfig::TextField('Titre') ?>"
                required>
         <label>70 caractères maximum</label>
@@ -60,7 +60,7 @@ if (isset($_POST['Titre'])) {
         </select>
     </p>
 
-    <input type="submit" value="Suivant" class="nav">
+    <input type="submit" value="Suivant" id="suivant"  class="nav">
 </form>
 
 <?php

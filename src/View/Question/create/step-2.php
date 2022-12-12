@@ -60,8 +60,8 @@ if (isset($_POST['next'])) {
                value="<?= FormConfig::TextField('finVote') ?>"
                min="<?= date("Y-m-d H:i"); ?>" required>
     </p>
-    <input type="submit" name=previous value="Retour" class="nav" formnovalidate>
-    <input type="submit" name=next value="Suivant" class="nav">
+    <input type="submit" name=previous value="Retour" id="precedent" class="nav" formnovalidate>
+    <input type="submit" name=next value="Suivant" id="suivant"  class="nav">
 </form>
 
 <?php
