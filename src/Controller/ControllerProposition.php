@@ -67,7 +67,7 @@ class ControllerProposition
     public static function read()
     {
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
-        $question = $proposition->getQuestion();
+        $question = (new QuestionRepository())->select($proposition->getIdQuestion());
         $coAuts = (new CoAuteurRepository())->selectWhere($_GET['idProposition'], '*', 'idproposition', "Coauteurs");
         //var_dump((new CoAuteurRepository())->selectAll());
         $sections = $question->getSections();

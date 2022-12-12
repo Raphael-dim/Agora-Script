@@ -53,37 +53,25 @@ class ControllerVote
                 // Supprime un vote
                 (new VoteRepository())->delete($vote->getIdvote());
                 MessageFlash::ajouter('success', 'Vote supprimé');
-                $propositions = $question->getPropositions();
-                Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
-                    "cheminVueBody" => "Proposition/list.php",
-                    "votants" => $votants,
-                    "propositions" => $propositions,
-                    "question" => $question]);
             } else if (!is_null($vote)) {
                 // Modifie un vote
                 $vote->setValeur($_GET['valeur']);
                 (new VoteRepository())->update($vote);
                 MessageFlash::ajouter('success', 'Vote mis à jour');
-                $propositions = $question->getPropositions();
-                Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
-                    "cheminVueBody" => "Proposition/list.php",
-                    "votants" => $votants,
-                    "propositions" => $propositions,
-                    "question" => $question]);
             } else {
                 // Enregistre un vote
                 $votant = new Votant($question);
                 $votant->setIdentifiant(ConnexionUtilisateur::getLoginUtilisateurConnecte());
                 $vote = new Vote($votant, $proposition, $_GET['valeur']);
                 $voteBD = (new VoteRepository())->sauvegarder($vote);
-                $propositions = $question->getPropositions();
                 MessageFlash::ajouter('success', 'Vote pris en compte');
-                Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
-                    "cheminVueBody" => "Proposition/list.php",
-                    "votants" => $votants,
-                    "propositions" => $propositions,
-                    "question" => $question]);
             }
+            $propositions = (new PropositionRepository())->selectWhere($question->getId(), '*', 'idquestion');
+            Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
+                "cheminVueBody" => "Proposition/list.php",
+                "votants" => $votants,
+                "propositions" => $propositions,
+                "question" => $question]);
         }
     }
 }
