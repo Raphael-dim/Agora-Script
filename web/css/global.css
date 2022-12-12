@@ -118,7 +118,7 @@ h1, h2, h3 {
     color: #dcdcdc;
 }
 
-h3, h2{
+h3, h2 {
     text-align: center;
 }
 
@@ -435,13 +435,18 @@ a#vote:hover img {
     background: white;
 }
 
-#suivant{
+#suivant {
     margin: 10px 100px 10px 50px;
     float: right;
 }
 
+#precedent {
+    float: left;
+    margin: 10px 50px 10px 100px;
+}
+
 .nav *, form .nav {
-    margin: 10px 10px 10px 100px;
+    margin: 10px 10px 10px 1px;
     height: 35px;
     width: auto;
     background-color: #dff5f4;
