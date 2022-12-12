@@ -88,11 +88,15 @@ main {
 }
 
 main p {
+    text-align: center;
+    width: auto;
+    max-width: 1000px;
     border-radius: 10px;
-    background: #dff5f4;
+    background: rgba(223, 245, 244, 0.7);
     padding: 10px;
-    margin: 7px;
-    border: solid lightgrey 1px;
+    /*margin: 7px;*/
+    margin: 20px auto 20px auto;
+    border: solid rgba(255, 255, 255, 0.79) 1px;
 }
 
 
@@ -111,8 +115,11 @@ main p a {
 
 
 h1, h2, h3 {
-    margin-left: 15px;
     color: #dcdcdc;
+}
+
+h3, h2{
+    text-align: center;
 }
 
 
@@ -164,7 +171,7 @@ span {
     border-width: 1px;
     border-color: black;
     border-style: solid;
-    background-color: #dff5f4;
+    background-color: rgba(223, 245, 244, 0.84);
     vertical-align: middle;
     display: inline-block;
     height: 250px;
@@ -428,7 +435,13 @@ a#vote:hover img {
     background: white;
 }
 
+#suivant{
+    margin: 10px 100px 10px 50px;
+    float: right;
+}
+
 .nav *, form .nav {
+    margin: 10px 10px 10px 100px;
     height: 35px;
     width: auto;
     background-color: #dff5f4;
@@ -510,7 +523,7 @@ a#vote:hover img {
 
 
 @media screen and (max-width: 1200px) {
-    .bouton{
+    .bouton {
         font-size: 17px;
         margin: 1px;
     }
@@ -558,18 +571,39 @@ a#vote:hover img {
         alignment: center;
     }
 
-    .selection, .barreHaut {
+    .selection {
         display: contents;
     }
 
-    .questions{
+    .questions {
         width: 75%;
     }
 
-    .barreHaut{
-        height: 300px;
+    .bouton {
+        width: 100px;
+        background-color: rgba(255, 255, 255, 0.56);
+        margin: 20px 57% 20px 43%;
+        display: inline-block;
+    }
+
+    .barreHaut {
+        margin-top: 20px;
+        width: 50%;
+        display: contents;
+    }
+
+
+    .barreHaut > form {
+        padding: 20px;
+        margin: auto;
+        width: 80%;
+    }
+
+    .barreHaut #motclef {
+        width: 80%;
     }
 }
+
 
 .listes_sans_puces {
     list-style-type: none;
