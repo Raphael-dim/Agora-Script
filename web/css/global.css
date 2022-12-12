@@ -775,7 +775,12 @@ div p {
     width: 100%;
     margin: 20px;
 }
-
+imgPremier{
+    width: 600px;
+    height: 1200px;
+    bottom: 50px;
+    right: 100px;
+}
 .premier{
     display: inline-block;
     width: 100%;
