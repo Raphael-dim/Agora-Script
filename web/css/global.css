@@ -90,6 +90,7 @@ main {
 main p {
     text-align: center;
     width: auto;
+    min-height: content-box;
     max-width: 1000px;
     border-radius: 10px;
     background: rgba(223, 245, 244, 0.7);
