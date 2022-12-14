@@ -49,10 +49,9 @@
                         <a href="" id = "auteur">par ' . $propositions[2]->getIdResponsable() . ' </a >
                         <img src="images/troisieme.png">
                 </div>  
-                 </div>
-             </div>
-         </div>';
+                 </div>';
             }
+            echo '</div></div>';
 
     echo '<div class="propositions">';
     for ($i=3;$i<count($propositions);$i++) {
@@ -79,6 +78,26 @@
                     y: 0.2
                 }
             })
+            setTimeout(function(){
+                confetti({
+                    spread: 120,
+                    particleCount: 250,
+                    origin:{
+                        x: 0.2,
+                        y: 1.2
+                    }
+                })
+
+                confetti({
+                    spread: 120,
+                    particleCount: 250,
+                    origin:{
+                        x: 0.8,
+                        y: 1.2
+                    }
+                })
+            },1000);
+
     </script>
     <script type="text/javascript" src="js/jquery-3.4.2.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.js"></script>

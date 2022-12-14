@@ -300,6 +300,7 @@ li, a {
 
 
 .deuxTrois {
+    width: 100%;
     display: flex;
 }
 .premier {
@@ -313,7 +314,7 @@ li, a {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50%;
+    width: 100%;
 }
 .troisieme {
     margin-top: 150px;
@@ -322,11 +323,11 @@ li, a {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50%;
+    width: 100%;
 }
 
 .propositions {
-    margin-top: 75px;
+    margin-top: 5px;
     width: 100%;
     display: inline-flex;
     flex-direction: column;
@@ -675,6 +676,7 @@ a#vote:hover img {
     }
 
     .deuxTrois{
+
          display: block;
     }
 
