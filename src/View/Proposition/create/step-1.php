@@ -1,8 +1,8 @@
 <?php
 
 use App\Vote\Config\FormConfig as FormConfig;
+use App\Vote\Controller\ControllerAccueil;
 use App\Vote\Lib\ConnexionUtilisateur;
-use App\Vote\Model\DataObject\Responsable;
 use App\Vote\Model\Repository\PropositionRepository;
 
 
@@ -17,7 +17,7 @@ if (isset($_GET['idProposition']) or isset($_SESSION[FormConfig::$arr]['idPropos
     if (isset($_GET['idProposition'])) {
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         if ($proposition == null) {
-            \App\Vote\Controller\ControllerAccueil::erreur();
+            ControllerAccueil::erreur();
         } else {
             $_SESSION[FormConfig::$arr]['idProposition'] = $_GET['idProposition'];
             FormConfig::initialiserSessionsProposition($proposition);
@@ -27,6 +27,7 @@ if (isset($_GET['idProposition']) or isset($_SESSION[FormConfig::$arr]['idPropos
 } else {
     echo "<h1>Création d'une Proposition</h1>";
 }
+
 
 if (isset($_SESSION[FormConfig::$arr]['idProposition'])){
     (new PropositionRepository())->select($_SESSION[FormConfig::$arr]['idProposition'])->getResponsable()->getIdentifiant();
@@ -64,7 +65,7 @@ if (isset($_POST['titre'])) {
         </label>
         <label>480 caractères maximum</label>
     </p>
-    <h2>Désigner les co-auteurs qui vous aideront à rédiger votre proposition :</h2>
+    <!--<h2>Désigner les co-auteurs qui vous aideront à rédiger votre proposition :</h2>-->
 
     <?php
     $sections = $question->getSections();
