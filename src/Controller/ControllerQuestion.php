@@ -175,7 +175,7 @@ class ControllerQuestion
         if ($calendrier->getDebutEcriture() >= $calendrier->getFinEcriture() || $calendrier->getDebutVote() >= $calendrier->getFinVote()
             || $calendrier->getDebutVote() <= $calendrier->getDebutEcriture() || $calendrier->getDebutVote() < $calendrier->getFinEcriture()) {
             MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
-            Controller::redirect("index.php?action=readAll&controller=question");
+            Controller::redirect("index.php?action=form&controller=question&step=2");
         }
         $calendrierBD = (new CalendrierRepository())->sauvegarder($calendrier);
         if ($calendrierBD != null) {
@@ -223,8 +223,8 @@ class ControllerQuestion
         $sections = $_SESSION[FormConfig::$arr]['Sections'];
         foreach ($sections as $value) {
             $section = new Section($value['titre'], $value['description'], $question);
-            if (strlen($section->getTitre()) > 80 || strlen($section->getDescription() > 360)) {
-                MessageFlash::ajouter("danger", "Les contraintes de taille maximales des champs de textes n'ont pas été respectées.");
+            if (strlen($value['titre']) > 80 || strlen($value['description']) > 360) {
+                MessageFlash::ajouter("warning", "Les contraintes de taille maximales des champs de textes n'ont pas été respectées.");
                 Controller::redirect("index.php?action=form&controller=question&step=3");
             }
             $sectionBD = (new SectionRepository())->sauvegarder($section);

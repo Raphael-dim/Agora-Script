@@ -63,9 +63,5 @@ if (isset($_POST['Titre'])) {
     <input type="submit" value="Suivant" id="suivant"  class="nav">
 </form>
 
-<?php
-if (isset($message)) {
-    echo "<p><img src=\"/web/images/attention.png\" class=\"attention\" > " . $message . "</p>";
-} ?>
 
 

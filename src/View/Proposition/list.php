@@ -9,6 +9,9 @@
     $i = 1;
     $peutVoter = false;
     $calendrier = $question->getCalendrier();
+    if(sizeof($propositions) == 0){
+        echo'<h2>Il n\'y a pas de propositions pour cette question</h2>';
+    }
     if ($question->getPhase() == 'vote' && ConnexionUtilisateur::estConnecte()
         && Votant::estVotant($votants, ConnexionUtilisateur::getLoginUtilisateurConnecte())
     ) {

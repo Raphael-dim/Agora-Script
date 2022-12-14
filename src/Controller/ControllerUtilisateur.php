@@ -82,6 +82,21 @@ class ControllerUtilisateur
 
     public static function created()
     {
+        $mdp = $_POST['mdp'];
+        if (strlen($mdp) < 6) {
+            MessageFlash::ajouter('info', 'Votre mot de passe doit contenir au moins 6 caractères.');
+            Controller::redirect('index.php?controller=utilisateur&action=create');
+        }
+        $bool = false;
+        for($i = 0; $i < 10 && !$bool; $i++){
+            if (strpos($mdp, $i)){
+                $bool = true;
+            }
+        }
+        if (!$bool){
+            MessageFlash::ajouter('info', 'Votre mot de passe doit contenir au moins 1 chiffre et une lettre.');
+            Controller::redirect('index.php?controller=utilisateur&action=create');
+        }
         if ($_POST['mdp'] != $_POST['mdp2']) {
             MessageFlash::ajouter('warning', 'Les mots de passes sont différents');
             Controller::redirect('index.php?controller=utilisateur&action=create');
