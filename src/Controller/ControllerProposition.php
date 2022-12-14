@@ -163,7 +163,8 @@ class ControllerProposition
             Controller::redirect('index.php?controller=proposition&action=readAll');
         }
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
-        $question = $proposition->getQuestion();
+        $idquestion = $proposition->getIdQuestion();
+        $question = (new QuestionRepository)->select($idquestion);
         $bool = true;
         $coauteurs = $proposition->getCoAuteurs();
         $coauteursid = array();
@@ -198,13 +199,14 @@ class ControllerProposition
         //session_start();
         FormConfig::setArr('SessionProposition');
         $proposition = (new PropositionRepository())->select($_SESSION[FormConfig::$arr]["idProposition"]);
-        $question = $proposition->getQuestion();
+        $idquestion = $proposition->getIdQuestion();
+        $question = (new QuestionRepository)->select($idquestion);
 
         $user = Session::getInstance()->lire('user');
         $date = date('d-m-Y à H:i:s');
         $bool = true;
         $calendrier = $question->getCalendrier();
-        if (!isset($user) || (!Responsable::estResponsable($proposition->getQuestion(), $user['id']) && !CoAuteur::estCoAuteur($user['id'],$_SESSION[FormConfig::$arr]["idProposition"]))) {
+        if (!isset($user) || (!Responsable::estResponsable($question, $user['id']) && !CoAuteur::estCoAuteur($user['id'],$_SESSION[FormConfig::$arr]["idProposition"]))) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier cette proposition, 
         vous n'êtes ni responsable ni co-auteur pour cette proposition.");
             $bool = false;
@@ -223,7 +225,7 @@ class ControllerProposition
                 $propositionSection = new PropositionSection((new PropositionRepository())->select($_SESSION[FormConfig::$arr]["idProposition"]), $section, $_SESSION[FormConfig::$arr]['contenu' . $section->getId()]);
                 (new PropositionSectionRepository())->sauvegarder($propositionSection);
             }
-            $prop = new Proposition($_SESSION[FormConfig::$arr]['titre'], $proposition->getIdResponsable(), $proposition->getQuestion(), $proposition->getNbVotes());
+            $prop = new Proposition($_SESSION[FormConfig::$arr]['titre'], $proposition->getIdResponsable(), $idquestion, $proposition->getNbVotes());
             $prop->setId($_SESSION[FormConfig::$arr]["idProposition"]);
             (new PropositionRepository())->update($prop);
 
@@ -241,7 +243,7 @@ class ControllerProposition
             }
 
             MessageFlash::ajouter("success", "La proposition a bien été modifié.");
-            Controller::redirect("index.php?controller=proposition&action=readAll&idQuestion=" . $proposition->getQuestion()->getId());
+            Controller::redirect("index.php?controller=proposition&action=readAll&idQuestion=" . $proposition->getIdQuestion());
         }
     }
 

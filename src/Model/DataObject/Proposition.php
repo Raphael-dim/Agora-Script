@@ -109,7 +109,7 @@ class Proposition extends AbstractDataObject
     public function formatTableau($update = false): array
     {
         $tab = array(
-            "idquestionTag" => $this->question->getId(),
+            "idquestionTag" => $this->idQuestion,
             "idresponsableTag" => $this->idResponsable,
             "titreTag" => $this->titre,
             "nbvotesTag" => $this->nbVotes,
