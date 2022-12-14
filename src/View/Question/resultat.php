@@ -21,7 +21,7 @@
                     $idPropositionURL . '> <h2>1. ' . $titreHTML . '</h2>   </a>
                     <br>
                     <h3>Nombre de votes : ' . $propositions[0]->getNbVotes() . '</h3>
-                    <a href="" id = "auteur">par ' . $propositions[0]->getResponsable()->getIdentifiant() . ' </a >
+                    <a href="" id = "auteur">par ' . $propositions[0]->getIdResponsable() . ' </a >
                     <img src="images/premier.png">
                 </div>
             </div>';
@@ -33,7 +33,7 @@
                             rawurlencode($propositions[1]->getId()) . '> <h2>2. ' . htmlspecialchars($propositions[1]->getTitre()) . '</h2>   </a>
                             <br>
                             <h3>Nombre de votes : ' . $propositions[1]->getNbVotes() . '</h3>
-                            <a href="" id = "auteur">par ' . $propositions[1]->getResponsable()->getIdentifiant() . ' </a >
+                            <a href="" id = "auteur">par ' . $propositions[1]->getIdResponsable() . ' </a >
                             <img src="images/deuxieme.png">
                             
                     </div>  
@@ -46,7 +46,7 @@
                     rawurlencode($propositions[2]->getId()) . '> <h2>3. ' . htmlspecialchars($propositions[2]->getTitre()) . '</h2>   </a>
                         <br>
                         <h3>Nombre de votes : ' . $propositions[2]->getNbVotes() . '</h3>
-                        <a href="" id = "auteur">par ' . $propositions[2]->getResponsable()->getIdentifiant() . ' </a >
+                        <a href="" id = "auteur">par ' . $propositions[2]->getIdResponsable() . ' </a >
                         <img src="images/troisieme.png">
                 </div>  
                  </div>
@@ -63,7 +63,7 @@
             $idPropositionURL . '> <h2>' . $i+1 .'. '. $titreHTML . '</h2>   </a>';
         echo '<br > ';
         echo '<h3>Nombre de votes : ' . $propositions[$i]->getNbVotes() . '</h3>';
-        echo '<a href="" id = "auteur">par ' . $propositions[$i]->getResponsable()->getIdentifiant() . ' </a >';
+        echo '<a href="" id = "auteur">par ' . $propositions[$i]->getIdResponsable() . ' </a >';
         echo '</div>';
         $i++;
     }

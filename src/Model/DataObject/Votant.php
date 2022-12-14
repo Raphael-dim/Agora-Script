@@ -23,14 +23,10 @@ class Votant extends Utilisateur
     }
 
     /**
-     * On vérifie si pour une question donnée, l'utilisateur passé en paramètre est dans la liste desvotants
-     * @param Question $question
-     * @param Utilisateur $utilisateur
-     * @return bool
+     * On vérifie si pour une question donnée, l'utilisateur passé en paramètre est dans la liste des votants
      */
-    public static function estVotant($question, $utilisateur): bool
+    public static function estVotant($votants, string $utilisateur): bool
     {
-        $votants = $question->getVotants();
         foreach ($votants as $votant) {
             if ($votant->getIdentifiant() == $utilisateur) {
                 return true;
@@ -39,19 +35,19 @@ class Votant extends Utilisateur
         return false;
     }
 
-    /**
-     * Si l'utilisateur a voté pour la proposition, on retourne l'objet vote, notamment la valeur
-     * du vote pour l'affichage.
-     * @param Proposition $proposition
-     * @param Utilisateur $utilisateur
-     * @return ?Vote
-     */
-    public static function aVote($proposition, $utilisateur): ?Vote
+    public static function getVotes(string $idUtilisateur): array
     {
-        $vote = (new VoteRepository())->selectWhere(array('clef0' => $proposition->getId(),
-            'clef1' => $utilisateur), '*',
-            array('idproposition', 'idvotant'), 'Votes');
-        return $vote[0] ?? null;
+        return (new VoteRepository())->selectWhere($idUtilisateur, '*', 'idvotant', 'Votes');
+    }
+
+    public static function aVote($proposition, $votes): ?Vote
+    {
+        foreach ($votes as $vote) {
+            if ($vote->getProposition()->getId() == $proposition->getId()) {
+                return $vote;
+            }
+        }
+        return null;
     }
 
     public function formatTableau(): array

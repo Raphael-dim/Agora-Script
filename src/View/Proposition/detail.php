@@ -21,8 +21,8 @@ echo '<h1>Titre de la proposition : ' . $proposition->getTitre() . '</h1>';
     echo'<div>';
         echo'<h1><strong  class ="color-yellow">Auteur</strong></h1>';
 
-            if (!is_null($proposition->getResponsable())) {
-                echo "<p>" . htmlspecialchars($proposition->getResponsable()->getIdentifiant()) . "</p>";
+            if (!is_null($proposition->getIdResponsable())) {
+                echo "<p>" . htmlspecialchars($proposition->getIdResponsable()) . "</p>";
             }
 
         echo '</div>';
