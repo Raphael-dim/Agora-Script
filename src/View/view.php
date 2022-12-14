@@ -15,26 +15,31 @@
     require __DIR__ . "/nav.php";
     ?>
 </header>
-<main>
-    <?php
+<?php
+if ($pagetitle == 'Detail question') {
+    echo '<main class = "pageDétail">';
+} else {
+    echo '<main>';
+}
 
-    use App\Vote\Lib\MessageFlash;
-    use App\Vote\Model\HTTP\Session;
+use App\Vote\Lib\MessageFlash;
+use App\Vote\Model\HTTP\Session;
 
-    echo '<div class = "pileflash" >';
-    if (!Session::getInstance()->contient('_messagesFlash')) {
-        new MessageFlash();
+echo '<div class = "pileflash" >';
+if (!Session::getInstance()->contient('_messagesFlash')) {
+    new MessageFlash();
+}
+foreach (MessageFlash::lireTousMessages() as $cle => $messagess) {
+    $messages = MessageFlash::lireMessages($cle);
+    foreach ($messages as $message) {
+        echo '<div class="alert alert-' . $cle . '">' . $message . '</div>';
     }
-    foreach (MessageFlash::lireTousMessages() as $cle => $messagess) {
-        $messages = MessageFlash::lireMessages($cle);
-        foreach ($messages as $message) {
-            echo '<div class="alert alert-' . $cle . '">' . $message . '</div>';
-        }
-    }
-    echo '</div>';
-    require __DIR__ . "/{$cheminVueBody}";
-    ?>
-</main>
+}
+echo '</div>';
+require __DIR__ . "/{$cheminVueBody}";
+echo '</main>';
+?>
+
 <footer>
     <ul class="footer">
         <li>

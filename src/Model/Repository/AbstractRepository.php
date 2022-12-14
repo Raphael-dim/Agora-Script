@@ -196,7 +196,7 @@ abstract class AbstractRepository
      * @param $nomTable         //le nom de la table, null par défaut qui sera remplacé dans la requete par la table par défaut
      * @return array
      */
-    public function selectWhere($clef, $rowSelect = '*', $whereCondition = null, $nomTable = null): array
+    public function selectWhere($clef, string $rowSelect = '*', $whereCondition = null, $nomTable = null): array
     {
         $ADonnees = array();
         if (is_null($nomTable)) {

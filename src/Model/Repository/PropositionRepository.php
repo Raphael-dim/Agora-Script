@@ -8,10 +8,16 @@ class PropositionRepository extends AbstractRepository
 {
     protected function construire(array $propositionTableau) : Proposition
     {
+
+        /*
+        On ne construit pas l'objet proposition avec un objet Responsable et un objet Question pour éviter de
+        faire un aller-retour inutile à la base de donnée.
+        Cela permet de construire uniquement si besoin le responsable et la question pour une proposition.
+        */
         $proposition = new Proposition(
             $propositionTableau["titre"],
-            (new ResponsableRepository())->select($propositionTableau['idresponsable']),
-            (new QuestionRepository())->select($propositionTableau['idquestion']),
+            $propositionTableau['idresponsable'],
+            $propositionTableau['idquestion'],
             $propositionTableau["nbvotes"]
         );
         $proposition->setId($propositionTableau["idproposition"]);
