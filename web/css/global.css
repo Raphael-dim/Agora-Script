@@ -378,6 +378,10 @@ li#vote.phases > a {
     background: #73D393;
 }
 
+.infos {
+    width: 60%;
+}
+
 
 a#vote {
     display: inline-block;
@@ -427,6 +431,7 @@ a#vote:hover img {
     border-width: 2px;
     color: #000e17;
 }
+
 
 .bouton:hover {
     color: #d8dae0;
@@ -593,6 +598,11 @@ a#vote:hover img {
 
     .detail_question {
         display: inline-block;
+        width: 100%;
+    }
+
+    .infos{
+        width: 100%;
     }
 
     .listes {
@@ -812,9 +822,6 @@ width: auto;
 }
 
 
-.infos {
-width: 60%;
-}
 
 .calendrier {
 margin: 2%;
