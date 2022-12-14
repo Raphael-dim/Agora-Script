@@ -2,9 +2,13 @@
 
     <?php
 
+    use App\Vote\Controller\Controller;
+    use App\Vote\Lib\MessageFlash;
+
     $i = 1;
     if (sizeof($propositions) == 0) {
-        echo '<h2>Il n\'y a pas de propositions.</h2>';
+        MessageFlash::ajouter('info', "Il n'y a aucune propositions pour cette question");
+        Controller::redirect('index.php?controller=question&action=readAll');
     }
 
     $idPropositionURL = rawurlencode($propositions[0]->getId());
@@ -35,7 +39,7 @@
                     </div>  
                      </div>';
             }
-            elseif (sizeof($propositions)>=3) {
+            if(sizeof($propositions)>=3) {
                 echo '<div class="troisieme">  
                     <div class=proposition>
                         <a href= index.php?action=read&controller=proposition&idProposition=' .

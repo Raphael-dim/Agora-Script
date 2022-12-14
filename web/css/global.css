@@ -541,6 +541,9 @@ a#vote:hover img {
         width: 100%;
     }
 
+    .propositions > div{
+        display: block;
+    }
     .listes {
         min-height: 50px;
         height: auto;
@@ -841,7 +844,7 @@ div p {
 }
 
 .deuxieme{
-    margin-top: 100px;
+    margin-top: 60px;
     position : relative;
     display: flex;
     align-items: center;
