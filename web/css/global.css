@@ -298,6 +298,43 @@ li, a {
     list-style-type: none;
 }
 
+
+.deuxTrois {
+    display: flex;
+}
+.premier {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.deuxieme {
+    margin-top: 20px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+}
+.troisieme {
+    margin-top: 150px;
+    margin-left: 15px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+}
+
+.propositions {
+    margin-top: 75px;
+    width: 100%;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
 .phases {
     margin: 0;
 }
@@ -626,183 +663,202 @@ a#vote:hover img {
     .barreHaut #motclef {
         width: 80%;
     }
+
+    .deuxTrois{
+         display: block;
+    }
+
+    .deuxieme{
+        margin-top: 75px;
+        width: 100%;
+    }
+    .troisieme{
+        margin-top: 75px;
+        width: 100%;
+        margin-left: 0px;
+    }
+
+    .propositions{
+        margin-top: 75px;
+    }
+
 }
 
 
 .listes_sans_puces {
-    list-style-type: none;
+list-style-type: none;
 }
 
 .barre_utilisateur * {
-    display: inline-block;
-    vertical-align: middle;
+display: inline-block;
+vertical-align: middle;
 }
 
 .barre_utilisateur > a {
-    margin-left: 60%;
+margin-left: 60%;
 }
 
 .barre_utilisateur > a img {
-    margin: 15px;
+margin: 15px;
 }
 
 .sortie {
-    max-width: 50px;
-    filter: invert(1);
+max-width: 50px;
+filter: invert(1);
 }
 
 .sortie {
-    max-width: 50px;
-    filter: invert(1);
+max-width: 50px;
+filter: invert(1);
 }
 
 .sortie:hover {
-    max-width: 50px;
-    filter: none;
+max-width: 50px;
+filter: none;
 }
 
 
 .pileflash {
-    position: fixed;
-    top: 75px;
-    right: 2px;
-    z-index: 100;
+position: fixed;
+top: 75px;
+right: 2px;
+z-index: 100;
 }
 
 .alert {
-    padding: 15px;
-    margin-bottom: 20px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    animation: fadeinout 5.5s;
-    margin: 1px;
-    transform: translateY(-150%);
+padding: 15px;
+margin-bottom: 20px;
+border: 1px solid transparent;
+border-radius: 4px;
+animation: fadeinout 5.5s;
+margin: 1px;
+transform: translateY(-150%);
 }
 
 .alert-success {
-    color: #3c763d;
-    background-color: #dff0d8;
-    border-color: #d6e9c6;
+color: #3c763d;
+background-color: #dff0d8;
+border-color: #d6e9c6;
 }
 
 .alert-info {
-    color: #31708f;
-    background-color: #d9edf7;
-    border-color: #bce8f1;
+color: #31708f;
+background-color: #d9edf7;
+border-color: #bce8f1;
 }
 
 .alert-warning {
-    color: #8a6d3b;
-    background-color: #fcf8e3;
-    border-color: #faebcc;
+color: #8a6d3b;
+background-color: #fcf8e3;
+border-color: #faebcc;
 }
 
 .alert-danger {
-    color: #a94442;
-    background-color: #f2dede;
-    border-color: #ebccd1;
+color: #a94442;
+background-color: #f2dede;
+border-color: #ebccd1;
 }
 
 h1 {
-    text-align: center;
+text-align: center;
 }
 
 h1 > strong {
-    color: white;
-    text-shadow: 2px 1px 1px black;
-    box-shadow: 2px 1px 1px white;
-    display: inline-block;
-    padding: 8px;
-    text-transform: capitalize;
+color: white;
+text-shadow: 2px 1px 1px black;
+box-shadow: 2px 1px 1px white;
+display: inline-block;
+padding: 8px;
+text-transform: capitalize;
 }
 
 h1 > strong.color-blue {
-    background: cornflowerblue;
-    transform: rotate(-3deg);
-    -webkit-transform: rotate(-3deg);
+background: cornflowerblue;
+transform: rotate(-3deg);
+-webkit-transform: rotate(-3deg);
 }
 
 h1 > strong.color-grey {
-    background: lightgrey;
-    transform: rotate(-4deg);
-    -webkit-transform: rotate(-4deg);
+background: lightgrey;
+transform: rotate(-4deg);
+-webkit-transform: rotate(-4deg);
 }
 
 h1 > strong.color-green {
-    background: lightgreen;
-    transform: rotate(4deg);
-    -webkit-transform: rotate(4deg);
+background: lightgreen;
+transform: rotate(4deg);
+-webkit-transform: rotate(4deg);
 }
 
 h1 > strong.color-yellow {
-    background: #F67952D8;
-    transform: rotate(3deg);
-    -webkit-transform: rotate(3deg);
+background: #F67952D8;
+transform: rotate(3deg);
+-webkit-transform: rotate(3deg);
 }
 
 h1 > strong.color-orange {
-    background: #FFC55C;
-    transform: rotate(-2deg);
-    -webkit-transform: rotate(-2deg);
+background: #FFC55C;
+transform: rotate(-2deg);
+-webkit-transform: rotate(-2deg);
 }
 
 .detail_question div {
-    vertical-align: middle;
-    display: inline-block;
+vertical-align: middle;
+display: inline-block;
 }
 
 div p {
-    width: auto;
+width: auto;
 }
 
 
 .infos {
-    width: 60%;
+width: 60%;
 }
 
 .calendrier {
-    margin: 2%;
-    text-align: center;
+margin: 2%;
+text-align: center;
 }
 
 .vertical-line {
-    display: inline-block;
+display: inline-block;
 
-    width: 7px;
-    height: 100px;
-    z-index: -1;
+width: 7px;
+height: 100px;
+z-index: -1;
 }
 
 .vertical-line-petite {
-    display: inline-block;
-    display: inline-block;
-    height: 45px;
-    width: 7px;
-    z-index: -1;
+display: inline-block;
+display: inline-block;
+height: 45px;
+width: 7px;
+z-index: -1;
 }
 
 #cercle {
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    width: 30px;
-    height: 30px;
-    border-radius: 20px;
-    background: #ffffff;
+margin-left: auto;
+margin-right: auto;
+display: flex;
+width: 30px;
+height: 30px;
+border-radius: 20px;
+background: #ffffff;
 }
 
 .responsables {
-    width: 100%;
+width: 100%;
 }
 
 
 .lien {
-    padding: 10px;
-    color: #012134;
-    font-size: 18px;
-    border-radius: 5px;
-    background-color: #dff5f4;
-    /*text-decoration: none;*/
+padding: 10px;
+color: #012134;
+font-size: 18px;
+border-radius: 5px;
+background-color: #dff5f4;
+/*text-decoration: none;*/
 }
 
 .lien:hover {
@@ -815,11 +871,7 @@ div p {
     display: inline-block;
 }
 
-.propositions {
-    margin-top: 30px;
-    align-items: center;
-    justify-content: center;
-}
+
 
 .propositions .listes {
     position: relative;
@@ -848,34 +900,7 @@ div p {
     padding-right: 0px;
 }
 
-.deuxTrois {
-    display: flex;
-}
 
-.premier {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.deuxieme {
-    margin-top: 100px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50%;
-}
-
-.troisieme {
-    margin-top: 150px;
-    margin-left: 15px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50%;
-}
 
 
 .cal {
