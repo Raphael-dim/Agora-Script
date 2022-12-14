@@ -1,3 +1,15 @@
+:root {
+    background-image: url("../images/fond2.jpg");
+    background-position: center;
+
+    /*background-size: 150%;*/
+    /*background-repeat: no-repeat;*/
+    /*--background: #3f3b45;*/
+    --background2: #012e49;
+    --details: #012e49;
+    --brand: #199f8e;
+}
+
 * {
     font-family: Georgia;
 }
@@ -52,16 +64,7 @@ main > h1, h2 {
     }
 }
 
-:root {
-    background-image: url("../images/fond2.jpg");
-    background-position: center;
 
-    /*background-size: 150%;*/
-    /*background-repeat: no-repeat;*/
-    /*--background: #3f3b45;*/
-    --background2: #012e49;
-    --details: #012e49;
-}
 
 * {
     box-sizing: border-box;
@@ -70,7 +73,7 @@ main > h1, h2 {
 
 body {
     background: var(--background);
-    overflow-x: hidden;
+    overflow-x: auto;
 }
 
 main {
@@ -88,18 +91,16 @@ main {
 }
 
 main p {
-    text-align: center;
     width: auto;
-    max-width: 1000px;
-    border-radius: 10px;
-    background: rgba(223, 245, 244, 0.7);
     padding: 10px;
-    /*margin: 7px;*/
-    margin: 20px auto 20px auto;
-    border: solid rgba(255, 255, 255, 0.79) 1px;
+    margin: 10px auto 10px auto;
 }
 
-
+main>p{
+    border-radius: 10px;
+    background: rgba(223, 245, 244, 0.7);
+    border: solid rgba(255, 255, 255, 0.79) 1px;
+}
 main p a {
     color: #000000;
     /*text-decoration: none;*/
@@ -189,6 +190,10 @@ span {
 
 .listes .titre {
     font-size: 20px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 95%;
+    margin: 0;
 }
 
 .questions .listes > * {
@@ -220,12 +225,11 @@ span {
     animation-name: slideinbottom;
 }
 
-#description {
+.description {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
-    display: -webkit-box;
-    width: 95%;
-    max-width: 95%;
+    display:inline-block;
+    width: calc(95%);
     height: 65px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -528,8 +532,15 @@ a#vote:hover img {
     border-left: 0;
 }
 
+@media screen and (max-width: 1300px) {
+
+    .pageDétail {
+        width: 100%;
+    }
+}
 
 @media screen and (max-width: 1200px) {
+
     .bouton {
         font-size: 17px;
         margin: 1px;
@@ -538,7 +549,17 @@ a#vote:hover img {
 
 @media screen and (max-width: 1000px) {
     main {
-        width: 100%;
+        width: 100vw;
+    }
+
+    #participants * {
+
+        display: block;
+        float: none;
+    }
+
+    .detail_question {
+        display: inline-block;
     }
 
     .listes {
@@ -572,10 +593,13 @@ a#vote:hover img {
         padding-left: 10%;
     }
 
-    .selection * {
+    .selection >ul>li {
         margin: auto;
-        max-width: 300px;
-        alignment: center;
+        width: 180px;
+        display:inline-block;
+    }
+    .selection >ul{
+        text-align: center
     }
 
     .selection {
@@ -587,10 +611,11 @@ a#vote:hover img {
     }
 
     .bouton {
-        width: 100px;
+        width: 50%;
         background-color: rgba(255, 255, 255, 0.56);
-        margin: 20px 57% 20px 43%;
-        display: inline-block;
+        margin: auto;
+        display: block;
+        text-align: center;
     }
 
     .barreHaut {
@@ -740,43 +765,89 @@ div p {
 
 
 .infos {
-    width: 60%;
+    width: 100%;
+}
+.infos .info{
+    margin:auto;
+    display:block;
+}
+.infos .question{
+    background:#dff5f4;
+    width:90%;
+}
+
+.infos h1{
+    color:black
+}
+.infos .calendrier{
+    width:50% !important;
 }
 
 .calendrier {
-    margin-left: 10%;
+    margin: 2%;
     text-align: center;
 }
 
-.vertical-line {
-    display: inline-block;
 
+.cal {
+    color: white;
+    background: none;
+    padding: 0;
+    border: none;
+    margin: 0;
+    top: 0px;
+    left:20px;
+    position:relative;
+}
+
+.cal::after {
+    content: "";
+    display: block;
+    width: 15px;
+    height: 15px;
+    border-radius: 20px;
+    background: #ffffff;
+    z-index: 1;
+    position:absolute;
+    top:10px;
+    left:-23px;
+}
+#participants{
+    display:inline-block;
+    width:100% !important;
+}
+#responsables {
+    width: 45%;
+}
+ #votants{
+     width:45%;
+     float:right;
+}
+
+.vertical-line {
+    display: block;
     width: 7px;
     height: 100px;
     z-index: -1;
 }
 
 .vertical-line-petite {
-    display: inline-block;
-    display: inline-block;
+    display: block;
     height: 45px;
     width: 7px;
     z-index: -1;
 }
 
 #cercle {
-    margin-left: auto;
-    margin-right: auto;
     display: flex;
+    position:relative;
     width: 30px;
     height: 30px;
     border-radius: 20px;
     background: #ffffff;
+    left:-11px;
 }
 
-.responsables {
-    width: 100%;
-}
 
 
 .lien {
@@ -798,11 +869,12 @@ div p {
     display: inline-block;
 }
 
-.propositions{
-    width: 80%;
-    margin: auto;
-    padding: 0;
+.propositions {
+    margin-top: 30px;
+    align-items: center;
+    justify-content: center;
 }
+
 .propositions .listes {
     position: relative;
     border-radius: 7px;
@@ -811,73 +883,54 @@ div p {
     border-style: solid;
     background-color: #dff5f4;
     vertical-align: middle;
-    display: inline-block;
+    display: flex;
     height: 250px;
     width: 100%;
     margin: 20px;
 }
 
-.premier{
-    display: inline-block;
-    width: 100%;
+.proposition > img {
+    position: absolute;
+    margin-left: 35px;
+    max-width: 70px;
 }
 
-.premier p{
-    display: inline-block;
-}
-.divDePremier{
+.divDePremier {
     width: 50%;
     position: relative;
-    display: block;
+    display: flex;
     padding-right: 0px;
 }
 
-.deuxTrois{
+.deuxTrois {
     display: flex;
 }
 
-.deuxieme{
-    position : relative;
-    display: block;
-    width: 50%;
-}
-.troisieme{
-    margin-top: 50px;
-    margin-left: 15px;
-    position : relative;
-    display: block;
-    width: 50%;
+.premier {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.cal {
-    color: white;
+.deuxieme {
+    margin-top: 100px;
     position: relative;
-    left: 150px;
-    background: none;
-    padding: 0;
-    border: none;
-    margin: 0;
-    top: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
 }
 
-.cal::after {
-    content: "";
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    width: 15px;
-    height: 15px;
-    border-radius: 20px;
-    background: #ffffff;
-    position: absolute;
-    left: -35px;
-    top: 10px;
-    z-index: 1;
+.troisieme {
+    margin-top: 150px;
+    margin-left: 15px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
 }
 
-#participants > * {
-    width: 45%;
-}
 
 #participants > * > p {
     background: #dff5f4;
@@ -887,14 +940,8 @@ div p {
     margin: 0;
 }
 
-#participants {
-    display: inline-block;
-    width: 100%;
-}
 
-#participants > #votants {
-    float: right;
-}
+
 
 input, textarea, select {
     /*height: 25px;*/
@@ -942,6 +989,35 @@ input:valid + span:after {
     background-color: rgba(255, 255, 255, 0.15);
     text-align: center;
     display: inline-block;
+    align-items: center;
+    justify-content: center;
 }
 
 
+.link-custom{
+    position:relative;
+}
+
+.link-custom::after{
+    content:"";
+    width:0%;
+    height:2px;
+    background:var(--brand);
+    position:absolute;
+    left:0;
+    top:110%;
+    transition: all 0.4s;
+}
+
+.link-custom:hover::after{
+    width:85%;
+}
+
+.shadow-effect{
+    transition: all 0.5s;
+}
+
+.shadow-effect:hover{
+    transform: scale(101%);
+    box-shadow:-3px 3px 0 0 var(--brand)
+}

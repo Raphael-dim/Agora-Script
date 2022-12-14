@@ -9,21 +9,41 @@ class Proposition extends AbstractDataObject
 {
     private int $id;
     private string $titre;
-    private Responsable $responsable;
-    private Question $question;
+    private string $idResponsable;
+    private string $idQuestion;
     private int $nbVotes;
-
-    public function __construct(string $titre, Responsable $responsable, Question $question, int $nbVotes)
+    public function __construct(string $titre, string $idResponsable, string $idQuestion, int $nbVotes)
     {
+        /*
+        On ne construit pas l'objet proposition avec un objet Responsable et un objet Question pour éviter de
+        faire un aller-retour inutile à la base de donnée.
+        Cela permet de construire uniquement si besoin le responsable et la question pour une proposition.
+        */
         $this->titre = $titre;
-        $this->responsable = $responsable;
-        $this->question = $question;
+        $this->idResponsable = $idResponsable;
+        $this->idQuestion = $idQuestion;
         $this->nbVotes = $nbVotes;
     }
 
     public function getTitre(): string
     {
         return $this->titre;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdQuestion(): string
+    {
+        return $this->idQuestion;
+    }
+
+    /**
+     * @param string $idQuestion
+     */
+    public function setIdQuestion(string $idQuestion): void
+    {
+        $this->idQuestion = $idQuestion;
     }
 
     /**
@@ -60,11 +80,11 @@ class Proposition extends AbstractDataObject
     }
 
     /**
-     * @param Responsable $responsable
+     * @param String $responsable
      */
-    public function setResponsable(Responsable $responsable): void
+    public function setResponsable(String $responsable): void
     {
-        $this->responsable = $responsable;
+        $this->idResponsable = $responsable;
     }
 
     public function getId(): int
@@ -72,29 +92,13 @@ class Proposition extends AbstractDataObject
         return $this->id;
     }
 
-    /**
-     * @param Question $question
-     */
-    public function setQuestion(Question $question): void
+    public function getIdResponsable(): string
     {
-        $this->question = $question;
-    }
-
-    public function getResponsable(): Responsable
-    {
-        return $this->responsable;
+        return $this->idResponsable;
     }
 
     public function  getCoAuteurs(): array{
         return (new CoAuteurRepository())->selectWhere($this->id,'*','idproposition',"Coauteurs");
-    }
-
-    /**
-     * @return Question
-     */
-    public function getQuestion(): Question
-    {
-        return $this->question;
     }
 
     public function getContenus()
@@ -106,7 +110,7 @@ class Proposition extends AbstractDataObject
     {
         $tab = array(
             "idquestionTag" => $this->question->getId(),
-            "idresponsableTag" => $this->responsable->getIdentifiant(),
+            "idresponsableTag" => $this->idResponsable,
             "titreTag" => $this->titre,
             "nbvotesTag" => $this->nbVotes,
         );

@@ -159,6 +159,12 @@ class ControllerQuestion
      */
     public static function created(): void
     {
+        /* Avant l'enregistrement de chacun des éléments, on rajoute une vérification supplémentaire pour respecter les contraintes
+        présentes dans la base de donnée.
+        Théoriquement, un utilisateur lambda qui arrive à cette étape n'a pas pu déroger à ces contraintes.
+        */
+
+
         //On vérifie si l'utilisateur est connecté
         if (!ConnexionUtilisateur::estConnecte()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas créer une question si vous n'êtes pas connecté.");
@@ -166,18 +172,28 @@ class ControllerQuestion
         }
         FormConfig::setArr('SessionQuestion');
         $calendrier = new Calendrier($_SESSION[FormConfig::$arr]['debutEcriture'], $_SESSION[FormConfig::$arr]['finEcriture'], $_SESSION[FormConfig::$arr]['debutVote'], $_SESSION[FormConfig::$arr]['finVote']);
-        $calendierBD = (new CalendrierRepository())->sauvegarder($calendrier);
-        if ($calendierBD != null) {
-            $calendrier->setId($calendierBD);
+        if ($calendrier->getDebutEcriture() >= $calendrier->getFinEcriture() || $calendrier->getDebutVote() >= $calendrier->getFinVote()
+            || $calendrier->getDebutVote() <= $calendrier->getDebutEcriture() || $calendrier->getDebutVote() < $calendrier->getFinEcriture()) {
+            MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
+            Controller::redirect("index.php?action=form&controller=question&step=2");
+        }
+        $calendrierBD = (new CalendrierRepository())->sauvegarder($calendrier);
+        if ($calendrierBD != null) {
+            $calendrier->setId($calendrierBD);
         } else {
             Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
 
-
         //var_dump($sections);
-        $organisateur = (new UtilisateurRepository)->select($_SESSION['user']['id']);
+        $organisateur = (new UtilisateurRepository)->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
 
         $creation = date("Y/m/d H:i:s");
+
+        if (strlen($_SESSION[FormConfig::$arr]['Titre']) > 80 || strlen($_SESSION[FormConfig::$arr]['Description']) > 360) {
+            (new CalendrierRepository())->delete($calendrier->getId());
+            MessageFlash::ajouter("danger", "Les contraintes de taille maximales des champs de textes n'ont pas été respectées.");
+            Controller::redirect("index.php?action=readAll&controller=question");
+        }
 
         $question = new Question($_SESSION[FormConfig::$arr]['Titre'], $_SESSION[FormConfig::$arr]['Description'], $creation, $calendrier, $organisateur);
         $questionBD = (new QuestionRepository())->sauvegarder($question);
@@ -207,6 +223,10 @@ class ControllerQuestion
         $sections = $_SESSION[FormConfig::$arr]['Sections'];
         foreach ($sections as $value) {
             $section = new Section($value['titre'], $value['description'], $question);
+            if (strlen($value['titre']) > 80 || strlen($value['description']) > 360) {
+                MessageFlash::ajouter("warning", "Les contraintes de taille maximales des champs de textes n'ont pas été respectées.");
+                Controller::redirect("index.php?action=form&controller=question&step=3");
+            }
             $sectionBD = (new SectionRepository())->sauvegarder($section);
             if ($sectionBD != null) {
                 $section->setId($sectionBD);
