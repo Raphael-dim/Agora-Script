@@ -1,4 +1,4 @@
-<ul class="propositions">
+<ul class="propositionsResultat">
 
     <?php
 
@@ -53,7 +53,7 @@
             }
             echo '</div></div>';
 
-    echo '<div class="propositions">';
+    echo '<div class="propositionsResultat">';
     for ($i=3;$i<count($propositions);$i++) {
         $idPropositionURL = rawurlencode($propositions[$i]->getId());
         $titreHTML = htmlspecialchars($propositions[$i]->getTitre());
@@ -64,7 +64,6 @@
         echo '<h3>Nombre de votes : ' . $propositions[$i]->getNbVotes() . '</h3>';
         echo '<a href="" id = "auteur">par ' . $propositions[$i]->getIdResponsable() . ' </a >';
         echo '</div>';
-        $i++;
     }
     echo '</div>';
     ?>
