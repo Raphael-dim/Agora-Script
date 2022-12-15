@@ -59,20 +59,19 @@ if (isset($_GET['selection'])) {
 
 
         if ($question->getPhase() == 'debut') {
-            echo '<li class="listes status_cree">';
+            echo '<li class="listes status_cree shadow-effect">';
         } else if ($question->getPhase() == 'ecriture') {
-            echo '<li class="listes status_ecriture">';
+            echo '<li class="listes status_ecriture shadow-effect">';
         } else if ($question->getPhase() == 'vote') {
-            echo '<li class="listes status_vote">';
+            echo '<li class="listes status_vote shadow-effect">';
         } else if ($question->getPhase() == 'fini') {
-            echo '<li class="listes status_termine">';
+            echo '<li class="listes status_termine shadow-effect">';
         } else {
-            echo '<li class="listes status_attente">';
+            echo '<li class="listes status_attente shadow-effect">';
         }
 
-        echo ' <a class=titre href="index.php?action=read&controller=question&idQuestion=' .
-            $idQuestionURL . '"> ' . $titreHTML . ' </a>
-            <a href="" class = "auteur">par ' . $organisateur . ' </a >';
+        echo ' <p class=titre> ' . $titreHTML . ' </p>
+            <a href="" class = "auteur link-custom">par ' . $organisateur . ' </a >';
         echo '<p class="description">' . $question->getDescription() . '</p>';
         if ($question->getPhase() == 'debut') {
             if (ConnexionUtilisateur::estConnecte() &&
@@ -102,6 +101,8 @@ if (isset($_GET['selection'])) {
         if ($question->getPhase() == 'fini') {
             echo '<a href="index.php?controller=question&action=result&idQuestion=' . $idQuestionURL . '">Page de résultat</a>';
         }
+        echo '<a class = "link-custom" style = "position:absolute; bottom:10px; right:5px;" href="index.php?action=read&controller=question&idQuestion=' .
+            $idQuestionURL . '">lire plus</a>';
         echo ' </li > ';
     }
     ?>

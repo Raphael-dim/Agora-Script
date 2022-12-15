@@ -45,18 +45,18 @@
             }
         }
 
-        //if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition) ||
-        //    $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
-        //echo ' < a href = index . php ? action = update & controller = proposition & idProposition = ' .
-        //    $proposition->getId() . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a > ';
 
-        //}
-        //if ($proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
-        //    echo '<a id = "vote" href = index.php?action=create&controller=coauteur&idProposition=' .
-        //        $idPropositionURL . ' > Désigner des co - auteurs </a > ';
         echo '<br > ';
         echo '<h3>Nombre de votes : ' . $proposition->getNbVotes() . '</h3>';
-        if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable()) {
+        if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
+            $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte() &&
+            $question->getPhase() == 'ecriture') {
+
+            echo ' <a href="index.php?action=update&controller=proposition&idProposition=' .
+                $proposition->getId() . '"><img class="modifier" src = "..\web\images\modifier.png" ></a ><br> ';
+        }
+        if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable() && $question->getPhase() == 'ecriture') {
+
             echo ' <a class="nav suppProp" 
             href=index.php?controller=proposition&action=delete&idProposition=' . $proposition->getId() . '>Supprimer</a>';
         }

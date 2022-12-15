@@ -7,7 +7,7 @@ use App\Vote\Model\DataObject\Question;
 
 if (isset($_POST['next'])) {
     FormConfig::postSession();
-    if(CoAuteur::estCoAuteur($_SESSION['user']['id'],$proposition)){
+    if(CoAuteur::estCoAuteur($_SESSION['user']['id'],$_GET['idProposition'])){
         FormConfig::redirect('index.php?controller=proposition&action=updated&idProposition=' . $_GET['idProposition']);
     }else{
         FormConfig::redirect("index.php?controller=proposition&action=update&step=2&idProposition=" . $_GET['idProposition']);
