@@ -1,6 +1,9 @@
 <?php
-
+echo '<div class = "custom-form">';
 use App\Vote\Config\FormConfig as FormConfig;
+use App\Vote\Controller\Controller;
+use App\Vote\Lib\MessageFlash;
+
 $_SESSION[FormConfig::$arr]['type'] = 'responsables';
 
 if (array_key_exists('user', $_POST)) {
@@ -24,6 +27,9 @@ function adduser(string $id): void
     if (!in_array($id, $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']])) {
         $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']][] = $id;
     }
+    else{
+        MessageFlash::ajouter('warning', "Cet utilisateur est déja selectionné en tant que responsable");
+    }
 }
 
 function removeuser(string $id): void
@@ -41,3 +47,4 @@ require_once "../src/View/Utilisateurs/select.php";
     <input type="submit" name=previous value="Retour" id="precedent" formnovalidate>
     <input type="submit" name=next value="Suivant" id="suivant" >
 </form>
+</div>

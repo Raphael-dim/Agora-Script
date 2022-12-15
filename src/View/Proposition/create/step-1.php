@@ -57,7 +57,7 @@ if (isset($_POST['titre'])) {
 
 <h3><i>* Veuillez remplir le formulaire ci-dessous, un titre pour votre proposition ainsi qu'un contenu pour chaque
         section.</i></h3>
-<form method="post">
+<form method="post" class ="custom-form">
 
     <p>
         <label>Titre de votre proposition
@@ -83,7 +83,7 @@ if (isset($_POST['titre'])) {
     </p> ';
     }
     ?>
-    <input type="submit" name="next" value="Suivant" CLASS="nav">
+    <input type="submit" name="next" value="Suivant" class="nav" id="suivant">
 </form>
 
 

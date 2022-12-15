@@ -109,11 +109,67 @@ main p a {
 .attention {
     max-width: 45px;
 }
-
+form{
+    margin-bottom:10px;
+}
 #utilisateurs {
-    background: #012e49;
+    background: none;
+    border:none;
 }
 
+#utilisateurs>button {
+    border: solid 1px;
+}
+
+#utilisateurs>button:after{
+    content: "";
+    background-image: url("../images/delete.png");
+    background-size: 10px 10px;
+    display: inline-block;
+    width:10px;
+    height:10px;
+    margin-left:3px;
+    display:none;
+}
+
+#utilisateurs>button:hover {
+    border:red solid 1px;
+}
+#utilisateurs>button:hover::after {
+    display:inline-block;
+}
+.form_select{
+    margin:0;
+    width:100%;
+    text-align: center;
+}
+.form_select>button{
+    padding:10px;
+    border: solid 1px transparent;
+    width:50%;
+    margin:auto;
+    position:relative
+}
+
+.form_select>button:hover {
+    border:green solid 1px;
+}
+.form_select>button:hover::after {
+    display:inline-block;
+}
+
+.form_select>button:after{
+    position:absolute;
+    right:5px;
+    content: "";
+    background-image: url("../images/add.png");
+    background-size: 20px 20px;
+    display: inline-block;
+    width:20px;
+    height:20px;
+    margin-left:3px;
+    display:none;
+}
 
 h1, h2, h3 {
     color: #dcdcdc;
@@ -131,7 +187,10 @@ form p label:first-child {
 }
 
 form legend {
-    color: white;
+    color: black;
+}
+fieldset{
+    border:none;
 }
 
 .message * {
@@ -152,8 +211,9 @@ span {
 .search {
     height: 27px;
     width: 27px;
-    background: lightgrey;
+    background: white;
     padding: 2px;
+    position:absolute;
 }
 
 .search:hover {
@@ -163,7 +223,6 @@ span {
 .questions {
     width: 50%;
     margin: auto;
-    padding: 0;
 }
 
 .questions .listes {
@@ -436,6 +495,26 @@ a#vote:hover img {
     height: auto;
     background: white;
 }
+#form_search>p{
+    width:100%;
+    height:fit-content;
+    background:white;
+    padding:2px;
+}
+#form_search>p>#keyword_input{
+    position: relative;
+    float: left;
+    width: 100%;
+    border: 0;
+    padding: 5px 10px 5px 7px;
+    font-size: 1.3rem;
+    line-height: 1;
+}
+#form_search>p>.search{
+    height:auto;
+    position:absolute;
+}
+
 
 #suivant {
     margin: 10px 100px 10px 50px;
@@ -467,15 +546,6 @@ a#vote:hover img {
     border-color: #dff5f4;
 }
 
-#form_search > #keyword_input {
-    position: relative;
-    float: left;
-    width: 100%;
-    border: 0;
-    padding: 20px 45px 20px 28px;
-    font-size: 1.3rem;
-    line-height: 1;
-}
 
 #form_search > .search {
     float: right;
@@ -585,8 +655,7 @@ a#vote:hover img {
 
     #form_search .search {
         transform: translateY(0%);
-        height: 40px;
-        width: 40px;
+        height: 100%;
     }
 
     .barreHaut:first-child {
@@ -628,11 +697,25 @@ a#vote:hover img {
     .barreHaut > form {
         padding: 20px;
         margin: auto;
-        width: 80%;
+        width: 60%;
+        justify-content: center;
+    }
+    .barreHaut > form >p{
+        width:auto;
+        background:white;
+        padding:2px;
     }
 
     .barreHaut #motclef {
-        width: 80%;
+        width: 90%;
+        max-width:calc(100% - 27px);
+    }
+    .barreHaut  p{
+        position:relative;
+    }
+    .barreHaut .search{
+        position:absolute;
+        right:0;
     }
 }
 
@@ -685,6 +768,7 @@ a#vote:hover img {
     animation: fadeinout 5.5s;
     margin: 1px;
     transform: translateY(-150%);
+    z-index:0;
 }
 
 .alert-success {
@@ -816,6 +900,16 @@ div p {
     display:inline-block;
     width:100% !important;
 }
+#participants>*>p:nth-child(even) {
+    background: #d3fffc;
+}
+#participants>*>p:nth-child(odd) {
+    background: #b8fff9;
+}
+#participants>*{
+    background: #dff5f4;
+    text-align: center;
+}
 #responsables {
     width: 45%;
 }
@@ -933,7 +1027,6 @@ div p {
 
 
 #participants > * > p {
-    background: #dff5f4;
     border: none;
     border-radius: 0;
     padding: 2px;
@@ -1020,4 +1113,12 @@ input:valid + span:after {
 .shadow-effect:hover{
     transform: scale(101%);
     box-shadow:-3px 3px 0 0 var(--brand)
+}
+
+.custom-form{
+    width:80%;
+    background: #bce8f1;
+    position: relative;
+    margin:auto;
+    padding-bottom: 50px;
 }

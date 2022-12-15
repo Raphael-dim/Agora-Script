@@ -20,7 +20,7 @@ $nbSection = $_SESSION[FormConfig::$arr]['nbSections'];
 <h1>Organisation des sections</h1>
 
 
-<form method=post>
+<form method=post class = "custom-form">
 
 
     <?php
