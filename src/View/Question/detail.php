@@ -1,17 +1,18 @@
-<div class="detail_question custom-form">
+<div class="detail_question ">
     <div class="infos">
 
         <div class = "question info">
-            <h1>Titre</h1>
+            <h4>Titre :</h4>
             <p> <?= htmlspecialchars($question->getTitre()) ?></p>
-            <h1>Description</h1>
+            <h4>Description :</h4>
             <p> <?= htmlspecialchars($question->getDescription()) ?></p>
 
         </div>
 
         <div id = "participants" class="info">
+            <h1><strong  class ='color-yellow'>Participants</strong></h1>
             <div id = "responsables">
-                <h1><strong  class ='color-yellow'>Responsables</strong></h1>
+                <h4><strong  class ='color-yellow'>Responsables</strong></h4>
                 <?php
                 if (is_array($responsables)) {
                     foreach ($responsables as $responsable) {
@@ -24,7 +25,7 @@
             </div>
 
             <div id="votants">
-                <h1><strong class='color-yellow'>Votants</strong></h1>
+                <h4><strong class='color-yellow'>Votants</strong></h4>
                 <?php
                 if (is_array($votants)) {
                     foreach ($votants as $votant) {
@@ -44,20 +45,27 @@
         <?php
         $i = 1;
         foreach ($sections as $Section) {
+            echo '<div class = "section">';
             echo '<h3 style = "color:black"> Section n° ' . $i . '</h3>';
             echo '<p> Titre : ' . htmlspecialchars($Section->getTitre()) . '</p>';
             echo '<p> Description : ' . htmlspecialchars($Section->getDescription()) . '</p>';
             echo '&nbsp;';
+            echo '</div>';
             $i++;
         }
         ?>
-        <h4 style = "color:black">Date de création :</h4>
-        <p>
-            <?= htmlspecialchars($question->getcreation()); ?>
-        </p>
+
+
 
         </div>
-    <div class="calendrier  info">
+        <div class = "date_creation info">
+            <h4 style = "color:black">Date de création :</h4>
+            <p>
+                <?= htmlspecialchars($question->getcreation()); ?>
+            </p>
+        </div>
+        <div class="info">
+    <div class="calendrier">
         <h1><strong  class ='color-green'>Calendrier</strong></h1>
 
 
@@ -117,7 +125,7 @@
             echo $cercle;
         }
         ?>
-    </div>
+    </div></div>
 </div>
 
 
