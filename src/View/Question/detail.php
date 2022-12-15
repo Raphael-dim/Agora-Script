@@ -1,11 +1,11 @@
-<div class="detail_question">
+<div class="detail_question custom-form">
     <div class="infos">
 
         <div class = "question info">
-        <h1>Titre</h1>
-        <p> <?= htmlspecialchars($question->getTitre()) ?></p>
-        <h1>Description</h1>
-        <p> <?= htmlspecialchars($question->getDescription()) ?></p>
+            <h1>Titre</h1>
+            <p> <?= htmlspecialchars($question->getTitre()) ?></p>
+            <h1>Description</h1>
+            <p> <?= htmlspecialchars($question->getDescription()) ?></p>
 
         </div>
 
@@ -44,14 +44,14 @@
         <?php
         $i = 1;
         foreach ($sections as $Section) {
-            echo '<h3> Section n° ' . $i . '</h3>';
+            echo '<h3 style = "color:black"> Section n° ' . $i . '</h3>';
             echo '<p> Titre : ' . htmlspecialchars($Section->getTitre()) . '</p>';
             echo '<p> Description : ' . htmlspecialchars($Section->getDescription()) . '</p>';
             echo '&nbsp;';
             $i++;
         }
         ?>
-        <h2>Date de création :</h2>
+        <h4 style = "color:black">Date de création :</h4>
         <p>
             <?= htmlspecialchars($question->getcreation()); ?>
         </p>
@@ -113,7 +113,7 @@
             <?= htmlspecialchars($question->getCalendrier()->getFinVote()) ?></p>
         <?php
         echo '<span class="vertical-line-petite" style="background:grey "></span>';
-        if ($question->getPhase() == 'vote') {
+        if ($question->getPhase() == 'fini') {
             echo $cercle;
         }
         ?>

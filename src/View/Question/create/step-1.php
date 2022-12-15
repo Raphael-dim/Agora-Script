@@ -35,7 +35,7 @@ if (isset($_POST['Titre'])) {
 ?>
 
 
-<form method="post">
+<form method="post" class = "custom-form">
 
     <p>
         <label for="titre_id">Titre</label> :

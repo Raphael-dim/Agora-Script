@@ -7,7 +7,7 @@ nav {
     transition: ease-in-out 0.5s;
     background-color: var(--details);
     height: 70px;
-    z-index: 100;
+    z-index: 1000;
     position: fixed;
 }
 

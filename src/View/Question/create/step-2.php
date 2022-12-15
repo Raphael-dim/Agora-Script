@@ -42,7 +42,7 @@ if (isset($_POST['next'])) {
 ?>
 <h1>Selection du calendrier</h1>
 
-<form method="post">
+<form method="post" class = "custom-form">
     <p>
         <label for="debutEcriture">Date de début d'écriture des propositions :</label>
         <input type="datetime-local" id="debutEcriture" name="debutEcriture"

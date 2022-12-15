@@ -15,13 +15,13 @@ if (isset($_POST["keyword"])) {
 
 ?>
 
-<form method=post>
+<form method=post >
     <?php
     foreach ($_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']] as $responsable) {
         echo '
                 <span id="utilisateurs" class="listes">
                 <button type = submit value = "' . $responsable . '" name = "delete">' . $responsable . '</button>
-                <img class="delete" src="../../web/images/delete.png" alt="supprimer">
+                
                 </span>
             ';
 
@@ -42,8 +42,8 @@ foreach ($utilisateurs as $utilisateur) {
     }
     echo '
 
-                    <form method= post>
-                        <p><button type = submit value = "' . $identifiant . '" name = "user">' . $nom . ' ' . $prenom . '</button></p>
+                    <form class = "form_select" method= post>
+                        <button type = submit value = "' . $identifiant . '" name = "user">' . $nom . ' ' . $prenom . '</button>
                         <input type ="hidden" name = "row" value = "nom" >
 
                         <input type = "hidden" name = "keyword" value ="' . $keyword . '"> 

@@ -1,5 +1,5 @@
 <?php
-
+echo '<div class = "custom-form">';
 use App\Vote\Config\FormConfig as FormConfig;
 
 
@@ -43,3 +43,4 @@ require_once "../src/View/Utilisateurs/select.php";
     <input type="submit" name=previous value="Retour" id="precedent" formnovalidate>
     <input type="submit" name=next value="Suivant" id="suivant" >
 </form>
+</div>
