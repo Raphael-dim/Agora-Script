@@ -91,18 +91,18 @@ if (isset($_GET['selection'])) {
             echo '<p>Fin de la phase de vote dans : ' . Calendrier::diff($interval) . '</p>';
         }
         if ($question->getPhase() != 'debut' && $question->getPhase() != 'fini') {
-            echo '<a href ="index.php?action=readAll&controller=proposition&idQuestion=' . $idQuestionURL . '">Liste des propositions</a>';
+            echo '<a class = "link-custom" style = "position:absolute" href ="index.php?action=readAll&controller=proposition&idQuestion=' . $idQuestionURL . '">Liste des propositions</a>';
         }
         if ($question->getPhase() == 'ecriture' && ConnexionUtilisateur::estConnecte() &&
             Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())
             && !Responsable::aCreeProposition($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
-            echo '<a href ="index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '">Créer une proposition</a>';
+            echo '<a class = "link-custom" style = "position:absolute; margin-top:25px" href ="index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '">Créer une proposition</a>';
         }
         if ($question->getPhase() == 'fini') {
-            echo '<a href="index.php?controller=question&action=result&idQuestion=' . $idQuestionURL . '">Page de résultat</a>';
+            echo '<a class = "link-custom" style = "position:absolute"  href="index.php?controller=question&action=result&idQuestion=' . $idQuestionURL . '">Page de résultat</a>';
         }
         echo '<a class = "link-custom" style = "position:absolute; bottom:10px; right:5px;" href="index.php?action=read&controller=question&idQuestion=' .
-            $idQuestionURL . '">lire plus</a>';
+            $idQuestionURL . '">Lire plus</a>';
         echo ' </li > ';
     }
     ?>
