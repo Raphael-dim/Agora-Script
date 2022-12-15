@@ -10,13 +10,13 @@ use App\Vote\Model\DataObject\Question;
 
 <h1>Détails de la proposition</h1>
 
-<h2>Titre question : <?= $question->getTitre() ?></h2>
-<h2>Description question : <?= $question->getDescription() ?></h2>
+<h2>Titre question : <?= htmlspecialchars($question->getTitre()) ?></h2>
+<h2>Description question : <?= htmlspecialchars($question->getDescription()) ?></h2>
 
 <?php
 
 $i = 1;
-echo '<h1>Titre de la proposition : ' . $proposition->getTitre() . '</h1>';
+echo '<h1>Titre de la proposition : ' . htmlspecialchars($proposition->getTitre()) . '</h1>';
     echo'<div id = "participants" class="detail_question">';
     echo'<div>';
         echo'<h1><strong  class ="color-yellow">Auteur</strong></h1>';
@@ -50,12 +50,12 @@ foreach ($sections as $section) {
     echo '<p>Description : ' . $section->getDescription() . ' </p > ';*/
     echo'<div>';
     echo '<h2>Section n°' . $i . '</h2>';
-    echo '<p>Titre : ' . $section->getTitre() . ' </p > ';
-    echo '<p>Description : ' . $section->getDescription() . ' </p > ';
+    echo '<p>Titre : ' . htmlspecialchars($section->getTitre()) . ' </p > ';
+    echo '<p>Description : ' . htmlspecialchars($section->getDescription()) . ' </p > ';
     echo '
     <p>
         <span> Contenu</span > :
-        ' . $contenu[$i-1]->getContenu() . '
+        ' . htmlspecialchars($contenu[$i-1]->getContenu()) . '
     </p> </div>';
 
     $i = $i + 1;

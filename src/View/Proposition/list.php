@@ -47,21 +47,21 @@
 
 
         echo '<br > ';
-        echo '<h3>Nombre de votes : ' . $proposition->getNbVotes() . '</h3>';
+        echo '<h3>Nombre de votes : ' . htmlspecialchars($proposition->getNbVotes()) . '</h3>';
         if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
             $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte() &&
             $question->getPhase() == 'ecriture') {
 
             echo ' <a href="index.php?action=update&controller=proposition&idProposition=' .
-                $proposition->getId() . '"><img class="modifier" src = "..\web\images\modifier.png" ></a ><br> ';
+               rawurlencode($proposition->getId()) . '"><img class="modifier" src = "..\web\images\modifier.png" ></a ><br> ';
         }
         if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable() && $question->getPhase() == 'ecriture') {
 
             echo ' <a class="nav suppProp" 
-            href=index.php?controller=proposition&action=delete&idProposition=' . $proposition->getId() . '>Supprimer</a>';
+            href=index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '>Supprimer</a>';
         }
         $i++;
-        echo '<a href="" id = "auteur">par ' . $proposition->getIdResponsable() . ' </a >';
+        echo '<a href="" id = "auteur">par ' .htmlspecialchars($proposition->getIdResponsable()) . ' </a >';
         echo '</div>';
     }
     ?>

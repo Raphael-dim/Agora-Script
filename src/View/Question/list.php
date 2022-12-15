@@ -72,7 +72,7 @@ if (isset($_GET['selection'])) {
 
         echo ' <p class=titre> ' . $titreHTML . ' </p>
             <a href="" class = "auteur link-custom">par ' . $organisateur . ' </a >';
-        echo '<p class="description">' . $question->getDescription() . '</p>';
+        echo '<p class="description">' . htmlspecialchars($question->getDescription()) . '</p>';
         if ($question->getPhase() == 'debut') {
             if (ConnexionUtilisateur::estConnecte() &&
                 ConnexionUtilisateur::getLoginUtilisateurConnecte() == $organisateur) {
