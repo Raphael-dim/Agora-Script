@@ -96,13 +96,13 @@ if (isset($_GET['selection'])) {
         if ($question->getPhase() == 'ecriture' && ConnexionUtilisateur::estConnecte() &&
             Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())
             && !Responsable::aCreeProposition($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
-            echo '<a href ="index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '">Créer une proposition</a>';
+            echo '<a class = "link-custom" style = "position:absolute; margin-top:25px" href ="index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '">Créer une proposition</a>';
         }
         if ($question->getPhase() == 'fini') {
             echo '<a class = "link-custom" style = "position:absolute"  href="index.php?controller=question&action=result&idQuestion=' . $idQuestionURL . '">Page de résultat</a>';
         }
         echo '<a class = "link-custom" style = "position:absolute; bottom:10px; right:5px;" href="index.php?action=read&controller=question&idQuestion=' .
-            $idQuestionURL . '">lire plus</a>';
+            $idQuestionURL . '">Lire plus</a>';
         echo ' </li > ';
     }
     ?>
