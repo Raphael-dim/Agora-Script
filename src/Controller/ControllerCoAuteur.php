@@ -16,6 +16,7 @@ use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\ResponsableRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
 
+//OBSOLETE
 class   ControllerCoAuteur
 {
 

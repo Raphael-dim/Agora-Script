@@ -9,7 +9,7 @@ if ((isset($_POST["keyword"]) && isset($_POST["row"]))) {
 }
 ?>
 
-<form method="post" >
+<form method="post">
     <fieldset>
         <legend>Selectionner des <?php echo $_SESSION[FormConfig::$arr]['type'] ?> :</legend>
         <p>

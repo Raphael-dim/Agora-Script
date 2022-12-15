@@ -1,6 +1,8 @@
 <?php
 
 use App\Vote\Config\FormConfig as FormConfig;
+use App\Vote\Controller\Controller;
+use App\Vote\Lib\MessageFlash;
 
 if (!isset($_SESSION[FormConfig::$arr]['step'][1])) {
     FormConfig::redirect("index.php?controller=question&action=create");
@@ -15,11 +17,16 @@ if (isset($_POST['next'])) {
     $debutVote = $_POST['debutVote'];
     $finVote = $_POST['finVote'];
     if ($debutEcriture >= $finEcriture) {
-        $message = "La date de fin d'écriture doit être supérieure à la date de début d'écriture";
+        MessageFlash::ajouter("warning", "La date de fin d'écriture doit être supérieure à la date de début d'écriture");
+        Controller::redirect('index.php?controller=question&action=form&step=2');
     } else if ($debutVote >= $finVote) {
-        $message = "La date de fin des votes doit être supérieure à la date de début des votes";
+        MessageFlash::ajouter('warning', "La date de fin des votes doit être supérieure à la date de début des votes");
+        Controller::redirect('index.php?controller=question&action=form&step=2');
+
     } else if ($debutVote <= $debutEcriture || $debutVote < $finEcriture) {
-        $message = "La phase de vote doit commencer après la phase d'écriture";
+        MessageFlash::ajouter('warning', "La phase de vote doit commencer après la phase d'écriture");
+        Controller::redirect('index.php?controller=question&action=form&step=2');
+
     } else {
         FormConfig::postSession();
         $_SESSION[FormConfig::$arr]['step'][2] = 2;
@@ -35,7 +42,7 @@ if (isset($_POST['next'])) {
 ?>
 <h1>Selection du calendrier</h1>
 
-<form method="post">
+<form method="post" class = "custom-form">
     <p>
         <label for="debutEcriture">Date de début d'écriture des propositions :</label>
         <input type="datetime-local" id="debutEcriture" name="debutEcriture"
@@ -61,10 +68,6 @@ if (isset($_POST['next'])) {
                min="<?= date("Y-m-d H:i"); ?>" required>
     </p>
     <input type="submit" name=previous value="Retour" id="precedent" class="nav" formnovalidate>
-    <input type="submit" name=next value="Suivant" id="suivant"  class="nav">
+    <input type="submit" name=next value="Suivant" id="suivant" class="nav">
 </form>
 
-<?php
-if (isset($message)) {
-    echo "<div class=\"message\"><p><img src=\"../web/images/attention.png\" class=\"attention\"  alt=\"Warning\"> " . $message . "</p></div>";
-} ?>

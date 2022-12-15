@@ -9,6 +9,9 @@
     $i = 1;
     $peutVoter = false;
     $calendrier = $question->getCalendrier();
+    if(sizeof($propositions) == 0){
+        echo'<h2>Il n\'y a pas de propositions pour cette question</h2>';
+    }
     if ($question->getPhase() == 'vote' && ConnexionUtilisateur::estConnecte()
         && Votant::estVotant($votants, ConnexionUtilisateur::getLoginUtilisateurConnecte())
     ) {
@@ -42,18 +45,18 @@
             }
         }
 
-        //if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition) ||
-        //    $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
-        //echo ' < a href = index . php ? action = update & controller = proposition & idProposition = ' .
-        //    $proposition->getId() . ' ><img class="modifier" src = "..\web\images\modifier.png" ></a > ';
 
-        //}
-        //if ($proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
-        //    echo '<a id = "vote" href = index.php?action=create&controller=coauteur&idProposition=' .
-        //        $idPropositionURL . ' > Désigner des co - auteurs </a > ';
         echo '<br > ';
         echo '<h3>Nombre de votes : ' . $proposition->getNbVotes() . '</h3>';
-        if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable()) {
+        if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
+            $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte() &&
+            $question->getPhase() == 'ecriture') {
+
+            echo ' <a href="index.php?action=update&controller=proposition&idProposition=' .
+                $proposition->getId() . '"><img class="modifier" src = "..\web\images\modifier.png" ></a ><br> ';
+        }
+        if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable() && $question->getPhase() == 'ecriture') {
+
             echo ' <a class="nav suppProp" 
             href=index.php?controller=proposition&action=delete&idProposition=' . $proposition->getId() . '>Supprimer</a>';
         }

@@ -38,8 +38,10 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
 
 
 ?>
-<h1><strong class='color-grey'><?= htmlspecialchars($Titre) ?></strong></h1>
-<h1><strong class='color-grey'><?= htmlspecialchars($Description) ?></strong></h1>
+<h1><strong class='color-grey'>Titre</strong></h1>
+<p><?= htmlspecialchars($Titre) ?></p>
+<h1><strong class='color-grey'>Description</strong></h1>
+<p><?= htmlspecialchars($Description) ?></p>
 
 
 <div>
@@ -81,7 +83,7 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
     ?>
 </div>
 
-<form method="post" class="nav">
+<form method="post" class="nav" >
     <input type="submit" name=previous value="Retour" id="precedent" formnovalidate>
     <input type="submit" name=next value="Suivant" id="suivant">
 </form>

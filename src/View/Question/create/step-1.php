@@ -35,7 +35,7 @@ if (isset($_POST['Titre'])) {
 ?>
 
 
-<form method="post">
+<form method="post" class = "custom-form">
 
     <p>
         <label for="titre_id">Titre</label> :
@@ -63,9 +63,5 @@ if (isset($_POST['Titre'])) {
     <input type="submit" value="Suivant" id="suivant"  class="nav">
 </form>
 
-<?php
-if (isset($message)) {
-    echo "<p><img src=\"/web/images/attention.png\" class=\"attention\" > " . $message . "</p>";
-} ?>
 
 

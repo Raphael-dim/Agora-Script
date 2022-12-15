@@ -1,5 +1,5 @@
 <?php
-
+echo '<div  class ="custom-form">';
 use App\Vote\Config\FormConfig as FormConfig;
 use App\Vote\Model\DataObject\Responsable;
 
@@ -44,6 +44,7 @@ function removeuser(string $id): void
 require_once "../src/View/Utilisateurs/select.php";
 ?>
 <form method="post" class="nav">
-    <input type="submit" name=previous value="Retour">
-    <input type="submit" name=next value="Valider">
+    <input type="submit" name=previous id="precedent" value="Retour">
+    <input type="submit" name=next id="suivant" value="Valider">
 </form>
+</div>

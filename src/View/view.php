@@ -25,16 +25,7 @@ if ($pagetitle == 'Detail question') {
 use App\Vote\Lib\MessageFlash;
 use App\Vote\Model\HTTP\Session;
 
-echo '<div class = "pileflash" >';
-if (!Session::getInstance()->contient('_messagesFlash')) {
-    new MessageFlash();
-}
-foreach (MessageFlash::lireTousMessages() as $cle => $messagess) {
-    $messages = MessageFlash::lireMessages($cle);
-    foreach ($messages as $message) {
-        echo '<div class="alert alert-' . $cle . '">' . $message . '</div>';
-    }
-}
+
 echo '</div>';
 require __DIR__ . "/{$cheminVueBody}";
 echo '</main>';
@@ -52,3 +43,18 @@ echo '</main>';
 </footer>
 </body>
 </html>
+
+<?php
+
+echo '<div class = "pileflash" >';
+if (!Session::getInstance()->contient('_messagesFlash')) {
+    new MessageFlash();
+}
+foreach (MessageFlash::lireTousMessages() as $cle => $messagess) {
+    $messages = MessageFlash::lireMessages($cle);
+    foreach ($messages as $message) {
+        echo '<div class="alert alert-' . $cle . '">' . $message . '</div>';
+    }
+}
+
+?>

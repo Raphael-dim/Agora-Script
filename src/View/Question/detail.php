@@ -1,14 +1,17 @@
-<div class="detail_question">
+<div class="detail_question custom-form">
     <div class="infos">
-        <h1><strong class='color-grey'>Titre</strong></h1>
-        <p> <?= htmlspecialchars($question->getTitre()) ?></p>
-        <h1><strong class='color-grey'>Description</strong></h1>
-        <p> <?= htmlspecialchars($question->getDescription()) ?></p>
 
+        <div class = "question info">
+            <h1>Titre</h1>
+            <p> <?= htmlspecialchars($question->getTitre()) ?></p>
+            <h1>Description</h1>
+            <p> <?= htmlspecialchars($question->getDescription()) ?></p>
 
-        <div id="participants">
-            <div id="responsables">
-                <h1><strong class='color-yellow'>Responsables</strong></h1>
+        </div>
+
+        <div id = "participants" class="info">
+            <div id = "responsables">
+                <h1><strong  class ='color-yellow'>Responsables</strong></h1>
                 <?php
                 if (is_array($responsables)) {
                     foreach ($responsables as $responsable) {
@@ -35,25 +38,29 @@
             </div>
         </div>
 
-        <h1><strong class='color-orange'>Sections</strong></h1>
+        <div class = "sections  info">
+        <h1><strong  class ='color-orange'>Sections</strong></h1>
 
         <?php
         $i = 1;
         foreach ($sections as $Section) {
-            echo '<h3> Section n° ' . $i . '</h3>';
+            echo '<h3 style = "color:black"> Section n° ' . $i . '</h3>';
             echo '<p> Titre : ' . htmlspecialchars($Section->getTitre()) . '</p>';
             echo '<p> Description : ' . htmlspecialchars($Section->getDescription()) . '</p>';
             echo '&nbsp;';
             $i++;
         }
         ?>
-        <h2>Date de création :</h2>
+        <h4 style = "color:black">Date de création :</h4>
         <p>
             <?= htmlspecialchars($question->getcreation()); ?>
         </p>
-    </div>
-    <div class="calendrier">
-        <h1><strong style="margin-left: 40%" class='color-green'>Calendrier</strong></h1>
+
+        </div>
+    <div class="calendrier  info">
+        <h1><strong  class ='color-green'>Calendrier</strong></h1>
+
+
 
         <?php
         echo '<span class="vertical-line-petite" style="background:grey "></span>';
@@ -106,7 +113,7 @@
             <?= htmlspecialchars($question->getCalendrier()->getFinVote()) ?></p>
         <?php
         echo '<span class="vertical-line-petite" style="background:grey "></span>';
-        if ($question->getPhase() == 'vote') {
+        if ($question->getPhase() == 'fini') {
             echo $cercle;
         }
         ?>
