@@ -604,6 +604,31 @@ a#vote:hover img {
 }
 
 
+.listes_sans_puces{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding-left: 0px;
+
+}
+
+.listes_sans_puces > * {
+    list-style-type: none;
+    background-color: #dff5f4;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    padding-left: 0px;
+    width: 30%;
+    border-radius: 5px;
+}
+
+.listes_sans_puces > * > p {
+    padding: 3px;
+    text-align: center;
+}
+
+
 #form_search > .search {
     float: right;
     height: 7%;
@@ -804,14 +829,21 @@ a#vote:hover img {
         flex-direction: column;
     }
 
+
+}
+
+@media screen and (max-width: 700px) {
+
+
+    .listes_sans_puces > * {
+        width: 50%;
+    }
 }
 
 
-.listes_sans_puces {
-list-style-type: none;
-}
 
-.barre_utilisateur * {
+
+    .barre_utilisateur * {
 display: inline-block;
 vertical-align: middle;
 }
