@@ -57,16 +57,10 @@ main > h1, h2 {
     }
 
     90% {
-        opacity:1;
         transform: translateY(0%);
     }
-    99% {
-        opacity: 1;
+    to {
         transform: translateY(-150%);
-    }
-    to{
-        opacity:0;
-        transform: translateY(-1000%);
     }
 }
 
@@ -94,7 +88,6 @@ main {
     z-index: -1;
     overflow: hidden;
 }
-
 
 main p {
     width: auto;
@@ -185,7 +178,7 @@ form {
 }
 
 h1, h2, h3 {
-    color: #dcdcdc;
+    color: white;
 }
 
 h3, h2 {
@@ -404,7 +397,7 @@ li, a {
 
 .troisieme {
     margin-top: 150px;
-    margin-left:0px;
+    margin-left: 0px;
     position: relative;
     display: flex;
     align-items: center;
@@ -455,6 +448,8 @@ li, a {
 }
 
 input, textarea {
+    background-color: white;
+    border: 1px #0c344b solid;
     max-width: 70%;
 }
 
@@ -474,7 +469,7 @@ li#vote.phases > a {
 .infos > * {
     margin-top: 40px !important;
     width: 90% !important;
-    background: #7ca3bb8f;
+    background: #dff5f4;
     padding: 10px;
     text-align: center;
 }
@@ -625,6 +620,31 @@ a#vote:hover img {
 }
 
 
+.listes_sans_puces {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding-left: 0px;
+
+}
+
+.listes_sans_puces > * {
+    list-style-type: none;
+    background-color: #dff5f4;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    padding-left: 0px;
+    width: 30%;
+    border-radius: 5px;
+}
+
+.listes_sans_puces > * > p {
+    padding: 3px;
+    text-align: center;
+}
+
+
 #form_search > .search {
     float: right;
     height: 7%;
@@ -711,7 +731,6 @@ a#vote:hover img {
     }
 
     .infos {
-        background-color: rgba(255, 255, 255, 0.58);
         width: 100%;
     }
 
@@ -825,18 +844,23 @@ a#vote:hover img {
         margin-top: 75px;
     }
 
-    .propositionsResultat{
+    .propositionsResultat {
 
         display: flex;
         flex-direction: column;
     }
 
+
 }
 
+@media screen and (max-width: 700px) {
 
-.listes_sans_puces {
-    list-style-type: none;
+
+    .listes_sans_puces > * {
+        width: 50%;
+    }
 }
+
 
 .barre_utilisateur * {
     display: inline-block;
@@ -904,8 +928,7 @@ a#vote:hover img {
     border-radius: 4px;
     animation: fadeinout 5.5s;
     margin: 1px;
-    opacity:0;
-    transform: translateY(-1000%);
+    transform: translateY(-150%);
     z-index: 0;
 }
 
@@ -1001,7 +1024,7 @@ div p {
 }
 
 .infos .question {
-    background: #7ca3bb8f;
+    background: #dff5f4;
     width: 90%;
 }
 
@@ -1051,22 +1074,21 @@ div p {
 
 #participants {
     width: 90% !important;
-    background: #7ca3bb8f;
+    background: #dff5f4;
     padding: 10px;
     text-align: center;
 }
 
 #participants > * > p:nth-child(even) {
-    background: #7ca3bb8f;
+    background: #d3fffc;
 }
 
 #participants > * > p:nth-child(odd) {
-    background: #7ca3bb8f;
+    background: #b8fff9;
 }
 
 #participants > * {
-    border: solid #012e49 1px;
-    background: rgba(223, 245, 244, 0.63);
+    background: #dff5f4;
 }
 
 #responsables {
@@ -1251,8 +1273,9 @@ input:valid + span:after {
 }
 
 .custom-form {
+    border-radius: 4px;
     width: 80%;
-    background: #bce8f1;
+    background: rgba(255, 255, 255, 0.43);
     position: relative;
     margin: auto;
     padding-bottom: 50px;
