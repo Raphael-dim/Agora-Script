@@ -1,4 +1,4 @@
-<form method="post" action="index.php?controller=utilisateur&action=created" class="inscription">
+<form class="custom-form" method="post" action="index.php?controller=utilisateur&action=created" class="inscription">
     <fieldset>
         <h2 style="color: #022234">Formulaire d'inscription :</h2>
         <p>

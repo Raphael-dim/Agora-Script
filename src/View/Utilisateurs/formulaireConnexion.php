@@ -1,4 +1,4 @@
-<form method="post" action="index.php?controller=utilisateur&action=connecter">
+<form class="custom-form" method="post" action="index.php?controller=utilisateur&action=connecter">
     <fieldset>
         <h2 style="color: #02243a ">Formulaire de connexion :</h2>
         <p>
