@@ -1,4 +1,4 @@
-<ul class="questions">
+<ul class="propositions">
     <?php
 
     use App\Vote\Lib\ConnexionUtilisateur;

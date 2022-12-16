@@ -1,6 +1,7 @@
 <?php
 echo '<div class = "custom-form">';
 use App\Vote\Config\FormConfig as FormConfig;
+use App\Vote\Lib\MessageFlash;
 
 
 $_SESSION[FormConfig::$arr]['type'] = 'votants';
@@ -25,6 +26,9 @@ function adduser(string $id): void
 {
     if (!in_array($id, $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']])) {
         $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']][] = $id;
+    }
+    else{
+        MessageFlash::ajouter('warning', "Cet utilisateur est déja selectionné en tant que votant");
     }
 }
 
