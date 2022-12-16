@@ -82,10 +82,10 @@ if (isset($_GET['selection'])) {
                     $idQuestionURL . '"><img class="delete" src = "..\web\images\delete.png" ></a></div>';
             }
             $interval = (new DateTime($date))->diff(new DateTime($calendrier->getDebutEcriture(true)));
-            echo '<p>Début de la phase d\'écriture dans : ' . Calendrier::diff($interval) . '</p>';
+            echo '<p style="background: rgba(169,68,66,0.49)" >Début de la phase d\'écriture dans : ' . Calendrier::diff($interval) . '</p>';
         } else if ($question->getPhase() == 'ecriture' || $question->getPhase() == 'entre') {
             $interval = (new DateTime($date))->diff(new DateTime($calendrier->getDebutVote(true)));
-            echo '<p>Début de la phase de vote dans : ' . Calendrier::diff($interval) . '</p>';
+            echo '<p style="background: rgba(1,46,73,0.14)" >Début de la phase de vote dans : ' . Calendrier::diff($interval) . '</p>';
         } else if ($question->getPhase() == 'vote') {
             $interval = (new DateTime($date))->diff(new DateTime($calendrier->getFinVote(true)));
             echo '<p>Fin de la phase de vote dans : ' . Calendrier::diff($interval) . '</p>';
