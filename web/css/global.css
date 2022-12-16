@@ -349,7 +349,6 @@ span {
 
 
 li, a {
-    margin-left: 20px;
     color: #dff5f4;
 }
 
@@ -842,6 +841,7 @@ a#vote:hover img {
 .barre_utilisateur * {
     display: inline-block;
     vertical-align: middle;
+    color : black
 }
 
 .barre_utilisateur > a {
@@ -851,7 +851,29 @@ a#vote:hover img {
 .barre_utilisateur > a img {
     margin: 15px;
 }
+.utilisateur-liste{
+    text-align:center;
+    overflow:hidden;
+    width:60%;
+    margin:auto;
+}
+.utilisateur-liste>h2{
+    color:black;
+}
+.utilisateur-liste a{
+    text-decoration: none;
+    word-break: break-all;
+}
+.utilisateur-liste>ul>li:nth-child(odd){
+    background:grey;
+}
+.utilisateur-liste>ul>li:nth-child(even){
+    background:white;
+}
 
+.utilisateur-propositions>h2{
+    color:black;
+}
 .sortie {
     max-width: 50px;
     filter: invert(1);
