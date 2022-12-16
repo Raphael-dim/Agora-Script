@@ -1,6 +1,6 @@
-<form method="post" action="index.php?controller=utilisateur&action=created" class="inscription">
+<form class="custom-form" method="post" action="index.php?controller=utilisateur&action=created" class="inscription">
     <fieldset>
-        <legend>Formulaire d'inscription :</legend>
+        <h2 style="color: #022234">Formulaire d'inscription :</h2>
         <p>
             <label for="username">Identifiant : </label><input type="text" placeholder="" name="identifiant"
                                                                id="username" required>
@@ -29,7 +29,7 @@
 <!--            <span class="validity"></span>-->
 
         </p>
-        <input id="precedent" type="submit" value="Inscription" class="nav">
+        <input id="suivant" type="submit" value="Inscription" class="nav">
 
     </fieldset>
 </form>

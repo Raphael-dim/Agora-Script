@@ -1,6 +1,6 @@
-<form method="post" action="index.php?controller=utilisateur&action=updated">
+<form class="custom-form" method="post" action="index.php?controller=utilisateur&action=updated">
     <fieldset>
-        <legend>Mise à jour de votre compte :</legend>
+        <h2>Mise à jour de votre compte :</h2>
         <p>
             <label for="username">Identifiant : </label>
             <input type="text" value="<?= $utilisateur->getIdentifiant() ?>" name="identifiant" id="username"

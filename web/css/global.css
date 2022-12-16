@@ -178,7 +178,7 @@ form {
 }
 
 h1, h2, h3 {
-    color: #dcdcdc;
+    color: white;
 }
 
 h3, h2 {
@@ -449,6 +449,8 @@ li, a {
 }
 
 input, textarea {
+    background-color: white;
+    border: 1px #0c344b solid;
     max-width: 70%;
 }
 
@@ -1249,8 +1251,9 @@ input:valid + span:after {
 }
 
 .custom-form {
+    border-radius: 4px;
     width: 80%;
-    background: #bce8f1;
+    background: rgba(255, 255, 255, 0.43);
     position: relative;
     margin: auto;
     padding-bottom: 50px;
