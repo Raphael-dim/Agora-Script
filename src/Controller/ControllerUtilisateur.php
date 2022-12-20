@@ -188,9 +188,25 @@ class ControllerUtilisateur
 
     public static function delete()
     {
-        (new UtilisateurRepository())->delete($_GET['idUtilisateur']);
-        MessageFlash::ajouter('success', "Votre compte a bien été supprimé");
-        ConnexionUtilisateur::deconnecter();
-        Controller::redirect("index.php?controller=accueil");
+        if (!isset($_GET['idUtilisateur'])) {
+            MessageFlash::ajouter('info', 'Veuillez saisir un identifiant valide');
+            Controller::redirect('index.php?controller=accueil');
+        }
+        if (!ConnexionUtilisateur::estConnecte() || ConnexionUtilisateur::getLoginUtilisateurConnecte() != $_GET['idUtilisateur']) {
+            MessageFlash::ajouter('info', 'Vous ne pouvez pas supprimer ce compte');
+            Controller::redirect('index.php?controller=accueil');
+        } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
+            Controller::afficheVue('view.php', ["pagetitle" => "Demande de confirmation ",
+                "cheminVueBody" => "confirm.php",
+                "url" => "index.php?action=delete&controller=utilisateur&idUtilisateur=" . $_GET['idUtilisateur'],
+                "message" => "Êtes vous sûr de vouloir supprimer votre compte ?"]);
+        } else if (isset($_POST["cancel"])) {
+            Controller::redirect("index.php?controller=utilisateur&action=read");
+        } else if (isset($_POST["confirm"])) {
+            (new UtilisateurRepository())->delete($_GET['idUtilisateur']);
+            MessageFlash::ajouter('success', "Votre compte a bien été supprimé");
+            ConnexionUtilisateur::deconnecter();
+            Controller::redirect("index.php?controller=accueil");
+        }
     }
 }

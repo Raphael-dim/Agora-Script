@@ -206,7 +206,7 @@ class ControllerProposition
         $date = date('d-m-Y à H:i:s');
         $bool = true;
         $calendrier = $question->getCalendrier();
-        if (!isset($user) || (!Responsable::estResponsable($question, $user['id']) && !CoAuteur::estCoAuteur($user['id'],$_SESSION[FormConfig::$arr]["idProposition"]))) {
+        if (!isset($user) || (!Responsable::estResponsable($question, $user['id']) && !CoAuteur::estCoAuteur($user['id'], $_SESSION[FormConfig::$arr]["idProposition"]))) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier cette proposition, 
         vous n'êtes ni responsable ni co-auteur pour cette proposition.");
             $bool = false;
@@ -268,9 +268,9 @@ class ControllerProposition
             Controller::redirect('index.php?controller=question&action=readAll');
         } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
             Controller::afficheVue('view.php', ["pagetitle" => "Supprimer proposition",
-                "cheminVueBody" => "confirmProp.php",
+                "cheminVueBody" => "confirm.php",
                 "message" => "Êtes vous sûr de vouloir supprimer cette proposition?",
-                "id" => $_GET['idProposition']]);
+                "url" => 'index.php?controller=proposition&action=delete&idProposition=' . $_GET['idProposition']]);
         } else if (isset($_POST["cancel"])) {
             Controller::redirect('index.php?controller=question&action=readAll');
         } else if (isset($_POST["confirm"])) {

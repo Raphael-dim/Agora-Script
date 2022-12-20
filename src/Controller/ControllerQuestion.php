@@ -406,10 +406,10 @@ class ControllerQuestion
             MessageFlash::ajouter("danger", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
             Controller::redirect('index.php?controller=question&action=readAll');
         } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
-            Controller::afficheVue('view.php', ["pagetitle" => "Question modifiée",
+            Controller::afficheVue('view.php', ["pagetitle" => "Demande de confirmation",
                 "cheminVueBody" => "confirm.php",
                 "message" => "Êtes vous sûr de vouloir supprimer cette question?",
-                "id" => $_GET['idQuestion']]);
+                "url" => 'index.php?action=delete&controller=question&idQuestion=' . $_GET['idQuestion']]);
         } else if (isset($_POST["cancel"])) {
             self::readAll();
         } else if (isset($_POST["confirm"])) {
