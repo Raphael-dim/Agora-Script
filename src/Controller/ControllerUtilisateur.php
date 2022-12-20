@@ -88,12 +88,12 @@ class ControllerUtilisateur
             Controller::redirect('index.php?controller=utilisateur&action=create');
         }
         $bool = false;
-        for($i = 0; $i < 10 && !$bool; $i++){
-            if (strpos($mdp, $i)){
+        for ($i = 0; $i < 10 && !$bool; $i++) {
+            if (strpos($mdp, $i)) {
                 $bool = true;
             }
         }
-        if (!$bool){
+        if (!$bool) {
             MessageFlash::ajouter('info', 'Votre mot de passe doit contenir au moins 1 chiffre et une lettre.');
             Controller::redirect('index.php?controller=utilisateur&action=create');
         }
@@ -107,7 +107,8 @@ class ControllerUtilisateur
             $utilisateur = Utilisateur::construireDepuisFormulaire($_POST);
             (new UtilisateurRepository())->sauvegarder($utilisateur);
             MessageFlash::ajouter("success", "Le compte a bien crée");
-            Controller::redirect("index.php?controller=utilisateur&action=connexion");
+            ConnexionUtilisateur::connecter($utilisateur->getIdentifiant());
+            Controller::redirect("index.php?controller=accueil");
         }
     }
 
@@ -183,5 +184,13 @@ class ControllerUtilisateur
             Controller::redirect("index.php?controller=utilisateur&action=read&idUtilisateur=" . $utilisateur->getIdentifiant());
         }
 
+    }
+
+    public static function delete()
+    {
+        (new UtilisateurRepository())->delete($_GET['idUtilisateur']);
+        MessageFlash::ajouter('success', "Votre compte a bien été supprimé");
+        ConnexionUtilisateur::deconnecter();
+        Controller::redirect("index.php?controller=accueil");
     }
 }

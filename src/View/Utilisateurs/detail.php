@@ -1,5 +1,6 @@
 <div class="barre_utilisateur">
-    <h1>Profil de <?= htmlspecialchars($utilisateur->getPrenom()) ?> <?= htmlspecialchars($utilisateur->getNom()) ?></h1>
+    <h1>Profil
+        de <?= htmlspecialchars($utilisateur->getPrenom()) ?> <?= htmlspecialchars($utilisateur->getNom()) ?></h1>
     <a href='index.php?action=disconnected&controller=utilisateur'>
         <img class="sortie" src="../web/images/logo_sortie.png" alt="Déconnexion"></a>
 </div>
@@ -25,3 +26,6 @@
     }
     ?>
 </ul>
+
+<a href="index.php?action=delete&controller=utilisateur&idUtilisateur=<?= rawurlencode($utilisateur->getIdentifiant()) ?>">Supprimer
+    mon compte </a>
