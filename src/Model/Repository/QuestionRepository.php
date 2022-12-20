@@ -5,6 +5,7 @@ namespace App\Vote\Model\Repository;
 use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Question;
 use App\Vote\Model\DatabaseConnection as DatabaseConnection;
+
 class QuestionRepository extends AbstractRepository
 {
     protected function construire(array $questionTableau): Question
@@ -61,12 +62,12 @@ class QuestionRepository extends AbstractRepository
 
     public function getTerminees(): array
     {
-    $ADonnees = array();
-    $sql = "SELECT * FROM questions_termines";
-    $pdoStatement = DatabaseConnection::getPdo()->query($sql);
-    while ($row = $pdoStatement->fetch()) {
-        $ADonnees[] = $this::construire(json_decode(json_encode($row), true));
+        $ADonnees = array();
+        $sql = "SELECT * FROM questions_termines";
+        $pdoStatement = DatabaseConnection::getPdo()->query($sql);
+        while ($row = $pdoStatement->fetch()) {
+            $ADonnees[] = $this::construire(json_decode(json_encode($row), true));
+        }
+        return $ADonnees;
     }
-    return $ADonnees;
-}
 }
