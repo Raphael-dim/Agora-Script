@@ -444,9 +444,14 @@ class ControllerQuestion
             Controller::redirect('index.php?controller=question&action=readAll');
         }
         $propositions = $question->getPropositionsTrie();
-        Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
-            'cheminVueBody' => "Question/resultat.php",
-            'propositions' => $propositions]);
+
+        if ($question->getSystemVote() == 'majoritaire') {
+
+        } else {
+            Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
+                'cheminVueBody' => "Question/resultat.php",
+                'propositions' => $propositions]);
+        }
     }
 
 

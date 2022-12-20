@@ -17,16 +17,34 @@ class Question extends AbstractDataObject
     private string $creation;
     private Utilisateur $organisateur;
     private Calendrier $calendrier;
+    private string $systemeVote;
 
 
     public function __construct(string     $titre, string $description, string $creation,
-                                Calendrier $calendrier, Utilisateur $organisateur)
+                                Calendrier $calendrier, Utilisateur $organisateur, string $systemeVote)
     {
         $this->titre = $titre;
         $this->description = $description;
         $this->creation = $creation;
         $this->calendrier = $calendrier;
         $this->organisateur = $organisateur;
+        $this->systemeVote = $systemeVote;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSystemeVote(): string
+    {
+        return $this->systemeVote;
+    }
+
+    /**
+     * @param string $systemeVote
+     */
+    public function setSystemeVote(string $systemeVote): void
+    {
+        $this->systemeVote = $systemeVote;
     }
 
     /**
@@ -189,7 +207,8 @@ class Question extends AbstractDataObject
             "descriptionTag" => $this->description,
             "creationTag" => $this->creation,
             "idCalendrierTag" => $this->calendrier->getId(),
-            "idOrganisateurTag" => $this->organisateur->getIdentifiant()
+            "idOrganisateurTag" => $this->organisateur->getIdentifiant(),
+            "systemeVoteTag" => $this->systemeVote
         );
         if ($update) {
             $tab["idQuestionTag"] = $this->id;
