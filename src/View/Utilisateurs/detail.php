@@ -6,7 +6,7 @@
 </div>
 <div style="margin-bottom: 60px">
     <a class="lien"
-       href="index.php?controller=utilisateur&action=update&idUtilisateur=<?= rawurlencode($utilisateur->getIdentifiant()) ?>">
+       href=index.php?controller=utilisateur&action=update&idUtilisateur=<?= rawurlencode($utilisateur->getIdentifiant()) ?>>
         Modifier les informations</a>
 </div>
 <h2>Mes questions : </h2>
@@ -27,5 +27,5 @@
     ?>
 </ul>
 
-<a href="index.php?action=delete&controller=utilisateur&idUtilisateur=<?= rawurlencode($utilisateur->getIdentifiant()) ?>">Supprimer
+<a href=index.php?action=delete&controller=utilisateur&idUtilisateur=<?= rawurlencode($utilisateur->getIdentifiant()) ?>>Supprimer
     mon compte </a>
