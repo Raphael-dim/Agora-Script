@@ -22,7 +22,6 @@ if (isset($_POST['next'])) {
     } else if ($debutVote >= $finVote) {
         MessageFlash::ajouter('warning', "La date de fin des votes doit être supérieure à la date de début des votes");
         Controller::redirect('index.php?controller=question&action=form&step=2');
-
     } else if ($debutVote <= $debutEcriture || $debutVote < $finEcriture) {
         MessageFlash::ajouter('warning', "La phase de vote doit commencer après la phase d'écriture");
         Controller::redirect('index.php?controller=question&action=form&step=2');

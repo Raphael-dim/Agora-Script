@@ -172,8 +172,8 @@ class ControllerQuestion
         }
         FormConfig::setArr('SessionQuestion');
         $calendrier = new Calendrier($_SESSION[FormConfig::$arr]['debutEcriture'], $_SESSION[FormConfig::$arr]['finEcriture'], $_SESSION[FormConfig::$arr]['debutVote'], $_SESSION[FormConfig::$arr]['finVote']);
-        if ($calendrier->getDebutEcriture() >= $calendrier->getFinEcriture() || $calendrier->getDebutVote() >= $calendrier->getFinVote()
-            || $calendrier->getDebutVote() <= $calendrier->getDebutEcriture() || $calendrier->getDebutVote() < $calendrier->getFinEcriture()) {
+        if ($calendrier->getDebutEcriture(true) >= $calendrier->getFinEcriture(true) || $calendrier->getDebutVote(true) >= $calendrier->getFinVote(true)
+            || $calendrier->getDebutVote(true) <= $calendrier->getDebutEcriture(true) || $calendrier->getDebutVote(true) < $calendrier->getFinEcriture(true)) {
             MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
             Controller::redirect("index.php?action=form&controller=question&step=2");
         }
@@ -192,10 +192,16 @@ class ControllerQuestion
         if (strlen($_SESSION[FormConfig::$arr]['Titre']) > 80 || strlen($_SESSION[FormConfig::$arr]['Description']) > 360) {
             (new CalendrierRepository())->delete($calendrier->getId());
             MessageFlash::ajouter("danger", "Les contraintes de taille maximales des champs de textes n'ont pas été respectées.");
-            Controller::redirect("index.php?action=readAll&controller=question");
+            Controller::redirect("index.php?action=form&controller=question&step=2");
         }
-
-        $question = new Question($_SESSION[FormConfig::$arr]['Titre'], $_SESSION[FormConfig::$arr]['Description'], $creation, $calendrier, $organisateur);
+        if ($_SESSION[FormConfig::$arr]['systemVote'] != "valeur" &
+            $_SESSION[FormConfig::$arr]['systemVote'] != "majoritaire") {
+            MessageFlash::ajouter("danger", "Veuillez vérifier le mode de scrutin.");
+            Controller::redirect("index.php?action=form&controller=question&step=5");
+        }
+        echo $_SESSION[FormConfig::$arr]['systemVote'];
+        $question = new Question($_SESSION[FormConfig::$arr]['Titre'], $_SESSION[FormConfig::$arr]['Description'],
+            $creation, $calendrier, $organisateur, $_SESSION[FormConfig::$arr]['systemeVote']);
         $questionBD = (new QuestionRepository())->sauvegarder($question);
         if ($questionBD != null) {
             $question->setId($questionBD);
@@ -400,10 +406,10 @@ class ControllerQuestion
             MessageFlash::ajouter("danger", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
             Controller::redirect('index.php?controller=question&action=readAll');
         } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
-            Controller::afficheVue('view.php', ["pagetitle" => "Question modifiée",
+            Controller::afficheVue('view.php', ["pagetitle" => "Demande de confirmation",
                 "cheminVueBody" => "confirm.php",
                 "message" => "Êtes vous sûr de vouloir supprimer cette question?",
-                "id" => $_GET['idQuestion']]);
+                "url" => 'index.php?action=delete&controller=question&idQuestion=' . $_GET['idQuestion']]);
         } else if (isset($_POST["cancel"])) {
             self::readAll();
         } else if (isset($_POST["confirm"])) {
@@ -444,9 +450,14 @@ class ControllerQuestion
             Controller::redirect('index.php?controller=question&action=readAll');
         }
         $propositions = $question->getPropositionsTrie();
-        Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
-            'cheminVueBody' => "Question/resultat.php",
-            'propositions' => $propositions]);
+
+        if ($question->getSystemVote() == 'majoritaire') {
+
+        } else {
+            Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
+                'cheminVueBody' => "Question/resultat.php",
+                'propositions' => $propositions]);
+        }
     }
 
 

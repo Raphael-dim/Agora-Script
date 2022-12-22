@@ -20,7 +20,7 @@ Session::getInstance();
 
 /*
  * On verifie que le controlleur est défini
- * sinon on redirige vers l'acceuil
+ * sinon on redirige vers l'accueil
  */
 if (!isset($_GET["controller"])) {
     $controller = "accueil";
@@ -30,7 +30,7 @@ if (!isset($_GET["controller"])) {
 
 /*
  * On verifie que l'action est définie
- * sinon on redirige vers l'action home du Controlleur Acceuil
+ * sinon on redirige vers l'action home du Controlleur accueil
  */
 if (!isset($_GET["action"])) {
     $action = "home";

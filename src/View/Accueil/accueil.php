@@ -1,5 +1,5 @@
      <h1>Bienvenue sur <strong class = "color-blue">Agora Script </strong> !</h1>
-    <div id="acceuil_search_form">
+    <div id="accueil_search_form">
         <h1><span>Trouve les réponses à tes questions</span></h1>
         <img id="imgsearch" src="../web/images/background.bmp" alt="background">
         <form id = "form_search"  method="post" action="index.php?controller=question&action=readKeyword">
