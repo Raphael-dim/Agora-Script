@@ -282,7 +282,7 @@ span {
 }
 
 #action {
-    display: inline-block;
+    display: inline;
     vertical-align: middle;
 }
 
