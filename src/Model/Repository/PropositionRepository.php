@@ -18,7 +18,8 @@ class PropositionRepository extends AbstractRepository
             $propositionTableau["titre"],
             $propositionTableau['idresponsable'],
             $propositionTableau['idquestion'],
-            $propositionTableau["nbvotes"]
+            $propositionTableau["nbvotes"],
+            $propositionTableau["nbetoiles"]
         );
         $proposition->setId($propositionTableau["idproposition"]);
         return $proposition;
@@ -36,6 +37,6 @@ class PropositionRepository extends AbstractRepository
 
     protected function getNomsColonnes(): array
     {
-        return array( "idquestion", "idresponsable", "titre", "nbvotes");
+        return array( "idquestion", "idresponsable", "titre", "nbvotes", "nbetoiles");
     }
 }

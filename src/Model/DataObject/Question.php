@@ -34,7 +34,7 @@ class Question extends AbstractDataObject
     /**
      * @return string
      */
-    public function getSystemeVote(): string
+    public function getsystemeVote(): string
     {
         return $this->systemeVote;
     }
@@ -42,7 +42,7 @@ class Question extends AbstractDataObject
     /**
      * @param string $systemeVote
      */
-    public function setSystemeVote(string $systemeVote): void
+    public function setsystemeVote(string $systemeVote): void
     {
         $this->systemeVote = $systemeVote;
     }

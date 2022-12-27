@@ -11,8 +11,10 @@ class Proposition extends AbstractDataObject
     private string $titre;
     private string $idResponsable;
     private string $idQuestion;
+    private int $nbEtoiles;
     private int $nbVotes;
-    public function __construct(string $titre, string $idResponsable, string $idQuestion, int $nbVotes)
+
+    public function __construct(string $titre, string $idResponsable, string $idQuestion, int $nbVotes, int $nbEtoiles)
     {
         /*
         On ne construit pas l'objet proposition avec un objet Responsable et un objet Question pour éviter de
@@ -23,6 +25,23 @@ class Proposition extends AbstractDataObject
         $this->idResponsable = $idResponsable;
         $this->idQuestion = $idQuestion;
         $this->nbVotes = $nbVotes;
+        $this->nbEtoiles = $nbEtoiles;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNbEtoiles(): int
+    {
+        return $this->nbEtoiles;
+    }
+
+    /**
+     * @param int $nbEtoiles
+     */
+    public function setNbEtoiles(int $nbEtoiles): void
+    {
+        $this->nbEtoiles = $nbEtoiles;
     }
 
     public function getTitre(): string
@@ -113,6 +132,7 @@ class Proposition extends AbstractDataObject
             "idresponsableTag" => $this->idResponsable,
             "titreTag" => $this->titre,
             "nbvotesTag" => $this->nbVotes,
+            "nbetoilesTag" => $this->nbEtoiles
         );
         if ($update) {
             $tab["idpropositionTag"] = $this->id;

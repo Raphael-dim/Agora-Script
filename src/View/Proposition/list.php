@@ -48,6 +48,8 @@
 
         echo '<br > ';
         echo '<h3>Nombre de votes : ' . htmlspecialchars($proposition->getNbVotes()) . '</h3>';
+        echo '<h3>Nombre d\'étoiles : ' . htmlspecialchars($proposition->getNbEtoiles()) . '</h3>';
+
         if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
             $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte() &&
             $question->getPhase() == 'ecriture') {

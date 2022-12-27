@@ -194,12 +194,13 @@ class ControllerQuestion
             MessageFlash::ajouter("danger", "Les contraintes de taille maximales des champs de textes n'ont pas été respectées.");
             Controller::redirect("index.php?action=form&controller=question&step=2");
         }
-        if ($_SESSION[FormConfig::$arr]['systemVote'] != "valeur" &
-            $_SESSION[FormConfig::$arr]['systemVote'] != "majoritaire") {
+        if ($_SESSION[FormConfig::$arr]['systemeVote'] != "valeur" &&
+            $_SESSION[FormConfig::$arr]['systemeVote'] != "majoritaire") {
+            MessageFlash::ajouter("danger", $_SESSION[FormConfig::$arr]['systemeVote'] );
+
             MessageFlash::ajouter("danger", "Veuillez vérifier le mode de scrutin.");
             Controller::redirect("index.php?action=form&controller=question&step=5");
         }
-        echo $_SESSION[FormConfig::$arr]['systemVote'];
         $question = new Question($_SESSION[FormConfig::$arr]['Titre'], $_SESSION[FormConfig::$arr]['Description'],
             $creation, $calendrier, $organisateur, $_SESSION[FormConfig::$arr]['systemeVote']);
         $questionBD = (new QuestionRepository())->sauvegarder($question);
@@ -451,7 +452,7 @@ class ControllerQuestion
         }
         $propositions = $question->getPropositionsTrie();
 
-        if ($question->getSystemVote() == 'majoritaire') {
+        if ($question->getsystemeVote() == 'majoritaire') {
 
         } else {
             Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',

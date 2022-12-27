@@ -43,7 +43,7 @@ class CoAuteur extends AbstractDataObject
      * @param  Proposition $proposition
      * @return bool
      */
-    public static function estCoAuteur($utilisateur, $proposition) : bool
+    public static function estCoAuteur(string $utilisateur, $proposition) : bool
     {
         $coAuteurs = (new CoAuteurRepository())->selectWhere(array('clef0' => $utilisateur, 'clef1' => $proposition),"*",array('clef0' => 'idauteur', 'clef1' => 'idproposition'));
         if(!$coAuteurs) return false;
