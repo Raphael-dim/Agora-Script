@@ -83,10 +83,10 @@ abstract class AbstractRepository
         $i = 0;
         foreach ($this->getNomsColonnes() as $colonne) {
             $sql = $sql . $colonne . " =:" . $colonne . "Tag";
-            if($i != sizeof($this->getNomsColonnes())-1){
+            if ($i != sizeof($this->getNomsColonnes()) - 1) {
                 $sql = $sql . " AND ";
             }
-            $i = $i+1;
+            $i = $i + 1;
         }
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
         try {
@@ -189,11 +189,11 @@ abstract class AbstractRepository
 
     /**
      * Permet de construire une requete sql grace aux contraintes passées en paramètres
-     * @param $clef             //Clef primaire
-     * @param $rowSelect        //Les colonnes que vous voulez selectionner '*' par défaut si le parametre n'est pas renseigné
-     * @param $whereCondition   //La condition qui sera placée dans le WHERE,
-                                //null par défaut qui sera remplacé dans la requete pas la clé primaire si le parametre n'est pas renseigné
-     * @param $nomTable         //le nom de la table, null par défaut qui sera remplacé dans la requete par la table par défaut
+     * @param $clef //Clef primaire
+     * @param $rowSelect //Les colonnes que vous voulez selectionner '*' par défaut si le parametre n'est pas renseigné
+     * @param $whereCondition //La condition qui sera placée dans le WHERE,
+     * //null par défaut qui sera remplacé dans la requete pas la clé primaire si le parametre n'est pas renseigné
+     * @param $nomTable //le nom de la table, null par défaut qui sera remplacé dans la requete par la table par défaut
      * @return array
      */
     public function selectWhere($clef, string $rowSelect = '*', $whereCondition = null, $nomTable = null): array
@@ -244,14 +244,15 @@ abstract class AbstractRepository
 
     /**
      * Permet de construire une requete sql grace aux contraintes passées en paramètres
-     * @param $clef             //Clef primaire
-     * @param $rowSelect        //Les colonnes que vous voulez selectionner '*' par défaut si le parametre n'est pas renseigné
-     * @param $whereCondition   //La condition qui sera placée dans le WHERE,
-    //null par défaut qui sera remplacé dans la requete pas la clé primaire si le parametre n'est pas renseigné
-     * @param $nomTable         //le nom de la table, null par défaut qui sera remplacé dans la requete par la table par défaut
+     * @param $clef //Clef primaire
+     * @param $rowSelect //Les colonnes que vous voulez selectionner '*' par défaut si le parametre n'est pas renseigné
+     * @param $whereCondition //La condition qui sera placée dans le WHERE,
+     * //null par défaut qui sera remplacé dans la requete pas la clé primaire si le parametre n'est pas renseigné
+     * @param $nomTable //le nom de la table, null par défaut qui sera remplacé dans la requete par la table par défaut
      * @return array
      */
-    public function selectWhereTrie($clef, $rowSelect = '*', $whereCondition = null, $nomTable = null): array
+    public function selectWhereTrie($clef, $rowSelect = '*', $whereCondition = null, $nomTable = null,
+                                    $conditionTrie = null, $ordre = null): array
     {
         $ADonnees = array();
         if (is_null($nomTable)) {
@@ -278,7 +279,7 @@ abstract class AbstractRepository
             }
 
         }
-        $sql = $sql . ' ORDER BY nbvotes DESC;';
+        $sql = $sql . ' ORDER BY ' . $conditionTrie . ' ' . $ordre;
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
         if (!is_array($clef)) {
