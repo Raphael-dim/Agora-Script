@@ -43,6 +43,9 @@ class ConnexionUtilisateur
 
     public static function estAdministrateur(): bool
     {
+        if (!self::estConnecte()) {
+            return false;
+        }
         if (self::estConnecte() && isset(self::$estAdmin)) {
             return self::$estAdmin;
         }

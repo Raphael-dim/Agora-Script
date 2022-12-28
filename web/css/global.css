@@ -281,12 +281,13 @@ span {
     overflow: hidden;
 }
 
-#action {
+.action {
     display: inline;
     vertical-align: middle;
 }
 
-#action, img {
+.action, img {
+    display: inline;
     max-width: 25px;
 }
 
