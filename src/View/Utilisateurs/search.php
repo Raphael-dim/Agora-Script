@@ -1,8 +1,3 @@
-<?php
-
-
-?>
-
 <form method="post" action="index.php?controller=utilisateur&action=readKeyword">
     <fieldset>
         <legend>Chercher un utilisateur :</legend>
@@ -11,7 +6,7 @@
             <input type ="hidden" name = "row" value = "nom" >
         </p>
         <p>
-            <input type="submit" value="Envoyer" >
+            <input type="submit" value="Envoyer" class="nav" >
         </p>
     </fieldset>
 </form>

@@ -76,8 +76,8 @@ if (isset($_GET['selection'])) {
         echo '<p class="description">' . htmlspecialchars($question->getDescription()) . '</p>';
         if ($question->getPhase() == 'debut' || ConnexionUtilisateur::estAdministrateur()) {
             if (ConnexionUtilisateur::estAdministrateur() || (ConnexionUtilisateur::estConnecte() &&
-                ConnexionUtilisateur::getLoginUtilisateurConnecte() == $organisateur)) {
-                echo '<div id="action" "><a href ="index.php?action=update&controller=question&idQuestion=' .
+                    ConnexionUtilisateur::getLoginUtilisateurConnecte() == $organisateur)) {
+                echo '<div class="action" style="display: inline"><a href ="index.php?action=update&controller=question&idQuestion=' .
                     $idQuestionURL . '"><img class="modifier" src = "..\web\images\modifier.png"  alt="modifier"></a >
                      <a href ="index.php?action=delete&controller=question&idQuestion=' .
                     $idQuestionURL . '"><img class="delete" src = "..\web\images\delete.png"  alt="supprimer"></a></div>';

@@ -207,9 +207,9 @@ class ControllerUtilisateur
                 "message" => $message]);
         } else if (isset($_POST["cancel"])) {
             if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $_GET['idUtilisateur']) {
-                Controller::redirect("index.php?controller=utilisateur&action=readAll");
-            } else {
                 Controller::redirect("index.php?controller=utilisateur&action=read");
+            } else {
+                Controller::redirect("index.php?controller=utilisateur&action=readAll");
             }
         } else if (isset($_POST["confirm"])) {
             (new UtilisateurRepository())->delete($_GET['idUtilisateur']);
