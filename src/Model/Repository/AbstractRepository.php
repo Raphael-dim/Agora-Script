@@ -41,6 +41,7 @@ abstract class AbstractRepository
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
         // On donne les valeurs et on exécute la requête
+        echo $sql;
         try {
             $pdoStatement->execute($object->formatTableau());
             foreach ($pdoStatement as $clePrimaire) {

@@ -5,6 +5,7 @@ namespace App\Vote\Controller;
 use App\Vote\Lib\ConnexionUtilisateur;
 use App\Vote\Lib\MessageFlash;
 use App\Vote\Lib\MotDePasse;
+use App\Vote\Lib\VerificationEmail;
 use App\Vote\Model\DataObject\Utilisateur;
 use App\Vote\Model\HTTP\Session;
 use App\Vote\Model\Repository\PropositionRepository;
@@ -105,10 +106,24 @@ class ControllerUtilisateur
             Controller::redirect('index.php?controller=utilisateur&action=create');
         } else {
             $utilisateur = Utilisateur::construireDepuisFormulaire($_POST);
+            VerificationEmail::envoiEmailValidation($utilisateur);
             (new UtilisateurRepository())->sauvegarder($utilisateur);
             MessageFlash::ajouter("success", "Le compte a bien crée");
             ConnexionUtilisateur::connecter($utilisateur->getIdentifiant());
             Controller::redirect("index.php?controller=accueil");
+        }
+    }
+
+    public static function validerEmail()
+    {
+        if (!isset($_GET['login']) || !isset($_GET['nonce'])) {
+            MessageFlash::ajouter('warning', 'Login ou nonce incorrect');
+            Controller::redirect('index.php?controller=accueil');
+        }
+        if (VerificationEmail::traiterEmailValidation($_GET['login'], $_GET['nonce'])) {
+            Controller::redirect('index.php?action=read&controller=utilisateur&idUtilisateur=raph');
+        } else {
+            Controller::redirect('index.php?controller=accueil');
         }
     }
 
@@ -217,7 +232,7 @@ class ControllerUtilisateur
                 MessageFlash::ajouter('success', "Votre compte a bien été supprimé");
                 ConnexionUtilisateur::deconnecter();
                 Controller::redirect("index.php?controller=accueil");
-            }else{
+            } else {
                 MessageFlash::ajouter('success', "Ce compte a bien été supprimé");
                 Controller::redirect("index.php?controller=utilisateur&action=readAll");
             }
