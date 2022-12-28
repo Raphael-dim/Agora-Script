@@ -45,12 +45,15 @@ class ConnexionUtilisateur
     {
         if (!self::estConnecte()) {
             return false;
-        }
-        if (self::estConnecte() && isset(self::$estAdmin)) {
+        } else if (self::estConnecte() && isset(self::$estAdmin)) {
             return self::$estAdmin;
+        } else {
+            $estAdmin = (new UtilisateurRepository())->select(self::getLoginUtilisateurConnecte());
+            if (!is_null($estAdmin)) {
+                self::$estAdmin = $estAdmin->isEstAdmin();
+                return self::$estAdmin;
+            }
         }
-
-        self::$estAdmin = (new UtilisateurRepository())->select(self::getLoginUtilisateurConnecte())->isEstAdmin();
-        return self::$estAdmin;
+        return false;
     }
 }

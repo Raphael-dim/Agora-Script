@@ -41,9 +41,14 @@ class Utilisateur extends AbstractDataObject
 
     public static function construireDepuisFormulaire(array $tableauFormulaire): Utilisateur
     {
+        if (isset($tableauFormulaire['estAdmin'])) {
+            $estAdmin = 1;
+        } else {
+            $estAdmin = 0;
+        }
         return new Utilisateur($tableauFormulaire['identifiant'], $tableauFormulaire['nom'],
-
-            $tableauFormulaire['prenom'], MotDePasse::hacher($tableauFormulaire['mdp']));
+            $tableauFormulaire['prenom'], MotDePasse::hacher($tableauFormulaire['mdp']),
+            $estAdmin);
     }
 
     public function getMdpHache(): string
@@ -104,12 +109,16 @@ class Utilisateur extends AbstractDataObject
 
     public function formatTableau(): array
     {
+        $estAdmin = $this->estAdmin;
+        if (!$estAdmin) {
+            $estAdmin = 0;
+        }
         return array(
             "identifiantTag" => $this->identifiant,
             "nomTag" => $this->nom,
             "prenomTag" => $this->prenom,
             "mdpTag" => $this->mdpHache,
-            "estAdminTag" => $this->estAdmin
+            "estAdminTag" => $estAdmin
         );
     }
 }

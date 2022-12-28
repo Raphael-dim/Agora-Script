@@ -1209,10 +1209,14 @@ input, textarea, select {
 }
 
 input:invalid + span:after {
-    position: absolute;
+   position: absolute;
     content: '✖';
     color: red;
     padding-left: 5px;
+}
+
+.validity{
+    background-color: transparent;
 }
 
 input:valid + span:after {
@@ -1290,4 +1294,40 @@ input:valid + span:after {
     background: rgba(164, 218, 246, 0.42);
     position: relative;
     padding-bottom: 50px;
+}
+.InputAddOn {
+    display: flex;
+    margin-bottom: 1.5em;
+}
+
+.InputAddOn-field {
+    max-width: 30%;
+    flex: 1;
+}
+.InputAddOn-field:not(:first-child) {
+    border-left: 0;
+}
+.InputAddOn-field:not(:last-child) {
+    border-right: 0;
+}
+
+.InputAddOn-item {
+    background-color: rgba(1, 46, 73, 0.3);
+    color: #ffffff;
+    font: inherit;
+    font-weight: normal;
+}
+
+.InputAddOn-field,
+.InputAddOn-item {
+    border: 1px solid rgba(147, 128, 108, 0.25);
+    padding: 0.5em 0.75em;
+}
+.InputAddOn-field:first-child,
+.InputAddOn-item:first-child {
+    border-radius: 2px 0 0 2px;
+}
+.InputAddOn-field:last-child,
+.InputAddOn-item:last-child {
+    border-radius: 0 2px 2px 0;
 }

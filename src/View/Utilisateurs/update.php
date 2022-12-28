@@ -1,34 +1,38 @@
 <form class="custom-form" method="post" action="index.php?controller=utilisateur&action=updated">
     <fieldset>
         <h2>Mise à jour de votre compte :</h2>
-        <p>
-            <label for="username">Identifiant : </label>
-            <input type="text" value="<?= $utilisateur->getIdentifiant() ?>" name="identifiant" id="username"
-                                                 readonly required>
+        <p class="InputAddOn">
+            <label class="InputAddOn-item" for="username">Identifiant : </label>
+            <input class="InputAddOn-field" type="text" value="<?= $utilisateur->getIdentifiant() ?>" name="identifiant"
+                   id="username"
+                   readonly required>
         </p>
-        <p>
-            <label for="lastname">Nom : </label>
-            <input type="text" value="<?= $utilisateur->getNom() ?>" name="nom" id="lastname" required>
+        <p class="InputAddOn">
+            <label class="InputAddOn-item" for="lastname">Nom&#42; : </label>
+            <input class="InputAddOn-field" type="text" value="<?= $utilisateur->getNom() ?>" name="nom" id="lastname"
+                   required>
             <span class="validity"></span>
         </p>
-        <p>
-            <label for="firstname">Prénom : </label>
-            <input type="text" value="<?= $utilisateur->getPrenom() ?>" name="prenom" id="firstname" required>
+        <p class="InputAddOn">
+            <label class="InputAddOn-item" for="firstname">Prénom&#42; : </label>
+            <input class="InputAddOn-field" type="text" value="<?= $utilisateur->getPrenom() ?>" name="prenom"
+                   id="firstname" required>
             <span class="validity"></span>
 
         </p>
-        <p>
-            <label for="mdp_id">Ancien mot de passe&#42; : </label>
-            <input type="password" value="" placeholder="" name="ancienMDP" id="mdp_id" required>
+        <p class="InputAddOn">
+            <label class="InputAddOn-item" for="mdp_id">Ancien mot de passe&#42; : </label>
+            <input class="InputAddOn-field" type="password" value="" placeholder="" name="ancienMDP" id="mdp_id"
+                   required>
         </p>
-        <p>
-            <label for="mdp_id">Mot de passe&#42; : </label>
-            <input type="password" value="" placeholder="" name="mdp" id="mdp_id" required>
+        <p class="InputAddOn">
+            <label class="InputAddOn-item" for="mdp_id">Mot de passe&#42; : </label>
+            <input class="InputAddOn-field" type="password" value="" placeholder="" name="mdp" id="mdp_id" required>
 
         </p>
-        <p>
-            <label for="mdp2_id">Vérification du mot de passe&#42; : </label>
-            <input type="password" value="" placeholder="" name="mdp2" id="mdp2_id" required>
+        <p class="InputAddOn">
+            <label class="InputAddOn-item" for="mdp2_id">Vérification du mot de passe&#42; : </label>
+            <input class="InputAddOn-field" type="password" value="" placeholder="" name="mdp2" id="mdp2_id" required>
         </p>
         <p>
             <input type="submit" value="Mettre à jour" class="nav">
