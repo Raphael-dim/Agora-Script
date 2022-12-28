@@ -194,12 +194,13 @@ class ControllerQuestion
             MessageFlash::ajouter("danger", "Les contraintes de taille maximales des champs de textes n'ont pas été respectées.");
             Controller::redirect("index.php?action=form&controller=question&step=2");
         }
-        if ($_SESSION[FormConfig::$arr]['systemVote'] != "valeur" &
-            $_SESSION[FormConfig::$arr]['systemVote'] != "majoritaire") {
+        if ($_SESSION[FormConfig::$arr]['systemeVote'] != "valeur" &&
+            $_SESSION[FormConfig::$arr]['systemeVote'] != "majoritaire") {
+            MessageFlash::ajouter("danger", $_SESSION[FormConfig::$arr]['systemeVote'] );
+
             MessageFlash::ajouter("danger", "Veuillez vérifier le mode de scrutin.");
             Controller::redirect("index.php?action=form&controller=question&step=5");
         }
-        echo $_SESSION[FormConfig::$arr]['systemVote'];
         $question = new Question($_SESSION[FormConfig::$arr]['Titre'], $_SESSION[FormConfig::$arr]['Description'],
             $creation, $calendrier, $organisateur, $_SESSION[FormConfig::$arr]['systemeVote']);
         $questionBD = (new QuestionRepository())->sauvegarder($question);
@@ -401,9 +402,10 @@ class ControllerQuestion
             Controller::redirect('index.php?controller=question&action=readAll');
         }
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        if (!ConnexionUtilisateur::estConnecte() ||
-            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant()) {
-            MessageFlash::ajouter("danger", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
+        if ((!ConnexionUtilisateur::estConnecte() ||
+            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant()) &&
+            !ConnexionUtilisateur::estAdministrateur())  {
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas supprimer une question dont vous n'êtes par l'organisateur.");
             Controller::redirect('index.php?controller=question&action=readAll');
         } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
             Controller::afficheVue('view.php', ["pagetitle" => "Demande de confirmation",
@@ -451,7 +453,7 @@ class ControllerQuestion
         }
         $propositions = $question->getPropositionsTrie();
 
-        if ($question->getSystemVote() == 'majoritaire') {
+        if ($question->getsystemeVote() == 'majoritaire') {
 
         } else {
             Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',

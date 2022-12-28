@@ -18,6 +18,7 @@ use App\Vote\Model\Repository\PropositionSectionRepository;
 use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\ResponsableRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
+use App\Vote\Model\Repository\VoteRepository;
 
 class ControllerProposition
 {
@@ -130,7 +131,7 @@ class ControllerProposition
         }
         $responsable = new Responsable($question);
         $responsable->setIdentifiant(ConnexionUtilisateur::getLoginUtilisateurConnecte());
-        $proposition = new Proposition($_SESSION[FormConfig::$arr]['titre'], $responsable->getIdentifiant(), $question->getId(), 0);
+        $proposition = new Proposition($_SESSION[FormConfig::$arr]['titre'], $responsable->getIdentifiant(), $question->getId(), 0, 0);
         $propositionBD = (new PropositionRepository())->sauvegarder($proposition);
 
         $coAuteursSelec = $_SESSION[FormConfig::$arr]['co-auteur'];

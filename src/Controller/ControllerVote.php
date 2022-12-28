@@ -64,6 +64,7 @@ class ControllerVote
                 $votant->setIdentifiant(ConnexionUtilisateur::getLoginUtilisateurConnecte());
                 $vote = new Vote($votant, $proposition, $_GET['valeur']);
                 $voteBD = (new VoteRepository())->sauvegarder($vote);
+                echo $voteBD;
                 MessageFlash::ajouter('success', 'Vote pris en compte');
             }
             $propositions = (new PropositionRepository())->selectWhere($question->getId(), '*', 'idquestion');

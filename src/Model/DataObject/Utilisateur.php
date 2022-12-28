@@ -12,13 +12,31 @@ class Utilisateur extends AbstractDataObject
     private string $nom;
     private string $prenom;
     private string $mdpHache;
+    private bool $estAdmin;
 
-    public function __construct(string $identifiant, string $nom, string $prenom, string $mdpHache)
+    public function __construct(string $identifiant, string $nom, string $prenom, string $mdpHache, bool $estAdmin)
     {
         $this->identifiant = $identifiant;
         $this->nom = $nom;
         $this->prenom = $prenom;
         $this->mdpHache = $mdpHache;
+        $this->estAdmin = $estAdmin;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEstAdmin(): bool
+    {
+        return $this->estAdmin;
+    }
+
+    /**
+     * @param bool $estAdmin
+     */
+    public function setEstAdmin(bool $estAdmin): void
+    {
+        $this->estAdmin = $estAdmin;
     }
 
     public static function construireDepuisFormulaire(array $tableauFormulaire): Utilisateur
@@ -90,7 +108,8 @@ class Utilisateur extends AbstractDataObject
             "identifiantTag" => $this->identifiant,
             "nomTag" => $this->nom,
             "prenomTag" => $this->prenom,
-            "mdpTag" => $this->mdpHache
+            "mdpTag" => $this->mdpHache,
+            "estAdminTag" => $this->estAdmin
         );
     }
 }

@@ -36,7 +36,7 @@
 </div>
 <div class="over">
     <form method="post" action=<?= $url ?>>
-        <p><label><?php echo $message ?></label></p>
+        <p><label style="color: white"><?php echo $message ?></label></p>
         <Button id="bt1" class="nav" type="submit" name="cancel" value="Annuler">Annuler</Button>
         <Button id="bt2" class="nav" type="submit" name="confirm" value="Confirmer">Confirmer</Button>
 
