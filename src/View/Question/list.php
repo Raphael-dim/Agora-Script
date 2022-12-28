@@ -78,9 +78,9 @@ if (isset($_GET['selection'])) {
             if (ConnexionUtilisateur::estAdministrateur() || (ConnexionUtilisateur::estConnecte() &&
                     ConnexionUtilisateur::getLoginUtilisateurConnecte() == $organisateur)) {
                 echo '<div class="action" style="display: inline"><a href ="index.php?action=update&controller=question&idQuestion=' .
-                    $idQuestionURL . '"><img class="modifier" src = "..\web\images\modifier.png"  alt="modifier"></a >
+                    $idQuestionURL . '"><img class="modifier" src = "../web/images/modifier.png"  alt="modifier"></a >
                      <a href ="index.php?action=delete&controller=question&idQuestion=' .
-                    $idQuestionURL . '"><img class="delete" src = "..\web\images\delete.png"  alt="supprimer"></a></div>';
+                    $idQuestionURL . '"><img class="delete" src = "../web/images/delete.png"  alt="supprimer"></a></div>';
             }
             $interval = (new DateTime($date))->diff(new DateTime($calendrier->getDebutEcriture(true)));
             echo '<p style="background: rgba(1,46,73,0.14)" >Début de la phase d\'écriture dans : ' . Calendrier::diff($interval) . '</p>';
