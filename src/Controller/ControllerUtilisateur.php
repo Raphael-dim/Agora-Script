@@ -192,21 +192,35 @@ class ControllerUtilisateur
             MessageFlash::ajouter('info', 'Veuillez saisir un identifiant valide');
             Controller::redirect('index.php?controller=accueil');
         }
-        if (!ConnexionUtilisateur::estConnecte() || ConnexionUtilisateur::getLoginUtilisateurConnecte() != $_GET['idUtilisateur']) {
+        if (!ConnexionUtilisateur::estAdministrateur() && (!ConnexionUtilisateur::estConnecte() || ConnexionUtilisateur::getLoginUtilisateurConnecte() != $_GET['idUtilisateur'])) {
             MessageFlash::ajouter('info', 'Vous ne pouvez pas supprimer ce compte');
             Controller::redirect('index.php?controller=accueil');
         } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
+            if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $_GET['idUtilisateur']) {
+                $message = "Êtes vous sûr de vouloir supprimer votre compte ?";
+            } else {
+                $message = "Êtes vous sûr de vouloir supprimer ce compte ?";
+            }
             Controller::afficheVue('view.php', ["pagetitle" => "Demande de confirmation ",
                 "cheminVueBody" => "confirm.php",
                 "url" => "index.php?action=delete&controller=utilisateur&idUtilisateur=" . $_GET['idUtilisateur'],
-                "message" => "Êtes vous sûr de vouloir supprimer votre compte ?"]);
+                "message" => $message]);
         } else if (isset($_POST["cancel"])) {
-            Controller::redirect("index.php?controller=utilisateur&action=read");
+            if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $_GET['idUtilisateur']) {
+                Controller::redirect("index.php?controller=utilisateur&action=readAll");
+            } else {
+                Controller::redirect("index.php?controller=utilisateur&action=read");
+            }
         } else if (isset($_POST["confirm"])) {
             (new UtilisateurRepository())->delete($_GET['idUtilisateur']);
-            MessageFlash::ajouter('success', "Votre compte a bien été supprimé");
-            ConnexionUtilisateur::deconnecter();
-            Controller::redirect("index.php?controller=accueil");
+            if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $_GET['idUtilisateur']) {
+                MessageFlash::ajouter('success', "Votre compte a bien été supprimé");
+                ConnexionUtilisateur::deconnecter();
+                Controller::redirect("index.php?controller=accueil");
+            }else{
+                MessageFlash::ajouter('success', "Ce compte a bien été supprimé");
+                Controller::redirect("index.php?controller=utilisateur&action=readAll");
+            }
         }
     }
 }
