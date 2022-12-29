@@ -7,6 +7,7 @@
         echo $pagetitle; ?></title>
     <link href="css/global.css" rel="stylesheet">
     <link href="css/nav.css" rel="stylesheet">
+    <link href="css/keyframes.css" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="images/logo_vote.ico">
 </head>
 <body>

@@ -1,10 +1,7 @@
 :root {
     background-image: url("../images/fond2.jpg");
+    background-attachment: scroll;
     background-position: center;
-
-    /*background-size: 150%;*/
-    /*background-repeat: no-repeat;*/
-    /*--background: #3f3b45;*/
     --background2: #012e49;
     --details: #012e49;
     --brand: #199f8e;
@@ -12,98 +9,24 @@
 
 * {
     font-family: Georgia;
-}
-
-main > h1, h2 {
-    animation-duration: 0.5s;
-    animation-name: slidein;
-}
-
-@keyframes slidein {
-    from {
-        opacity: 0;
-        transform: translateX(100%);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0%);
-    }
-}
-
-
-@keyframes slideinbottom {
-    from {
-        opacity: 0;
-        transform: translateY(100%);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0%);
-    }
-}
-
-@keyframes fadeinout {
-    from {
-        opacity: 0;
-        transform: translateY(0%);
-        transform: translateX(100%);
-    }
-    15% {
-        opacity: 1;
-        transform: translateY(0%);
-        transform: translateX(0%);
-    }
-
-    90% {
-        transform: translateY(0%);
-    }
-    to {
-        transform: translateY(-150%);
-    }
-}
-
-
-* {
     box-sizing: border-box;
-    /*overflow: auto;*/
 }
 
 body {
-    background: var(--background);
     overflow-x: auto;
 }
 
 main {
     padding: 15px;
-    border-radius: 20px;
     width: 85%;
     margin: auto;
     padding-top: 100px;
-    background: rgba(25, 63, 86, 0.82);
+    background: rgba(25, 63, 86);
     min-height: 100vh;
     height: 100%;
     opacity: 0.99;
     z-index: -1;
     overflow: hidden;
-}
-
-main p {
-    width: auto;
-    padding: 10px;
-    margin: 10px auto 10px auto;
-}
-
-main > p {
-    border-radius: 10px;
-    background: rgba(223, 245, 244, 0.7);
-    border: solid rgba(255, 255, 255, 0.79) 1px;
-}
-
-main p a {
-    color: #000000;
-    /*text-decoration: none;*/
 }
 
 .attention {
@@ -449,8 +372,6 @@ li, a {
 
 input, textarea {
     background-color: white;
-    border: 1px #0c344b solid;
-    max-width: 70%;
 }
 
 #ecriture.phases > a {
@@ -541,10 +462,6 @@ a#vote:hover img {
 }
 
 
-#acceuil_search_form {
-    position: relative;
-    justify-content: center;
-}
 
 #imgsearch {
     height: auto;
@@ -554,38 +471,6 @@ a#vote:hover img {
     width: 90%;
     max-width: 100%;
     z-index: -1;
-}
-
-#form_search {
-    position: absolute;
-    display: flex;
-    top: 65%;
-    right: 15%;
-    width: 35%;
-    height: auto;
-    background: white;
-}
-
-#form_search > p {
-    width: 100%;
-    height: fit-content;
-    background: white;
-    padding: 2px;
-}
-
-#form_search > p > #keyword_input {
-    position: relative;
-    float: left;
-    width: 100%;
-    border: 0;
-    padding: 5px 10px 5px 7px;
-    font-size: 1.3rem;
-    line-height: 1;
-}
-
-#form_search > p > .search {
-    height: auto;
-    position: absolute;
 }
 
 
@@ -717,7 +602,7 @@ a#vote:hover img {
 
 @media screen and (max-width: 1000px) {
     main {
-        width: 100vw;
+        width: 100%;
     }
 
     #participants * {
@@ -928,7 +813,8 @@ a#vote:hover img {
     border-radius: 4px;
     animation: fadeinout 5.5s;
     margin: 1px;
-    transform: translateY(-150%);
+    transform: translateY(-1500%);
+    opacity:0;
     z-index: 0;
 }
 
@@ -1213,10 +1099,9 @@ input:valid + span:after {
 }
 
 .footer {
-    background-color: rgba(49, 49, 59, 0.86);
+    background-color: rgba(29, 29, 30, 0.99);
     vertical-align: middle;
     height: 60px;
-    border-radius: 5px;
     list-style: none;
     display: flex;
 }
