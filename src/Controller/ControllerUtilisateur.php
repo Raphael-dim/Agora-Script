@@ -98,6 +98,10 @@ class ControllerUtilisateur
             MessageFlash::ajouter('info', 'Votre mot de passe doit contenir au moins 1 chiffre et une lettre.');
             Controller::redirect('index.php?controller=utilisateur&action=create');
         }
+        if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+            MessageFlash::ajouter('warning', 'Le format du mail saisi est invalide');
+            Controller::redirect('index.php?controller=utilisateur&action=create');
+        }
         if ($_POST['mdp'] != $_POST['mdp2']) {
             MessageFlash::ajouter('warning', 'Les mots de passes sont différents');
             Controller::redirect('index.php?controller=utilisateur&action=create');

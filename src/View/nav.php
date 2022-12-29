@@ -12,11 +12,14 @@
         if (ConnexionUtilisateur::estAdministrateur()) {
             echo '<li class="grosmenu"><a href="index.php?action=readAll&controller=utilisateur">Liste des utilisateurs</a></li>';
         }
-        if (!isset($_SESSION['user'])) {
+        if (!ConnexionUtilisateur::estConnecte()) {
             echo '<li class=grosmenu><a href = index.php?action=connexion&controller=utilisateur>Connexion</a></li></ul>';
         } else {
-            echo "</ul>
-                  <a class=profil href='index.php?action=read&controller=utilisateur'>
-                                        <img src='images/profil.png' alt='Profil'></a>";
+            echo '
+                   <a class=profil href=index.php?action=readAll&controller=message
+                                &idUtilisateur=' . ConnexionUtilisateur::getLoginUtilisateurConnecte() . ' style="margin-right: 70px">
+                                <img src=images/logo_lettre.png alt=messagerie></a></ul>
+                    <a class=profil href = index.php?action=read&controller=utilisateur>
+                                        <img src = images/profil.png alt=Profil ></a > ';
         } ?>
 </nav>

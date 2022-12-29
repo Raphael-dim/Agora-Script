@@ -51,7 +51,7 @@
 
             echo '<br > ';
             echo '<h3>Nombre de votes : ' . $nbVotes . '</h3>';
-            $votesProposition = (new VoteRepository())->selectWhereTrie($proposition->getId(), '*',
+            $votesProposition = (new VoteRepository())->selectWhere($proposition->getId(), '*',
                 'idProposition', 'Votes', 'valeurvote');
             if ($nbVotes > 0) {
                 if ($nbVotes == 1) {
