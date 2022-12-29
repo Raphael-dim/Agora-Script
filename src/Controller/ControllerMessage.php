@@ -25,11 +25,16 @@ class ControllerMessage
             '*', array("clef0" => 'idAuteur', "clef1" => 'idDestinataire'), 'Messages', 'date');
         $recus = (new MessageRepository())->selectWhere(
             array("clef0" => $_GET['idContact'], "clef1" => ConnexionUtilisateur::getLoginUtilisateurConnecte()),
-            '*', array("clef0" => 'idAuteur', "clef1" => 'idDestinataire'), 'Messages', 'date' );
+            '*', array("clef0" => 'idAuteur', "clef1" => 'idDestinataire'), 'Messages', 'date');
         Controller::afficheVue('view.php',
             ["recus" => $recus,
                 "envoyes" => $envoyes,
                 "pagetitle" => "Conversation",
                 "cheminVueBody" => "Message/discussion.php"]);
+    }
+
+    public static function create()
+    {
+
     }
 }

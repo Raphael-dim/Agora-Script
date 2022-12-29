@@ -11,3 +11,7 @@ foreach ($recus as $recu) {
     }
 }
 
+?>
+
+<a href="index.php?action=create&controller=message">Envoyer un message</a>
+
