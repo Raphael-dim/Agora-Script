@@ -1,5 +1,6 @@
 <?php
 echo '<div class = "custom-form">';
+
 use App\Vote\Config\FormConfig as FormConfig;
 use App\Vote\Lib\MessageFlash;
 
@@ -26,8 +27,7 @@ function adduser(string $id): void
 {
     if (!in_array($id, $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']])) {
         $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']][] = $id;
-    }
-    else{
+    } else {
         MessageFlash::ajouter('warning', "Cet utilisateur est déja selectionné en tant que votant");
     }
 }
@@ -43,8 +43,16 @@ function removeuser(string $id): void
 
 require_once "../src/View/Utilisateurs/select.php";
 ?>
-<form method="post" class="nav">
-    <input type="submit" name=previous value="Retour" id="precedent" formnovalidate>
-    <input type="submit" name=next value="Suivant" id="suivant" >
+<form method="post">
+    <p>
+        <label for="systemeVote">Système de vote : </label>
+        <select name="systemeVote" id="systemeVote">
+            <option value="valeur" <?=FormConfig::DropDown("systemeVote", "valeur")?>>Vote par valeur </option>
+            <option value="majoritaire"  <?=FormConfig::DropDown("systemeVote", "majoritaire")?>>Jugement majoritaire </option>
+        </select>
+    </p>
+    <input type="submit" name=previous value="Retour" class="nav" id="precedent" formnovalidate>
+    <input type="submit" name=next value="Suivant" class="nav" id="suivant">
+
 </form>
-</div>
+

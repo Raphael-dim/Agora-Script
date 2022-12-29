@@ -27,7 +27,7 @@ use App\Vote\Lib\MessageFlash;
 use App\Vote\Model\HTTP\Session;
 
 
-echo '</div>';
+//echo '</div>';
 require __DIR__ . "/{$cheminVueBody}";
 echo '</main>';
 ?>
@@ -42,9 +42,6 @@ echo '</main>';
         </li>
     </ul>
 </footer>
-</body>
-</html>
-
 <?php
 
 echo '<div class = "pileflash" >';
@@ -57,5 +54,8 @@ foreach (MessageFlash::lireTousMessages() as $cle => $messagess) {
         echo '<div class="alert alert-' . $cle . '">' . $message . '</div>';
     }
 }
-
+echo '</div>'
 ?>
+</body>
+</html>
+

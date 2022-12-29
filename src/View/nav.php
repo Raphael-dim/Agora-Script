@@ -4,8 +4,14 @@
         <li class="grosmenu"><a href="index.php?action=create&controller=question">Créer une question</a></li>
         <li class="grosmenu"><a href="index.php?action=readAll&controller=question">Liste des questions</a></li>
 
+
         <?php
 
+        use App\Vote\Lib\ConnexionUtilisateur;
+
+        if (ConnexionUtilisateur::estAdministrateur()) {
+            echo '<li class="grosmenu"><a href="index.php?action=readAll&controller=utilisateur">Liste des utilisateurs</a></li>';
+        }
         if (!isset($_SESSION['user'])) {
             echo '<li class=grosmenu><a href = index.php?action=connexion&controller=utilisateur>Connexion</a></li></ul>';
         } else {
