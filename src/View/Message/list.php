@@ -12,6 +12,5 @@ foreach ($recus as $recu) {
 }
 
 ?>
-
-<a href="index.php?action=create&controller=message">Envoyer un message</a>
+<a style="display: block; margin-top: 100px"  href="index.php?action=create&controller=message">Envoyer un message</a>
 

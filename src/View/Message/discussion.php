@@ -16,8 +16,10 @@ usort($messages, "compare");
 
 foreach ($messages as $message) {
     if ($message->getAuteur()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
+        echo $message->getDate();
         echo '<div style="margin-left: 80%" class="messageChat"> ' . $message->getContenu() . '</div>';
     } else {
+        echo $message->getDate();
         echo '<div class="messageChat"> ' . $message->getContenu() . '</div>';
     }
 }

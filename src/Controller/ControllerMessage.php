@@ -35,6 +35,9 @@ class ControllerMessage
 
     public static function create()
     {
-
+        Controller::afficheVue('view.php', [
+            "cheminVueBody"=>"Message/create.php",
+            "pagetitle" => "Créer un message"
+        ]);
     }
 }
