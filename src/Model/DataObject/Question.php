@@ -184,7 +184,7 @@ class Question extends AbstractDataObject
      * @return string
      * @throws \Exception
      */
-    public function getPhase(): string
+    public function getPhase(): string  
     {
         $date = date('Y-m-d H:i');
         if ($date < $this->calendrier->getDebutEcriture(true)) {

@@ -140,9 +140,8 @@ class ControllerUtilisateur
 
     public static function readKeyword()
     {
-        $row = $_POST['row'];
         $keyword = $_POST['keyword'];
-        $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, $row);
+        $utilisateurs = (new UtilisateurRepository())->selectKeywordUtilisateur($keyword);
         Controller::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,
                 "pagetitle" => "Liste des Utilisateurs",
