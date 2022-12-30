@@ -21,7 +21,9 @@
         $interval = (new DateTime(date("d-m-Y H:i")))->diff(new DateTime($calendrier->getFinVote(true)));
         echo '<h2>Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
     }
-    foreach ($propositions as $proposition) {
+    foreach ($propositions
+
+             as $proposition) {
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
         echo '<div class=proposition>';
@@ -29,22 +31,14 @@
             $idPropositionURL . '> <h2>' . $titreHTML . '</h2>   </a>';
         if ($peutVoter) {
             $vote = Votant::aVote($proposition, $votes);
-            if (!is_null($vote)) {
-                for ($val = 1; $val <= $vote->getValeur(); $val++) {
-                    echo '<a id=vote style="background:#a94442" href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
+            for ($val = 1; $val <= $vote->getValeur(); $val++) {
+                echo '<a id=vote style="background:#a94442" href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
                         <img src=../web/images/coeur_logo.png alt=""></a>';
-                }
-                for ($val = $vote->getValeur() + 1; $val <= 5; $val++) {
-                    echo '<a id=vote href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
-                        <img src=../web/images/coeur_logo.png alt=""></a>';
-                }
-            } else {
-                for ($val = 1; $val <= 5; $val++) {
-                    echo '<a id=vote href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
-                        <img src=../web/images/coeur_logo.png alt=""></a>';
-                }
             }
-
+            for ($val = $vote->getValeur() + 1; $val <= 6; $val++) {
+                echo '<a id=vote href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
+                        <img src=../web/images/coeur_logo.png alt=""></a>';
+            }
 
             $nbVotes = htmlspecialchars($proposition->getNbVotes());
             $nbEtoiles = htmlspecialchars($proposition->getNbEtoiles());
