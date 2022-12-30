@@ -425,6 +425,9 @@ class ControllerQuestion
 
     public static function readKeyword(): void
     {
+        if (!isset($_POST['keyword'])){
+            Controller::redirect('index.php?action=create&controller=message');
+        }
         $keyword = $_POST['keyword'];
         $questions = (new QuestionRepository())->selectKeyword($keyword, 'titre');
         Controller::afficheVue('view.php',
