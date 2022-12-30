@@ -67,12 +67,14 @@
                 if ($val <= $vote->getValeur()) {
                     echo '<a class=vote style="background:#a94442" 
                         href="index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '">
-                        <img src=../web/images/coeur_logo.png alt=""></a>';
+                        <img src=../web/images/coeur_logo.png alt="">';
                 } else {
                     echo '<a class=vote 
                     href="index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '">
-                        <img src=../web/images/coeur_logo.png alt=""></a>';
+                        <img src=../web/images/coeur_logo.png alt="">
+                        ';
                 }
+                echo '<span>'.$attribut.'</span></a>';
             }
             $nbVotes = htmlspecialchars($proposition->getNbVotes());
             $nbEtoiles = htmlspecialchars($proposition->getNbEtoiles());
