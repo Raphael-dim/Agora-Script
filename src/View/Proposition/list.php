@@ -1,4 +1,4 @@
-<ul class="propositions">
+<div class="propositions">
     <?php
 
     use App\Vote\Lib\ConnexionUtilisateur;
@@ -7,6 +7,18 @@
     use App\Vote\Model\DataObject\Votant;
     use App\Vote\Model\Repository\VoteRepository;
 
+    if ($question->getSystemeVote() == 'majoritaire') {
+        $modeScrutin = 'Scrutin par jugement majoritaire';
+        $message = 'Le scrutin majoritaire établit un \'vote médian\' pour chaque proposition, 
+                    par défaut, la mention \'passable\' est sélectionnée.';
+    }
+    ?>
+    <h2><?= $modeScrutin ?></h2>
+    <p class="survol">
+        <img class="imageAide" src="images/aide_logo.png" alt=""/>
+        <span><?= $message ?></span>
+    </p>
+    <?php
     $i = 1;
     $peutVoter = false;
     $calendrier = $question->getCalendrier();
@@ -21,31 +33,47 @@
         $interval = (new DateTime(date("d-m-Y H:i")))->diff(new DateTime($calendrier->getFinVote(true)));
         echo '<h2>Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
     }
-    foreach ($propositions as $proposition) {
+    foreach ($propositions
+
+             as $proposition) {
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
         echo '<div class=proposition>';
-        echo ' <a href= index.php?action=read&controller=proposition&idProposition=' .
-            $idPropositionURL . '> <h2>' . $titreHTML . '</h2>   </a>';
+        echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
+            $idPropositionURL . '"> <h2>' . $titreHTML . '</h2>   </a>';
         if ($peutVoter) {
             $vote = Votant::aVote($proposition, $votes);
-            if (!is_null($vote)) {
-                for ($val = 1; $val <= $vote->getValeur(); $val++) {
-                    echo '<a id=vote style="background:#a94442" href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
-                        <img src=../web/images/coeur_logo.png alt=""></a>';
+            for ($val = 1; $val <= 6; $val++) {
+                switch ($val) {
+                    case 1 :
+                        $attribut = 'À rejeter';
+                        break;
+                    case 2  :
+                        $attribut = 'Insuffisant';
+                        break;
+                    case 3 :
+                        $attribut = 'Passable';
+                        break;
+                    case 4:
+                        $attribut = 'Assez bien';
+                        break;
+                    case 5 :
+                        $attribut = 'Bien';
+                        break;
+                    case 6 :
+                        $attribut = 'Très bien';
+                        break;
                 }
-                for ($val = $vote->getValeur() + 1; $val <= 5; $val++) {
-                    echo '<a id=vote href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
+                if ($val <= $vote->getValeur()) {
+                    echo '<a class=vote style="background:#a94442" 
+                        href="index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '">
                         <img src=../web/images/coeur_logo.png alt=""></a>';
-                }
-            } else {
-                for ($val = 1; $val <= 5; $val++) {
-                    echo '<a id=vote href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
+                } else {
+                    echo '<a class=vote 
+                    href="index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '">
                         <img src=../web/images/coeur_logo.png alt=""></a>';
                 }
             }
-
-
             $nbVotes = htmlspecialchars($proposition->getNbVotes());
             $nbEtoiles = htmlspecialchars($proposition->getNbEtoiles());
 
@@ -82,8 +110,8 @@
             href=index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '>Supprimer</a>';
         }
         $i++;
-        echo '<a href="" id = "auteur">par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a >';
+        echo '<a href="" >par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a >';
         echo '</div>';
     }
     ?>
-</ul>
+</div>

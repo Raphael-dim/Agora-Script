@@ -35,7 +35,7 @@ class ControllerVote
             MessageFlash::ajouter("warning", "Vous ne pouvez pas voter tant que la phase de vote n'a pas débuté.");
             $bool = false;
         }
-        if (!isset($_GET['valeur']) || $_GET['valeur'] > 5 || $_GET['valeur'] < 0) {
+        if (!isset($_GET['valeur']) || $_GET['valeur'] > 6 || $_GET['valeur'] < 0) {
             MessageFlash::ajouter('warning', "Valeur de vote invalide");
             $bool = false;
         }
@@ -51,8 +51,7 @@ class ControllerVote
             $vote = Votant::aVote($proposition, Votant::getVotes(ConnexionUtilisateur::getLoginUtilisateurConnecte()));
             if (!is_null($vote) && $vote->getValeur() == $_GET['valeur']) {
                 // Supprime un vote
-                (new VoteRepository())->delete($vote->getIdvote());
-                MessageFlash::ajouter('success', 'Vote supprimé');
+                MessageFlash::ajouter('info', 'Vous ne pouvez pas supprimer votre vote');
             } else if (!is_null($vote)) {
                 // Modifie un vote
                 $vote->setValeur($_GET['valeur']);

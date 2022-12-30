@@ -13,13 +13,14 @@
             echo '<li class="grosmenu"><a href="index.php?action=readAll&controller=utilisateur">Liste des utilisateurs</a></li>';
         }
         if (!ConnexionUtilisateur::estConnecte()) {
-            echo '<li class=grosmenu><a href = index.php?action=connexion&controller=utilisateur>Connexion</a></li></ul>';
+            echo '<li class=grosmenu><a href="index.php?action=connexion&controller=utilisateur">Connexion</a></li></ul>';
         } else {
             echo '
-                   <a class=profil href=index.php?action=readAll&controller=message
-                                &idUtilisateur=' . ConnexionUtilisateur::getLoginUtilisateurConnecte() . ' style="margin-right: 70px">
-                                <img src=images/logo_lettre.png alt=messagerie></a></ul>
-                    <a class=profil href = index.php?action=read&controller=utilisateur>
-                                        <img src = images/profil.png alt=Profil ></a > ';
+                   <li class=profil><a 
+                   href="index.php?action=readAll&controller=message&idUtilisateur=' . ConnexionUtilisateur::getLoginUtilisateurConnecte() . '"
+                    style="margin-right: 70px">
+                                <img src=images/logo_lettre.png alt=messagerie></a></li></ul>
+                    <a class=profil href = "index.php?action=read&controller=utilisateur">
+                                        <img src = images/profil.png alt=Profil ></a> ';
         } ?>
 </nav>

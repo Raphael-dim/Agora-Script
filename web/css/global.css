@@ -344,7 +344,7 @@ li#vote.phases > a {
     text-align: center;
 }
 
-a#vote {
+a.vote {
     display: inline-block;
     padding: 5px;
     margin-left: auto;
@@ -362,17 +362,17 @@ a#vote {
     color: #ffffff;
 }
 
-a#vote:hover {
+a.vote:hover {
     background-color: #f1f4f8;
     border-color: rgb(1, 46, 73);
     border-width: 2px;
 }
 
-a#vote img {
+a.vote img {
     filter: invert(85%);
 }
 
-a#vote:hover img {
+a.vote:hover img {
     filter: invert(0%);
 }
 
@@ -622,7 +622,7 @@ a#vote:hover img {
 .barre_utilisateur * {
     display: inline-block;
     vertical-align: middle;
-    color : black
+    color: black
 }
 
 .barre_utilisateur > a {
@@ -632,29 +632,35 @@ a#vote:hover img {
 .barre_utilisateur > a img {
     margin: 15px;
 }
-.utilisateur-liste{
-    text-align:center;
-    overflow:hidden;
-    width:60%;
-    margin:auto;
+
+.utilisateur-liste {
+    text-align: center;
+    overflow: hidden;
+    width: 60%;
+    margin: auto;
 }
-.utilisateur-liste>h2{
-    color:black;
+
+.utilisateur-liste > h2 {
+    color: black;
 }
-.utilisateur-liste a{
+
+.utilisateur-liste a {
     text-decoration: none;
     word-break: break-all;
 }
-.utilisateur-liste>ul>li:nth-child(odd){
-    background:grey;
-}
-.utilisateur-liste>ul>li:nth-child(even){
-    background:white;
+
+.utilisateur-liste > ul > li:nth-child(odd) {
+    background: grey;
 }
 
-.utilisateur-propositions>h2{
-    color:black;
+.utilisateur-liste > ul > li:nth-child(even) {
+    background: white;
 }
+
+.utilisateur-propositions > h2 {
+    color: black;
+}
+
 .sortie {
     max-width: 50px;
     filter: invert(1);
@@ -956,13 +962,13 @@ input, textarea{
 }
 
 input:invalid + span:after {
-   position: absolute;
+    position: absolute;
     content: '✖';
     color: red;
     padding-left: 5px;
 }
 
-.validity{
+.validity {
     background-color: transparent;
 }
 
@@ -1041,6 +1047,7 @@ input:valid + span:after {
     position: relative;
     padding-bottom: 50px;
 }
+
 .InputAddOn {
     display: flex;
     margin-bottom: 1.5em;
@@ -1050,9 +1057,11 @@ input:valid + span:after {
     max-width: 30%;
     flex: 1;
 }
+
 .InputAddOn-field:not(:first-child) {
     border-left: 0;
 }
+
 .InputAddOn-field:not(:last-child) {
     border-right: 0;
 }
@@ -1069,17 +1078,19 @@ input:valid + span:after {
     border: 1px solid rgba(147, 128, 108, 0.25);
     padding: 0.5em 0.75em;
 }
+
 .InputAddOn-field:first-child,
 .InputAddOn-item:first-child {
     border-radius: 2px 0 0 2px;
 }
+
 .InputAddOn-field:last-child,
 .InputAddOn-item:last-child {
     border-radius: 0 2px 2px 0;
 }
 
 
-.messageChat{
+.messageChat {
     max-width: min-content;
     padding: 10px;
     min-height: 25px;
@@ -1087,4 +1098,26 @@ input:valid + span:after {
     width: auto;
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.62);
+}
+
+.survol span {
+    width: auto;
+    visibility: hidden;
+    background-color: #012e49;
+    color: white;
+    border-radius: 10px;
+    padding: 5px;
+    display: inline-block;
+    font-size: 20px;
+}
+
+.survol img:hover + span {
+    width: auto;
+    visibility: visible;
+}
+
+.imageAide {
+    margin-left: 50%;
+    min-width: 50px;
+    filter: invert(1);
 }
