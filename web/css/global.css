@@ -1377,6 +1377,8 @@ input:valid + span:after {
 }
 
 #conversation {
+    overflow-y: scroll;
+    max-height: 400px;
     margin-left: 20%;
     width: 60%;
 }
