@@ -28,7 +28,7 @@ function adduser(string $id): void
         $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']][] = $id;
     }
     else{
-        MessageFlash::ajouter('warning', "Cet utilisateur est déja selectionné en tant que responsable");
+        MessageFlash::ajouter('warning', "Cet utilisateur est déjà sélectionné en tant que responsable");
     }
 }
 

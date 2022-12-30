@@ -1375,3 +1375,12 @@ input:valid + span:after {
     min-width: 50px;
     filter: invert(1);
 }
+
+#conversation {
+    margin-left: 20%;
+    width: 60%;
+}
+
+.date{
+    color: white;
+}
