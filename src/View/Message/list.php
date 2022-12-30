@@ -6,9 +6,18 @@ foreach ($recus as $recu) {
         $contacts[] = $recu->getAuteur();
     }
 }
+
+foreach ($envoyes as $envoye) {
+    if (!in_array($envoye->getDestinataire(), $contacts)) {
+        $contacts[] = $envoye->getDestinataire();
+    }
+}
 foreach ($contacts as $contact) {
-    echo '<a class="contact" href=index.php?controller=message&action=read&idContact=' . $contact->getIdentifiant() . '
-         > ' . $contact->getIdentifiant() . '</a > ';
+    echo '<div class="contact">
+            <img style="max-height: 40px" src="images/profil.png" alt="">
+            <a class="" href="">' . $contact->getPrenom() . ' ' . $contact->getNom() . '</a>
+            <a style="min-width: 100%" href="index.php?controller=message&action=read&idContact=' . $contact->getIdentifiant() . '">Ecrire un message</a>
+             </div> ';
 }
 
 ?>
