@@ -453,7 +453,7 @@ class ControllerQuestion
         }
         $propositions = $question->getPropositionsTrie();
 
-        if ($question->getsystemeVote() == 'majoritaire') {
+        if ($question->getSystemeVote() == 'majoritaire') {
 
         } else {
             Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',

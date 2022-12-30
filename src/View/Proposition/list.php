@@ -7,6 +7,19 @@
     use App\Vote\Model\DataObject\Votant;
     use App\Vote\Model\Repository\VoteRepository;
 
+
+    if ($question->getSystemeVote() == 'majoritaire') {
+        $modeScrutin = 'Scrutin par jugement majoritaire';
+        $message = 'Le scrutin majoritaire établit un \'vote médian\' pour chaque proposition, 
+                    par défaut, la valeur \'passable\' est sélectionnée.';
+    }
+    ?>
+    <h2><?= $modeScrutin ?></h2>
+    <p class="survol">
+    <img class="imageAide" src="images/aide_logo.png" alt=""/>
+    <span><?= $message ?></span>
+    </p>
+    <?php
     $i = 1;
     $peutVoter = false;
     $calendrier = $question->getCalendrier();

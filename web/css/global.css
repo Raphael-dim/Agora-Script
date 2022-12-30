@@ -1342,3 +1342,28 @@ input:valid + span:after {
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.62);
 }
+
+.survol span {
+    width: auto;
+    visibility: hidden;
+    background-color: #012e49;
+    color: white;
+    border-radius: 10px;
+    padding: 5px;
+    display: inline-block;
+    font-size: 20px;
+
+}
+
+.survol img:hover + span {
+
+    width: auto;
+    visibility: visible;
+}
+
+.imageAide{
+
+    margin-left: 50%;
+    min-width: 50px;
+    filter: invert(1);
+}
