@@ -91,8 +91,8 @@ class Message extends AbstractDataObject
     public function formatTableau(): array
     {
         return array(
-            "auteurTag" => $this->auteur->getIdentifiant(),
-            "destinataireTag" => $this->destinataire->getIdentifiant(),
+            "idAuteurTag" => $this->auteur->getIdentifiant(),
+            "idDestinataireTag" => $this->destinataire->getIdentifiant(),
             "contenuTag" => $this->contenu,
             "dateTag" => $this->date
         );

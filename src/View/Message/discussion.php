@@ -35,3 +35,14 @@ foreach ($messages as $message) {
 }
 ?>
 </div>
+<form class="custom-form" method="post" action="index.php?action=created&controller=message">
+    <input type="hidden" name="idContact" value="<?= $_GET['idContact'] ?>">
+    <p style="width: 70%; margin-top: 100px" class="champ">
+        <label for="message_id">Message : </label>
+        <textarea id="message_id" maxlength="350" name="message" rows="7" cols="50" required> </textarea>
+        <label>350 caractères maximum</label>
+    </p>
+    <input id="suivant" type="submit" value="Envoyer" class="nav">
+
+</form>
+
