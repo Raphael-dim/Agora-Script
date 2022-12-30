@@ -44,26 +44,29 @@
                         <img src=../web/images/coeur_logo.png alt=""></a>';
                 }
             }
-        }
 
-        $nbVotes = htmlspecialchars($proposition->getNbVotes());
-        $nbEtoiles = htmlspecialchars($proposition->getNbEtoiles());
 
-        echo '<br > ';
-        echo '<h3>Nombre de votes : ' . $nbVotes . '</h3>';
-        $votesProposition = (new VoteRepository())->selectWhereTrie($proposition->getId(), '*',
-            'idProposition', 'Votes', 'valeurvote');
+            $nbVotes = htmlspecialchars($proposition->getNbVotes());
+            $nbEtoiles = htmlspecialchars($proposition->getNbEtoiles());
 
-        if ($nbVotes > 0) {
-            if (sizeof($votesProposition) % 2  == 0){
-                $median = $votesProposition[sizeof($votesProposition) / 2];
-            }else{
-                $median = $votesProposition[sizeof($votesProposition) / 2 + 1];
+            echo '<br > ';
+            echo '<h3>Nombre de votes : ' . $nbVotes . '</h3>';
+            $votesProposition = (new VoteRepository())->selectWhere($proposition->getId(), '*',
+                'idProposition', 'Votes', 'valeurvote');
+            if ($nbVotes > 0) {
+                if ($nbVotes == 1) {
+                    $median = $votesProposition[0];
+                } else {
+                    if (sizeof($votesProposition) % 2 == 0) {
+                        $median = $votesProposition[(sizeof($votesProposition) / 2) - 1];
+                    } else {
+                        $median = $votesProposition[((sizeof($votesProposition) + 1) / 2) - 1];
+                    }
+                }
+                echo '<h3>Moyenne des votes : ' . htmlspecialchars($nbEtoiles / $nbVotes) . '</h3>';
+                echo '<h3>Médianne :  ' . htmlspecialchars($median->getValeur()) . '</h3>';
             }
-            echo '<h3>Moyenne des votes : ' . htmlspecialchars($nbEtoiles / $nbVotes) . '</h3>';
-            echo '<h3>Médianne :  ' . htmlspecialchars($median->getValeur()).'</h3>';
         }
-
 
 
         if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||

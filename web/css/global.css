@@ -1077,3 +1077,14 @@ input:valid + span:after {
 .InputAddOn-item:last-child {
     border-radius: 0 2px 2px 0;
 }
+
+
+.messageChat{
+    max-width: min-content;
+    padding: 10px;
+    min-height: 25px;
+    margin: 10px 10px 10px 20%;
+    width: auto;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.62);
+}
