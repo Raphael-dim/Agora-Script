@@ -74,7 +74,7 @@
                         <img src=../web/images/coeur_logo.png alt="">
                         ';
                 }
-                echo '<span>'.$attribut.'</span></a>';
+                echo '<span style="font-size: 18px">'.$attribut.'</span></a>';
             }
             $nbVotes = htmlspecialchars($proposition->getNbVotes());
             $nbEtoiles = htmlspecialchars($proposition->getNbEtoiles());

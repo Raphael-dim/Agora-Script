@@ -1138,6 +1138,22 @@ input:valid + span:after {
     filter: invert(1);
 }
 
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #7ec7f1;
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #012e49;
+    border-radius: 10px;
+    border: 3px solid #5bb3e7;
+}
+
 #conversation {
     overflow-y: scroll;
     max-height: 400px;
