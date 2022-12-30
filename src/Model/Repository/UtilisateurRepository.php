@@ -35,4 +35,9 @@ class UtilisateurRepository extends AbstractRepository
     {
         return array("identifiant", "nom", "prenom", "mdp", "estAdmin", "email", "emailAValider", "nonce");
     }
+
+    public function selectKeywordUtilisateur($motclef):array
+    {
+        return $this->selectKeyword($motclef,'nom') + $this->selectKeyword($motclef,'prenom') + $this->selectKeyword($motclef,'identifiant');
+    }
 }

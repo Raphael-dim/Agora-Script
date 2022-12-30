@@ -80,7 +80,11 @@ ul[id="Menu"] li {
     min-width:34px ;
 }
 
-
+nav img{
+    margin-left: 10px;
+    display: inline;
+    max-width: 25px;
+}
 @media screen and (max-width: 1000px) {
 
 

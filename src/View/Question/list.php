@@ -1,3 +1,4 @@
+<link href="css/ListeQuestion.css" rel="stylesheet">
 <?php
 if (isset($_GET['selection'])) {
     if ($_GET['selection'] == 'ecriture') {
