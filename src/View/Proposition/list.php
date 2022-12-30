@@ -7,10 +7,6 @@
     use App\Vote\Model\DataObject\Votant;
     use App\Vote\Model\Repository\VoteRepository;
 
-    for ($i = 1; $i < 6; $i++) {
-
-    }
-
     if ($question->getSystemeVote() == 'majoritaire') {
         $modeScrutin = 'Scrutin par jugement majoritaire';
         $message = 'Le scrutin majoritaire établit un \'vote médian\' pour chaque proposition, 
