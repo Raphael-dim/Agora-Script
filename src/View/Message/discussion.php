@@ -14,7 +14,10 @@ function compare(Message $message1, Message $message2): int
 
 $messages = array_merge($recus, $envoyes);
 usort($messages, "compare");
-echo '<div id="conversation">';
+echo '<h2>Votre conversation avec ' . htmlspecialchars($contact->getPrenom()) . ' ' . htmlspecialchars($contact->getNom()) . ' </h2>
+<hr style="margin-bottom: 20px">
+<div id="conversation">';
+
 echo '';
 $i = 1;
 $id = '';
@@ -22,7 +25,7 @@ foreach ($messages as $message) {
 
     $interval = (new DateTime(date("d-m-Y H:i")))->diff(new DateTime($message->getDate()));
     if (Calendrier::diff($interval) == "") {
-        $diff = 'quelques secondes.';
+        $diff = 'quelques secondes . ';
     } else {
         $diff = Calendrier::diff($interval);
     }
@@ -30,12 +33,12 @@ foreach ($messages as $message) {
         $id = 'dernierMessage';
     }
     if ($message->getAuteur()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
-        echo '<p id="' . $id . '"  style="margin-left: 50%" class="date" >Il y a ' . $diff . '</p>';
-        echo '<div style="margin-left: 60%;" class="messageChat" > ' . $message->getContenu() . '</div>';
+        echo ' <p id = "' . $id . '"  style = "margin-left: 50%" class="date" > Il y a ' . $diff . ' </p > ';
+        echo '<div style = "margin-left: 60%;" class="messageChat" > ' . htmlspecialchars($message->getContenu()) . '</div > ';
 
     } else {
-        echo '<p id="' . $id . '" class="date" >Il y a ' . $diff . '</p>';
-        echo '<div class="messageChat"> ' . $message->getContenu() . '</div>';
+        echo '<p id = "' . $id . '" class="date" > Il y a ' . $diff . ' </p > ';
+        echo '<div class="messageChat" > ' . htmlspecialchars($message->getContenu()) . '</div > ';
     }
     $i++;
 }

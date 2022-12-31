@@ -48,10 +48,12 @@ class ControllerMessage
                 (new MessageRepository())->update($recu);
             }
         }
+
         Controller::afficheVue('view.php',
             ["recus" => $recus,
                 "envoyes" => $envoyes,
                 "pagetitle" => "Conversation",
+                "contact" => (new UtilisateurRepository())->select($_GET['idContact']),
                 "cheminVueBody" => "Message/discussion.php"]);
     }
 
