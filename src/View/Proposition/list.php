@@ -1,5 +1,4 @@
-<ul class="propositions">
-    <?php
+ <?php
 
     use App\Vote\Lib\ConnexionUtilisateur;
     use App\Vote\Model\DataObject\Calendrier;
@@ -19,27 +18,28 @@
         $peutVoter = true;
         $interval = (new DateTime(date("d-m-Y H:i")))->diff(new DateTime($calendrier->getFinVote(true)));
         echo '<h2>Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
+        echo '<ul class="propositions">';
     }
     foreach ($propositions as $proposition) {
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
-        echo '<div class=proposition>';
-        echo ' <a href= index.php?action=read&controller=proposition&idProposition=' .
-            $idPropositionURL . '> <h2>' . $titreHTML . '</h2>   </a>';
+        echo '<li class="proposition">';
+        echo ' <a href="index.php?action=read&controller=proposition&idProposition=' .
+            $idPropositionURL . '"> <h2>' . $titreHTML . '</h2>   </a>';
         if ($peutVoter) {
             $vote = Votant::aVote($proposition, $votes);
             if (!is_null($vote)) {
                 for ($val = 1; $val <= $vote->getValeur(); $val++) {
-                    echo '<a id=vote style="background:#a94442" href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
+                    echo '<a class="vote" style="background:#a94442" href="index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '">
                         <img src=../web/images/coeur_logo.png alt=""></a>';
                 }
                 for ($val = $vote->getValeur() + 1; $val <= 5; $val++) {
-                    echo '<a id=vote href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
+                    echo '<a class="vote" href="index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '">
                         <img src=../web/images/coeur_logo.png alt=""></a>';
                 }
             } else {
                 for ($val = 1; $val <= 5; $val++) {
-                    echo '<a id=vote href=index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '>
+                    echo '<a class="vote" href="index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '">
                         <img src=../web/images/coeur_logo.png alt=""></a>';
                 }
             }
@@ -58,11 +58,11 @@
         if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable() && $question->getPhase() == 'ecriture') {
 
             echo ' <a class="nav suppProp" 
-            href=index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '>Supprimer</a>';
+            href="index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '">Supprimer</a>';
         }
         $i++;
-        echo '<a href="" id = "auteur">par ' .htmlspecialchars($proposition->getIdResponsable()) . ' </a >';
-        echo '</div>';
+        echo '<a href="">par ' .htmlspecialchars($proposition->getIdResponsable()) . ' </a >';
+        echo '</li>';
     }
     ?>
 </ul>

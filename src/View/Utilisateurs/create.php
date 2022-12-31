@@ -1,20 +1,21 @@
-<form class="custom-form" method="post" action="index.php?controller=utilisateur&action=created" class="inscription">
+<form class="custom-form inscription" method="post" action="index.php?controller=utilisateur&action=created">
     <fieldset>
         <h2 style="color: #022234">Formulaire d'inscription :</h2>
         <p>
-            <label for="username">Identifiant : </label><input type="text" placeholder="" name="identifiant"
-                                                               id="username" required>
+            <label for="username">Identifiant : </label>
+            <input type="text" placeholder="" name="identifiant" id="username" required>
             <span class="validity"></span>
 
         </p>
         <p>
-            <label for="lastname">Nom : </label><input type="text" placeholder="" name="nom" id="lastname" required>
+            <label for="lastname">Nom : </label>
+            <input type="text" placeholder="" name="nom" id="lastname" required>
             <span class="validity"></span>
 
         </p>
         <p>
-            <label for="firstname">Prénom : </label><input type="text" placeholder="" name="prenom" id="firstname"
-                                                           required>
+            <label for="firstname">Prénom : </label>
+            <input type="text" placeholder="" name="prenom" id="firstname" required>
             <span class="validity"></span>
         </p>
         <p class="InputAddOn">

@@ -462,7 +462,7 @@ input, textarea {
     background: #FFC55C;
 }
 
-li#vote.phases > a {
+li.vote.phases > a {
     background: rgba(246, 121, 82, 0.85);
 }
 
@@ -479,7 +479,7 @@ li#vote.phases > a {
     text-align: center;
 }
 
-a#vote {
+a.vote {
     display: inline-block;
     padding: 5px;
     margin-left: auto;
@@ -497,17 +497,17 @@ a#vote {
     color: #ffffff;
 }
 
-a#vote:hover {
+a.vote:hover {
     background-color: #f1f4f8;
     border-color: rgb(1, 46, 73);
     border-width: 2px;
 }
 
-a#vote img {
+a.vote img {
     filter: invert(85%);
 }
 
-a#vote:hover img {
+a.vote:hover img {
     filter: invert(0%);
 }
 

@@ -125,7 +125,7 @@
             echo $cercle;
         }
         ?>
-    </div></div>
+    </div></div></div>
 </div>
 
 

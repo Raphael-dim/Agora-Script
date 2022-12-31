@@ -7,7 +7,7 @@
         <?php
 
         if (!isset($_SESSION['user'])) {
-            echo '<li class=grosmenu><a href = index.php?action=connexion&controller=utilisateur>Connexion</a></li></ul>';
+            echo '<li class=grosmenu><a href ="index.php?action=connexion&controller=utilisateur">Connexion</a></li></ul>';
         } else {
             echo "</ul>
                   <a class=profil href='index.php?action=read&controller=utilisateur'>
