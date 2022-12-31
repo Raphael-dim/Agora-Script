@@ -16,22 +16,28 @@ $messages = array_merge($recus, $envoyes);
 usort($messages, "compare");
 echo '<div id="conversation">';
 echo '';
+$i = 1;
+$id = '';
 foreach ($messages as $message) {
+
     $interval = (new DateTime(date("d-m-Y H:i")))->diff(new DateTime($message->getDate()));
     if (Calendrier::diff($interval) == "") {
         $diff = 'quelques secondes.';
     } else {
         $diff = Calendrier::diff($interval);
     }
-
+    if ($i == sizeof($messages)) {
+        $id = 'dernierMessage';
+    }
     if ($message->getAuteur()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
-        echo '<p style="margin-left: 60%" class="date" >Il y a ' . $diff . '</p>';
-        echo '<div style="margin-left: 80%;" class="messageChat" > ' . $message->getContenu() . '</div>';
+        echo '<p id="' . $id . '"  style="margin-left: 50%" class="date" >Il y a ' . $diff . '</p>';
+        echo '<div style="margin-left: 60%;" class="messageChat" > ' . $message->getContenu() . '</div>';
 
     } else {
-        echo '<p class="date" >Il y a ' . $diff . '</p>';
+        echo '<p id="' . $id . '" class="date" >Il y a ' . $diff . '</p>';
         echo '<div class="messageChat"> ' . $message->getContenu() . '</div>';
     }
+    $i++;
 }
 ?>
 </div>

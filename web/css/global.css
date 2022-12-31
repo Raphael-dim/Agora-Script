@@ -620,6 +620,10 @@ a.vote:hover img {
         flex-direction: column;
     }
 
+    #conversation {
+        margin-left: 2%;
+    }
+
 
 }
 
@@ -1107,11 +1111,14 @@ input:valid + span:after {
 
 
 .messageChat {
-    max-width: min-content;
     padding: 10px;
     min-height: 25px;
-    margin: 10px 10px 10px 20%;
-    width: auto;
+    height: auto;
+    margin: 10px 10px 10px 10%;
+    min-width: content-box;
+    max-width: max-content;
+    word-wrap: break-word;
+    white-space: normal;
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.62);
 }
@@ -1155,6 +1162,7 @@ input:valid + span:after {
 }
 
 #conversation {
+    overflow-x: auto;
     overflow-y: scroll;
     max-height: 400px;
     margin-left: 20%;

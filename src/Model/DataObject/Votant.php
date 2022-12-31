@@ -53,7 +53,7 @@ class Votant extends Utilisateur
         $votant->setIdentifiant(ConnexionUtilisateur::getLoginUtilisateurConnecte());
         $proposition->setNbVotes(1);
         $vote = new Vote($votant, $proposition, 3);
-        (new VoteRepository())->sauvegarder($vote);
+        (new VoteRepository())->sauvegarder($vote, true);
         return $vote;
     }
 

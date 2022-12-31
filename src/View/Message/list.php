@@ -1,9 +1,13 @@
 <h2>Votre messagerie</h2>
 <?php
 $contacts = array();
+$nonVu = array();
 foreach ($recus as $recu) {
     if (!in_array($recu->getAuteur(), $contacts)) {
         $contacts[] = $recu->getAuteur();
+    }
+    if (!$recu->isEstvu() && !in_array($recu->getAuteur(), $nonVu)) {
+        $nonVu[] = $recu->getAuteur();
     }
 }
 
@@ -13,11 +17,21 @@ foreach ($envoyes as $envoye) {
     }
 }
 foreach ($contacts as $contact) {
+    if (in_array($contact, $nonVu)) {
+        $message = 'Nouveau message';
+    } else {
+        $message = 'Écrire un message';
+    }
     echo '<div class="contact">
             <img style="max-height: 40px" src="images/profil.png" alt="">
             <a class="" href="">' . $contact->getPrenom() . ' ' . $contact->getNom() . '</a>
-            <a style="min-width: 100%" href="index.php?controller=message&action=read&idContact=' . $contact->getIdentifiant() . '">Ecrire un message</a>
-             </div> ';
+            <a style="min-width: 100%" href="index.php?controller=message&action=read&idContact=' . $contact->getIdentifiant() . '#dernierMessage">' . $message . '</a>
+            ';
+    if ($message == 'Nouveau message') {
+        echo '<img style="width: 40px" src="images/nouveau-message.png" >';
+    }
+
+    echo '</div> ';
 }
 
 ?>

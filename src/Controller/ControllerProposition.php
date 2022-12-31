@@ -132,7 +132,7 @@ class ControllerProposition
         $responsable = new Responsable($question);
         $responsable->setIdentifiant(ConnexionUtilisateur::getLoginUtilisateurConnecte());
         $proposition = new Proposition($_SESSION[FormConfig::$arr]['titre'], $responsable->getIdentifiant(), $question->getId(), 0, 0);
-        $propositionBD = (new PropositionRepository())->sauvegarder($proposition);
+        $propositionBD = (new PropositionRepository())->sauvegarder($proposition, true);
 
         $coAuteursSelec = $_SESSION[FormConfig::$arr]['co-auteur'];
         $proposition->setId($propositionBD);

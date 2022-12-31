@@ -9,28 +9,58 @@ class Message extends AbstractDataObject
     private Utilisateur $destinataire;
     private string $contenu;
     private string $date;
+    private bool $estVu;
+    private int $id;
 
     /**
      * @param Utilisateur $auteur
      * @param Utilisateur $destinataire
      * @param string $contenu
+     * @param string $date
+     * @param bool $estVu
      */
-    public function __construct(Utilisateur $auteur, Utilisateur $destinataire, string $contenu, string $date)
+    public function __construct(Utilisateur $auteur, Utilisateur $destinataire, string $contenu, string $date, bool $estVu)
     {
         $this->auteur = $auteur;
         $this->destinataire = $destinataire;
         $this->contenu = $contenu;
         $this->date = $date;
+        $this->estVu = $estVu;
     }
 
     /**
-     * @return Utilisateur
+     * @return bool
      */
+    public function isEstVu(): bool
+    {
+        return $this->estVu;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function setEstVu(bool $estVu): void
+    {
+        $this->estVu = $estVu;
+    }
+
     public function getAuteur(): Utilisateur
     {
         return $this->auteur;
     }
-
 
     /**
      * @return string
@@ -88,13 +118,22 @@ class Message extends AbstractDataObject
         $this->contenu = $contenu;
     }
 
-    public function formatTableau(): array
+    public function formatTableau($update = false): array
     {
-        return array(
+        $estVu = 0;
+        if ($this->estVu) {
+            $estVu = 1;
+        }
+        $tab =  array(
             "idAuteurTag" => $this->auteur->getIdentifiant(),
             "idDestinataireTag" => $this->destinataire->getIdentifiant(),
             "contenuTag" => $this->contenu,
-            "dateTag" => $this->date
+            "dateTag" => $this->date,
+            "estVuTag" => $estVu
         );
+        if($update) {
+            $tab["idMessageTag"] = $this->id;
+        }
+        return $tab;
     }
 }
