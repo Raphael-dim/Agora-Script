@@ -15,7 +15,7 @@
     ?>
     <h2><?= $modeScrutin ?></h2>
     <p class="survol">
-        <img class="imageAide" src="images/aide_logo.png" alt=""/>
+        <img class="imageAide" src="images/aide_logo.png" alt="">
         <span><?= $message ?></span>
     </p>
     <?php

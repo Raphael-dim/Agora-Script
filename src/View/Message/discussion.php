@@ -30,14 +30,14 @@ foreach ($messages as $message) {
         $diff = Calendrier::diff($interval);
     }
     if ($i == sizeof($messages)) {
-        $id = 'dernierMessage';
+        $id = 'id="dernierMessage"';
     }
     if ($message->getAuteur()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
-        echo ' <p id = "' . $id . '"  style = "margin-left: 50%" class="date" > Il y a ' . $diff . ' </p > ';
+        echo ' <p ' . $id . ' style = "margin-left: 50%" class="date" > Il y a ' . $diff . ' </p > ';
         echo '<div style = "margin-left: 60%;" class="messageChat" > ' . htmlspecialchars($message->getContenu()) . '</div > ';
 
     } else {
-        echo '<p id = "' . $id . '" class="date" > Il y a ' . $diff . ' </p > ';
+        echo '<p ' . $id . ' class="date" > Il y a ' . $diff . ' </p > ';
         echo '<div class="messageChat" > ' . htmlspecialchars($message->getContenu()) . '</div > ';
     }
     $i++;
