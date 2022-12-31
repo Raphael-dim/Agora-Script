@@ -6,11 +6,15 @@
     use App\Vote\Model\DataObject\CoAuteur;
     use App\Vote\Model\DataObject\Votant;
     use App\Vote\Model\Repository\VoteRepository;
+    var_dump($question->getSystemeVote());
 
     if ($question->getSystemeVote() == 'majoritaire') {
         $modeScrutin = 'Scrutin par jugement majoritaire';
         $message = 'Le scrutin majoritaire établit un \'vote médian\' pour chaque proposition, 
                     par défaut, la mention \'passable\' est sélectionnée.';
+    }else if($question->getSystemeVote() == 'valeur'){
+        $modeScrutin = 'Scrutin par valeur';
+        $message = 'Le scrutin par valeur établit une \'note moyenne\' pour chaque proposition.';
     }
     ?>
     <h2><?= $modeScrutin ?></h2>

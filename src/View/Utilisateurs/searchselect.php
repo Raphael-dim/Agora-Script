@@ -15,7 +15,7 @@ if ((isset($_POST["keyword"]) && isset($_POST["row"]))) {
         <p>
             <input type="text" placeholder="" name="keyword" id="motclef" value ="<?php echo $keyword ?>" required>
             <input type ="hidden" name = "row" value = "nom" >
-            <input type="image" alt = "Submit" src="../web/images/search.png" class = "search">
+            <input type="image" alt = "Submit" src="../web/images/search.png" style="width:25px" id = "search">
         </p>
     </fieldset>
 </form>
