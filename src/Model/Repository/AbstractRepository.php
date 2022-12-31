@@ -19,7 +19,7 @@ abstract class AbstractRepository
      * @param AbstractDataObject $object
      * @return ?int
      */
-    public function sauvegarder(AbstractDataObject $object): ?int
+    public function sauvegarder(AbstractDataObject $object, $return = false): ?int
     {
         $sql = "INSERT INTO " . $this->getNomTable();
         $sql = $sql . " (";
@@ -33,15 +33,13 @@ abstract class AbstractRepository
         }
         $sql = substr($sql, 0, -2);
         $sql = $sql . ")";
-        if (get_class($object) == Question::class || get_class($object) == Proposition::class
-            || get_class($object) == Section::class || get_class($object) == Calendrier::class) {
+        if ($return) {
             $sql = $sql . " RETURNING " . $this->getNomClePrimaire();
         }
         $sql = $sql . ";";
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
         // On donne les valeurs et on exécute la requête
-        echo $sql;
         try {
             $pdoStatement->execute($object->formatTableau());
             foreach ($pdoStatement as $clePrimaire) {
@@ -83,10 +81,10 @@ abstract class AbstractRepository
         $i = 0;
         foreach ($this->getNomsColonnes() as $colonne) {
             $sql = $sql . $colonne . " =:" . $colonne . "Tag";
-            if($i != sizeof($this->getNomsColonnes())-1){
+            if ($i != sizeof($this->getNomsColonnes()) - 1) {
                 $sql = $sql . " AND ";
             }
-            $i = $i+1;
+            $i = $i + 1;
         }
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
         try {
@@ -187,71 +185,18 @@ abstract class AbstractRepository
         return $this->construire($data);
     }
 
-    /**
-     * Permet de construire une requete sql grace aux contraintes passées en paramètres
-     * @param $clef             //Clef primaire
-     * @param $rowSelect        //Les colonnes que vous voulez selectionner '*' par défaut si le parametre n'est pas renseigné
-     * @param $whereCondition   //La condition qui sera placée dans le WHERE,
-                                //null par défaut qui sera remplacé dans la requete pas la clé primaire si le parametre n'est pas renseigné
-     * @param $nomTable         //le nom de la table, null par défaut qui sera remplacé dans la requete par la table par défaut
-     * @return array
-     */
-    public function selectWhere($clef, string $rowSelect = '*', $whereCondition = null, $nomTable = null): array
-    {
-        $ADonnees = array();
-        if (is_null($nomTable)) {
-            $sql = 'SELECT ' . $rowSelect . ' from ' . $this->getNomTable();
-        } else {
-            $sql = 'SELECT ' . $rowSelect . ' from ' . $nomTable;
-        }
-        if (is_null($whereCondition)) {
-            $sql = $sql . ' WHERE ' . $this->getNomClePrimaire() . ' =:clef';
-        } else if (!is_array($whereCondition)) {
-            $sql = $sql . ' WHERE ' . $whereCondition . ' =:clef';
-        } else {
-            $nbCases = sizeof($whereCondition);
-            $i = 0;
-            foreach ($whereCondition as $where) {
-                if ($i == 0) {
-                    $sql = $sql . ' WHERE ';
-                }
-                $sql = $sql . $where . ' =:clef' . $i . ' ';
-                if ($i != $nbCases - 1) {
-                    $sql = $sql . 'AND ';
-                } else {
-                    $sql = $sql . ';';
-                }
-                $i++;
-            }
-        }
-        // Préparation de la requête
-        $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
-        if (!is_array($clef)) {
-            $values = array(
-                "clef" => $clef,
-            );
-            $pdoStatement->execute($values);
-        } else {
-            $pdoStatement->execute($clef);
-        }
-        foreach ($pdoStatement as $donneesFormatTableau) {
-            $ADonnees[] = $this::construire(json_decode(json_encode($donneesFormatTableau), true));
-        }
-
-        return $ADonnees;
-    }
-
 
     /**
      * Permet de construire une requete sql grace aux contraintes passées en paramètres
-     * @param $clef             //Clef primaire
-     * @param $rowSelect        //Les colonnes que vous voulez selectionner '*' par défaut si le parametre n'est pas renseigné
-     * @param $whereCondition   //La condition qui sera placée dans le WHERE,
-    //null par défaut qui sera remplacé dans la requete pas la clé primaire si le parametre n'est pas renseigné
-     * @param $nomTable         //le nom de la table, null par défaut qui sera remplacé dans la requete par la table par défaut
+     * @param $clef //Clef primaire
+     * @param string $rowSelect //Les colonnes que vous voulez selectionner '*' par défaut si le parametre n'est pas renseigné
+     * @param $whereCondition //La condition qui sera placée dans le WHERE,
+     * //null par défaut qui sera remplacé dans la requete pas la clé primaire si le parametre n'est pas renseigné
+     * @param $nomTable //le nom de la table, null par défaut qui sera remplacé dans la requete par la table par défaut
      * @return array
      */
-    public function selectWhereTrie($clef, $rowSelect = '*', $whereCondition = null, $nomTable = null): array
+    public function selectWhere($clef, string $rowSelect = '*', $whereCondition = null, $nomTable = null,
+                                    $conditionTrie = null, $ordre = null): array
     {
         $ADonnees = array();
         if (is_null($nomTable)) {
@@ -276,9 +221,10 @@ abstract class AbstractRepository
                 }
                 $i++;
             }
-
         }
-        $sql = $sql . ' ORDER BY nbvotes DESC;';
+        if ($conditionTrie){
+            $sql = $sql . ' ORDER BY ' . $conditionTrie . ' ' . $ordre;
+        }
         // Préparation de la requête
         $pdoStatement = DatabaseConnection::getPdo()->prepare($sql);
         if (!is_array($clef)) {

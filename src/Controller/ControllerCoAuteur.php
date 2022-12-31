@@ -17,7 +17,7 @@ use App\Vote\Model\Repository\ResponsableRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
 
 //OBSOLETE
-class   ControllerCoAuteur
+class  ControllerCoAuteur
 {
 
     public static function create()

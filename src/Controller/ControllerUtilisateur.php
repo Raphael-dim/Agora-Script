@@ -5,6 +5,7 @@ namespace App\Vote\Controller;
 use App\Vote\Lib\ConnexionUtilisateur;
 use App\Vote\Lib\MessageFlash;
 use App\Vote\Lib\MotDePasse;
+use App\Vote\Lib\VerificationEmail;
 use App\Vote\Model\DataObject\Utilisateur;
 use App\Vote\Model\HTTP\Session;
 use App\Vote\Model\Repository\PropositionRepository;
@@ -97,6 +98,10 @@ class ControllerUtilisateur
             MessageFlash::ajouter('info', 'Votre mot de passe doit contenir au moins 1 chiffre et une lettre.');
             Controller::redirect('index.php?controller=utilisateur&action=create');
         }
+        if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+            MessageFlash::ajouter('warning', 'Le format du mail saisi est invalide');
+            Controller::redirect('index.php?controller=utilisateur&action=create');
+        }
         if ($_POST['mdp'] != $_POST['mdp2']) {
             MessageFlash::ajouter('warning', 'Les mots de passes sont différents');
             Controller::redirect('index.php?controller=utilisateur&action=create');
@@ -105,10 +110,24 @@ class ControllerUtilisateur
             Controller::redirect('index.php?controller=utilisateur&action=create');
         } else {
             $utilisateur = Utilisateur::construireDepuisFormulaire($_POST);
+            VerificationEmail::envoiEmailValidation($utilisateur);
             (new UtilisateurRepository())->sauvegarder($utilisateur);
             MessageFlash::ajouter("success", "Le compte a bien crée");
             ConnexionUtilisateur::connecter($utilisateur->getIdentifiant());
             Controller::redirect("index.php?controller=accueil");
+        }
+    }
+
+    public static function validerEmail()
+    {
+        if (!isset($_GET['login']) || !isset($_GET['nonce'])) {
+            MessageFlash::ajouter('warning', 'Login ou nonce incorrect');
+            Controller::redirect('index.php?controller=accueil');
+        }
+        if (VerificationEmail::traiterEmailValidation($_GET['login'], $_GET['nonce'])) {
+            Controller::redirect('index.php?action=read&controller=utilisateur&idUtilisateur=raph');
+        } else {
+            Controller::redirect('index.php?controller=accueil');
         }
     }
 
@@ -121,9 +140,8 @@ class ControllerUtilisateur
 
     public static function readKeyword()
     {
-        $row = $_POST['row'];
         $keyword = $_POST['keyword'];
-        $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, $row);
+        $utilisateurs = (new UtilisateurRepository())->selectKeywordUtilisateur($keyword);
         Controller::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,
                 "pagetitle" => "Liste des Utilisateurs",
@@ -192,21 +210,35 @@ class ControllerUtilisateur
             MessageFlash::ajouter('info', 'Veuillez saisir un identifiant valide');
             Controller::redirect('index.php?controller=accueil');
         }
-        if (!ConnexionUtilisateur::estConnecte() || ConnexionUtilisateur::getLoginUtilisateurConnecte() != $_GET['idUtilisateur']) {
+        if (!ConnexionUtilisateur::estAdministrateur() && (!ConnexionUtilisateur::estConnecte() || ConnexionUtilisateur::getLoginUtilisateurConnecte() != $_GET['idUtilisateur'])) {
             MessageFlash::ajouter('info', 'Vous ne pouvez pas supprimer ce compte');
             Controller::redirect('index.php?controller=accueil');
         } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
+            if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $_GET['idUtilisateur']) {
+                $message = "Êtes vous sûr de vouloir supprimer votre compte ?";
+            } else {
+                $message = "Êtes vous sûr de vouloir supprimer ce compte ?";
+            }
             Controller::afficheVue('view.php', ["pagetitle" => "Demande de confirmation ",
                 "cheminVueBody" => "confirm.php",
                 "url" => "index.php?action=delete&controller=utilisateur&idUtilisateur=" . $_GET['idUtilisateur'],
-                "message" => "Êtes vous sûr de vouloir supprimer votre compte ?"]);
+                "message" => $message]);
         } else if (isset($_POST["cancel"])) {
-            Controller::redirect("index.php?controller=utilisateur&action=read");
+            if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $_GET['idUtilisateur']) {
+                Controller::redirect("index.php?controller=utilisateur&action=read");
+            } else {
+                Controller::redirect("index.php?controller=utilisateur&action=readAll");
+            }
         } else if (isset($_POST["confirm"])) {
             (new UtilisateurRepository())->delete($_GET['idUtilisateur']);
-            MessageFlash::ajouter('success', "Votre compte a bien été supprimé");
-            ConnexionUtilisateur::deconnecter();
-            Controller::redirect("index.php?controller=accueil");
+            if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $_GET['idUtilisateur']) {
+                MessageFlash::ajouter('success', "Votre compte a bien été supprimé");
+                ConnexionUtilisateur::deconnecter();
+                Controller::redirect("index.php?controller=accueil");
+            } else {
+                MessageFlash::ajouter('success', "Ce compte a bien été supprimé");
+                Controller::redirect("index.php?controller=utilisateur&action=readAll");
+            }
         }
     }
 }

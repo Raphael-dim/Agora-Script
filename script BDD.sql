@@ -170,7 +170,8 @@ select `q`.`idquestion`     AS `idquestion`,
        `q`.`description`    AS `description`,
        `q`.`idorganisateur` AS `idorganisateur`,
        `q`.`idcalendrier`   AS `idcalendrier`,
-       `q`.`creation`       AS `creation`
+       `q`.`creation`       AS `creation`,
+       `q`.`systemeVote`       AS `systemeVote`
 from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
 where (select current_timestamp() AS `current_timestamp`) > `c`.`debutecriture`
   and (select current_timestamp() AS `current_timestamp`) < `c`.`finecriture`;
@@ -181,7 +182,8 @@ select `q`.`idquestion`     AS `idquestion`,
        `q`.`description`    AS `description`,
        `q`.`idorganisateur` AS `idorganisateur`,
        `q`.`idcalendrier`   AS `idcalendrier`,
-       `q`.`creation`       AS `creation`
+       `q`.`creation`       AS `creation`,
+       `q`.`systemeVote`       AS `systemeVote`
 from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
 where (select current_timestamp() AS `current_timestamp`) > `c`.`finvote`;
 
@@ -191,7 +193,8 @@ select `q`.`idquestion`     AS `idquestion`,
        `q`.`description`    AS `description`,
        `q`.`idorganisateur` AS `idorganisateur`,
        `q`.`idcalendrier`   AS `idcalendrier`,
-       `q`.`creation`       AS `creation`
+       `q`.`creation`       AS `creation`,
+       `q`.`systemeVote`       AS `systemeVote`
 from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
 where (select current_timestamp() AS `current_timestamp`) > `c`.`debutvote`
   and (select current_timestamp() AS `current_timestamp`) < `c`.`finvote`;

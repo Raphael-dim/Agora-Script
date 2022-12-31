@@ -177,13 +177,14 @@ class ControllerQuestion
             MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
             Controller::redirect("index.php?action=form&controller=question&step=2");
         }
-        $calendrierBD = (new CalendrierRepository())->sauvegarder($calendrier);
+        $calendrierBD = (new CalendrierRepository())->sauvegarder($calendrier, true);
         if ($calendrierBD != null) {
             $calendrier->setId($calendrierBD);
         } else {
             Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
 
+        //var_dump($sections);
         $organisateur = (new UtilisateurRepository)->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
 
         $creation = date("Y/m/d H:i:s");
@@ -193,15 +194,16 @@ class ControllerQuestion
             MessageFlash::ajouter("danger", "Les contraintes de taille maximales des champs de textes n'ont pas été respectées.");
             Controller::redirect("index.php?action=form&controller=question&step=2");
         }
-        if ($_SESSION[FormConfig::$arr]['systemeVote'] != "valeur" &
+        if ($_SESSION[FormConfig::$arr]['systemeVote'] != "valeur" &&
             $_SESSION[FormConfig::$arr]['systemeVote'] != "majoritaire") {
+            MessageFlash::ajouter("danger", $_SESSION[FormConfig::$arr]['systemeVote'] );
+
             MessageFlash::ajouter("danger", "Veuillez vérifier le mode de scrutin.");
             Controller::redirect("index.php?action=form&controller=question&step=5");
         }
-        echo $_SESSION[FormConfig::$arr]['systemeVote'];
         $question = new Question($_SESSION[FormConfig::$arr]['Titre'], $_SESSION[FormConfig::$arr]['Description'],
             $creation, $calendrier, $organisateur, $_SESSION[FormConfig::$arr]['systemeVote']);
-        $questionBD = (new QuestionRepository())->sauvegarder($question);
+        $questionBD = (new QuestionRepository())->sauvegarder($question, true);
         if ($questionBD != null) {
             $question->setId($questionBD);
         } else {
@@ -232,7 +234,7 @@ class ControllerQuestion
                 MessageFlash::ajouter("warning", "Les contraintes de taille maximales des champs de textes n'ont pas été respectées.");
                 Controller::redirect("index.php?action=form&controller=question&step=3");
             }
-            $sectionBD = (new SectionRepository())->sauvegarder($section);
+            $sectionBD = (new SectionRepository())->sauvegarder($section, true);
             if ($sectionBD != null) {
                 $section->setId($sectionBD);
             } else {
@@ -317,7 +319,7 @@ class ControllerQuestion
         for ($i = 0; $i < count($nouvSections); $i++) {
             if (count($ancSections) <= $i) {
                 $section = new Section($nouvSections[$i]['titre'], $nouvSections[$i]['description'], $question);
-                $sectionBD = (new SectionRepository())->sauvegarder($section);
+                $sectionBD = (new SectionRepository())->sauvegarder($section, true);
                 if ($sectionBD != null) {
                     $section->setId($sectionBD);
                 } else {
@@ -400,9 +402,10 @@ class ControllerQuestion
             Controller::redirect('index.php?controller=question&action=readAll');
         }
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        if (!ConnexionUtilisateur::estConnecte() ||
-            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant()) {
-            MessageFlash::ajouter("danger", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
+        if ((!ConnexionUtilisateur::estConnecte() ||
+            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant()) &&
+            !ConnexionUtilisateur::estAdministrateur())  {
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas supprimer une question dont vous n'êtes par l'organisateur.");
             Controller::redirect('index.php?controller=question&action=readAll');
         } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
             Controller::afficheVue('view.php', ["pagetitle" => "Demande de confirmation",
@@ -422,6 +425,9 @@ class ControllerQuestion
 
     public static function readKeyword(): void
     {
+        if (!isset($_POST['keyword'])){
+            Controller::redirect('index.php?action=create&controller=message');
+        }
         $keyword = $_POST['keyword'];
         $questions = (new QuestionRepository())->selectKeyword($keyword, 'titre');
         Controller::afficheVue('view.php',

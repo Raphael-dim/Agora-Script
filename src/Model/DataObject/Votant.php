@@ -2,7 +2,9 @@
 
 namespace App\Vote\Model\DataObject;
 
+use App\Vote\Lib\ConnexionUtilisateur;
 use App\Vote\Model\Repository\AbstractRepository;
+use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\VoteRepository;
 
 class Votant extends Utilisateur
@@ -47,7 +49,12 @@ class Votant extends Utilisateur
                 return $vote;
             }
         }
-        return null;
+        $votant = new Votant((new QuestionRepository())->select($proposition->getIdQuestion()));
+        $votant->setIdentifiant(ConnexionUtilisateur::getLoginUtilisateurConnecte());
+        $proposition->setNbVotes(1);
+        $vote = new Vote($votant, $proposition, 3);
+        (new VoteRepository())->sauvegarder($vote, true);
+        return $vote;
     }
 
     public function formatTableau(): array

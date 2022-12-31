@@ -7,6 +7,7 @@
         echo $pagetitle; ?></title>
     <link href="css/global.css" rel="stylesheet">
     <link href="css/nav.css" rel="stylesheet">
+    <link href="css/keyframes.css" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="images/logo_vote.ico">
 </head>
 <body>
@@ -26,6 +27,7 @@ use App\Vote\Lib\MessageFlash;
 use App\Vote\Model\HTTP\Session;
 
 
+//echo '</div>';
 require __DIR__ . "/{$cheminVueBody}";
 echo '</main>';
 ?>
@@ -40,10 +42,9 @@ echo '</main>';
         </li>
     </ul>
 </footer>
-
 <?php
 
-echo '<div class="pileflash">';
+echo '<div class = "pileflash" >';
 if (!Session::getInstance()->contient('_messagesFlash')) {
     new MessageFlash();
 }
@@ -53,8 +54,8 @@ foreach (MessageFlash::lireTousMessages() as $cle => $messagess) {
         echo '<div class="alert alert-' . $cle . '">' . $message . '</div>';
     }
 }
-echo'</div>';
-
+echo '</div>'
 ?>
 </body>
 </html>
+

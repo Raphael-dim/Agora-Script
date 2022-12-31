@@ -29,13 +29,12 @@ function adduser(string $id): void
     if (!in_array($id, $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']])) {
         $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']][] = $id;
     } else {
-        MessageFlash::ajouter('warning', "Cet utilisateur est déja selectionné en tant que votant");
+        MessageFlash::ajouter('warning', "Cet utilisateur est déjà sélectionné en tant que votant");
     }
 }
 
 function removeuser(string $id): void
 {
-
     if (($key = array_search($id, $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']])) !== false) {
         unset($_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']][$key]);
     }
