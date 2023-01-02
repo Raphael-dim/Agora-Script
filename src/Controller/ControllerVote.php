@@ -74,7 +74,7 @@ class ControllerVote
             }
             $propositions = (new PropositionRepository())->selectWhere($question->getId(), '*', 'idquestion');
             Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
-                "cheminVueBody" => "Proposition/list.php",
+                "cheminVueBody" => "Proposition/listMajoritaire.php",
                 "votants" => $votants,
                 "propositions" => $propositions,
                 "question" => $question]);
