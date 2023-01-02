@@ -30,23 +30,23 @@ foreach ($messages as $message) {
         $diff = Calendrier::diff($interval);
     }
     if ($i == sizeof($messages)) {
-        $id = 'id="dernierMessage"';
+        $id = 'dernierMessage';
     }
     if ($message->getAuteur()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
-        echo ' <p ' . $id . ' style = "margin-left: 50%" class="date" > Il y a ' . $diff . ' </p > ';
+        echo ' <p id = "' . $id . '"  style = "margin-left: 50%" class="date" >Vous, il y a ' . $diff . ' </p > ';
         echo '<div style = "margin-left: 60%;" class="messageChat" > ' . htmlspecialchars($message->getContenu()) . '</div > ';
 
     } else {
-        echo '<p ' . $id . ' class="date" > Il y a ' . $diff . ' </p > ';
+        echo '<p id = "' . $id . '" class="date" >' . htmlspecialchars($message->getAuteur()->getPrenom()) . ', il y a ' . $diff . ' </p > ';
         echo '<div class="messageChat" > ' . htmlspecialchars($message->getContenu()) . '</div > ';
     }
     $i++;
 }
 ?>
 </div>
-<form class="custom-form" method="post" action="index.php?action=created&controller=message">
+<form class="zoneTexte" method="post" action="index.php?action=created&controller=message">
     <input type="hidden" name="idContact" value="<?= $_GET['idContact'] ?>">
-    <p style="width: 70%; margin-top: 100px" class="champ">
+    <p class="champ">
         <label for="message_id">Message : </label>
         <textarea id="message_id" maxlength="350" name="message" rows="7" cols="50" required> </textarea>
         <label>350 caractères maximum</label>

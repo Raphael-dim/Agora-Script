@@ -195,9 +195,9 @@ class ControllerQuestion
             Controller::redirect("index.php?action=form&controller=question&step=2");
         }
         if ($_SESSION[FormConfig::$arr]['systemeVote'] != "valeur" &&
-            $_SESSION[FormConfig::$arr]['systemeVote'] != "majoritaire") {
+            $_SESSION[FormConfig::$arr]['systemeVote'] != "majoritaire" &&
+            $_SESSION[FormConfig::$arr]['systemeVote'] != "unique") {
             MessageFlash::ajouter("danger", $_SESSION[FormConfig::$arr]['systemeVote'] );
-
             MessageFlash::ajouter("danger", "Veuillez vérifier le mode de scrutin.");
             Controller::redirect("index.php?action=form&controller=question&step=5");
         }

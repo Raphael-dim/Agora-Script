@@ -20,7 +20,7 @@
                    <a href="index.php?action=readAll&controller=message"
                     style="margin-right: 80px">
                     <img style="min-width: 40px;"  src=images/logo_lettre.png alt=messagerie></a></li>
-                    <li><a class=profil href = "index.php?action=read&controller=utilisateur">
-                                        <img src = images/profil.png alt=Profil ></a></li></ul> ';
+                    <a class=profil href = "index.php?action=read&controller=utilisateur&idUtilisateur=' . ConnexionUtilisateur::getLoginUtilisateurConnecte() . '">
+                                        <img src = images/profil.png alt=Profil ></a></ul> ';
         } ?>
 </nav>

@@ -8,7 +8,7 @@
 }
 
 * {
-    font-family: Georgia;
+    font-family: Georgia, cursive;
     box-sizing: border-box;
 }
 
@@ -846,14 +846,14 @@ div p {
 .cal::after {
     content: "";
     display: block;
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
     border-radius: 20px;
     background: #ffffff;
     z-index: 1;
     position: absolute;
     top: 10px;
-    left: -23px;
+    left: -25px;
 }
 
 #participants {
@@ -917,7 +917,7 @@ div p {
     width: 30px;
     height: 30px;
     border-radius: 20px;
-    background: #ffffff;
+    background: rgba(1, 46, 73, 0.69);
     left: -11px;
 }
 
@@ -1059,14 +1059,15 @@ input:valid + span:after {
 }
 
 .custom-form {
+    padding: 10px 10px 50px 15px;
     margin: 30px auto auto auto;
     /*text-align: center;*/
     border-radius: 4px;
     width: 80%;
     background: rgba(164, 218, 246, 0.42);
     position: relative;
-    padding-bottom: 50px;
 }
+
 
 .InputAddOn {
     display: flex;
@@ -1162,6 +1163,7 @@ input:valid + span:after {
 }
 
 #conversation {
+    padding: 5px;
     overflow-x: auto;
     overflow-y: scroll;
     max-height: 400px;
@@ -1186,4 +1188,31 @@ input:valid + span:after {
     display: inline;
     margin-left: 20px;
     vertical-align: middle;
+}
+
+select {
+    /*width: 120px;*/
+    height: 30px;
+    border: 1px solid #999;
+    font-size: 18px;
+    color: #012e49;
+    background-color: #eee;
+    border-radius: 5px;
+    box-shadow: 4px 4px #ccc;
+}
+
+.zoneTexte {
+    color: white;
+    margin-top: 5%;
+    max-width: max-content;
+    padding: 10px 10px 60px 10px;
+    margin-left: 20%;
+    /*background-color: #012e49;*/
+    border: 2px #9c9da0 solid;
+    border-radius: 5px;
+}
+
+.zoneTexte textarea {
+    color: white;
+    background-color: rgba(91, 179, 231, 0.33);
 }
