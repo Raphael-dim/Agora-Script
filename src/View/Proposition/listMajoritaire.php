@@ -33,10 +33,24 @@
         $peutVoter = true;
         $interval = (new DateTime(date("d-m-Y H:i")))->diff(new DateTime($calendrier->getFinVote(true)));
         echo '<h2>Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
-    }
-    foreach ($propositions
-
-             as $proposition) {
+    } ?>
+    <div class="selection">
+        <ul>
+            <li class="phases" id="termine">
+                <a href="index.php?action=readAll&controller=proposition&idQuestion=<?= $question->getId() ?>">Toutes</a>
+            </li>
+            <li class="phases" id="vote">
+                <a href="index.php?action=readAll&selection=date&controller=proposition&idQuestion=<?= $question->getId() ?>">Les
+                    plus récentes</a>
+            </li>
+            <li class="phases" id="termine">
+                <a href="index.php?action=readAll&selection=note&controller=proposition&idQuestion=<?= $question->getId() ?>">Les
+                    mieux notées</a>
+            </li>
+        </ul>
+    </div>
+    <?php
+    foreach ($propositions as $proposition) {
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
         echo '<div class=proposition>';

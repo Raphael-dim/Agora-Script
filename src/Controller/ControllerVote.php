@@ -48,12 +48,8 @@ class ControllerVote
             $bool = false;
         }
         if (!$bool) {
-            $propositions = $question->getPropositions();
-            Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
-                "cheminVueBody" => "Proposition/listMajoritaire.php",
-                "votants" => $votants,
-                "propositions" => $propositions,
-                "question" => $question]);
+            Controller::redirect('index.php?action=readAll&controller=proposition&idQuestion=' . $question->getId());
+
         } else {
             $vote = Votant::aVote($proposition, Votant::getVotes(ConnexionUtilisateur::getLoginUtilisateurConnecte()));
             if (!is_null($vote) && $vote->getValeur() == $_GET['valeur']) {
@@ -103,14 +99,10 @@ class ControllerVote
             MessageFlash::ajouter("warning", "Vous ne pouvez pas voter tant que la phase de vote n'a pas débuté.");
             $bool = false;
         }
-        $propositions = $question->getPropositions();
         if (!$bool) {
-            Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
-                "cheminVueBody" => "Proposition/listUnique.php",
-                "votants" => $votants,
-                "propositions" => $propositions,
-                "question" => $question]);
+            Controller::redirect('index.php?action=readAll&controller=proposition&idQuestion=' . $question->getId());
         }
+        $propositions = $question->getPropositions();
         $aVote = null;
         foreach ($propositions as $prop) {
             $vote = Votant::aVote($prop, Votant::getVotes(ConnexionUtilisateur::getLoginUtilisateurConnecte()));
@@ -143,10 +135,18 @@ class ControllerVote
 
     public static function delete()
     {
+        if (!isset($_GET['idProposition'])) {
+            MessageFlash::ajouter('warning', 'Proposition introuvable');
+            Controller::redirect('index.php?action=readAll&controller=proposition&idQuestion=' . $question->getId());
+        }
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
-        $aVote = Votant::aVote($proposition, Votant::getVotes(ConnexionUtilisateur::getLoginUtilisateurConnecte()));
-        (new VoteRepository())->delete($aVote->getIdvote());
         $question = (new QuestionRepository())->select($proposition->getIdQuestion());
+        $aVote = Votant::aVote($proposition, Votant::getVotes(ConnexionUtilisateur::getLoginUtilisateurConnecte()));
+        if (is_null($aVote)) {
+            MessageFlash::ajouter('warning', 'Vous n\'avez pas voté pour cette proposition');
+            Controller::redirect('index.php?action=readAll&controller=proposition&idQuestion=' . $question->getId());
+        }
+        (new VoteRepository())->delete($aVote->getIdvote());
         $votants = $question->getVotants();
         $propositions = $question->getPropositions();
         MessageFlash::ajouter('success', 'Vote supprimé');
