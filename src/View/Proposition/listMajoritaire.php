@@ -34,21 +34,19 @@
         $interval = (new DateTime(date("d-m-Y H:i")))->diff(new DateTime($calendrier->getFinVote(true)));
         echo '<h2>Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
     } ?>
-    <div class="selection">
-        <ul>
-            <li class="phases" id="termine">
-                <a href="index.php?action=readAll&controller=proposition&idQuestion=<?= $question->getId() ?>">Toutes</a>
-            </li>
-            <li class="phases" id="vote">
-                <a href="index.php?action=readAll&selection=date&controller=proposition&idQuestion=<?= $question->getId() ?>">Les
-                    plus récentes</a>
-            </li>
-            <li class="phases" id="termine">
-                <a href="index.php?action=readAll&selection=note&controller=proposition&idQuestion=<?= $question->getId() ?>">Les
-                    mieux notées</a>
-            </li>
-        </ul>
-    </div>
+    <ul>
+        <li id="termine">
+            <a href="index.php?action=readAll&controller=proposition&idQuestion=<?= $question->getId() ?>">Toutes</a>
+        </li>
+        <li id="vote">
+            <a href="index.php?action=readAll&selection=date&controller=proposition&idQuestion=<?= $question->getId() ?>">Les
+                plus récentes</a>
+        </li>
+        <li id="termine">
+            <a href="index.php?action=readAll&selection=note&controller=proposition&idQuestion=<?= $question->getId() ?>">Les
+                mieux notées</a>
+        </li>
+    </ul>
     <?php
     foreach ($propositions as $proposition) {
         $idPropositionURL = rawurlencode($proposition->getId());
@@ -127,7 +125,7 @@
             href=index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '>Supprimer</a>';
         }
         $i++;
-        echo '<a href="" >par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a >';
+        echo '<a href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($proposition->getIdResponsable()) . '" >par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a >';
         echo '</div>';
     }
     ?>

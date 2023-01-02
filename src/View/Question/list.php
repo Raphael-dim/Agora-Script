@@ -73,7 +73,7 @@ if (isset($_GET['selection'])) {
         }
 
         echo ' <p class=titre> ' . $titreHTML . ' </p>
-            <a href="" class = "auteur link-custom">par ' . $organisateur . ' </a >';
+            <a href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($question->getOrganisateur()->getIdentifiant()) . '" class = "auteur link-custom">par ' . $organisateur . ' </a >';
         echo '<p class="description">' . htmlspecialchars($question->getDescription()) . '</p>';
         if ($question->getPhase() == 'debut' || ConnexionUtilisateur::estAdministrateur()) {
             if (ConnexionUtilisateur::estAdministrateur() || (ConnexionUtilisateur::estConnecte() &&
