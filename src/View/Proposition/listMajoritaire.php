@@ -16,7 +16,7 @@
     ?>
     <h2><?= $modeScrutin ?></h2>
     <p class="survol">
-        <img class="imageAide" src="images/aide_logo.png" alt=""/>
+        <img class="imageAide" src="images/aide_logo.png" alt="">
         <span><?= $message ?></span>
     </p>
     <?php
@@ -35,14 +35,14 @@
         echo '<h2>Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
     } ?>
     <ul>
-        <li id="termine">
+        <li>
             <a href="index.php?action=readAll&controller=proposition&idQuestion=<?= $question->getId() ?>">Toutes</a>
         </li>
-        <li id="vote">
+        <li>
             <a href="index.php?action=readAll&selection=date&controller=proposition&idQuestion=<?= $question->getId() ?>">Les
                 plus récentes</a>
         </li>
-        <li id="termine">
+        <li>
             <a href="index.php?action=readAll&selection=note&controller=proposition&idQuestion=<?= $question->getId() ?>">Les
                 mieux notées</a>
         </li>
