@@ -42,19 +42,22 @@ class Votant extends Utilisateur
         return (new VoteRepository())->selectWhere($idUtilisateur, '*', 'idvotant', 'Votes');
     }
 
-    public static function aVote($proposition, $votes): ?Vote
+    public static function aVote($proposition, $votes, $modeScrutin = 'unique'): ?Vote
     {
         foreach ($votes as $vote) {
             if ($vote->getProposition()->getId() == $proposition->getId()) {
                 return $vote;
             }
         }
-        $votant = new Votant((new QuestionRepository())->select($proposition->getIdQuestion()));
-        $votant->setIdentifiant(ConnexionUtilisateur::getLoginUtilisateurConnecte());
-        $proposition->setNbVotes(1);
-        $vote = new Vote($votant, $proposition, 3);
-        (new VoteRepository())->sauvegarder($vote, true);
-        return $vote;
+        if ($modeScrutin == 'majoritaire') {
+            $votant = new Votant((new QuestionRepository())->select($proposition->getIdQuestion()));
+            $votant->setIdentifiant(ConnexionUtilisateur::getLoginUtilisateurConnecte());
+            $proposition->setNbVotes(1);
+            $vote = new Vote($votant, $proposition, 3);
+            (new VoteRepository())->sauvegarder($vote, true);
+            return $vote;
+        }
+        return null;
     }
 
     public function formatTableau(): array

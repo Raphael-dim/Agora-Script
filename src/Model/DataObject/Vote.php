@@ -57,10 +57,23 @@ class Vote extends AbstractDataObject
         $this->id = $id;
     }
 
-    public function getProposition(): AbstractDataObject
+    /**
+     * @return Proposition
+     */
+    public function getProposition(): Proposition
     {
         return $this->proposition;
     }
+
+    /**
+     * @param Proposition $proposition
+     */
+    public function setProposition(Proposition $proposition): void
+    {
+        $this->proposition = $proposition;
+    }
+
+
 
     public function formatTableau($update = false): array
     {

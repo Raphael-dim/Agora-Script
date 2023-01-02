@@ -76,11 +76,14 @@ class Proposition extends AbstractDataObject
     /**
      * @param int $nbVotes
      */
-    public function setNbVotes(int $nbVotes): void
+    public function setNbVotes(int $nbVotes, int $incremente = 0): void
     {
-        $this->nbVotes = $nbVotes;
+        if ($incremente != 0) {
+            $this->nbVotes += $incremente;
+        } else {
+            $this->nbVotes = $nbVotes;
+        }
     }
-
 
     /**
      * @param int $id
@@ -101,7 +104,7 @@ class Proposition extends AbstractDataObject
     /**
      * @param String $responsable
      */
-    public function setResponsable(String $responsable): void
+    public function setResponsable(string $responsable): void
     {
         $this->idResponsable = $responsable;
     }
@@ -116,8 +119,9 @@ class Proposition extends AbstractDataObject
         return $this->idResponsable;
     }
 
-    public function  getCoAuteurs(): array{
-        return (new CoAuteurRepository())->selectWhere($this->id,'*','idproposition',"Coauteurs");
+    public function getCoAuteurs(): array
+    {
+        return (new CoAuteurRepository())->selectWhere($this->id, '*', 'idproposition', "Coauteurs");
     }
 
     public function getContenus()

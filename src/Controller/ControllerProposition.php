@@ -95,10 +95,17 @@ class ControllerProposition
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $votants = $question->getVotants();
 
-        Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
-            "cheminVueBody" => "Proposition/list.php",
-            "votants" => $votants,
-            "propositions" => $propositions, "question" => $question]);
+        if ($question->getSystemeVote() == 'majoritaire' || $question->getSystemeVote() == 'valeur') {
+            Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
+                "cheminVueBody" => "Proposition/listMajoritaire.php",
+                "votants" => $votants,
+                "propositions" => $propositions, "question" => $question]);
+        } else {
+            Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
+                "cheminVueBody" => "Proposition/listUnique.php",
+                "votants" => $votants,
+                "propositions" => $propositions, "question" => $question]);
+        }
     }
 
     public static function created()

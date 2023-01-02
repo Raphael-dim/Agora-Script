@@ -7,11 +7,12 @@
     use App\Vote\Model\DataObject\Votant;
     use App\Vote\Model\Repository\VoteRepository;
 
-    if ($question->getSystemeVote() == 'majoritaire') {
-        $modeScrutin = 'Scrutin par jugement majoritaire';
-        $message = 'Le scrutin majoritaire établit un \'vote médian\' pour chaque proposition, 
-                    par défaut, la mention \'passable\' est sélectionnée.';
-    }
+    $modeScrutin = 'Scrutin par jugement majoritaire (médiane) ';
+    $message = 'Le scrutin majoritaire établit un \'vote médian\' pour chaque proposition, 
+                    par défaut, la mention \'passable\' est sélectionnée.
+                    Notez chaque proposition entre 1 et 6 ci-dessous.';
+
+
     ?>
     <h2><?= $modeScrutin ?></h2>
     <p class="survol">
@@ -42,7 +43,7 @@
         echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
             $idPropositionURL . '"> <h2>' . $titreHTML . '</h2>   </a>';
         if ($peutVoter) {
-            $vote = Votant::aVote($proposition, $votes);
+            $vote = Votant::aVote($proposition, $votes, 'majoritaire');
             for ($val = 1; $val <= 6; $val++) {
                 switch ($val) {
                     case 1 :
@@ -74,7 +75,7 @@
                         <img src=../web/images/coeur_logo.png alt="">
                         ';
                 }
-                echo '<span style="font-size: 18px">'.$attribut.'</span></a>';
+                echo '<span style="font-size: 18px">' . $attribut . '</span></a>';
             }
             $nbVotes = htmlspecialchars($proposition->getNbVotes());
             $nbEtoiles = htmlspecialchars($proposition->getNbEtoiles());

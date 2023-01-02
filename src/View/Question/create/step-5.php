@@ -46,8 +46,9 @@ require_once "../src/View/Utilisateurs/select.php";
     <p>
         <label for="systemeVote">Système de vote : </label>
         <select name="systemeVote" id="systemeVote">
-            <option value="valeur" <?=FormConfig::DropDown("systemeVote", "valeur")?>>Vote par valeur </option>
-            <option value="majoritaire"  <?=FormConfig::DropDown("systemeVote", "majoritaire")?>>Jugement majoritaire </option>
+            <option value="valeur" <?=FormConfig::DropDown("systemeVote", "valeur")?>>Vote par valeurs</option>
+            <option value="majoritaire"  <?=FormConfig::DropDown("systemeVote", "majoritaire")?>>Jugement majoritaire</option>
+            <option value="unique"  <?=FormConfig::DropDown("systemeVote", "unique")?>>unique</option>
         </select>
     </p>
     <input type="submit" name=previous value="Retour" class="nav" id="precedent" formnovalidate>
