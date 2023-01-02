@@ -38,7 +38,7 @@ if (isset($_POST['Titre'])) {
 <form method="post" class = "custom-form">
 
     <p>
-        <label for="titre_id">Titre</label> :
+        <label for="titre_id">Titre : </label>
         <input type="text" placeholder="L'oeuf ou la poule ? " size="65" maxlength="70" name="Titre" id="titre_id"
                value="<?= FormConfig::TextField('Titre') ?>"
                required>
@@ -50,7 +50,7 @@ if (isset($_POST['Titre'])) {
         <label>350 caractères maximum</label>
     </p>
     <p>
-        <label for="nbSections_select">Nombre de sections</label>
+        <label for="nbSections_select">Nombre de sections : </label>
         <select name="nbSections" id="nbSections_select">
             <?php
             for ($i = 1; $i <= 10; $i++) {
