@@ -131,11 +131,9 @@ fieldset {
 }
 
 
-span {
-    background: lightblue;
-    opacity: 0.8;
-    padding: 1px;
-    border: dodgerblue;
+.EasyMDEContainer{
+    width:90%;
+    margin:auto;
 }
 
 
@@ -264,11 +262,6 @@ li, a {
     background-color: white;
 }
 
-.champ * {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 15px;
-}
 
 
 .deuxTrois {

@@ -15,12 +15,12 @@
         if (!ConnexionUtilisateur::estConnecte()) {
             echo '<li class=grosmenu><a href="index.php?action=connexion&controller=utilisateur">Connexion</a></li></ul>';
         } else {
-            echo '
-                   <li class=profil>
-                   <a href="index.php?action=readAll&controller=message"
+
+                   
+                  echo'</ul> <a class=profil href="index.php?action=readAll&controller=message&idUtilisateur=' . ConnexionUtilisateur::getLoginUtilisateurConnecte() . '"
                     style="margin-right: 80px">
-                    <img style="min-width: 40px;"  src=images/logo_lettre.png alt=messagerie></a></li>
-                    <a class=profil href = "index.php?action=read&controller=utilisateur&idUtilisateur=' . ConnexionUtilisateur::getLoginUtilisateurConnecte() . '">
-                                        <img src = images/profil.png alt=Profil ></a></ul> ';
+                    <img style="min-width: 40px;"  src=images/logo_lettre.png alt=messagerie></a>
+                    <a class=profil href = "index.php?action=read&controller=utilisateur&idUtilisateur=' . ConnexionUtilisateur::getLoginUtilisateurConnecte() . '"">
+                                        <img src = images/profil.png alt=Profil ></a> ';
         } ?>
 </nav>
