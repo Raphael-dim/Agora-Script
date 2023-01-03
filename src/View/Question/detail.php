@@ -67,15 +67,18 @@
 
 
                 <?php
+                $cercle = '<div id="cercle"></div>';
                 $calendriers = $question->getCalendrier(true);
                 $calendrierActuel = $question->getCalendrier();
+                $i = 1;
                 foreach ($calendriers as $calendrier) {
-                    echo '<span class="vertical-line-petite" style="background:grey "></span>';
-                    $cercle = '<div id="cercle"></div>';
+                    if ($i != 1) {
+                        echo '<h2 style="color: #012e49">' . $i . '<sup>e</sup> phase</h2>';
+                    }
                     if ($question->getPhase() == 'debut' && $calendrierActuel == $calendrier) {
                         echo $cercle;
-                        echo '<span class="vertical-line-petite" style="background: grey"></span>';
                     }
+                    echo '<span class="vertical-line-petite" style="background: grey"></span>';
                     ?>
 
                     <p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_debut">Début
@@ -87,9 +90,7 @@
                     if ($question->getPhase() == 'ecriture' && $calendrierActuel == $calendrier) {
                         echo '<span class="vertical-line-petite" style="background: rgba(206,22,22,0.61)"></span>';
                         echo $cercle;
-                        ?>
 
-                        <?php
                         echo '<span class="vertical-line-petite" style="background: #CE16169B"></span>';
                     } else {
                         echo '<span class="vertical-line" style="background: #CE16169B"></span>';
@@ -130,12 +131,14 @@
                     if ($question->getPhase() == 'fini' && $calendrierActuel == $calendrier) {
                         echo $cercle;
                     }
+                    $i++;
                 }
                 ?>
 
             </div>
         </div>
     </div>
+</div>
 
 
 

@@ -185,6 +185,12 @@ class Question extends AbstractDataObject
         }
     }
 
+    /*
+     * Retourne le calendrier courant pour une question donnée.
+     * C'est à -dire le calendrier en cours ou alors le calendrier prochain.
+     * Si $tous true, on retourne tous les calendriers de la question,
+     * utilisé notamment dans la vue de détail d'une question.
+    */
     public function getCalendrier(bool $tous = false)
     {
         if (!isset($this->calendriers)) {
@@ -197,9 +203,20 @@ class Question extends AbstractDataObject
         foreach ($this->calendriers as $calendrier) {
             if ($date > $calendrier->getDebutEcriture(true) && $date < $calendrier->getFinVote(true)) {
                 return $calendrier;
+            }// Si la date courante est comprise dans le calendrier, on retourne le calendrier.
+        }
+        /*
+         * Si on est à ce stade, c'est que la date courante est entre 2 calendriers, avant ou après.
+         * On retourne donc le premier calendrier qui a une date de début d'écriture des propositions
+         * supérieure à la date courante.
+         * */
+        foreach ($this->calendriers as $calendrier) {
+            if ($date < $calendrier->getDebutEcriture()) {
+                return $calendrier;
             }
         }
-        return $this->calendriers[0];
+        // Si on arrive ici, c'est qu'on est dans le cas où la question est terminée. On retourne le dernier calendrier.
+        return $this->calendriers[sizeof($this->calendriers) - 1];
     }
 
 
