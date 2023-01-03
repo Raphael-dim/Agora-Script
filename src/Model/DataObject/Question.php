@@ -8,6 +8,7 @@ use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\SectionRepository;
 use App\Vote\Model\Repository\ResponsableRepository;
 use App\Vote\Model\Repository\VotantRepository;
+use Exception;
 
 class Question extends AbstractDataObject
 {
@@ -166,7 +167,7 @@ class Question extends AbstractDataObject
     /**
      * On obtient la phase en cours pour une question
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function getPhase(): string
     {
@@ -184,10 +185,13 @@ class Question extends AbstractDataObject
         }
     }
 
-    public function getCalendrier()
+    public function getCalendrier(bool $tous = false)
     {
         if (!isset($this->calendriers)) {
-            $this->calendriers = (new CalendrierRepository())->selectWhere($this->id, '*', 'idQuestion');;
+            $this->calendriers = (new CalendrierRepository())->selectWhere($this->id, '*', 'idQuestion', 'Calendriers', 'debutEcriture');
+        }
+        if ($tous) {
+            return $this->calendriers;
         }
         $date = date('Y-m-d H:i');
         foreach ($this->calendriers as $calendrier) {

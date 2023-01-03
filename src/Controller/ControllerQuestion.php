@@ -164,50 +164,51 @@ class ControllerQuestion
         Théoriquement, un utilisateur lambda qui arrive à cette étape n'a pas pu déroger à ces contraintes.
         */
 
-
         //On vérifie si l'utilisateur est connecté
         if (!ConnexionUtilisateur::estConnecte()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas créer une question si vous n'êtes pas connecté.");
             Controller::redirect("index.php?action=readAll&controller=question");
         }
         FormConfig::setArr('SessionQuestion');
-        $calendrier = new Calendrier($_SESSION[FormConfig::$arr]['debutEcriture'], $_SESSION[FormConfig::$arr]['finEcriture'], $_SESSION[FormConfig::$arr]['debutVote'], $_SESSION[FormConfig::$arr]['finVote']);
-        if ($calendrier->getDebutEcriture(true) >= $calendrier->getFinEcriture(true) || $calendrier->getDebutVote(true) >= $calendrier->getFinVote(true)
-            || $calendrier->getDebutVote(true) <= $calendrier->getDebutEcriture(true) || $calendrier->getDebutVote(true) < $calendrier->getFinEcriture(true)) {
-            MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
-            Controller::redirect("index.php?action=form&controller=question&step=2");
-        }
-        $calendrierBD = (new CalendrierRepository())->sauvegarder($calendrier, true);
-        if ($calendrierBD != null) {
-            $calendrier->setId($calendrierBD);
-        } else {
-            Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
-        }
-
-        //var_dump($sections);
-        $organisateur = (new UtilisateurRepository)->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
+        $nbCalendriers = $_SESSION[FormConfig::$arr]['nbCalendriers'];
 
         $creation = date("Y/m/d H:i:s");
+        $organisateur = (new UtilisateurRepository)->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
 
         if (strlen($_SESSION[FormConfig::$arr]['Titre']) > 80 || strlen($_SESSION[FormConfig::$arr]['Description']) > 360) {
-            (new CalendrierRepository())->delete($calendrier->getId());
             MessageFlash::ajouter("danger", "Les contraintes de taille maximales des champs de textes n'ont pas été respectées.");
             Controller::redirect("index.php?action=form&controller=question&step=2");
         }
         if ($_SESSION[FormConfig::$arr]['systemeVote'] != "valeur" &&
             $_SESSION[FormConfig::$arr]['systemeVote'] != "majoritaire" &&
             $_SESSION[FormConfig::$arr]['systemeVote'] != "unique") {
-            MessageFlash::ajouter("danger", $_SESSION[FormConfig::$arr]['systemeVote'] );
+            MessageFlash::ajouter("danger", $_SESSION[FormConfig::$arr]['systemeVote']);
             MessageFlash::ajouter("danger", "Veuillez vérifier le mode de scrutin.");
             Controller::redirect("index.php?action=form&controller=question&step=5");
         }
         $question = new Question($_SESSION[FormConfig::$arr]['Titre'], $_SESSION[FormConfig::$arr]['Description'],
-            $creation, $calendrier, $organisateur, $_SESSION[FormConfig::$arr]['systemeVote']);
+            $creation, $organisateur, $_SESSION[FormConfig::$arr]['systemeVote']);
         $questionBD = (new QuestionRepository())->sauvegarder($question, true);
         if ($questionBD != null) {
             $question->setId($questionBD);
         } else {
             Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+        }
+
+        for ($i = 1; $i <= $nbCalendriers; $i++) {
+            $calendrier = new Calendrier($question, FormConfig::TextField('debutEcriture' . $i), FormConfig::TextField('finEcriture' . $i),
+                FormConfig::TextField('debutVote' . $i), FormConfig::TextField('finVote' . $i));
+            if ($calendrier->getDebutEcriture(true) >= $calendrier->getFinEcriture(true) || $calendrier->getDebutVote(true) >= $calendrier->getFinVote(true)
+                || $calendrier->getDebutVote(true) <= $calendrier->getDebutEcriture(true) || $calendrier->getDebutVote(true) < $calendrier->getFinEcriture(true)) {
+                MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
+                Controller::redirect("index.php?action=form&controller=question&step=2");
+            }
+            $calendrierBD = (new CalendrierRepository())->sauvegarder($calendrier, true);
+            if ($calendrierBD != null) {
+                $calendrier->setId($calendrierBD);
+            } else {
+                Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+            }
         }
 
 
@@ -403,8 +404,8 @@ class ControllerQuestion
         }
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         if ((!ConnexionUtilisateur::estConnecte() ||
-            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant()) &&
-            !ConnexionUtilisateur::estAdministrateur())  {
+                ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant()) &&
+            !ConnexionUtilisateur::estAdministrateur()) {
             MessageFlash::ajouter("danger", "Vous ne pouvez pas supprimer une question dont vous n'êtes par l'organisateur.");
             Controller::redirect('index.php?controller=question&action=readAll');
         } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
@@ -425,7 +426,7 @@ class ControllerQuestion
 
     public static function readKeyword(): void
     {
-        if (!isset($_POST['keyword'])){
+        if (!isset($_POST['keyword'])) {
             Controller::redirect('index.php?action=create&controller=message');
         }
         $keyword = $_POST['keyword'];
