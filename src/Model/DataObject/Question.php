@@ -171,13 +171,13 @@ class Question extends AbstractDataObject
     public function getPhase(): string
     {
         $date = date('Y-m-d H:i');
-        if ($date < $this->calendriers[0]->getDebutEcriture(true)) {
+        if ($date < $this->getCalendrier()->getDebutEcriture(true)) {
             return 'debut';
-        } else if ($date > $this->calendriers[0]->getDebutEcriture(true) && $date < $this->calendriers[0]->getFinEcriture(true)) {
+        } else if ($date > $this->getCalendrier()->getDebutEcriture(true) && $date < $this->getCalendrier()->getFinEcriture(true)) {
             return 'ecriture';
-        } else if ($date > $this->calendriers[0]->getFinEcriture(true) && $date < $this->calendriers[0]->getDebutVote(true)) {
+        } else if ($date > $this->getCalendrier()->getFinEcriture(true) && $date < $this->getCalendrier()->getDebutVote(true)) {
             return 'entre';
-        } else if ($date > $this->calendriers[0]->getDebutVote(true) && $date < $this->calendriers[0]->getFinVote(true)) {
+        } else if ($date > $this->getCalendrier()->getDebutVote(true) && $date < $this->getCalendrier()->getFinVote(true)) {
             return 'vote';
         } else {
             return 'fini';
@@ -195,7 +195,7 @@ class Question extends AbstractDataObject
                 return $calendrier;
             }
         }
-        return $this->calendriers;
+        return $this->calendriers[0];
     }
 
 
