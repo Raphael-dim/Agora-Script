@@ -73,7 +73,7 @@ if (isset($_GET['selection'])) {
         }
 
         echo ' <p class=titre> ' . $titreHTML . ' </p>
-            <a href="" class = "auteur link-custom">par ' . $organisateur . ' </a >';
+            <a href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($question->getOrganisateur()->getIdentifiant()) . '" class = "auteur link-custom">par ' . $organisateur . ' </a >';
         echo '<p class="description">' . htmlspecialchars($question->getDescription()) . '</p>';
         if ($question->getPhase() == 'debut' || ConnexionUtilisateur::estAdministrateur()) {
             if (ConnexionUtilisateur::estAdministrateur() || (ConnexionUtilisateur::estConnecte() &&
@@ -84,13 +84,17 @@ if (isset($_GET['selection'])) {
                     $idQuestionURL . '"><img class="delete" src = "../web/images/delete.png"  alt="supprimer"></a></div>';
             }
             $interval = (new DateTime($date))->diff(new DateTime($calendrier->getDebutEcriture(true)));
-            echo '<p style="background: rgba(1,46,73,0.14)" >Début de la phase d\'écriture dans : ' . Calendrier::diff($interval) . '</p>';
-        } else if ($question->getPhase() == 'ecriture' || $question->getPhase() == 'entre') {
+            if ($question->getPhase() == 'debut') {
+                echo '<p class="debut" >Début de la phase d\'écriture dans : ' . Calendrier::diff($interval) . '</p>';
+            }
+        }
+        if ($question->getPhase() == 'ecriture' || $question->getPhase() == 'entre') {
             $interval = (new DateTime($date))->diff(new DateTime($calendrier->getDebutVote(true)));
-            echo '<p style="background: rgba(1,46,73,0.14)" >Début de la phase de vote dans : ' . Calendrier::diff($interval) . '</p>';
-        } else if ($question->getPhase() == 'vote') {
+            echo '<p class="debut">Début de la phase de vote dans : ' . Calendrier::diff($interval) . '</p>';
+        }
+        if ($question->getPhase() == 'vote') {
             $interval = (new DateTime($date))->diff(new DateTime($calendrier->getFinVote(true)));
-            echo '<p style="background: rgba(1,46,73,0.14)" >Fin de la phase de vote dans : ' . Calendrier::diff($interval) . '</p>';
+            echo '<p class="debut"> Fin de la phase de vote dans : ' . Calendrier::diff($interval) . '</p>';
         }
         if ($question->getPhase() != 'debut' && $question->getPhase() != 'fini') {
             echo '<a class = "link-custom" style = "position:absolute" href ="index.php?action=readAll&controller=proposition&idQuestion=' . $idQuestionURL . '">Liste des propositions</a>';

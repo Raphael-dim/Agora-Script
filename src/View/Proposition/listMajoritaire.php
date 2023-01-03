@@ -7,11 +7,12 @@
     use App\Vote\Model\DataObject\Votant;
     use App\Vote\Model\Repository\VoteRepository;
 
-    if ($question->getSystemeVote() == 'majoritaire') {
-        $modeScrutin = 'Scrutin par jugement majoritaire';
-        $message = 'Le scrutin majoritaire établit un \'vote médian\' pour chaque proposition, 
-                    par défaut, la mention \'passable\' est sélectionnée.';
-    }
+    $modeScrutin = 'Scrutin par jugement majoritaire (médiane) ';
+    $message = 'Le scrutin majoritaire établit un \'vote médian\' pour chaque proposition, 
+                    par défaut, la mention \'passable\' est sélectionnée.
+                    Notez chaque proposition entre 1 et 6 ci-dessous.';
+
+
     ?>
     <h2><?= $modeScrutin ?></h2>
     <p class="survol">
@@ -32,17 +33,29 @@
         $peutVoter = true;
         $interval = (new DateTime(date("d-m-Y H:i")))->diff(new DateTime($calendrier->getFinVote(true)));
         echo '<h2>Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
-    }
-    foreach ($propositions
-
-             as $proposition) {
+    } ?>
+    <ul>
+        <li id="termine">
+            <a href="index.php?action=readAll&controller=proposition&idQuestion=<?= $question->getId() ?>">Toutes</a>
+        </li>
+        <li id="vote">
+            <a href="index.php?action=readAll&selection=date&controller=proposition&idQuestion=<?= $question->getId() ?>">Les
+                plus récentes</a>
+        </li>
+        <li id="termine">
+            <a href="index.php?action=readAll&selection=note&controller=proposition&idQuestion=<?= $question->getId() ?>">Les
+                mieux notées</a>
+        </li>
+    </ul>
+    <?php
+    foreach ($propositions as $proposition) {
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
         echo '<div class=proposition>';
         echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
             $idPropositionURL . '"> <h2>' . $titreHTML . '</h2>   </a>';
         if ($peutVoter) {
-            $vote = Votant::aVote($proposition, $votes);
+            $vote = Votant::aVote($proposition, $votes, 'majoritaire');
             for ($val = 1; $val <= 6; $val++) {
                 switch ($val) {
                     case 1 :
@@ -74,7 +87,7 @@
                         <img src=../web/images/coeur_logo.png alt="">
                         ';
                 }
-                echo '<span style="font-size: 18px">'.$attribut.'</span></a>';
+                echo '<span style="font-size: 18px">' . $attribut . '</span></a>';
             }
             $nbVotes = htmlspecialchars($proposition->getNbVotes());
             $nbEtoiles = htmlspecialchars($proposition->getNbEtoiles());
@@ -112,7 +125,7 @@
             href=index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '>Supprimer</a>';
         }
         $i++;
-        echo '<a href="" >par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a >';
+        echo '<a href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($proposition->getIdResponsable()) . '" >par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a >';
         echo '</div>';
     }
     ?>

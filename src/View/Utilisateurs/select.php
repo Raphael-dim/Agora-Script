@@ -24,7 +24,6 @@ if (isset($_POST["keyword"])) {
                 
                 </span>
             ';
-
     }
     ?>
     <input type="hidden" name="row" value="nom">

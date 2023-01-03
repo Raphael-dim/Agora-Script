@@ -15,19 +15,21 @@ class MessageRepository extends AbstractRepository
 
     protected function construire(array $objetFormatTableau): Message
     {
-        return new Message(
+        $message = new Message(
             (new UtilisateurRepository())->select($objetFormatTableau['idAuteur']),
             (new UtilisateurRepository())->select($objetFormatTableau['idDestinataire']),
-            $objetFormatTableau['contenu'], $objetFormatTableau['date']);
+            $objetFormatTableau['contenu'], $objetFormatTableau['date'], $objetFormatTableau['estVu']);
+        $message->setId($objetFormatTableau['idMessage']);
+        return $message;
     }
 
     protected function getNomClePrimaire(): string
     {
-        return '';
+        return 'idMessage';
     }
 
     protected function getNomsColonnes(): array
     {
-        return array('idAuteur', 'idDestinataire', 'contenu', 'date');
+        return array('idAuteur', 'idDestinataire', 'contenu', 'date', 'estVu');
     }
 }

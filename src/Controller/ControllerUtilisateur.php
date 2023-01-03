@@ -65,10 +65,14 @@ class ControllerUtilisateur
 
     public static function read()
     {
+        if (!isset($_GET['idUtilisateur']) || !Utilisateur::identifiantExiste($_GET['idUtilisateur'])) {
+            MessageFlash::ajouter('warning', 'Utilisateur introuvable');
+            Controller::redirect('index.php');
+        }
         Session::getInstance();
-        $utilisateur = ((new UtilisateurRepository))->select($_SESSION['user']['id']);
-        $questions = (new QuestionRepository())->selectWhere($_SESSION['user']['id'], '*', 'idorganisateur');
-        $propositions = (new PropositionRepository())->selectWhere($_SESSION['user']['id'], '*', 'idresponsable');
+        $utilisateur = ((new UtilisateurRepository))->select($_GET['idUtilisateur']);
+        $questions = (new QuestionRepository())->selectWhere($_GET['idUtilisateur'], '*', 'idorganisateur');
+        $propositions = (new PropositionRepository())->selectWhere($_GET['idUtilisateur'], '*', 'idresponsable');
         Controller::afficheVue('view.php', ['pagetitle' => "Profil",
             "cheminVueBody" => "Utilisateurs/detail.php", "utilisateur" => $utilisateur,
             "questions" => $questions, "propositions" => $propositions]);

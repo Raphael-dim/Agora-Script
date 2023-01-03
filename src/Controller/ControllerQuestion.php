@@ -177,7 +177,7 @@ class ControllerQuestion
             MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
             Controller::redirect("index.php?action=form&controller=question&step=2");
         }
-        $calendrierBD = (new CalendrierRepository())->sauvegarder($calendrier);
+        $calendrierBD = (new CalendrierRepository())->sauvegarder($calendrier, true);
         if ($calendrierBD != null) {
             $calendrier->setId($calendrierBD);
         } else {
@@ -195,15 +195,15 @@ class ControllerQuestion
             Controller::redirect("index.php?action=form&controller=question&step=2");
         }
         if ($_SESSION[FormConfig::$arr]['systemeVote'] != "valeur" &&
-            $_SESSION[FormConfig::$arr]['systemeVote'] != "majoritaire") {
+            $_SESSION[FormConfig::$arr]['systemeVote'] != "majoritaire" &&
+            $_SESSION[FormConfig::$arr]['systemeVote'] != "unique") {
             MessageFlash::ajouter("danger", $_SESSION[FormConfig::$arr]['systemeVote'] );
-
             MessageFlash::ajouter("danger", "Veuillez vérifier le mode de scrutin.");
             Controller::redirect("index.php?action=form&controller=question&step=5");
         }
         $question = new Question($_SESSION[FormConfig::$arr]['Titre'], $_SESSION[FormConfig::$arr]['Description'],
             $creation, $calendrier, $organisateur, $_SESSION[FormConfig::$arr]['systemeVote']);
-        $questionBD = (new QuestionRepository())->sauvegarder($question);
+        $questionBD = (new QuestionRepository())->sauvegarder($question, true);
         if ($questionBD != null) {
             $question->setId($questionBD);
         } else {
@@ -234,7 +234,7 @@ class ControllerQuestion
                 MessageFlash::ajouter("warning", "Les contraintes de taille maximales des champs de textes n'ont pas été respectées.");
                 Controller::redirect("index.php?action=form&controller=question&step=3");
             }
-            $sectionBD = (new SectionRepository())->sauvegarder($section);
+            $sectionBD = (new SectionRepository())->sauvegarder($section, true);
             if ($sectionBD != null) {
                 $section->setId($sectionBD);
             } else {
@@ -319,7 +319,7 @@ class ControllerQuestion
         for ($i = 0; $i < count($nouvSections); $i++) {
             if (count($ancSections) <= $i) {
                 $section = new Section($nouvSections[$i]['titre'], $nouvSections[$i]['description'], $question);
-                $sectionBD = (new SectionRepository())->sauvegarder($section);
+                $sectionBD = (new SectionRepository())->sauvegarder($section, true);
                 if ($sectionBD != null) {
                     $section->setId($sectionBD);
                 } else {

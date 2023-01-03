@@ -19,7 +19,7 @@ abstract class AbstractRepository
      * @param AbstractDataObject $object
      * @return ?int
      */
-    public function sauvegarder(AbstractDataObject $object): ?int
+    public function sauvegarder(AbstractDataObject $object, $return = false): ?int
     {
         $sql = "INSERT INTO " . $this->getNomTable();
         $sql = $sql . " (";
@@ -33,8 +33,7 @@ abstract class AbstractRepository
         }
         $sql = substr($sql, 0, -2);
         $sql = $sql . ")";
-        if (get_class($object) == Question::class || get_class($object) == Proposition::class
-            || get_class($object) == Section::class || get_class($object) == Calendrier::class) {
+        if ($return) {
             $sql = $sql . " RETURNING " . $this->getNomClePrimaire();
         }
         $sql = $sql . ";";

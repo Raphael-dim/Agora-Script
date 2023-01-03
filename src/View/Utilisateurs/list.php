@@ -6,7 +6,7 @@ foreach ($utilisateurs as $utilisateur) {
     $prenom = htmlspecialchars($utilisateur->getPrenom());
     $urlidentifiant = rawurlencode($utilisateur->getIdentifiant());
     echo '<p style="display: inline">
-          <a href = "../web/frontController.php?action=read&login='
+          <a href = "index.php?action=read&idUtilisateur='
         . $urlidentifiant . '&controller=utilisateur">' . $nom . ' ' . $prenom . '</a>';
     echo '<div class="action">
            <a href ="index.php?action=update&controller=utilisateur&idUtilisateur=' .

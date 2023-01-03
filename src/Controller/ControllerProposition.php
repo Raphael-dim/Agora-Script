@@ -25,18 +25,35 @@ class ControllerProposition
 
     public static function create(): void
     {
-        if (ConnexionUtilisateur::estConnecte()) {
+        $bool = true;
+        $question = (new QuestionRepository())->select($_GET["idQuestion"]);
+
+        if (!ConnexionUtilisateur::estConnecte() || !Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition, 
+            vous n'êtes pas responsable pour cette question.");
+            $bool = false;
+        }
+        if ($question->getPhase() != 'ecriture') {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition en dehors 
+            de la phase d'écriture.");
+            $bool = false;
+        }
+        if (Responsable::aCreeProposition($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
+            MessageFlash::ajouter("warning", "Vous avez déjà crée une proposition pour cette question.");
+            $bool = false;
+        }
+        if (!$bool) {
+            Controller::redirect("index.php?controller=question&action=readAll");
+        } else {
             FormConfig::setArr('SessionProposition');
             FormConfig::startSession();
             self::form();
-        } else {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas créer une proposition si vous n'êtes pas connecté.");
-            Controller::redirect("index.php?action=connexion&controller=utilisateur");
         }
     }
 
 
-    public static function form()
+    public
+    static function form()
     {
         Session::getInstance();
         FormConfig::setArr('SessionProposition');
@@ -65,7 +82,8 @@ class ControllerProposition
     }
 
 
-    public static function read()
+    public
+    static function read()
     {
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         $question = (new QuestionRepository())->select($proposition->getIdQuestion());
@@ -83,25 +101,44 @@ class ControllerProposition
             "cheminVueBody" => "Proposition/detail.php"]);
     }
 
-    public static function readAll()
+    public
+    static function readAll()
     {
         if (!isset($_GET['idQuestion'])) {
             MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
             Controller::redirect('index.php?controller=question&action=readAll');
         }
-        $propositions = (new PropositionRepository())->selectWhere($_GET['idQuestion'], '*', 'idquestion');
+        if (isset($_GET['selection'])) {
+            switch ($_GET['selection']) {
+                case 'note' :
+                    $propositions = (new PropositionRepository())->selectWhere($_GET['idQuestion'], '*', 'idquestion', 'Propositions', 'nbetoiles', 'DESC');
+                    break;
+                case 'date' :
+                    $propositions = (new PropositionRepository())->selectWhere($_GET['idQuestion'], '*', 'idquestion', 'Propositions', 'nbetoiles', 'DESC');
+            }
+        } else {
+            $propositions = (new PropositionRepository())->selectWhere($_GET['idQuestion'], '*', 'idquestion');
+        }
         // Au lieu de faire un appel supplémentaire à la base de donnée, on vérifie s'il existe une proposition,
         // si oui, on récupère la question grâce à l'objet Proposition.
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $votants = $question->getVotants();
 
-        Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
-            "cheminVueBody" => "Proposition/list.php",
-            "votants" => $votants,
-            "propositions" => $propositions, "question" => $question]);
+        if ($question->getSystemeVote() == 'majoritaire' || $question->getSystemeVote() == 'valeur') {
+            Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
+                "cheminVueBody" => "Proposition/listMajoritaire.php",
+                "votants" => $votants,
+                "propositions" => $propositions, "question" => $question]);
+        } else {
+            Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
+                "cheminVueBody" => "Proposition/listUnique.php",
+                "votants" => $votants,
+                "propositions" => $propositions, "question" => $question]);
+        }
     }
 
-    public static function created()
+    public
+    static function created()
     {
         /* On vérifie au préalable si l'utilisateur a le droit de créer une proposition pour la question donnée
         dans l'éventualité où il a tenté de le faire depuis la barre d'adresse. */
@@ -118,8 +155,7 @@ class ControllerProposition
             $bool = false;
         }
         if ($question->getPhase() != 'ecriture') {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition tant 
-            que la phase d'écriture n'est pas en cours.");
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition en dehors de la phase d'écriture.");
             $bool = false;
         }
         if (Responsable::aCreeProposition($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
@@ -132,7 +168,7 @@ class ControllerProposition
         $responsable = new Responsable($question);
         $responsable->setIdentifiant(ConnexionUtilisateur::getLoginUtilisateurConnecte());
         $proposition = new Proposition($_SESSION[FormConfig::$arr]['titre'], $responsable->getIdentifiant(), $question->getId(), 0, 0);
-        $propositionBD = (new PropositionRepository())->sauvegarder($proposition);
+        $propositionBD = (new PropositionRepository())->sauvegarder($proposition, true);
 
         $coAuteursSelec = $_SESSION[FormConfig::$arr]['co-auteur'];
         $proposition->setId($propositionBD);
@@ -157,7 +193,8 @@ class ControllerProposition
      *
      * @return void
      */
-    public static function update(): void
+    public
+    static function update(): void
     {
         if (!isset($_GET['idProposition'])) {
             MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
@@ -174,14 +211,17 @@ class ControllerProposition
         }
 
         if (!ConnexionUtilisateur::estConnecte()) {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une proposition si vous n'etes pas connecté.");
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une proposition si vous n'êtes pas connecté.");
             $bool = false;
         }
         if (!in_array(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $coauteursid) && ConnexionUtilisateur::getLoginUtilisateurConnecte() != $proposition->getIdResponsable()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une proposition dont vous n'êtes pas co-auteur ou représentant.");
             $bool = false;
         }
-
+        if ($question->getPhase() != 'ecriture') {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier cette proposition en dehors de la phase d'écriture.");
+            $bool = false;
+        }
         if (!$bool) {
             Controller::redirect("index.php?action=readAll&controller=proposition");
         } else {
@@ -195,7 +235,8 @@ class ControllerProposition
     }
 
 
-    public static function updated()
+    public
+    static function updated()
     {
         //session_start();
         FormConfig::setArr('SessionProposition');
@@ -203,18 +244,14 @@ class ControllerProposition
         $idquestion = $proposition->getIdQuestion();
         $question = (new QuestionRepository)->select($idquestion);
 
-        $user = Session::getInstance()->lire('user');
-        $date = date('d-m-Y à H:i:s');
         $bool = true;
-        $calendrier = $question->getCalendrier();
-        if (!isset($user) || (!Responsable::estResponsable($question, $user['id']) && !CoAuteur::estCoAuteur($user['id'], $_SESSION[FormConfig::$arr]["idProposition"]))) {
+        if (!ConnexionUtilisateur::estConnecte() || (!Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte()) && !CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $_SESSION[FormConfig::$arr]["idProposition"]))) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier cette proposition, 
         vous n'êtes ni responsable ni co-auteur pour cette proposition.");
             $bool = false;
         }
-        if ($calendrier->getDebutEcriture() > $date || $calendrier->getFinEcriture() < $date) {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier cette proposition tant 
-        que la phase d'écriture n'a pas débuté.");
+        if ($question->getPhase() != 'ecriture') {
+            MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier cette proposition en dehors de la phase d'écriture.");
             $bool = false;
         }
         if (!$bool) {
@@ -253,7 +290,8 @@ class ControllerProposition
      * Vérifie d'abord si l'utilisateur le peut et affiche ensuite la vue pour confimer la suppression
      * @return void
      */
-    public static function delete(): void
+    public
+    static function delete(): void
     {
         /* On vérifie au préalable si l'utilisateur a le droit de supprimer une question
         dans l'éventualité où il a tenté de le faire depuis la barre d'adresse. */
