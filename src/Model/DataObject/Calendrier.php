@@ -9,25 +9,44 @@ use DateTime;
 
 class Calendrier extends AbstractDataObject
 {
+    private Question $question;
     private int $id;
     private string $debutEcriture;
     private string $finEcriture;
     private string $debutVote;
     private string $finVote;
 
-    /**
+    /*
      * @param string $debutEcriture
      * @param string $finEcriture
      * @param string $debutVote
      * @param string $finVote
      */
-    public function __construct(string $debutEcriture, string $finEcriture, string $debutVote, string $finVote)
+    public function __construct(Question $question, string $debutEcriture, string $finEcriture, string $debutVote, string $finVote)
     {
+        $this->question = $question;
         $this->debutEcriture = $debutEcriture;
         $this->finEcriture = $finEcriture;
         $this->debutVote = $debutVote;
         $this->finVote = $finVote;
     }
+
+    /**
+     * @return Question
+     */
+    public function getQuestion(): Question
+    {
+        return $this->question;
+    }
+
+    /**
+     * @param Question $question
+     */
+    public function setQuestion(Question $question): void
+    {
+        $this->question = $question;
+    }
+
 
     /**
      * La base de donnée gère les dates dans un format différent, il faut donc convertir ce dernier
@@ -161,6 +180,7 @@ class Calendrier extends AbstractDataObject
     public function formatTableau($update = false): array
     {
         $tab = array(
+            "idQuestionTag" => $this->question->getId(),
             "debutEcritureTag" => $this->debutEcriture,
             "finEcritureTag" => $this->finEcriture,
             "debutVoteTag" => $this->debutVote,

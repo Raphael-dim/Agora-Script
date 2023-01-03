@@ -38,35 +38,49 @@ if (isset($_POST['next'])) {
     FormConfig::redirect("index.php?controller=question&action=form&step=1");
 }
 
+if (isset($_POST['click'])) {
+    $i++;
+}
 ?>
 <h1>Selection du calendrier</h1>
 
-<form method="post" class = "custom-form">
-    <p>
-        <label for="debutEcriture">Date de début d'écriture des propositions :</label>
+<form method="post">
+    <input type="image" style="max-width: 30px" name="click" src="../web/images/add.png" alt="">
+    <input type="submit" style="max-width: 30px" name="click" value="click" alt="">
+
+</form>
+
+<form method="post" class="custom-form">
+    <?php
+    for ($n = 0; $n < $i; $n++) {
+        echo ' <p>
+        <label for="debutEcriture">Date de début d\'écriture des propositions :</label>
         <input type="datetime-local" id="debutEcriture" name="debutEcriture"
-               value="<?= FormConfig::TextField('debutEcriture') ?>"
-               min="<?= date("Y-m-d H:i"); ?>" required>
+               value="' . FormConfig::TextField('debutEcriture') . '"
+               min="' . date("Y-m-d H:i") . '" required>
     </p>
     <p>
-        <label for="finEcriture">Date de fin d'écriture des propositions :</label>
+        <label for="finEcriture">Date de fin d\'écriture des propositions :</label>
         <input type="datetime-local" id="finEcriture" name="finEcriture"
-               value="<?= FormConfig::TextField('finEcriture') ?>"
-               min="<?= date("Y-m-d H:i"); ?>" required>
+               value="' . FormConfig::TextField('finEcriture') . '"
+               min="' . date("Y-m-d H:i") . '" required>
     </p>
     <p>
         <label for="debutVote">Date de début des votes :</label>
         <input type="datetime-local" id="debutVote" name="debutVote"
-               value="<?= FormConfig::TextField('debutVote') ?>"
-               min="<?= date("Y-m-d H:i"); ?>" required>
+               value="' . FormConfig::TextField('debutVote') . '"
+               min="' . date("Y-m-d H:i") . '" required>
     </p>
     <p>
         <label for="finVote">Date de fin des votes :</label>
         <input type="datetime-local" id="finVote" name="finVote"
-               value="<?= FormConfig::TextField('finVote') ?>"
-               min="<?= date("Y-m-d H:i"); ?>" required>
-    </p>
+               value="' . FormConfig::TextField("finVote") . '"
+               min="' . date("Y-m-d H:i") . '" required>
+    </p>';
+    }
+    ?>
     <input type="submit" name=previous value="Retour" id="precedent" class="nav" formnovalidate>
     <input type="submit" name=next value="Suivant" id="suivant" class="nav">
+
 </form>
 
