@@ -43,6 +43,9 @@ $nbSection = $_SESSION[FormConfig::$arr]['nbSections'];
                 <p class ="champ">
                     <label>Description :</label>
                     <textarea maxlength="350" name=description' . $i . ' rows="7" cols="50" required>' . FormConfig::TextField('description' . $i) . '</textarea>
+                     <script>
+                        const easyMDE = new EasyMDE({ forceSync: true});
+                    </script>
                     <label>350 caractères maximum</label>
                </p>';
     }

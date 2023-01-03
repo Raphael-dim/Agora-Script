@@ -87,3 +87,10 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
     <input type="submit" name=previous value="Retour" id="precedent" formnovalidate>
     <input type="submit" name=next value="Suivant" id="suivant">
 </form>
+
+<script>
+    const element = document.querySelectorAll("p");
+    element.forEach(p => {
+        p.innerHTML = marked.parse(p.innerHTML);
+    });
+</script>
