@@ -1198,3 +1198,19 @@ select {
     border-radius: 5px;
     box-shadow: 4px 4px #ccc;
 }
+
+.zoneTexte {
+    color: white;
+    margin-top: 5%;
+    max-width: max-content;
+    padding: 10px 10px 60px 10px;
+    margin-left: 20%;
+    /*background-color: #012e49;*/
+    border: 2px #9c9da0 solid;
+    border-radius: 5px;
+}
+
+.zoneTexte textarea {
+    color: white;
+    background-color: rgba(91, 179, 231, 0.33);
+}
