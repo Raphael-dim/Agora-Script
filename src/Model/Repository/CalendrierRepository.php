@@ -10,6 +10,7 @@ class   CalendrierRepository extends AbstractRepository
     protected function construire(array $calendrierTableau) : Calendrier
     {
         $calendrier = new Calendrier(
+            (new QuestionRepository())->select($calendrierTableau['idQuestion']),
             $calendrierTableau["debutecriture"],
             $calendrierTableau["finecriture"],
             $calendrierTableau["debutvote"],
@@ -31,6 +32,6 @@ class   CalendrierRepository extends AbstractRepository
 
     protected function getNomsColonnes(): array
     {
-        return array("debutEcriture", "finEcriture", "debutVote", "finVote");
+        return array("idQuestion", "debutEcriture", "finEcriture", "debutVote", "finVote");
     }
 }

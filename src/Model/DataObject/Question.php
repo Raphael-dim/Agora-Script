@@ -2,6 +2,7 @@
 
 namespace App\Vote\Model\DataObject;
 
+use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\CoAuteurRepository;
 use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\SectionRepository;
@@ -16,17 +17,16 @@ class Question extends AbstractDataObject
     private string $description;
     private string $creation;
     private Utilisateur $organisateur;
-    private Calendrier $calendrier;
     private string $systemeVote;
+    private array $calendriers;
 
 
-    public function __construct(string     $titre, string $description, string $creation,
-                                Calendrier $calendrier, Utilisateur $organisateur, string $systemeVote)
+    public function __construct(string      $titre, string $description, string $creation,
+                                Utilisateur $organisateur, string $systemeVote)
     {
         $this->titre = $titre;
         $this->description = $description;
         $this->creation = $creation;
-        $this->calendrier = $calendrier;
         $this->organisateur = $organisateur;
         $this->systemeVote = $systemeVote;
     }
@@ -47,13 +47,6 @@ class Question extends AbstractDataObject
         $this->systemeVote = $systemeVote;
     }
 
-    /**
-     * @return Calendrier
-     */
-    public function getCalendrier(): Calendrier
-    {
-        return $this->calendrier;
-    }
 
     /**
      * @return string
@@ -91,15 +84,6 @@ class Question extends AbstractDataObject
     /**
      * @return Utilisateur
      */
-
-    /**
-     * @param Calendrier $calendrier
-     */
-    public function setCalendrier(Calendrier $calendrier): void
-    {
-        $this->calendrier = $calendrier;
-    }
-
 
     /**
      * @return int
@@ -184,20 +168,34 @@ class Question extends AbstractDataObject
      * @return string
      * @throws \Exception
      */
-    public function getPhase(): string  
+    public function getPhase(): string
     {
         $date = date('Y-m-d H:i');
-        if ($date < $this->calendrier->getDebutEcriture(true)) {
+        if ($date < $this->calendriers[0]->getDebutEcriture(true)) {
             return 'debut';
-        } else if ($date > $this->calendrier->getDebutEcriture(true) && $date < $this->calendrier->getFinEcriture(true)) {
+        } else if ($date > $this->calendriers[0]->getDebutEcriture(true) && $date < $this->calendriers[0]->getFinEcriture(true)) {
             return 'ecriture';
-        } else if ($date > $this->calendrier->getFinEcriture(true) && $date < $this->calendrier->getDebutVote(true)) {
+        } else if ($date > $this->calendriers[0]->getFinEcriture(true) && $date < $this->calendriers[0]->getDebutVote(true)) {
             return 'entre';
-        } else if ($date > $this->calendrier->getDebutVote(true) && $date < $this->calendrier->getFinVote(true)) {
+        } else if ($date > $this->calendriers[0]->getDebutVote(true) && $date < $this->calendriers[0]->getFinVote(true)) {
             return 'vote';
         } else {
             return 'fini';
         }
+    }
+
+    public function getCalendrier()
+    {
+        if (!isset($this->calendriers)) {
+            $this->calendriers = (new CalendrierRepository())->selectWhere($this->id, '*', 'idQuestion');;
+        }
+        $date = date('Y-m-d H:i');
+        foreach ($this->calendriers as $calendrier) {
+            if ($date < $calendrier->getDebutEcriture()) {
+                return $calendrier;
+            }
+        }
+        return $this->calendriers;
     }
 
 
@@ -207,7 +205,6 @@ class Question extends AbstractDataObject
             "titreTag" => $this->titre,
             "descriptionTag" => $this->description,
             "creationTag" => $this->creation,
-            "idCalendrierTag" => $this->calendrier->getId(),
             "idOrganisateurTag" => $this->organisateur->getIdentifiant(),
             "systemeVoteTag" => $this->systemeVote
         );
