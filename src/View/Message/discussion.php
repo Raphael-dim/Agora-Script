@@ -47,7 +47,7 @@ foreach ($messages as $message) {
 <form class="zoneTexte" method="post" action="index.php?action=created&controller=message">
     <input type="hidden" name="idContact" value="<?= $_GET['idContact'] ?>">
     <p class="champ">
-        <textarea id="message_id" maxlength="350" name="message" rows="7" cols="50" style="max-width: 80%;" placeholder="Écrire un nouveau message" required></textarea>
+        <textarea id="message_id" maxlength="350" name="message" rows="7" cols="50" style="max-width: 90%;" placeholder="Écrire un nouveau message" required></textarea>
         <label>350 caractères maximum</label>
     </p>
     <input id="suivant" type="submit" value="Envoyer" class="nav">

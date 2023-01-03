@@ -1,11 +1,12 @@
 <?php
 
 require "../src/View/Utilisateurs/search.php";
+echo '<hr style="margin-bottom: 20px">';
 foreach ($utilisateurs as $utilisateur) {
     $nom = htmlspecialchars($utilisateur->getNom());
     $prenom = htmlspecialchars($utilisateur->getPrenom());
     $urlidentifiant = rawurlencode($utilisateur->getIdentifiant());
-    echo '<div style="height:50px">
+    echo '<div class="user">
           <a href = "index.php?action=read&idUtilisateur='
         . $urlidentifiant . '&controller=utilisateur">' . $nom . ' ' . $prenom . '</a>';
     echo '<div class="action">
