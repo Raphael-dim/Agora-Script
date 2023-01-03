@@ -70,7 +70,7 @@ class Question extends AbstractDataObject
     public function getCreation(): string
     {
         $date = date_create($this->creation);
-        return date_format($date, 'd/m/Y H:i:s');
+        return date_format($date, 'd/m/Y à H:i:s');
     }
 
     /**
