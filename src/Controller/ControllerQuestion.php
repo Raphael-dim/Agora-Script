@@ -417,8 +417,6 @@ class ControllerQuestion
             self::readAll();
         } else if (isset($_POST["confirm"])) {
             (new QuestionRepository())->delete($_GET['idQuestion']);
-            $calendrier = $question->getCalendrier();
-            (new CalendrierRepository())->delete($calendrier->getId());
             MessageFlash::ajouter('success', 'La question a bien été supprimée');
             Controller::redirect("index.php?controller=question&action=readAll");
         }
