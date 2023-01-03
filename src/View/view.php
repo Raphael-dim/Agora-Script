@@ -2,9 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title><?php
-
-        echo $pagetitle; ?></title>
+    <title><?php echo $pagetitle; ?></title>
     <link href="css/global.css" rel="stylesheet">
     <link href="css/nav.css" rel="stylesheet">
     <link href="css/keyframes.css" rel="stylesheet">
