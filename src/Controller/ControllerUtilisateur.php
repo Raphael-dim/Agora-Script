@@ -166,8 +166,8 @@ class ControllerUtilisateur
     public static function update()
     {
         $utilisateur = (new UtilisateurRepository())->select($_GET['idUtilisateur']);
-        if (!ConnexionUtilisateur::estConnecte() ||
-            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $utilisateur->getIdentifiant()) {
+        if (!ConnexionUtilisateur::estAdministrateur() && (!ConnexionUtilisateur::estConnecte() ||
+                ConnexionUtilisateur::getLoginUtilisateurConnecte() != $utilisateur->getIdentifiant())) {
             MessageFlash::ajouter("warning", "Connectez-vous à votre compte pour le modifier.");
             Controller::redirect("index.php?action=connexion&controller=utilisateur");
         } else {
@@ -186,7 +186,7 @@ class ControllerUtilisateur
             MessageFlash::ajouter("warning", "Connectez-vous à votre compte pour le modifier.");
             Controller::redirect("index.php?action=connexion&controller=utilisateur");
         }
-        if (ConnexionUtilisateur::getLoginUtilisateurConnecte() != $utilisateur->getIdentifiant()) {
+        if (ConnexionUtilisateur::getLoginUtilisateurConnecte() != $utilisateur->getIdentifiant() && !ConnexionUtilisateur::estAdministrateur()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier un compte qui ne vous appartient pas.");
             Controller::redirect("index.php?action=readAll&controller=question");
         }
@@ -201,9 +201,18 @@ class ControllerUtilisateur
             $utilisateur->setNom($_POST['nom']);
             $utilisateur->setPrenom($_POST['prenom']);
             $utilisateur->setMdpHache($_POST['mdp']);
+            if (!isset($_POST['estAdmin'])) {
+                $utilisateur->setEstAdmin(false);
+            } else {
+                $utilisateur->setEstAdmin(true);
+            }
             (new UtilisateurRepository())->update($utilisateur);
-            MessageFlash::ajouter('success', 'Vos informations ont été mises à jour');
-            Controller::redirect("index.php?controller=utilisateur&action=read&idUtilisateur=" . $utilisateur->getIdentifiant());
+            if (ConnexionUtilisateur::getLoginUtilisateurConnecte() != $utilisateur->getIdentifiant()) {
+                MessageFlash::ajouter('success', 'Les informations de ' . $utilisateur->getIdentifiant() . ' ont été mises à jour');
+            } else {
+                MessageFlash::ajouter('success', 'Vos informations ont été mises à jour');
+            }
+            Controller::redirect("index.php?controller=utilisateur&action=read&idUtilisateur=" . ConnexionUtilisateur::getLoginUtilisateurConnecte());
         }
 
     }

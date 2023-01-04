@@ -44,7 +44,11 @@ use App\Vote\Lib\ConnexionUtilisateur;
         if (ConnexionUtilisateur::estAdministrateur()) {
             echo '<p class="InputAddOn">
                     <label class="InputAddOn-item" for="estAdmin_id">Administrateur&#42; : </label>
-                    <input class="InputAddOn-field" type="checkbox" checked placeholder="" name="estAdmin" id="estAdmin_id"></p>';
+                    <input class="InputAddOn-field" type="checkbox" placeholder="" name="estAdmin" id="estAdmin_id"';
+            if ($utilisateur->isEstAdmin()) {
+                echo ' checked ';
+            }
+            echo '></p>';
         }
         ?>
 
