@@ -35,7 +35,7 @@ class Conf
 
     static public function getAbsoluteURL(): string
     {
-        return "http://localhost/web/index.php?";
+        return "http://localhost/web/index.php";
     }
 
 
