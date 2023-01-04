@@ -18,8 +18,7 @@ class VerificationEmail
         $lienValidationEmail = "$absoluteURL?action=validerEmail&controller=utilisateur&login=$loginURL&nonce=$nonceURL";
         $corpsEmail = "<a href=\"$lienValidationEmail\">Validation</a>";
 
-// Temporairement avant d'envoyer un vrai mail
-        mail($utilisateur->getEmailAValider(), 'Vérification email', $corpsEmail);
+        echo(mail($utilisateur->getEmailAValider(), 'Vérification email', $corpsEmail));
     }
 
     public static function traiterEmailValidation($login, $nonce): bool

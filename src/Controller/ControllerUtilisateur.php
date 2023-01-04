@@ -115,10 +115,10 @@ class ControllerUtilisateur
         } else {
             $utilisateur = Utilisateur::construireDepuisFormulaire($_POST);
             VerificationEmail::envoiEmailValidation($utilisateur);
-            (new UtilisateurRepository())->sauvegarder($utilisateur);
-            MessageFlash::ajouter("success", "Le compte a bien crée");
-            ConnexionUtilisateur::connecter($utilisateur->getIdentifiant());
-            Controller::redirect("index.php?controller=accueil");
+            //(new UtilisateurRepository())->sauvegarder($utilisateur);
+            //MessageFlash::ajouter("success", "Le compte a bien crée");
+            //ConnexionUtilisateur::connecter($utilisateur->getIdentifiant());
+            //Controller::redirect("index.php?controller=accueil");
         }
     }
 
