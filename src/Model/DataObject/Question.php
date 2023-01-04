@@ -22,7 +22,7 @@ class Question extends AbstractDataObject
     private array $calendriers;
 
 
-    public function __construct(string      $titre, string $description, string $creation,
+    public function __construct(string $titre, string $description, string $creation,
                                 Utilisateur $organisateur, string $systemeVote)
     {
         $this->titre = $titre;
@@ -155,7 +155,14 @@ class Question extends AbstractDataObject
     /* On obtient les propositions pour une question*/
     public function getPropositions(): array
     {
-        return (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion", 'Propositions');
+        $propositions =  (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion", 'Propositions');
+        $calendriers = $this->getCalendrier(true);
+        $calendrierActuel = $this->getCalendrier();
+        var_dump(array_key_first($calendriers));
+        if (sizeof($propositions) > 1 && $this->getPhase() == 'debut') {
+
+        }
+        return $propositions;
     }
 
     public function getPropositionsTrie()
@@ -211,14 +218,13 @@ class Question extends AbstractDataObject
          * supérieure à la date courante.
          * */
         foreach ($this->calendriers as $calendrier) {
-            if ($date < $calendrier->getDebutEcriture()) {
+            if ($date < $calendrier->getDebutEcriture(true)) {
                 return $calendrier;
             }
         }
         // Si on arrive ici, c'est qu'on est dans le cas où la question est terminée. On retourne le dernier calendrier.
         return $this->calendriers[sizeof($this->calendriers) - 1];
     }
-
 
     public function formatTableau($update = false): array
     {
