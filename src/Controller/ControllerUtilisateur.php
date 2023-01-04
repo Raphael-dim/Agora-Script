@@ -116,7 +116,7 @@ class ControllerUtilisateur
             $utilisateur = Utilisateur::construireDepuisFormulaire($_POST);
             VerificationEmail::envoiEmailValidation($utilisateur);
             (new UtilisateurRepository())->sauvegarder($utilisateur);
-            MessageFlash::ajouter("success", "Le compte a bien crée");
+            MessageFlash::ajouter("success", "Le compte a bien été crée");
             ConnexionUtilisateur::connecter($utilisateur->getIdentifiant());
             Controller::redirect("index.php?controller=accueil");
         }
