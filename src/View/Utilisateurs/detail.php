@@ -46,6 +46,9 @@ use App\Vote\Lib\ConnexionUtilisateur;
 
 <?php
 if ($bool) {
-    echo '<a href=index.php?action=delete&controller=utilisateur&idUtilisateur=' . rawurlencode($utilisateur->getIdentifiant()) . '>Supprimer
-    mon compte </a>';
+    echo '<p><a href=index.php?action=delete&controller=utilisateur&idUtilisateur=' . rawurlencode($utilisateur->getIdentifiant()) . '>Supprimer
+    mon compte </a></p>';
+    if (ConnexionUtilisateur::estAdministrateur()) {
+        echo '<p><a href=index.php?action=create&controller=utilisateur>Créer un autre compte </a></p>';
+    }
 }
