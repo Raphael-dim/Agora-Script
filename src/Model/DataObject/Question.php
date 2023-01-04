@@ -22,7 +22,7 @@ class Question extends AbstractDataObject
     private array $calendriers;
 
 
-    public function __construct(string $titre, string $description, string $creation,
+    public function __construct(string      $titre, string $description, string $creation,
                                 Utilisateur $organisateur, string $systemeVote)
     {
         $this->titre = $titre;
@@ -155,14 +155,42 @@ class Question extends AbstractDataObject
     /* On obtient les propositions pour une question*/
     public function getPropositions(): array
     {
-        $propositions =  (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion", 'Propositions');
+        $propositions = (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion", 'Propositions');
         $calendriers = $this->getCalendrier(true);
-        $calendrierActuel = $this->getCalendrier();
-        var_dump(array_key_first($calendriers));
-        if (sizeof($propositions) > 1 && $this->getPhase() == 'debut') {
+        $nbPropositionEliminees = 0;
+        if ($this->aPassePhase() && $this->getPhase() == 'debut') {
+            foreach ($propositions as $proposition) {
+                if ($proposition->isEstEliminee()) {
+                    $nbPropositionEliminees++;
+                }
+            }
 
+            // vérifier si on doit en suppr
+            //if ($nbPropositionEliminees < sizeof($propositions) / sizeof($this->calendriers)) {
+            //    foreach ($propositions as $proposition) {
+            //
+            //    }
+            //}
+            if ($this->estDernierePhase()) {
+                $nbPropositionATej = sizeof($propositions) - 1;
+            } else if (sizeof($this->calendriers) == 2) {
+                $nbPropositionATej = sizeof($propositions) / 2;
+            } else {
+                $nbPropositionATej = (sizeof($propositions) / sizeof($this->calendriers)) + 1;
+            }
         }
         return $propositions;
+    }
+
+    public function getPropositionsNonEliminees(array $propositions): array
+    {
+        $propositionsNonEliminees = array();
+        foreach ($propositions as $proposition) {
+            if (!$proposition->isEstEliminees) {
+                $propositionsNonEliminees[] = $proposition;
+            }
+        }
+        return $propositionsNonEliminees;
     }
 
     public function getPropositionsTrie()
@@ -224,6 +252,30 @@ class Question extends AbstractDataObject
         }
         // Si on arrive ici, c'est qu'on est dans le cas où la question est terminée. On retourne le dernier calendrier.
         return $this->calendriers[sizeof($this->calendriers) - 1];
+    }
+
+    /*
+     * Permet de savoir si une question donnée a déjà passé une première phase de vote et d'écriture
+    */
+
+    public function aPassePhase(): bool
+    {
+        $calendriers = $this->getCalendrier(true);
+        $calendrierActuel = $this->getCalendrier();
+        if (sizeof($this->calendriers) > 1 && $calendriers[0] != $calendrierActuel) {
+            return true;
+        }
+        return false;
+    }
+
+    public function estDernierePhase(): bool
+    {
+        $calendriers = $this->getCalendrier(true);
+        $calendrierActuel = $this->getCalendrier();
+        if ($calendriers[sizeof($this->calendriers) - 1] == $calendrierActuel) {
+            return true;
+        }
+        return false;
     }
 
     public function formatTableau($update = false): array

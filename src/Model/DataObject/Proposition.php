@@ -13,19 +13,47 @@ class Proposition extends AbstractDataObject
     private string $idQuestion;
     private int $nbEtoiles;
     private int $nbVotes;
+    private bool $estEliminee;
 
-    public function __construct(string $titre, string $idResponsable, string $idQuestion, int $nbVotes, int $nbEtoiles)
+    /**
+     * @param int $id
+     * @param string $titre
+     * @param string $idResponsable
+     * @param string $idQuestion
+     * @param int $nbEtoiles
+     * @param int $nbVotes
+     * @param bool $estEliminee
+     */
+
+    public function __construct(string $titre, string $idResponsable, string $idQuestion, int $nbEtoiles, int $nbVotes, bool $estEliminee)
     {
         /*
-        On ne construit pas l'objet proposition avec un objet Responsable et un objet Question pour éviter de
-        faire un aller-retour inutile à la base de donnée.
-        Cela permet de construire uniquement si besoin le responsable et la question pour une proposition.
-        */
+       On ne construit pas l'objet proposition avec un objet Responsable et un objet Question pour éviter de
+       faire un aller-retour inutile à la base de donnée.
+       Cela permet de construire uniquement si besoin le responsable et la question pour une proposition.
+       */
         $this->titre = $titre;
         $this->idResponsable = $idResponsable;
         $this->idQuestion = $idQuestion;
-        $this->nbVotes = $nbVotes;
         $this->nbEtoiles = $nbEtoiles;
+        $this->nbVotes = $nbVotes;
+        $this->estEliminee = $estEliminee;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEstEliminee(): bool
+    {
+        return $this->estEliminee;
+    }
+
+    /**
+     * @param bool $estEliminee
+     */
+    public function setEstEliminee(bool $estEliminee): void
+    {
+        $this->estEliminee = $estEliminee;
     }
 
     /**
@@ -131,12 +159,17 @@ class Proposition extends AbstractDataObject
 
     public function formatTableau($update = false): array
     {
+        $estEliminee = $this->estEliminee;
+        if (!$estEliminee) {
+            $estEliminee = 0;
+        }
         $tab = array(
             "idquestionTag" => $this->idQuestion,
             "idresponsableTag" => $this->idResponsable,
             "titreTag" => $this->titre,
             "nbvotesTag" => $this->nbVotes,
-            "nbetoilesTag" => $this->nbEtoiles
+            "nbetoilesTag" => $this->nbEtoiles,
+            "estElimineeTag" => $estEliminee
         );
         if ($update) {
             $tab["idpropositionTag"] = $this->id;

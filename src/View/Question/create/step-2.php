@@ -18,7 +18,6 @@ if (isset($_POST['next'])) {
         $finEcriture = $_POST['finEcriture' . $n];
         $debutVote = $_POST['debutVote' . $n];
         $finVote = $_POST['finVote' . $n];
-        var_dump($finVote);
         if ($debutEcriture >= $finEcriture) {
             MessageFlash::ajouter("warning", "La date de fin d'écriture doit être supérieure à la date de début d'écriture");
             Controller::redirect('index.php?controller=question&action=form&step=2');
@@ -30,6 +29,10 @@ if (isset($_POST['next'])) {
             Controller::redirect('index.php?controller=question&action=form&step=2');
         } else if ($n < $_SESSION[FormConfig::$arr]['nbCalendriers'] && $_POST['finVote' . $n] > $_POST['debutEcriture' . $n + 1]) {
             MessageFlash::ajouter("warning", "Les phases doivent se succéder et ne peuvent être simultanées.");
+            Controller::redirect('index.php?controller=question&action=form&step=2');
+        }
+        if (str_starts_with($_POST['nbPropositionsAEliminer' . $n], '-')) {
+            MessageFlash::ajouter("warning", "Veuillez saisir un entier valide.");
             Controller::redirect('index.php?controller=question&action=form&step=2');
         }
     }
@@ -96,6 +99,15 @@ if (isset($_POST['ajoutPhase'])) {
                value="' . FormConfig::TextField("finVote" . $n) . '"
                min="' . date("Y-m-d H:i") . '" required>
     </p>';
+        if ($_SESSION[FormConfig::$arr]['nbCalendriers'] > 1) {
+            echo '<p>
+                        <label for="nbPropositionsAEliminer">Nombre de propositions à éliminer : </label>
+                        <input type="number" id="nbPropositionsAEliminer" name="nbPropositionsAEliminer' . $n . '"
+                           value="' . FormConfig::TextField("nbPropositionsAEliminer" . $n) . '"
+                           min="0" style="max-width: 55px" required>
+                 </p>';
+        }
+
     }
     ?>
     <input type="submit" name=previous value="Retour" id="precedent" class="nav" formnovalidate>
