@@ -110,27 +110,20 @@ class ControllerProposition
         }
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
 
-        if (isset($_GET['selection'])) {
-            switch ($_GET['selection']) {
-                case 'note' :
-                    $propositions = $question->getPropositions();
-                    break;
-                case 'date' :
-                    $propositions = $question->getPropositions();
-            }
-        } else {
-            $propositions = $question->getPropositions();
-        }
+
         // Au lieu de faire un appel supplémentaire à la base de donnée, on vérifie s'il existe une proposition,
         // si oui, on récupère la question grâce à l'objet Proposition.
         $votants = $question->getVotants();
+        $propositions = $question->getPropositionsTrie();
 
         if ($question->getSystemeVote() == 'majoritaire' || $question->getSystemeVote() == 'valeur') {
+
             Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
                 "cheminVueBody" => "Proposition/listMajoritaire.php",
                 "votants" => $votants,
                 "propositions" => $propositions, "question" => $question]);
         } else {
+
             Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
                 "cheminVueBody" => "Proposition/listUnique.php",
                 "votants" => $votants,
@@ -319,4 +312,27 @@ class ControllerProposition
             Controller::redirect("index.php?controller=question&action=readAll");
         }
     }
+
+    public static function eliminer()
+    {
+        $proposition = (new PropositionRepository())->select($_GET['idProposition']);
+        $question = (new QuestionRepository())->select($proposition->getIdQuestion());
+        $propositions = $question->getPropositionsTrie();
+        if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant()
+            && $question->getPhase() == 'entre' && $question->aPassePhase()) {
+            $proposition->setEstEliminee(true);
+            (new PropositionRepository())->update($proposition);
+            foreach ($propositions as $propo) {
+                if (array_search($propo, $propositions) > array_search($proposition, $propositions)
+                    && !$propo->isEstEliminee()) {
+                    $propo->setEstEliminee(true);
+                    (new PropositionRepository())->update($propo);
+                }
+            }
+        }
+        MessageFlash::ajouter('succes', 'Les propositions sélectionnées ont été mise à jour');
+        Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
+    }
+
+
 }

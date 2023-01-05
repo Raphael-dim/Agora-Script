@@ -17,6 +17,11 @@
         <span><?= $message ?></span>
     </p>
     <?php
+    if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
+        $question->getPhase() == 'entre' && $question->aPassePhase()) {
+        echo '<h2>Vous êtes responsable de cette question multiphase, vous pouvez éliminer 
+            les propositions les moins attractives.</h2>';
+    }
     $i = 1;
     $peutVoter = false;
     $calendrier = $question->getCalendrier();
@@ -32,12 +37,17 @@
         echo '<h2>Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
     }
     foreach ($propositions as $proposition) {
+
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
-        echo '<div class=proposition>';
-        echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
+        if ($proposition->isEstEliminee()){
+            echo '<div style="background: #000e17" class=proposition>';
+            echo '<h3>(Eliminé)</h3>';
+        }else{
+            echo '<div class=proposition>';
+        }        echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
             $idPropositionURL . '"> <h2>' . $titreHTML . '</h2>   </a>';
-        if ($peutVoter) {
+        if ($peutVoter && !$proposition->isEstEliminee()) {
             $vote = Votant::aVote($proposition, $votes);
             if (is_null($vote)) {
                 echo '<form method="get" action="../web/index.php">
@@ -54,12 +64,16 @@
                 <input type="submit" value="Supprimer le vote" class="nav">
                     </form>';
             }
-            $nbVotes = htmlspecialchars($proposition->getNbVotes());
 
             echo '<br > ';
-            echo '<h3>Nombre de votes : ' . $nbVotes . '</h3>';
         }
+        $nbVotes = htmlspecialchars($proposition->getNbEtoiles());
+        echo '<h3>Nombre de votes : ' . $nbVotes . '</h3>';
 
+        if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
+            $question->getPhase() == 'entre' && $question->aPassePhase()) {
+            echo '<a href="index.php?controller=proposition&action=eliminer&idProposition=' . $idPropositionURL . '">Eliminer</a><br>';
+        }
 
         if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
             $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte() &&

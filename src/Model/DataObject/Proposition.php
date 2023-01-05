@@ -107,9 +107,9 @@ class Proposition extends AbstractDataObject
     public function setNbVotes(int $nbVotes, int $incremente = 0): void
     {
         if ($incremente != 0) {
-            $this->nbVotes += $incremente;
+            $this->nbEtoiles += $incremente;
         } else {
-            $this->nbVotes = $nbVotes;
+            $this->nbEtoiles = $nbVotes;
         }
     }
 

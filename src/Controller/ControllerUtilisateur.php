@@ -143,6 +143,7 @@ class ControllerUtilisateur
         }
         if (VerificationEmail::traiterEmailValidation($_GET['login'], $_GET['nonce'])) {
             MessageFlash::ajouter('success', 'Votre e-mail a été validé.');
+            ConnexionUtilisateur::connecter($_GET['login']);
             Controller::redirect('index.php?action=read&controller=utilisateur&idUtilisateur=' . $_GET['login']);
         } else {
             Controller::redirect('index.php?');

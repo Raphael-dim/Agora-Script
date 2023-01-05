@@ -29,10 +29,7 @@ class ControllerVote
             Controller::redirect('index.php');
         }
         $question = (new QuestionRepository())->select($proposition->getIdQuestion());
-        if ($question->getSystemeVote() == 'unique') {
-            MessageFlash::ajouter('danger', 'Système de vote incorrecte');
-            $bool = false;
-        }
+
         $votants = $question->getVotants();
         $bool = true;
         if (!ConnexionUtilisateur::estConnecte() || !Votant::estVotant($votants, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
@@ -45,6 +42,14 @@ class ControllerVote
         }
         if (!isset($_GET['valeur']) || $_GET['valeur'] > 6 || $_GET['valeur'] < 0) {
             MessageFlash::ajouter('warning', "Valeur de vote invalide");
+            $bool = false;
+        }
+        if ($question->getSystemeVote() == 'unique') {
+            MessageFlash::ajouter('danger', 'Système de vote incorrecte');
+            $bool = false;
+        }
+        if ($proposition->isEstEliminee()) {
+            MessageFlash::ajouter('danger', 'Cette proposition est éliminée.');
             $bool = false;
         }
         if (!$bool) {
@@ -90,6 +95,10 @@ class ControllerVote
         $question = (new QuestionRepository())->select($proposition->getIdQuestion());
         if ($question->getSystemeVote() != 'unique') {
             MessageFlash::ajouter('danger', 'Système de vote incorrecte');
+            $bool = false;
+        }
+        if ($proposition->isEstEliminee()) {
+            MessageFlash::ajouter('danger', 'Cette proposition est éliminée.');
             $bool = false;
         }
         $votants = $question->getVotants();

@@ -33,28 +33,19 @@
         $peutVoter = true;
         $interval = (new DateTime(date("d-m-Y H:i")))->diff(new DateTime($calendrier->getFinVote(true)));
         echo '<h2>Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
-    } ?>
-    <ul>
-        <li id="termine">
-            <a href="index.php?action=readAll&controller=proposition&idQuestion=<?= $question->getId() ?>">Toutes</a>
-        </li>
-        <li id="vote">
-            <a href="index.php?action=readAll&selection=date&controller=proposition&idQuestion=<?= $question->getId() ?>">Les
-                plus récentes</a>
-        </li>
-        <li id="termine">
-            <a href="index.php?action=readAll&selection=note&controller=proposition&idQuestion=<?= $question->getId() ?>">Les
-                mieux notées</a>
-        </li>
-    </ul>
-    <?php
+    }
     foreach ($propositions as $proposition) {
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
-        echo '<div class=proposition>';
+        if ($proposition->isEstEliminee()){
+            echo '<div style="background: #000e17" class=proposition>';
+            echo '<h3>(Eliminé)</h3>';
+        }else{
+            echo '<div class=proposition>';
+        }
         echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
             $idPropositionURL . '"> <h2>' . $titreHTML . '</h2>   </a>';
-        if ($peutVoter) {
+        if ($peutVoter && !$proposition->isEstEliminee()) {
             $vote = Votant::aVote($proposition, $votes, 'majoritaire');
             for ($val = 1; $val <= 6; $val++) {
                 switch ($val) {
@@ -91,7 +82,6 @@
             }
             $nbVotes = htmlspecialchars($proposition->getNbVotes());
             $nbEtoiles = htmlspecialchars($proposition->getNbEtoiles());
-
             echo '<br > ';
             echo '<h3>Nombre de votes : ' . $nbVotes . '</h3>';
             $votesProposition = (new VoteRepository())->selectWhere($proposition->getId(), '*',
@@ -112,6 +102,13 @@
         }
 
 
+        if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
+            $question->getPhase() == 'entre' && $question->aPassePhase()) {
+            echo '<a href="index.php?controller=proposition&action=eliminer&idProposition=' . $idPropositionURL . '">Eliminer</a><br>';
+        }
+
+
+
         if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
             $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte() &&
             $question->getPhase() == 'ecriture') {
@@ -120,7 +117,6 @@
                 rawurlencode($proposition->getId()) . '"><img class="modifier" src = "..\web\images\modifier.png" ></a ><br> ';
         }
         if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable() && $question->getPhase() == 'ecriture') {
-
             echo ' <a class="nav suppProp" 
             href=index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '>Supprimer</a>';
         }

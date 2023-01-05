@@ -181,7 +181,7 @@ class Question extends AbstractDataObject
     public function getPropositionsTrie()
     {
         return (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion",
-            'Propositions', 'nbVotes', 'DESC');
+            'Propositions', 'nbEtoiles', 'DESC');
     }
 
     /**

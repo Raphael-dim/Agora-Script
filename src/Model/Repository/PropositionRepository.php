@@ -18,8 +18,8 @@ class PropositionRepository extends AbstractRepository
             $propositionTableau["titre"],
             $propositionTableau['idresponsable'],
             $propositionTableau['idquestion'],
-            $propositionTableau["nbvotes"],
             $propositionTableau["nbetoiles"],
+            $propositionTableau["nbvotes"],
             $propositionTableau["estEliminee"]
         );
         $proposition->setId($propositionTableau["idproposition"]);
