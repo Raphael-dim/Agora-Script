@@ -14,13 +14,23 @@
     <h2><?= $modeScrutin ?></h2>
     <p class="survol">
         <img class="imageAide" src="images/aide_logo.png" alt=""/>
-        <span><?= $message ?></span>
+        <span class="messageInfo"><?= $message ?></span>
     </p>
     <?php
     if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
         $question->getPhase() == 'entre' && $question->aPassePhase()) {
-        echo '<h2>Vous êtes responsable de cette question multiphase, vous pouvez éliminer 
-            les propositions les moins attractives.</h2>';
+        $organisateurRole = 'Vous êtes responsable pour cette question multiphase';
+        $messageOrganisateur = 'Vous pouvez éliminer les propositions les moins attractives. 
+                Par défaut, elles sont triées par nombre de votes, si vous éliminez
+            une proposition, vous éliminez aussi celles qui ont un nombre de votes inférieur.';
+        ?>
+        <h2><?= $organisateurRole ?></h2>
+        <p class="survol">
+            <img class="imageAide" src="images/aide_logo.png" alt=""/>
+            <span class="messageInfo"><?= $messageOrganisateur ?></span>
+        </p>
+        <?php
+        echo '<h2></h2>';
     }
     $i = 1;
     $peutVoter = false;
@@ -40,12 +50,13 @@
 
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
-        if ($proposition->isEstEliminee()){
+        if ($proposition->isEstEliminee()) {
             echo '<div style="background: #000e17" class=proposition>';
             echo '<h3>(Eliminé)</h3>';
-        }else{
+        } else {
             echo '<div class=proposition>';
-        }        echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
+        }
+        echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
             $idPropositionURL . '"> <h2>' . $titreHTML . '</h2>   </a>';
         if ($peutVoter && !$proposition->isEstEliminee()) {
             $vote = Votant::aVote($proposition, $votes);

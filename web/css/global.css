@@ -1207,3 +1207,8 @@ select {
     color: white;
     background-color: rgba(91, 179, 231, 0.33);
 }
+
+.messageInfo {
+    margin-left: 15px;
+    max-width: 500px;
+}
