@@ -11,6 +11,7 @@ use App\Vote\Model\HTTP\Session;
 use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class ControllerUtilisateur
 {
@@ -54,6 +55,10 @@ class ControllerUtilisateur
         } else {
             if (!MotDePasse::verifier($mdp, $utilisateur->getMdpHache())) {
                 MessageFlash::ajouter('warning', 'Mot de passe incorrect');
+                Controller::redirect('index.php?controller=utilisateur&action=connexion');
+            }
+            if (!VerificationEmail::aValideEmail($utilisateur)) {
+                MessageFlash::ajouter('warning', 'Vous devez valider votre compte, vérifiez votre boite mail, ainsi que vos spams.');
                 Controller::redirect('index.php?controller=utilisateur&action=connexion');
             } else {
                 ConnexionUtilisateur::connecter($utilisateur->getIdentifiant());
@@ -114,14 +119,19 @@ class ControllerUtilisateur
             Controller::redirect('index.php?controller=utilisateur&action=create');
         } else {
             $utilisateur = Utilisateur::construireDepuisFormulaire($_POST);
-            VerificationEmail::envoiEmailValidation($utilisateur);
+            try {
+                VerificationEmail::envoiEmailValidation($utilisateur);
+            } catch (TransportExceptionInterface $e) {
+                MessageFlash::ajouter('warning', 'L\'envoie du mail a échoué');
+                Controller::redirect('index.php');
+            }
             (new UtilisateurRepository())->sauvegarder($utilisateur);
             MessageFlash::ajouter("success", "Le compte a bien été crée");
-            ConnexionUtilisateur::connecter($utilisateur->getIdentifiant());
-            Controller::redirect("index.php?controller=accueil");
+            MessageFlash::ajouter("success", "Pour valider votre compte, vérifiez votre boite mail et vos spams");
+            //ConnexionUtilisateur::connecter($utilisateur->getIdentifiant());
+            Controller::redirect("index.php?controller=utilisateur&action=connexion");
         }
     }
-
 
 
     public static function validerEmail()
@@ -132,6 +142,7 @@ class ControllerUtilisateur
             Controller::redirect('index.php?controller=accueil');
         }
         if (VerificationEmail::traiterEmailValidation($_GET['login'], $_GET['nonce'])) {
+            MessageFlash::ajouter('success', 'Votre compte a été validé.');
             Controller::redirect('index.php?action=read&controller=utilisateur&idUtilisateur=raph');
         } else {
             Controller::redirect('index.php?');
@@ -200,10 +211,23 @@ class ControllerUtilisateur
         if ($_POST['mdp'] != $_POST['mdp2']) {
             MessageFlash::ajouter('warning', 'Les mots de passes sont différents');
             Controller::redirect('index.php?controller=utilisateur&action=update&idUtilisateur=' . $utilisateur->getIdentifiant());
+        }
+        if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+            MessageFlash::ajouter('warning', 'Le format du mail saisi est invalide');
+            Controller::redirect('index.php?controller=utilisateur&action=update');
+            Controller::redirect('index.php?controller=utilisateur&action=update&idUtilisateur=' . $utilisateur->getIdentifiant());
         } else {
             $utilisateur->setNom($_POST['nom']);
             $utilisateur->setPrenom($_POST['prenom']);
             $utilisateur->setMdpHache($_POST['mdp']);
+            if ($utilisateur->getEmail() != $_POST['mail']) {
+                $utilisateur->setEmailAVerifier($_POST['mail']);
+                try {
+                    VerificationEmail::envoiEmailValidation($utilisateur);
+                } catch (TransportExceptionInterface $e) {
+
+                }
+            }
             if (!isset($_POST['estAdmin'])) {
                 $utilisateur->setEstAdmin(false);
             } else {

@@ -26,6 +26,11 @@ use App\Vote\Lib\ConnexionUtilisateur;
 
         </p>
         <p class="InputAddOn">
+            <label class="InputAddOn-item" for="mail">Email : </label>
+            <input class="InputAddOn-field" type="text" value="<?= $utilisateur->getMail() ?>" name="mail"
+                   id="mail" readonly required>
+        </p>
+        <p class="InputAddOn">
             <label class="InputAddOn-item" for="mdp_id">Ancien mot de passe&#42; : </label>
             <input class="InputAddOn-field" type="password" value="" placeholder="" name="ancienMDP" id="mdp_id"
                    required>
