@@ -34,11 +34,17 @@
             <input class="InputAddOn-field" type="email" value="" placeholder="toto@yopmail.com" name="email"
                    id="email_id" required>
         </p>
-        <p class="InputAddOn">
-            <label class="InputAddOn-item" for="estAdmin_id">Administrateur&#42; : </label>
-            <input class="InputAddOn-field" type="checkbox" placeholder="" name="estAdmin" id="estAdmin_id">
-        </p>
+        <?php
 
+        use App\Vote\Lib\ConnexionUtilisateur;
+
+        if (ConnexionUtilisateur::estAdministrateur()) {
+            echo '<p class="InputAddOn">
+                    <label class="InputAddOn-item" for="estAdmin_id">Administrateur&#42; : </label>
+                    <input class="InputAddOn-field" type="checkbox" placeholder="" name="estAdmin" id="estAdmin_id">
+                </p>';
+        }
+        ?>
         <input id="suivant" type="submit" value="Inscription" class="nav">
 
     </fieldset>

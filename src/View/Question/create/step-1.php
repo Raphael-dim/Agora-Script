@@ -47,6 +47,9 @@ if (isset($_POST['Titre'])) {
     <p class ="champ">
         <label for="description_id">Description : </label>
         <textarea id="description_id" maxlength="350" name="Description" rows="7" cols="50" required><?= FormConfig::TextField('Description'); ?></textarea>
+        <script>
+            const easyMDE = new EasyMDE({ forceSync: true});
+        </script>
         <label>350 caractères maximum</label>
     </p>
     <p>
@@ -62,6 +65,4 @@ if (isset($_POST['Titre'])) {
 
     <input type="submit" value="Suivant" id="suivant"  class="nav">
 </form>
-
-
 

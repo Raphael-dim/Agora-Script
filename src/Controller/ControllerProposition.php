@@ -108,20 +108,21 @@ class ControllerProposition
             MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
             Controller::redirect('index.php?controller=question&action=readAll');
         }
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
+
         if (isset($_GET['selection'])) {
             switch ($_GET['selection']) {
                 case 'note' :
-                    $propositions = (new PropositionRepository())->selectWhere($_GET['idQuestion'], '*', 'idquestion', 'Propositions', 'nbetoiles', 'DESC');
+                    $propositions = $question->getPropositions();
                     break;
                 case 'date' :
-                    $propositions = (new PropositionRepository())->selectWhere($_GET['idQuestion'], '*', 'idquestion', 'Propositions', 'nbetoiles', 'DESC');
+                    $propositions = $question->getPropositions();
             }
         } else {
-            $propositions = (new PropositionRepository())->selectWhere($_GET['idQuestion'], '*', 'idquestion');
+            $propositions = $question->getPropositions();
         }
         // Au lieu de faire un appel supplémentaire à la base de donnée, on vérifie s'il existe une proposition,
         // si oui, on récupère la question grâce à l'objet Proposition.
-        $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $votants = $question->getVotants();
 
         if ($question->getSystemeVote() == 'majoritaire' || $question->getSystemeVote() == 'valeur') {
@@ -167,7 +168,7 @@ class ControllerProposition
         }
         $responsable = new Responsable($question);
         $responsable->setIdentifiant(ConnexionUtilisateur::getLoginUtilisateurConnecte());
-        $proposition = new Proposition($_SESSION[FormConfig::$arr]['titre'], $responsable->getIdentifiant(), $question->getId(), 0, 0);
+        $proposition = new Proposition($_SESSION[FormConfig::$arr]['titre'], $responsable->getIdentifiant(), $question->getId(), 0, 0, false);
         $propositionBD = (new PropositionRepository())->sauvegarder($proposition, true);
 
         $coAuteursSelec = $_SESSION[FormConfig::$arr]['co-auteur'];
@@ -263,7 +264,7 @@ class ControllerProposition
                 $propositionSection = new PropositionSection((new PropositionRepository())->select($_SESSION[FormConfig::$arr]["idProposition"]), $section, $_SESSION[FormConfig::$arr]['contenu' . $section->getId()]);
                 (new PropositionSectionRepository())->sauvegarder($propositionSection);
             }
-            $prop = new Proposition($_SESSION[FormConfig::$arr]['titre'], $proposition->getIdResponsable(), $idquestion, $proposition->getNbVotes());
+            $prop = new Proposition($_SESSION[FormConfig::$arr]['titre'], $proposition->getIdResponsable(), $idquestion, $proposition->getNbEtoiles(), $proposition->getNbVotes(), false);
             $prop->setId($_SESSION[FormConfig::$arr]["idProposition"]);
             (new PropositionRepository())->update($prop);
 

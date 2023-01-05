@@ -2,11 +2,13 @@
 
 namespace App\Vote\Model\DataObject;
 
+use App\Vote\Model\Repository\CalendrierRepository;
 use App\Vote\Model\Repository\CoAuteurRepository;
 use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\SectionRepository;
 use App\Vote\Model\Repository\ResponsableRepository;
 use App\Vote\Model\Repository\VotantRepository;
+use Exception;
 
 class Question extends AbstractDataObject
 {
@@ -16,17 +18,16 @@ class Question extends AbstractDataObject
     private string $description;
     private string $creation;
     private Utilisateur $organisateur;
-    private Calendrier $calendrier;
     private string $systemeVote;
+    private array $calendriers;
 
 
-    public function __construct(string     $titre, string $description, string $creation,
-                                Calendrier $calendrier, Utilisateur $organisateur, string $systemeVote)
+    public function __construct(string      $titre, string $description, string $creation,
+                                Utilisateur $organisateur, string $systemeVote)
     {
         $this->titre = $titre;
         $this->description = $description;
         $this->creation = $creation;
-        $this->calendrier = $calendrier;
         $this->organisateur = $organisateur;
         $this->systemeVote = $systemeVote;
     }
@@ -47,13 +48,6 @@ class Question extends AbstractDataObject
         $this->systemeVote = $systemeVote;
     }
 
-    /**
-     * @return Calendrier
-     */
-    public function getCalendrier(): Calendrier
-    {
-        return $this->calendrier;
-    }
 
     /**
      * @return string
@@ -91,15 +85,6 @@ class Question extends AbstractDataObject
     /**
      * @return Utilisateur
      */
-
-    /**
-     * @param Calendrier $calendrier
-     */
-    public function setCalendrier(Calendrier $calendrier): void
-    {
-        $this->calendrier = $calendrier;
-    }
-
 
     /**
      * @return int
@@ -170,7 +155,42 @@ class Question extends AbstractDataObject
     /* On obtient les propositions pour une question*/
     public function getPropositions(): array
     {
-        return (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion", 'Propositions');
+        $propositions = (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion", 'Propositions');
+        $calendriers = $this->getCalendrier(true);
+        $nbPropositionEliminees = 0;
+        if ($this->aPassePhase() && $this->getPhase() == 'debut') {
+            foreach ($propositions as $proposition) {
+                if ($proposition->isEstEliminee()) {
+                    $nbPropositionEliminees++;
+                }
+            }
+
+            // vérifier si on doit en suppr
+            //if ($nbPropositionEliminees < sizeof($propositions) / sizeof($this->calendriers)) {
+            //    foreach ($propositions as $proposition) {
+            //
+            //    }
+            //}
+            if ($this->estDernierePhase()) {
+                $nbPropositionATej = sizeof($propositions) - 1;
+            } else if (sizeof($this->calendriers) == 2) {
+                $nbPropositionATej = sizeof($propositions) / 2;
+            } else {
+                $nbPropositionATej = (sizeof($propositions) / sizeof($this->calendriers)) + 1;
+            }
+        }
+        return $propositions;
+    }
+
+    public function getPropositionsNonEliminees(array $propositions): array
+    {
+        $propositionsNonEliminees = array();
+        foreach ($propositions as $proposition) {
+            if (!$proposition->isEstEliminees) {
+                $propositionsNonEliminees[] = $proposition;
+            }
+        }
+        return $propositionsNonEliminees;
     }
 
     public function getPropositionsTrie()
@@ -182,24 +202,81 @@ class Question extends AbstractDataObject
     /**
      * On obtient la phase en cours pour une question
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getPhase(): string  
+    public function getPhase(): string
     {
         $date = date('Y-m-d H:i');
-        if ($date < $this->calendrier->getDebutEcriture(true)) {
+        if ($date < $this->getCalendrier()->getDebutEcriture(true)) {
             return 'debut';
-        } else if ($date > $this->calendrier->getDebutEcriture(true) && $date < $this->calendrier->getFinEcriture(true)) {
+        } else if ($date > $this->getCalendrier()->getDebutEcriture(true) && $date < $this->getCalendrier()->getFinEcriture(true)) {
             return 'ecriture';
-        } else if ($date > $this->calendrier->getFinEcriture(true) && $date < $this->calendrier->getDebutVote(true)) {
+        } else if ($date > $this->getCalendrier()->getFinEcriture(true) && $date < $this->getCalendrier()->getDebutVote(true)) {
             return 'entre';
-        } else if ($date > $this->calendrier->getDebutVote(true) && $date < $this->calendrier->getFinVote(true)) {
+        } else if ($date > $this->getCalendrier()->getDebutVote(true) && $date < $this->getCalendrier()->getFinVote(true)) {
             return 'vote';
         } else {
             return 'fini';
         }
     }
 
+    /*
+     * Retourne le calendrier courant pour une question donnée.
+     * C'est à -dire le calendrier en cours ou alors le calendrier prochain.
+     * Si $tous true, on retourne tous les calendriers de la question,
+     * utilisé notamment dans la vue de détail d'une question.
+    */
+    public function getCalendrier(bool $tous = false)
+    {
+        if (!isset($this->calendriers)) {
+            $this->calendriers = (new CalendrierRepository())->selectWhere($this->id, '*', 'idQuestion', 'Calendriers', 'debutEcriture');
+        }
+        if ($tous) {
+            return $this->calendriers;
+        }
+        $date = date('Y-m-d H:i:s');
+        foreach ($this->calendriers as $calendrier) {
+            if ($date > $calendrier->getDebutEcriture(true) && $date < $calendrier->getFinVote(true)) {
+                return $calendrier;
+            }// Si la date courante est comprise dans le calendrier, on retourne le calendrier.
+        }
+        /*
+         * Si on est à ce stade, c'est que la date courante est entre 2 calendriers, avant ou après.
+         * On retourne donc le premier calendrier qui a une date de début d'écriture des propositions
+         * supérieure à la date courante.
+         * */
+        foreach ($this->calendriers as $calendrier) {
+            if ($date < $calendrier->getDebutEcriture(true)) {
+                return $calendrier;
+            }
+        }
+        // Si on arrive ici, c'est qu'on est dans le cas où la question est terminée. On retourne le dernier calendrier.
+        return $this->calendriers[sizeof($this->calendriers) - 1];
+    }
+
+    /*
+     * Permet de savoir si une question donnée a déjà passé une première phase de vote et d'écriture
+    */
+
+    public function aPassePhase(): bool
+    {
+        $calendriers = $this->getCalendrier(true);
+        $calendrierActuel = $this->getCalendrier();
+        if (sizeof($this->calendriers) > 1 && $calendriers[0] != $calendrierActuel) {
+            return true;
+        }
+        return false;
+    }
+
+    public function estDernierePhase(): bool
+    {
+        $calendriers = $this->getCalendrier(true);
+        $calendrierActuel = $this->getCalendrier();
+        if ($calendriers[sizeof($this->calendriers) - 1] == $calendrierActuel) {
+            return true;
+        }
+        return false;
+    }
 
     public function formatTableau($update = false): array
     {
@@ -207,7 +284,6 @@ class Question extends AbstractDataObject
             "titreTag" => $this->titre,
             "descriptionTag" => $this->description,
             "creationTag" => $this->creation,
-            "idCalendrierTag" => $this->calendrier->getId(),
             "idOrganisateurTag" => $this->organisateur->getIdentifiant(),
             "systemeVoteTag" => $this->systemeVote
         );

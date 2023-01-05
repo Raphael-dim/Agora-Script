@@ -96,7 +96,7 @@ if (isset($_GET['selection'])) {
             $interval = (new DateTime($date))->diff(new DateTime($calendrier->getFinVote(true)));
             echo '<p class="debut"> Fin de la phase de vote dans : ' . Calendrier::diff($interval) . '</p>';
         }
-        if ($question->getPhase() != 'debut' && $question->getPhase() != 'fini') {
+        if ($question->aPassePhase() || ($question->getPhase() != 'debut' && $question->getPhase() != 'fini')) {
             echo '<a class = "link-custom" style = "position:absolute" href ="index.php?action=readAll&controller=proposition&idQuestion=' . $idQuestionURL . '">Liste des propositions</a>';
         }
         if ($question->getPhase() == 'ecriture' && ConnexionUtilisateur::estConnecte() &&

@@ -38,7 +38,7 @@ use App\Vote\Lib\ConnexionUtilisateur;
     <h2><?= $pronom ?> propositions : </h2>
     <ul class="listes_sans_puces">
         <?php foreach ($propositions as $proposition) {
-            echo '<li><p><a class="lien" href="index.php?controller=proposition&action=read&idProposition=' . rawurlencode($proposition->getId()) . '">
+            echo '<li><p><a href = "index.php?controller=proposition&action=read&idProposition=' . rawurlencode($proposition->getId()) . '">
     ' . $proposition->getTitre() . '</a></p></li>';
         }
         ?>
@@ -46,6 +46,9 @@ use App\Vote\Lib\ConnexionUtilisateur;
 
 <?php
 if ($bool) {
-    echo '<a href="index.php?action=delete&controller=utilisateur&idUtilisateur=' . rawurlencode($utilisateur->getIdentifiant()) . '">Supprimer
-    mon compte </a>';
+    echo '<p><a href="index.php?action=delete&controller=utilisateur&idUtilisateur=' . rawurlencode($utilisateur->getIdentifiant()) . '">Supprimer
+    mon compte </a></p>';
+    if (ConnexionUtilisateur::estAdministrateur()) {
+        echo '<p><a href="index.php?action=create&controller=utilisateur">Créer un autre compte </a></p>';
+    }
 }
