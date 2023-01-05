@@ -198,8 +198,13 @@ class ControllerQuestion
         for ($i = 1; $i <= $nbCalendriers; $i++) {
             $calendrier = new Calendrier($question, FormConfig::TextField('debutEcriture' . $i), FormConfig::TextField('finEcriture' . $i),
                 FormConfig::TextField('debutVote' . $i), FormConfig::TextField('finVote' . $i));
-            if ($calendrier->getDebutEcriture(true) >= $calendrier->getFinEcriture(true) || $calendrier->getDebutVote(true) >= $calendrier->getFinVote(true)
-                || $calendrier->getDebutVote(true) <= $calendrier->getDebutEcriture(true) || $calendrier->getDebutVote(true) < $calendrier->getFinEcriture(true)) {
+            if ($calendrier->getDebutEcriture() != "" && $calendrier->getFinEcriture() != ""
+                && ($calendrier->getDebutEcriture(true) >= $calendrier->getFinEcriture(true)
+                    || $calendrier->getDebutVote(true) < $calendrier->getFinEcriture(true))) {
+                MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
+                Controller::redirect("index.php?action=form&controller=question&step=2");
+            }
+            if ($calendrier->getDebutVote(true) >= $calendrier->getFinVote(true)) {
                 MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
                 Controller::redirect("index.php?action=form&controller=question&step=2");
             }
@@ -207,7 +212,9 @@ class ControllerQuestion
             if ($calendrierBD != null) {
                 $calendrier->setId($calendrierBD);
             } else {
-                Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
+                (new QuestionRepository())->delete($question->getId());
+                MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
+                Controller::redirect("index.php?action=form&controller=question&step=6");
             }
         }
 

@@ -79,6 +79,8 @@ class ControllerVote
 
     public static function create()
     {
+        // Booléen indiquant si la requête de vote est valide ou non
+
         $bool = true;
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         if (is_null($proposition)) {

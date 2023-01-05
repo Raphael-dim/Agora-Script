@@ -9,6 +9,7 @@ use App\Vote\Model\Repository\SectionRepository;
 use App\Vote\Model\Repository\ResponsableRepository;
 use App\Vote\Model\Repository\VotantRepository;
 use Exception;
+use mysql_xdevapi\XSession;
 
 class Question extends AbstractDataObject
 {
@@ -156,34 +157,18 @@ class Question extends AbstractDataObject
     public function getPropositions(): array
     {
         $propositions = (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion", 'Propositions');
-        $calendriers = $this->getCalendrier(true);
-        $nbPropositionEliminees = 0;
-        if ($this->aPassePhase() && $this->getPhase() == 'debut') {
-            foreach ($propositions as $proposition) {
-                if ($proposition->isEstEliminee()) {
-                    $nbPropositionEliminees++;
-                }
-            }
-
-            // vérifier si on doit en suppr
-            //if ($nbPropositionEliminees < sizeof($propositions) / sizeof($this->calendriers)) {
-            //    foreach ($propositions as $proposition) {
-            //
-            //    }
-            //}
-            if ($this->estDernierePhase()) {
-                $nbPropositionATej = sizeof($propositions) - 1;
-            } else if (sizeof($this->calendriers) == 2) {
-                $nbPropositionATej = sizeof($propositions) / 2;
-            } else {
-                $nbPropositionATej = (sizeof($propositions) / sizeof($this->calendriers)) + 1;
-            }
-        }
         return $propositions;
     }
 
     public function getPropositionsNonEliminees(array $propositions): array
     {
+        //prend en paramètre un tableau de propositions et retourne un tableau
+        // contenant uniquement les propositions qui n'ont pas été éliminées.
+        // La méthode parcourt chaque proposition du tableau en utilisant une boucle "foreach",
+        // et vérifie si la propriété "estEliminee" de chaque proposition est égale à false.
+        // Si c'est le cas, elle ajoute la proposition au tableau de propositions non éliminées.
+        // La méthode retourne finalement le tableau de propositions non éliminées.
+
         $propositionsNonEliminees = array();
         foreach ($propositions as $proposition) {
             if (!$proposition->isEstEliminees) {
@@ -229,14 +214,14 @@ class Question extends AbstractDataObject
     public function getCalendrier(bool $tous = false)
     {
         if (!isset($this->calendriers)) {
-            $this->calendriers = (new CalendrierRepository())->selectWhere($this->id, '*', 'idQuestion', 'Calendriers', 'debutEcriture');
+            $this->calendriers = (new CalendrierRepository())->selectWhere($this->id, '*', 'idQuestion', 'Calendriers', 'debutVote');
         }
         if ($tous) {
             return $this->calendriers;
         }
         $date = date('Y-m-d H:i:s');
         foreach ($this->calendriers as $calendrier) {
-            if ($date > $calendrier->getDebutEcriture(true) && $date < $calendrier->getFinVote(true)) {
+            if ($date < $calendrier->getDebutVote(true)  || ($date > $calendrier->getDebutEcriture(true) && $date < $calendrier->getFinVote(true))) {
                 return $calendrier;
             }// Si la date courante est comprise dans le calendrier, on retourne le calendrier.
         }
@@ -268,13 +253,21 @@ class Question extends AbstractDataObject
         return false;
     }
 
+        // Cette fonction vérifie si la phase actuelle est la dernière phase du calendrier.
+        // Elle retourne un booléen : vrai si c'est la dernière phase, faux sinon.
     public function estDernierePhase(): bool
     {
+        // Récupère tous les calendriers
         $calendriers = $this->getCalendrier(true);
+        // Récupère le calendrier actuel
         $calendrierActuel = $this->getCalendrier();
+
+        // Si le dernier élément du tableau des calendriers est égal au calendrier actuel
         if ($calendriers[sizeof($this->calendriers) - 1] == $calendrierActuel) {
+            // Alors c'est la dernière phase
             return true;
         }
+        // Sinon, ce n'est pas la dernière phase
         return false;
     }
 

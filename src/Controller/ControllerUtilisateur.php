@@ -195,6 +195,16 @@ class ControllerUtilisateur
 
     public static function updated()
     {
+        /*permet de mettre à jour les informations d'un utilisateur dans une base de données.
+        La méthode récupère d'abord les informations de l'utilisateur à mettre à jour en utilisant
+         le repository "UtilisateurRepository". Elle vérifie ensuite si l'utilisateur est connecté,
+        La méthode vérifie également si l'utilisateur connecté est l'utilisateur à mettre à jour ou s'il
+         s'agit d'un administrateur.
+        vérifie si l'ancien mot de passe saisi est valide en utilisant la classe "MotDePasse".
+        vérifie également si les mots de passe saisis sont identiques
+        Si toutes les vérifications précédentes sont passées, la méthode met à jour les
+         informations de l'utilisateur dans la base de données*/
+
         $utilisateur = (new UtilisateurRepository())->select($_POST['identifiant']);
         if (!ConnexionUtilisateur::estConnecte()) {
             MessageFlash::ajouter("warning", "Connectez-vous à votre compte pour le modifier.");
@@ -249,6 +259,19 @@ class ControllerUtilisateur
 
     public static function delete()
     {
+        /*
+        Permet de supprimer un utilisateur d'une base de données.
+        La méthode vérifie tout d'abord si l'identifiant de l'utilisateur à supprimer a été fourni en tant que paramètre GET.
+         Si ce n'est pas le cas, elle affiche un message d'erreur et redirige l'utilisateur vers la page d'accueil.
+
+            Ensuite, la méthode vérifie si l'utilisateur connecté est un administrateur ou s'il s'agit de l'utilisateur à supprimer.
+         Si l'utilisateur clique sur "Annuler", il est redirigé vers sa page
+        de profil ou vers la liste des utilisateurs, selon le cas.
+         Si l'utilisateur clique sur "Confirmer", le compte est supprimé de la base de données et l'utilisateur
+        est redirigé vers la page d'accueil ou vers la liste des utilisateurs, selon le cas.
+         */
+
+
         if (!isset($_GET['idUtilisateur'])) {
             MessageFlash::ajouter('info', 'Veuillez saisir un identifiant valide');
             Controller::redirect('index.php?controller=accueil');

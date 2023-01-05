@@ -75,33 +75,36 @@
                     if ($i != 1) {
                         echo '<h2 style="color: #012e49">' . $i . '<sup>e</sup> phase</h2>';
                     }
-                    if ($question->getPhase() == 'debut' && $calendrierActuel == $calendrier) {
-                        echo $cercle;
-                    }
-                    echo '<span class="vertical-line-petite" style="background: grey"></span>';
-                    ?>
+                    if (!is_null($calendrier->getDebutEcriture())) {
+                        if ($question->getPhase() == 'debut' && $calendrierActuel == $calendrier) {
+                            echo $cercle;
+                        }
+                        echo '<span class="vertical-line-petite" style="background: grey"></span>';
+                        ?>
 
-                    <p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_debut">Début
-                        d'écriture des
-                        propositions
-                        : <br>
-                        <?= htmlspecialchars($calendrier->getDebutEcriture()) ?></p>
-                    <?php
-                    if ($question->getPhase() == 'ecriture' && $calendrierActuel == $calendrier) {
-                        echo '<span class="vertical-line-petite" style="background: rgba(206,22,22,0.61)"></span>';
-                        echo $cercle;
+                        <p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_debut">
+                            Début
+                            d'écriture des
+                            propositions
+                            : <br>
+                            <?= htmlspecialchars($calendrier->getDebutEcriture()) ?></p>
+                        <?php
+                        if ($question->getPhase() == 'ecriture' && $calendrierActuel == $calendrier) {
+                            echo '<span class="vertical-line-petite" style="background: rgba(206,22,22,0.61)"></span>';
+                            echo $cercle;
 
-                        echo '<span class="vertical-line-petite" style="background: #CE16169B"></span>';
-                    } else {
-                        echo '<span class="vertical-line" style="background: #CE16169B"></span>';
-                    } ?>
-                    <p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_fin">Fin
-                        d'écriture des
-                        propositions :
-                        <br>
-                        <?= htmlspecialchars($calendrier->getFinEcriture()) ?></p>
+                            echo '<span class="vertical-line-petite" style="background: #CE16169B"></span>';
+                        } else {
+                            echo '<span class="vertical-line" style="background: #CE16169B"></span>';
+                        } ?>
+                        <p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_fin">Fin
+                            d'écriture des
+                            propositions :
+                            <br>
+                            <?= htmlspecialchars($calendrier->getFinEcriture()) ?></p>
+                    <?php }
 
-                    <?php
+
                     if ($question->getPhase() == 'entre' && $calendrierActuel == $calendrier) {
                         echo '<span class="vertical-line-petite" style="background:grey " ></span>';
                         echo $cercle;
