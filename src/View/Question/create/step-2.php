@@ -78,8 +78,8 @@ if (isset($_POST['ajoutPhase'])) {
 
 <form method="post">
     <!--    <input type="image" style="max-width: 30px" name="click" src="../web/images/add.png" alt="">-->
-    <input type="submit" name="ajoutPhase" value="Ajouter une phase">
-    <input type="submit" name="supprimerPhase" value="Supprimer une phase">
+    <input class="nav" type="submit" name="ajoutPhase" value="Ajouter une phase">
+    <input class="nav" type="submit" name="supprimerPhase" value="Supprimer une phase">
 
 </form>
 
