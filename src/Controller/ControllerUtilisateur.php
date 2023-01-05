@@ -142,8 +142,8 @@ class ControllerUtilisateur
             Controller::redirect('index.php?controller=accueil');
         }
         if (VerificationEmail::traiterEmailValidation($_GET['login'], $_GET['nonce'])) {
-            MessageFlash::ajouter('success', 'Votre compte a été validé.');
-            Controller::redirect('index.php?action=read&controller=utilisateur&idUtilisateur=raph');
+            MessageFlash::ajouter('success', 'Votre e-mail a été validé.');
+            Controller::redirect('index.php?action=read&controller=utilisateur&idUtilisateur=' . $_GET['login']);
         } else {
             Controller::redirect('index.php?');
         }
@@ -212,7 +212,7 @@ class ControllerUtilisateur
             MessageFlash::ajouter('warning', 'Les mots de passes sont différents');
             Controller::redirect('index.php?controller=utilisateur&action=update&idUtilisateur=' . $utilisateur->getIdentifiant());
         }
-        if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) {
             MessageFlash::ajouter('warning', 'Le format du mail saisi est invalide');
             Controller::redirect('index.php?controller=utilisateur&action=update');
             Controller::redirect('index.php?controller=utilisateur&action=update&idUtilisateur=' . $utilisateur->getIdentifiant());
@@ -221,11 +221,14 @@ class ControllerUtilisateur
             $utilisateur->setPrenom($_POST['prenom']);
             $utilisateur->setMdpHache($_POST['mdp']);
             if ($utilisateur->getEmail() != $_POST['mail']) {
-                $utilisateur->setEmailAVerifier($_POST['mail']);
+                $utilisateur->setEmailAValider($_POST['mail']);
                 try {
+                    $utilisateur->setNonce(MotDePasse::genererChaineAleatoire());
                     VerificationEmail::envoiEmailValidation($utilisateur);
-                } catch (TransportExceptionInterface $e) {
+                    MessageFlash::ajouter('info', 'Un mail a été envoyé pour valider votre nouvelle adresse e-mail');
 
+                } catch (TransportExceptionInterface $e) {
+                    Controller::redirect('index.php');
                 }
             }
             if (!isset($_POST['estAdmin'])) {
