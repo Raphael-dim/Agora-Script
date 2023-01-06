@@ -336,13 +336,10 @@ class ControllerProposition
             && ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
             $proposition->setEstEliminee(true);
             (new PropositionRepository())->update($proposition);
-            $tab = array_slice($propositions, array_search($proposition, $propositions), sizeof($propositions) - 1);
+            $tab = array_slice($propositions, array_search($proposition, $propositions));
             foreach ($tab as $propo) {
-                if (array_search($propo, $propositions) > array_search($proposition, $propositions)
-                    && !$propo->isEstEliminee()) {
-                    $propo->setEstEliminee(true);
-                    (new PropositionRepository())->update($propo);
-                }
+                $propo->setEstEliminee(true);
+                (new PropositionRepository())->update($propo);
             }
             MessageFlash::ajouter('success', 'Les propositions sélectionnées ont été éliminées.');
         } else {
