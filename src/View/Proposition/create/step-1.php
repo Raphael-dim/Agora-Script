@@ -21,9 +21,7 @@ if (isset($_POST['titre'])) {
     if (!isset($_SESSION[FormConfig::$arr]['co-auteur'])) {
         $_SESSION[FormConfig::$arr]['co-auteur'] = array();
     }
-    if (isset($_GET['idProposition'])) {
-        FormConfig::redirect("index.php?controller=proposition&action=form&step=2&idQuestion=" . $question->getId());
-    }
+    FormConfig::redirect("index.php?controller=proposition&action=form&step=2&idQuestion=".$question->getId());
 }
 ?>
 <h2>Titre : <?= htmlspecialchars($question->getTitre()) ?></h2>

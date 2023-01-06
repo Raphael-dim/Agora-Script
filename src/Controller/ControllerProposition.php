@@ -61,7 +61,7 @@ class ControllerProposition
         $view = "";
         $step = $_GET['step'] ?? 1;
         $params = array();
-        $params['question'] = (new QuestionRepository())->select($_GET['idQuestion']);
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
         switch ($step) {
             case 1:
                 $view = "step-1";
@@ -78,8 +78,9 @@ class ControllerProposition
         }
 
         Controller::afficheVue('view.php',
-            array_merge(["pagetitle" => "Créer une question",
-                "cheminVueBody" => "Proposition/create/" . $view . ".php"], $params));
+            ["pagetitle" => "Créer une question",
+                "cheminVueBody" => "Proposition/create/" . $view . ".php",
+                "question" => $question]);
     }
 
 

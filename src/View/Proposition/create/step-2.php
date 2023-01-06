@@ -12,11 +12,16 @@ if (isset($_POST['next'])) {
         FormConfig::redirect('index.php?controller=proposition&action=updated');
     } else {
         FormConfig::postSession();
-        FormConfig::redirect("index.php?controller=proposition&action=created");
+        FormConfig::redirect("index.php?controller=proposition&action=created&idQuestion=" . $question->getId());
     }
 } else if (isset($_POST['previous'])) {
     FormConfig::postSession();
-    FormConfig::redirect("index.php?controller=proposition&action=form&step=1&idProposition=" . $_GET['idProposition']);
+    if (isset($_GET['idProposition'])) {
+        FormConfig::redirect("index.php?controller=proposition&action=form&step=1&idProposition=" . $_GET['idProposition']);
+    } else {
+        FormConfig::redirect("index.php?controller=proposition&action=form&step=1&idQuestion=");
+
+    }
 }
 
 
