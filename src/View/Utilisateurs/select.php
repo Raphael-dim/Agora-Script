@@ -12,7 +12,6 @@ if (isset($_POST["keyword"])) {
 } else {
     $keyword = "";
 }
-echo $keyword;
 ?>
 
 
