@@ -326,16 +326,17 @@ class ControllerProposition
     }
 
     public
-    static function eliminer()
+    static function eliminer(): void
     {
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         $question = (new QuestionRepository())->select($proposition->getIdQuestion());
         $propositions = $question->getPropositionsTrie();
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant()
-            && $question->getPhase() == 'entre' && $question->aPassePhase()) {
+            && ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
             $proposition->setEstEliminee(true);
             (new PropositionRepository())->update($proposition);
-            foreach ($propositions as $propo) {
+            $tab = array_slice($propositions, array_search($proposition, $propositions), sizeof($propositions) - 1);
+            foreach ($tab as $propo) {
                 if (array_search($propo, $propositions) > array_search($proposition, $propositions)
                     && !$propo->isEstEliminee()) {
                     $propo->setEstEliminee(true);
@@ -350,13 +351,13 @@ class ControllerProposition
     }
 
     public
-    static function annulerEliminer()
+    static function annulerEliminer(): void
     {
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         $question = (new QuestionRepository())->select($proposition->getIdQuestion());
         $propositions = $question->getPropositionsTrie();
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant()
-            && $question->getPhase() == 'entre' && $question->aPassePhase()) {
+            && ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
             $proposition->setEstEliminee(false);
             (new PropositionRepository())->update($proposition);
             foreach ($propositions as $propo) {
