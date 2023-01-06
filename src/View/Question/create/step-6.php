@@ -94,22 +94,22 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
 
                     <p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_debut">
                         Début d'écriture des propositions : <br>
-                        <?= htmlspecialchars(FormConfig::TextField('debutEcriture' . $i)) ?></p>
+                        <?= (new DateTime(htmlspecialchars(FormConfig::TextField('debutEcriture' . $i))))->format('d-m-Y à H:i:s')  ?></p>
                     <!--        <span class="vertical-line-petite" style="background: #CE16169B"></span>-->
                     <span class="vertical-line" style="background: #CE16169B"></span>
                     <p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_fin">
                         Fin d'écriture des propositions : <br>
-                        <?= htmlspecialchars(FormConfig::TextField('finEcriture' . $i)) ?></p>
+                        <?= (new DateTime(htmlspecialchars(FormConfig::TextField('finEcriture' . $i))))->format('d-m-Y à H:i:s')  ?></p>
                     <span class="vertical-line" style="background:grey "></span>
                     <p style="background : rgba(65,112,56,0.76); color: white; padding: 6px" class="cal"
                        id="vote_debut">Début des votes :
                         <br>
-                        <?= htmlspecialchars(FormConfig::TextField('debutVote' . $i)) ?></p>
+                        <?= (new DateTime(htmlspecialchars(FormConfig::TextField('debutVote' . $i))))->format('d-m-Y à H:i:s')  ?></p>
                     <span class="vertical-line" style="background: rgba(65,112,56,0.76);"></span>
                     <p style="background: rgba(65,112,56,0.76); color: white; padding: 6px" class="cal"
                        id="vote_fin">
                         Fin des votes : <br>
-                        <?= htmlspecialchars(FormConfig::TextField('finVote' . $i)) ?></p>
+                        <?= (new DateTime(htmlspecialchars(FormConfig::TextField('finVote' . $i))))->format('d-m-Y à H:i:s')  ?></p>
                     <span class="vertical-line-petite" style="background:grey "></span>
                     <?php
                 }
