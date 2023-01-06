@@ -460,12 +460,14 @@ class ControllerQuestion
         if (!$bool) {
             Controller::redirect('index.php?controller=question&action=readAll');
         }
-        $propositions = $question->getPropositionsTrie();
 
         if ($question->getSystemVote() == 'majoritaire') {
+            $propositions = array_keys($question->getPropositionsTrieMajoritaire());
+            $medians = array_values($question->getPropositionsTrieMajoritaire());
             Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
                 'cheminVueBody' => "Question/resultatMajoritaire.php",
-                'propositions' => $propositions]);
+                'propositions' => $propositions,
+                'medians' => $medians]);
         } else {
             $propositions = $question->getPropositionsTrie();
             Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',

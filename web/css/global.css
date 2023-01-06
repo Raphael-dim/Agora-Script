@@ -412,7 +412,7 @@ a.vote:hover img {
 
 
 #suivant {
-    margin: 10px 100px 10px 50px;
+    margin: 0 50px;
     float: right;
 }
 
@@ -422,7 +422,11 @@ a.vote:hover img {
 
 #precedent {
     float: left;
-    margin: 10px 50px 10px 100px;
+    margin: 0 50px;
+}
+
+.titreForm{
+    max-width:100%
 }
 
 .nav *, form .nav {
@@ -988,7 +992,7 @@ input:invalid + span:after {
     display:inline-block;
     content: '✖';
     color: red;
-    padding: 50%;
+    padding: 80%;
 }
 
 .validity {
@@ -999,7 +1003,7 @@ input:valid + span:after {
     display:inline-block;
     content: '✓';
     color: green;
-    padding: 50%;
+    padding: 80%;
 }
 
 .footer {

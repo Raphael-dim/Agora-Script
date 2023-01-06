@@ -188,9 +188,10 @@ class Question extends AbstractDataObject
     {
         $propositions = $this->getPropositions();
         foreach ($propositions as $proposition){
-            $p[$proposition->getId()][$proposition] = $proposition->getMedian();
+            $p[$proposition] = $proposition->getMedian();
         }
         sort($p);
+        return $p;
     }
 
     /**

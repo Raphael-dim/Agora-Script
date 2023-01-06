@@ -69,7 +69,7 @@ class Proposition extends AbstractDataObject
     {
         $votesProposition = (new VoteRepository())->selectWhere($this->id, '*',
             'idProposition', 'Votes', 'valeurvote');
-        return $median = $votesProposition[($this->nbVotes/2)-1 + $this->nbVotes%2];
+        return $median = $votesProposition[($this->nbVotes/2)-1 + $this->nbVotes%2]->getValeur();
     }
 
     /**
