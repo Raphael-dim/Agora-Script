@@ -5,7 +5,7 @@
             <h1><strong class="color-blue">Titre :</strong></h1>
             <p> <?= htmlspecialchars($question->getTitre()) ?></p>
             <h1><strong class="color-blue">Description :</strong></h1>
-            <p> <?= htmlspecialchars($question->getDescription()) ?></p>
+            <p class = "mdparse"> <?= htmlspecialchars($question->getDescription()) ?></p>
 
         </div>
 
@@ -141,5 +141,9 @@
 </div>
 
 
-
+<script>
+    Array.from(document.getElementsByClassName('mdparse')).forEach(elem =>{
+        elem.innerHTML = marked.parse(elem.innerHTML);
+    });
+</script>
 

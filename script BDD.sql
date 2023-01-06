@@ -169,10 +169,10 @@ select `q`.`idquestion`     AS `idquestion`,
        `q`.`titre`          AS `titre`,
        `q`.`description`    AS `description`,
        `q`.`idorganisateur` AS `idorganisateur`,
-       `q`.`idcalendrier`   AS `idcalendrier`,
+       `c`.`idcalendrier`   AS `idcalendrier`,
        `q`.`creation`       AS `creation`,
        `q`.`systemeVote`       AS `systemeVote`
-from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
+from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`c`.`idquestion` = `q`.`idquestion`))
 where (select current_timestamp() AS `current_timestamp`) > `c`.`debutecriture`
   and (select current_timestamp() AS `current_timestamp`) < `c`.`finecriture`;
 
@@ -181,10 +181,10 @@ select `q`.`idquestion`     AS `idquestion`,
        `q`.`titre`          AS `titre`,
        `q`.`description`    AS `description`,
        `q`.`idorganisateur` AS `idorganisateur`,
-       `q`.`idcalendrier`   AS `idcalendrier`,
+       `c`.`idcalendrier`   AS `idcalendrier`,
        `q`.`creation`       AS `creation`,
        `q`.`systemeVote`       AS `systemeVote`
-from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
+from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`c`.`idquestion` = `q`.`idquestion`))
 where (select current_timestamp() AS `current_timestamp`) > `c`.`finvote`;
 
 create or replace definer = dimeckr@`%` view dimeckr.questions_vote as
@@ -192,10 +192,10 @@ select `q`.`idquestion`     AS `idquestion`,
        `q`.`titre`          AS `titre`,
        `q`.`description`    AS `description`,
        `q`.`idorganisateur` AS `idorganisateur`,
-       `q`.`idcalendrier`   AS `idcalendrier`,
+       `c`.`idcalendrier`   AS `idcalendrier`,
        `q`.`creation`       AS `creation`,
        `q`.`systemeVote`       AS `systemeVote`
-from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`q`.`idcalendrier` = `c`.`idCalendrier`))
+from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`c`.`idquestion` = `q`.`idquestion`))
 where (select current_timestamp() AS `current_timestamp`) > `c`.`debutvote`
   and (select current_timestamp() AS `current_timestamp`) < `c`.`finvote`;
 
