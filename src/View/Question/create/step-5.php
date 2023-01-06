@@ -41,15 +41,24 @@ function removeuser(string $id): void
 
 
 require_once "../src/View/Utilisateurs/select.php";
+$message = 'Le système de vote \'Jugement majoritaire\' et \'Vote par valeurs\' sont les mêmes, la différence réside 
+dans le classement des propositions. <br>Le jugement majoritaire établit un vote médian tandis que le vote par valeur établit une moyenne.<br>
+Les votants doivent noter toutes les propositions avec ces 2 systèmes de vote.<br>
+Le vote unique permet de voter pour une seule proposition.';
 ?>
 <form method="post">
     <p>
         <label for="systemeVote">Système de vote : </label>
         <select name="systemeVote" id="systemeVote">
-            <option value="valeur" <?=FormConfig::DropDown("systemeVote", "valeur")?>>Vote par valeurs</option>
-            <option value="majoritaire"  <?=FormConfig::DropDown("systemeVote", "majoritaire")?>>Jugement majoritaire</option>
-            <option value="unique"  <?=FormConfig::DropDown("systemeVote", "unique")?>>unique</option>
+            <option value="valeur" <?= FormConfig::DropDown("systemeVote", "valeur") ?>>Vote par valeurs</option>
+            <option value="majoritaire" <?= FormConfig::DropDown("systemeVote", "majoritaire") ?>>Jugement majoritaire
+            </option>
+            <option value="unique" <?= FormConfig::DropDown("systemeVote", "unique") ?>>Unique</option>
         </select>
+    <p class="survol">
+        <img class="imageAide" src="images/aide_logo.png" alt=""/>
+        <span class="messageInfo"><?= $message ?></span>
+    </p>
     </p>
     <input type="submit" name=previous value="Retour" class="nav" id="precedent" formnovalidate>
     <input type="submit" name=next value="Suivant" class="nav" id="suivant">
