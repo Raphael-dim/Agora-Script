@@ -77,7 +77,7 @@ class ControllerMessage
         Controller::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,
                 "pagetitle" => "Créer un message",
-                "cheminVueBody" => "message/create.php"]);
+                "cheminVueBody" => "Message/create.php"]);
     }
 
     public static function created()

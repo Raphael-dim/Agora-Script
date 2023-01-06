@@ -8,7 +8,9 @@ use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\SectionRepository;
 use App\Vote\Model\Repository\ResponsableRepository;
 use App\Vote\Model\Repository\VotantRepository;
+use App\Vote\Model\Repository\VoteRepository;
 use Exception;
+use mysql_xdevapi\XSession;
 
 class Question extends AbstractDataObject
 {
@@ -155,14 +157,79 @@ class Question extends AbstractDataObject
     /* On obtient les propositions pour une question*/
     public function getPropositions(): array
     {
-        return (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion", 'Propositions');
+        $propositions = (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion", 'Propositions');
+        return $propositions;
+    }
+
+    public function getPropositionsNonEliminees(array $propositions): array
+    {
+        //prend en paramètre un tableau de propositions et retourne un tableau
+        // contenant uniquement les propositions qui n'ont pas été éliminées.
+        // La méthode parcourt chaque proposition du tableau en utilisant une boucle "foreach",
+        // et vérifie si la propriété "estEliminee" de chaque proposition est égale à false.
+        // Si c'est le cas, elle ajoute la proposition au tableau de propositions non éliminées.
+        // La méthode retourne finalement le tableau de propositions non éliminées.
+
+        $propositionsNonEliminees = array();
+        foreach ($propositions as $proposition) {
+            if (!$proposition->isEstEliminees) {
+                $propositionsNonEliminees[] = $proposition;
+            }
+        }
+        return $propositionsNonEliminees;
     }
 
     public function getPropositionsTrie()
     {
-        return (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion",
-            'Propositions', 'nbVotes', 'DESC');
+        $propositions = (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion",
+            'Propositions', 'nbEtoiles', 'DESC');
+        if ($this->systemeVote == 'majoritaire') {
+            $propositionsTrie = array();
+            foreach ($propositions as $proposition) {
+                $votesProposition = (new VoteRepository())->selectWhere($proposition->getId(), '*',
+                    'idProposition', 'Votes', 'valeurvote');
+                $nbVotes = $proposition->getNbVotes();
+                if ($nbVotes > 0) {
+                    if ($nbVotes == 1) {
+                        $proposition->setVoteMedian($votesProposition[0]->getValeur());
+                    } else {
+                        if (sizeof($votesProposition) % 2 == 0) {
+                            $proposition->setVoteMedian($votesProposition[(sizeof($votesProposition) / 2) - 1]->getValeur());
+                        } else {
+                            $proposition->setVoteMedian($votesProposition[((sizeof($votesProposition) + 1) / 2) - 1]->getValeur());
+                        }
+                    }
+                }
+                $propositionsTrie[] = $proposition;
+            }
+            usort($propositionsTrie, array($this, "trieMedianne"));
+        } else if ($this->systemeVote == 'valeur') {
+            usort($propositions, array($this, "trieMoyenne"));
+        }
+        return $propositions;
     }
+
+    function trieMoyenne(Proposition $proposition1, Proposition $proposition2)
+    {
+        if ($proposition1->getNbVotes() == 0 && $proposition2->getNbVotes() == 0) {
+            return 0;
+        }
+        $moyenneProposition1 = $proposition1->getNbEtoiles() / $proposition1->getNbVotes();
+        $moyenneProposition2 = $proposition2->getNbEtoiles() / $proposition2->getNbVotes();
+        if ($moyenneProposition1 == $moyenneProposition2) {
+            return 0;
+        }
+        return ($moyenneProposition1 > $moyenneProposition2) ? -1 : 1;
+    }
+
+    function trieMedianne(Proposition $proposition1, Proposition $proposition2)
+    {
+        if ($proposition1->getVotemedian() == $proposition2->getVotemedian()) {
+            return 0;
+        }
+        return ($proposition1->getVotemedian() < $proposition2->getVotemedian()) ? -1 : 1;
+    }
+
 
     /**
      * On obtient la phase en cours pour une question
@@ -194,14 +261,14 @@ class Question extends AbstractDataObject
     public function getCalendrier(bool $tous = false)
     {
         if (!isset($this->calendriers)) {
-            $this->calendriers = (new CalendrierRepository())->selectWhere($this->id, '*', 'idQuestion', 'Calendriers', 'debutEcriture');
+            $this->calendriers = (new CalendrierRepository())->selectWhere($this->id, '*', 'idQuestion', 'Calendriers', 'debutVote');
         }
         if ($tous) {
             return $this->calendriers;
         }
         $date = date('Y-m-d H:i:s');
         foreach ($this->calendriers as $calendrier) {
-            if ($date > $calendrier->getDebutEcriture(true) && $date < $calendrier->getFinVote(true)) {
+            if ($date < $calendrier->getDebutVote(true) || ($date > $calendrier->getDebutEcriture(true) && $date < $calendrier->getFinVote(true))) {
                 return $calendrier;
             }// Si la date courante est comprise dans le calendrier, on retourne le calendrier.
         }
@@ -211,7 +278,7 @@ class Question extends AbstractDataObject
          * supérieure à la date courante.
          * */
         foreach ($this->calendriers as $calendrier) {
-            if ($date < $calendrier->getDebutEcriture()) {
+            if ($date < $calendrier->getDebutEcriture(true)) {
                 return $calendrier;
             }
         }
@@ -219,6 +286,37 @@ class Question extends AbstractDataObject
         return $this->calendriers[sizeof($this->calendriers) - 1];
     }
 
+    /*
+     * Permet de savoir si une question donnée a déjà passé une première phase de vote et d'écriture
+    */
+
+    public function aPassePhase(): bool
+    {
+        $calendriers = $this->getCalendrier(true);
+        $calendrierActuel = $this->getCalendrier();
+        if (sizeof($this->calendriers) > 1 && $calendriers[0] != $calendrierActuel) {
+            return true;
+        }
+        return false;
+    }
+
+    // Cette fonction vérifie si la phase actuelle est la dernière phase du calendrier.
+    // Elle retourne un booléen : vrai si c'est la dernière phase, faux sinon.
+    public function estDernierePhase(): bool
+    {
+        // Récupère tous les calendriers
+        $calendriers = $this->getCalendrier(true);
+        // Récupère le calendrier actuel
+        $calendrierActuel = $this->getCalendrier();
+
+        // Si le dernier élément du tableau des calendriers est égal au calendrier actuel
+        if ($calendriers[sizeof($this->calendriers) - 1] == $calendrierActuel) {
+            // Alors c'est la dernière phase
+            return true;
+        }
+        // Sinon, ce n'est pas la dernière phase
+        return false;
+    }
 
     public function formatTableau($update = false): array
     {

@@ -23,7 +23,7 @@ main {
     padding-top: 100px;
     background: rgba(25, 63, 86);
     min-height: 100vh;
-    height: 100%;
+    /*height: 100%;*/
     opacity: 0.99;
     z-index: -1;
     overflow: hidden;
@@ -488,7 +488,9 @@ a.vote:hover img {
     }
 
     #participants * {
-
+        min-width: max-content;
+        /*width: 100%;*/
+        display: block;
         float: none;
     }
 
@@ -786,6 +788,16 @@ h1 > strong.color-orange {
     display: inline-block;
 }
 
+.detail_question p {
+    font-size: 17px;
+
+    margin: auto;
+    /*max-width: max-content;*/
+    word-wrap: break-word;
+    white-space: normal;
+    max-width: 50%;
+}
+
 div p {
     width: auto;
 }
@@ -816,6 +828,12 @@ div p {
 
 
 .calendrier {
+    margin: 2%;
+    text-align: center;
+}
+
+.calendrier p {
+    max-width: 450px;
     margin: 2%;
     text-align: center;
 }
@@ -1119,15 +1137,17 @@ input:valid + span:after {
 .survol span {
     width: auto;
     visibility: hidden;
+    display: none;
     background-color: #012e49;
     color: white;
     border-radius: 10px;
     padding: 5px;
-    display: inline-block;
     font-size: 20px;
 }
 
 .survol img:hover + span {
+    margin: auto;
+    display: block;
     width: auto;
     visibility: visible;
 }
@@ -1206,4 +1226,9 @@ select {
 .zoneTexte textarea {
     color: white;
     background-color: rgba(91, 179, 231, 0.33);
+}
+
+.messageInfo {
+    margin-left: 15px;
+    max-width: 550px;
 }

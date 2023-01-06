@@ -11,6 +11,7 @@ use App\Vote\Model\HTTP\Session;
 use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\QuestionRepository;
 use App\Vote\Model\Repository\UtilisateurRepository;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class ControllerUtilisateur
 {
@@ -54,6 +55,10 @@ class ControllerUtilisateur
         } else {
             if (!MotDePasse::verifier($mdp, $utilisateur->getMdpHache())) {
                 MessageFlash::ajouter('warning', 'Mot de passe incorrect');
+                Controller::redirect('index.php?controller=utilisateur&action=connexion');
+            }
+            if (!VerificationEmail::aValideEmail($utilisateur)) {
+                MessageFlash::ajouter('warning', 'Vous devez valider votre compte, vérifiez votre boite mail, ainsi que vos spams.');
                 Controller::redirect('index.php?controller=utilisateur&action=connexion');
             } else {
                 ConnexionUtilisateur::connecter($utilisateur->getIdentifiant());
@@ -114,24 +119,34 @@ class ControllerUtilisateur
             Controller::redirect('index.php?controller=utilisateur&action=create');
         } else {
             $utilisateur = Utilisateur::construireDepuisFormulaire($_POST);
-            VerificationEmail::envoiEmailValidation($utilisateur);
+            try {
+                VerificationEmail::envoiEmailValidation($utilisateur);
+            } catch (TransportExceptionInterface $e) {
+                MessageFlash::ajouter('warning', 'L\'envoie du mail a échoué');
+                Controller::redirect('index.php');
+            }
             (new UtilisateurRepository())->sauvegarder($utilisateur);
-            MessageFlash::ajouter("success", "Le compte a bien crée");
-            ConnexionUtilisateur::connecter($utilisateur->getIdentifiant());
-            Controller::redirect("index.php?controller=accueil");
+            MessageFlash::ajouter("success", "Le compte a bien été crée");
+            MessageFlash::ajouter("success", "Pour valider votre compte, vérifiez votre boite mail et vos spams");
+            //ConnexionUtilisateur::connecter($utilisateur->getIdentifiant());
+            Controller::redirect("index.php?controller=utilisateur&action=connexion");
         }
     }
 
+
     public static function validerEmail()
     {
+        echo "test";
         if (!isset($_GET['login']) || !isset($_GET['nonce'])) {
             MessageFlash::ajouter('warning', 'Login ou nonce incorrect');
             Controller::redirect('index.php?controller=accueil');
         }
         if (VerificationEmail::traiterEmailValidation($_GET['login'], $_GET['nonce'])) {
-            Controller::redirect('index.php?action=read&controller=utilisateur&idUtilisateur=raph');
+            MessageFlash::ajouter('success', 'Votre e-mail a été validé.');
+            ConnexionUtilisateur::connecter($_GET['login']);
+            Controller::redirect('index.php?action=read&controller=utilisateur&idUtilisateur=' . $_GET['login']);
         } else {
-            Controller::redirect('index.php?controller=accueil');
+            Controller::redirect('index.php?');
         }
     }
 
@@ -166,8 +181,8 @@ class ControllerUtilisateur
     public static function update()
     {
         $utilisateur = (new UtilisateurRepository())->select($_GET['idUtilisateur']);
-        if (!ConnexionUtilisateur::estConnecte() ||
-            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $utilisateur->getIdentifiant()) {
+        if (!ConnexionUtilisateur::estAdministrateur() && (!ConnexionUtilisateur::estConnecte() ||
+                ConnexionUtilisateur::getLoginUtilisateurConnecte() != $utilisateur->getIdentifiant())) {
             MessageFlash::ajouter("warning", "Connectez-vous à votre compte pour le modifier.");
             Controller::redirect("index.php?action=connexion&controller=utilisateur");
         } else {
@@ -181,12 +196,22 @@ class ControllerUtilisateur
 
     public static function updated()
     {
+        /*permet de mettre à jour les informations d'un utilisateur dans une base de données.
+        La méthode récupère d'abord les informations de l'utilisateur à mettre à jour en utilisant
+         le repository "UtilisateurRepository". Elle vérifie ensuite si l'utilisateur est connecté,
+        La méthode vérifie également si l'utilisateur connecté est l'utilisateur à mettre à jour ou s'il
+         s'agit d'un administrateur.
+        vérifie si l'ancien mot de passe saisi est valide en utilisant la classe "MotDePasse".
+        vérifie également si les mots de passe saisis sont identiques
+        Si toutes les vérifications précédentes sont passées, la méthode met à jour les
+         informations de l'utilisateur dans la base de données*/
+
         $utilisateur = (new UtilisateurRepository())->select($_POST['identifiant']);
         if (!ConnexionUtilisateur::estConnecte()) {
             MessageFlash::ajouter("warning", "Connectez-vous à votre compte pour le modifier.");
             Controller::redirect("index.php?action=connexion&controller=utilisateur");
         }
-        if (ConnexionUtilisateur::getLoginUtilisateurConnecte() != $utilisateur->getIdentifiant()) {
+        if (ConnexionUtilisateur::getLoginUtilisateurConnecte() != $utilisateur->getIdentifiant() && !ConnexionUtilisateur::estAdministrateur()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier un compte qui ne vous appartient pas.");
             Controller::redirect("index.php?action=readAll&controller=question");
         }
@@ -197,19 +222,57 @@ class ControllerUtilisateur
         if ($_POST['mdp'] != $_POST['mdp2']) {
             MessageFlash::ajouter('warning', 'Les mots de passes sont différents');
             Controller::redirect('index.php?controller=utilisateur&action=update&idUtilisateur=' . $utilisateur->getIdentifiant());
+        }
+        if (!filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) {
+            MessageFlash::ajouter('warning', 'Le format du mail saisi est invalide');
+            Controller::redirect('index.php?controller=utilisateur&action=update');
+            Controller::redirect('index.php?controller=utilisateur&action=update&idUtilisateur=' . $utilisateur->getIdentifiant());
         } else {
             $utilisateur->setNom($_POST['nom']);
             $utilisateur->setPrenom($_POST['prenom']);
             $utilisateur->setMdpHache($_POST['mdp']);
+            if ($utilisateur->getEmail() != $_POST['mail']) {
+                $utilisateur->setEmailAValider($_POST['mail']);
+                try {
+                    $utilisateur->setNonce(MotDePasse::genererChaineAleatoire());
+                    VerificationEmail::envoiEmailValidation($utilisateur);
+                    MessageFlash::ajouter('info', 'Un mail a été envoyé pour valider votre nouvelle adresse e-mail');
+
+                } catch (TransportExceptionInterface $e) {
+                    Controller::redirect('index.php');
+                }
+            }
+            if (!isset($_POST['estAdmin'])) {
+                $utilisateur->setEstAdmin(false);
+            } else {
+                $utilisateur->setEstAdmin(true);
+            }
             (new UtilisateurRepository())->update($utilisateur);
-            MessageFlash::ajouter('success', 'Vos informations ont été mises à jour');
-            Controller::redirect("index.php?controller=utilisateur&action=read&idUtilisateur=" . $utilisateur->getIdentifiant());
+            if (ConnexionUtilisateur::getLoginUtilisateurConnecte() != $utilisateur->getIdentifiant()) {
+                MessageFlash::ajouter('success', 'Les informations de ' . $utilisateur->getIdentifiant() . ' ont été mises à jour');
+            } else {
+                MessageFlash::ajouter('success', 'Vos informations ont été mises à jour');
+            }
+            Controller::redirect("index.php?controller=utilisateur&action=read&idUtilisateur=" . ConnexionUtilisateur::getLoginUtilisateurConnecte());
         }
 
     }
 
     public static function delete()
     {
+        /*
+        Permet de supprimer un utilisateur d'une base de données.
+        La méthode vérifie tout d'abord si l'identifiant de l'utilisateur à supprimer a été fourni en tant que paramètre GET.
+         Si ce n'est pas le cas, elle affiche un message d'erreur et redirige l'utilisateur vers la page d'accueil.
+
+            Ensuite, la méthode vérifie si l'utilisateur connecté est un administrateur ou s'il s'agit de l'utilisateur à supprimer.
+         Si l'utilisateur clique sur "Annuler", il est redirigé vers sa page
+        de profil ou vers la liste des utilisateurs, selon le cas.
+         Si l'utilisateur clique sur "Confirmer", le compte est supprimé de la base de données et l'utilisateur
+        est redirigé vers la page d'accueil ou vers la liste des utilisateurs, selon le cas.
+         */
+
+
         if (!isset($_GET['idUtilisateur'])) {
             MessageFlash::ajouter('info', 'Veuillez saisir un identifiant valide');
             Controller::redirect('index.php?controller=accueil');

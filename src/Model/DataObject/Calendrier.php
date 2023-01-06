@@ -22,11 +22,13 @@ class Calendrier extends AbstractDataObject
      * @param string $debutVote
      * @param string $finVote
      */
-    public function __construct(Question $question, string $debutEcriture, string $finEcriture, string $debutVote, string $finVote)
+    public function __construct(Question $question, ?string $debutEcriture, ?string $finEcriture, string $debutVote, string $finVote)
     {
         $this->question = $question;
-        $this->debutEcriture = $debutEcriture;
-        $this->finEcriture = $finEcriture;
+        if (!is_null($debutEcriture))
+            $this->debutEcriture = $debutEcriture;
+        if(!is_null($finEcriture))
+            $this->finEcriture = $finEcriture;
         $this->debutVote = $debutVote;
         $this->finVote = $finVote;
     }
@@ -51,11 +53,17 @@ class Calendrier extends AbstractDataObject
     /**
      * La base de donnée gère les dates dans un format différent, il faut donc convertir ce dernier
      * dans chaque Getter
-     * @return string
+     * @return ?string
      * @throws \Exception
      */
-    public function getDebutEcriture($bool = false): string
+    public function getDebutEcriture($bool = false): ?string
     {
+        if (!isset($this->debutEcriture)) {
+            return null;
+        }
+        if ($this->debutEcriture == "") {
+            return "";
+        }
         if ($bool) {
             return (new DateTime($this->debutEcriture))->format('Y-m-d H:i');
         }
@@ -73,8 +81,14 @@ class Calendrier extends AbstractDataObject
     /**
      * @throws \Exception
      */
-    public function getFinEcriture($bool = false): string
+    public function getFinEcriture($bool = false): ?string
     {
+        if (!isset($this->finEcriture)) {
+            return null;
+        }
+        if ($this->finEcriture == "") {
+            return "";
+        }
         if ($bool) {
             return (new DateTime($this->finEcriture))->format('Y-m-d H:i');
         }
@@ -179,13 +193,23 @@ class Calendrier extends AbstractDataObject
 
     public function formatTableau($update = false): array
     {
-        $tab = array(
-            "idQuestionTag" => $this->question->getId(),
-            "debutEcritureTag" => $this->debutEcriture,
-            "finEcritureTag" => $this->finEcriture,
-            "debutVoteTag" => $this->debutVote,
-            "finVoteTag" => $this->finVote
-        );
+        if ($this->debutEcriture == "" && $this->finEcriture == "") {
+            $tab = array(
+                "idQuestionTag" => $this->question->getId(),
+                "debutEcritureTag" => null,
+                "finEcritureTag" => null,
+                "debutVoteTag" => $this->debutVote,
+                "finVoteTag" => $this->finVote
+            );
+        } else{
+            $tab = array(
+                "idQuestionTag" => $this->question->getId(),
+                "debutEcritureTag" => $this->debutEcriture,
+                "finEcritureTag" => $this->finEcriture,
+                "debutVoteTag" => $this->debutVote,
+                "finVoteTag" => $this->finVote
+            );
+        }
         if ($update) {
             $tab['idCalendrierTag'] = $this->id;
         }

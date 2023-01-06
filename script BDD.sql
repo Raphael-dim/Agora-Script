@@ -1,37 +1,113 @@
-create or replace table dimeckr.Calendriers
+create or replace table Messages
 (
-    idCalendrier  int auto_increment
-    primary key,
-    debutecriture timestamp default current_timestamp()   not null on update current_timestamp(),
-    finecriture   timestamp default '0000-00-00 00:00:00' not null,
-    debutvote     timestamp default '0000-00-00 00:00:00' not null,
-    finvote       timestamp default '0000-00-00 00:00:00' not null,
-    constraint date_check
-    check (`debutecriture` < `finecriture` and `finecriture` < `debutvote` and `debutvote` < `finvote`)
+    idAuteur       varchar(30)                            not null,
+    idDestinataire varchar(30)                            not null,
+    contenu        varchar(350)                           not null,
+    date           timestamp  default current_timestamp() not null on update current_timestamp(),
+    estVu          tinyint(1) default 0                   null,
+    idMessage      int auto_increment
+    primary key
 );
 
-create or replace table dimeckr.Questions
+create or replace table `Système de vote`
+(
+    nom varchar(30) not null
+        primary key
+);
+
+create or replace table Utilisateurs
+(
+    identifiant   varchar(30)          not null
+    primary key,
+    nom           varchar(30)          null,
+    prenom        varchar(30)          null,
+    mdp           varchar(256)         null,
+    estAdmin      tinyint(1) default 0 null,
+    email         varchar(256)         not null,
+    emailAValider varchar(256)         not null,
+    nonce         varchar(32)          not null
+);
+
+create or replace table Questions
 (
     idquestion     int auto_increment
     primary key,
     titre          varchar(80)                           null,
     description    varchar(360)                          null,
     idorganisateur varchar(30)                           null,
-    idcalendrier   int                                   null,
     creation       timestamp default current_timestamp() not null on update current_timestamp(),
-    constraint Questions_Calendriers_idCalendrier_fk
-    foreign key (idcalendrier) references dimeckr.Calendriers (idCalendrier)
+    systemeVote    varchar(30)                           null,
+    constraint `Questions_Système de vote_nom_fk`
+    foreign key (systemeVote) references `Système de vote` (nom)
+    on update cascade on delete cascade,
+    constraint Questions_Utilisateurs_identifiant_fk
+    foreign key (idorganisateur) references Utilisateurs (identifiant)
     on update cascade on delete cascade
 );
 
-create or replace definer = dimeckr@`%` trigger dimeckr.tr_maj_delete_calendrier
-    before delete
-           on dimeckr.Questions
-               for each row
-DELETE FROM Calendriers
-WHERE idcalendrier = OLD.idCalendrier;
+create or replace table Calendriers
+(
+    idQuestion    int                                   null,
+    idCalendrier  int auto_increment
+    primary key,
+    debutecriture timestamp default current_timestamp() not null,
+    finecriture   timestamp default current_timestamp() not null,
+    debutvote     timestamp default current_timestamp() not null,
+    finvote       timestamp default current_timestamp() not null,
+    constraint Calendriers_Questions_null_fk
+    foreign key (idQuestion) references Questions (idquestion)
+    on update cascade on delete cascade,
+    constraint check_date_2phases
+    check (`finecriture` <= `debutvote`),
+    constraint check_date_vote
+    check (`debutvote` < `finvote`),
+    constraint date_check_ecriture
+    check (`debutecriture` < `finecriture`)
+);
 
-create or replace table dimeckr.Sections
+create or replace table Responsables
+(
+    idquestion    int         not null,
+    idutilisateur varchar(30) not null,
+    primary key (idquestion, idutilisateur),
+    constraint Responsables_Questions_idquestion_fk
+    foreign key (idquestion) references Questions (idquestion)
+    on update cascade on delete cascade,
+    constraint Responsables_Utilisateurs_identifiant_fk
+    foreign key (idutilisateur) references Utilisateurs (identifiant)
+    on update cascade on delete cascade
+);
+
+create or replace table Propositions
+(
+    idquestion    int           not null,
+    idresponsable varchar(30)   not null,
+    titre         varchar(500)  null,
+    idproposition int auto_increment,
+    nbetoiles     int default 0 null,
+    nbvotes       int default 0 not null,
+    primary key (idquestion, idresponsable),
+    constraint Propositions_pk
+    unique (idproposition),
+    constraint Propositions_Questions_idquestion_fk
+    foreign key (idquestion, idresponsable) references Responsables (idquestion, idutilisateur)
+    on update cascade on delete cascade
+);
+
+create or replace table Coauteurs
+(
+    idauteur      varchar(30) not null,
+    idproposition int         not null,
+    primary key (idproposition, idauteur),
+    constraint `Co-auteurs_Propositions_idproposition_fk`
+    foreign key (idproposition) references Propositions (idproposition)
+    on update cascade on delete cascade,
+    constraint `Co-auteurs_Utilisateurs_identifiant_fk`
+    foreign key (idauteur) references Utilisateurs (identifiant)
+    on update cascade on delete cascade
+);
+
+create or replace table Sections
 (
     idsection   int auto_increment,
     idquestion  int          not null,
@@ -39,94 +115,38 @@ create or replace table dimeckr.Sections
     description varchar(360) null,
     primary key (idsection, idquestion),
     constraint Sections_Questions_idquestion_fk
-    foreign key (idquestion) references dimeckr.Questions (idquestion)
+    foreign key (idquestion) references Questions (idquestion)
     on update cascade on delete cascade
 );
 
-create or replace table dimeckr.Utilisateurs
-(
-    identifiant varchar(30)          not null
-    primary key,
-    nom         varchar(30)          null,
-    prenom      varchar(30)          null,
-    mdp         varchar(256)         null,
-    estAdmin    tinyint(1) default 0 null
-);
-
-create or replace table dimeckr.Responsables
-(
-    idquestion    int         not null,
-    idutilisateur varchar(30) not null,
-    primary key (idquestion, idutilisateur),
-    constraint Responsables_Questions_idquestion_fk
-    foreign key (idquestion) references dimeckr.Questions (idquestion)
-    on update cascade on delete cascade,
-    constraint Responsables_Utilisateurs_identifiant_fk
-    foreign key (idutilisateur) references dimeckr.Utilisateurs (identifiant)
-);
-
-create or replace table dimeckr.Propositions
-(
-    idquestion    int           not null,
-    idresponsable varchar(30)   not null,
-    titre         varchar(500)  null,
-    idproposition int auto_increment,
-    nbvotes       int default 0 null,
-    primary key (idquestion, idresponsable),
-    constraint Propositions_pk
-    unique (idproposition),
-    constraint Propositions_Questions_idquestion_fk
-    foreign key (idquestion, idresponsable) references dimeckr.Responsables (idquestion, idutilisateur)
-    on update cascade on delete cascade
-);
-
-create or replace table dimeckr.Coauteurs
-(
-    idauteur      varchar(30) not null,
-    idproposition int         not null,
-    primary key (idproposition, idauteur),
-    constraint `Co-auteurs_Propositions_idproposition_fk`
-    foreign key (idproposition) references dimeckr.Propositions (idproposition)
-    on update cascade on delete cascade,
-    constraint `Co-auteurs_Utilisateurs_identifiant_fk`
-    foreign key (idauteur) references dimeckr.Utilisateurs (identifiant)
-    on update cascade on delete cascade
-);
-
-create or replace table dimeckr.Proposition_section
+create or replace table Proposition_section
 (
     idsection     int           not null,
     contenu       varchar(1500) null,
     idproposition int           not null,
     primary key (idsection, idproposition),
     constraint Proposition_section_Propositions_idproposition_fk
-    foreign key (idproposition) references dimeckr.Propositions (idproposition)
+    foreign key (idproposition) references Propositions (idproposition)
     on update cascade on delete cascade,
     constraint Proposition_section_Sections_idsection_fk
-    foreign key (idsection) references dimeckr.Sections (idsection)
+    foreign key (idsection) references Sections (idsection)
     on update cascade on delete cascade
 );
 
-create or replace index Propositions_Responsables_idutilisateur_fk
-    on dimeckr.Propositions (idresponsable);
-
-create or replace index idquestion
-    on dimeckr.Propositions (idquestion);
-
-create or replace table dimeckr.Votants
+create or replace table Votants
 (
     idquestion    int         not null,
     idutilisateur varchar(30) not null,
     primary key (idquestion, idutilisateur),
     constraint Votants_Questions_idquestion_fk
-    foreign key (idquestion) references dimeckr.Questions (idquestion)
+    foreign key (idquestion) references Questions (idquestion)
     on update cascade on delete cascade,
     constraint Votants_Utilisateurs_identifiant_fk
-    foreign key (idutilisateur) references dimeckr.Utilisateurs (identifiant)
+    foreign key (idutilisateur) references Utilisateurs (identifiant)
     on update cascade on delete cascade
 );
 
-create or replace table dimeckr.Votes
+create or replace table Votes
 (
     idvotant      varchar(30) not null,
     idproposition int         not null,
@@ -136,35 +156,54 @@ create or replace table dimeckr.Votes
     constraint idvote
     unique (idvote),
     constraint Votes_Propositions_idproposition_fk
-    foreign key (idproposition) references dimeckr.Propositions (idproposition)
+    foreign key (idproposition) references Propositions (idproposition)
+    on update cascade on delete cascade,
+    constraint Votes_Utilisateurs_identifiant_fk
+    foreign key (idvotant) references Utilisateurs (identifiant)
     on update cascade on delete cascade
 );
 
-create or replace definer = dimeckr@`%` trigger dimeckr.tr_maj_nbVotes_DELETE
+create or replace definer = dimeckr@`%` trigger tr_maj_nbEtoiles_DELETE
     after delete
-          on dimeckr.Votes
+          on Votes
               for each row
 UPDATE Propositions
-SET nbvotes = nbvotes - OLD.valeurvote
+SET nbetoiles = nbetoiles - OLD.valeurVote
 WHERE idproposition = OLD.idproposition;
 
-create or replace definer = dimeckr@`%` trigger dimeckr.tr_maj_nbVotes_INSERT
+create or replace definer = dimeckr@`%` trigger tr_maj_nbEtoiles_INSERT
     after insert
-          on dimeckr.Votes
+          on Votes
               for each row
 UPDATE Propositions
-SET nbvotes = nbvotes + NEW.valeurvote
+SET nbetoiles = nbetoiles + NEW.valeurVote
 WHERE idproposition = NEW.idproposition;
 
-create or replace definer = dimeckr@`%` trigger dimeckr.tr_maj_nbVotes_UPDATE
+create or replace definer = dimeckr@`%` trigger tr_maj_nbEtoiles_UPDATE
     after update
-                                on dimeckr.Votes
+                                on Votes
                                 for each row
 UPDATE Propositions
-SET nbvotes = nbvotes - (OLD.valeurvote - NEW.valeurvote)
+SET nbetoiles = nbetoiles - (OLD.valeurvote - NEW.valeurvote)
 WHERE idproposition = OLD.idproposition;
 
-create or replace definer = dimeckr@`%` view dimeckr.questions_ecriture as
+create or replace definer = dimeckr@`%` trigger tr_maj_nbVotes_DELETE
+    after delete
+          on Votes
+              for each row
+UPDATE Propositions
+SET nbvotes = nbvotes - 1
+WHERE idproposition = OLD.idProposition;
+
+create or replace definer = dimeckr@`%` trigger tr_maj_nbVotes_INSERT
+    after insert
+          on Votes
+              for each row
+UPDATE Propositions
+SET nbvotes = nbvotes + 1
+WHERE idproposition = NEW.idProposition;
+
+create or replace definer = dimeckr@`%` view questions_ecriture as
 select `q`.`idquestion`     AS `idquestion`,
        `q`.`titre`          AS `titre`,
        `q`.`description`    AS `description`,
@@ -176,7 +215,7 @@ from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`c`.`idques
 where (select current_timestamp() AS `current_timestamp`) > `c`.`debutecriture`
   and (select current_timestamp() AS `current_timestamp`) < `c`.`finecriture`;
 
-create or replace definer = dimeckr@`%` view dimeckr.questions_termines as
+create or replace definer = dimeckr@`%` view questions_termines as
 select `q`.`idquestion`     AS `idquestion`,
        `q`.`titre`          AS `titre`,
        `q`.`description`    AS `description`,
@@ -187,7 +226,7 @@ select `q`.`idquestion`     AS `idquestion`,
 from (`dimeckr`.`Questions` `q` join `dimeckr`.`Calendriers` `c` on (`c`.`idquestion` = `q`.`idquestion`))
 where (select current_timestamp() AS `current_timestamp`) > `c`.`finvote`;
 
-create or replace definer = dimeckr@`%` view dimeckr.questions_vote as
+create or replace definer = dimeckr@`%` view questions_vote as
 select `q`.`idquestion`     AS `idquestion`,
        `q`.`titre`          AS `titre`,
        `q`.`description`    AS `description`,

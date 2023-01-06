@@ -14,9 +14,24 @@
     <h2><?= $modeScrutin ?></h2>
     <p class="survol">
         <img class="imageAide" src="images/aide_logo.png" alt=""/>
-        <span><?= $message ?></span>
+        <span class="messageInfo"><?= $message ?></span>
     </p>
     <?php
+    if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
+        ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
+        $organisateurRole = 'Vous êtes responsable pour cette question multiphase';
+        $messageOrganisateur = 'Vous pouvez éliminer les propositions les moins attractives. 
+                Par défaut, elles sont triées par nombre de votes, si vous éliminez
+            une proposition, vous éliminez aussi celles qui ont un nombre de votes inférieur.';
+        ?>
+        <h2><?= $organisateurRole ?></h2>
+        <p class="survol">
+            <img class="imageAide" src="images/aide_logo.png" alt=""/>
+            <span class="messageInfo"><?= $messageOrganisateur ?></span>
+        </p>
+        <?php
+        echo '<h2></h2>';
+    }
     $i = 1;
     $peutVoter = false;
     $calendrier = $question->getCalendrier();
@@ -32,12 +47,18 @@
         echo '<h2>Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
     }
     foreach ($propositions as $proposition) {
+
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
-        echo '<div class=proposition>';
+        if ($proposition->isEstEliminee()) {
+            echo '<div style="background: #000e17" class=proposition>';
+            echo '<h3>(Eliminé)</h3>';
+        } else {
+            echo '<div class=proposition>';
+        }
         echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
             $idPropositionURL . '"> <h2>' . $titreHTML . '</h2>   </a>';
-        if ($peutVoter) {
+        if ($peutVoter && !$proposition->isEstEliminee()) {
             $vote = Votant::aVote($proposition, $votes);
             if (is_null($vote)) {
                 echo '<form method="get" action="../web/index.php">
@@ -54,27 +75,35 @@
                 <input type="submit" value="Supprimer le vote" class="nav">
                     </form>';
             }
-            $nbVotes = htmlspecialchars($proposition->getNbVotes());
 
             echo '<br > ';
-            echo '<h3>Nombre de votes : ' . $nbVotes . '</h3>';
         }
-
+        $nbVotes = htmlspecialchars($proposition->getNbEtoiles());
+        echo '<h3>Nombre de votes : ' . $nbVotes . '</h3>';
 
         if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
             $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte() &&
             $question->getPhase() == 'ecriture') {
 
-            echo ' <a href="index.php?action=update&controller=proposition&idProposition=' .
-                rawurlencode($proposition->getId()) . '"><img class="modifier" src = "..\web\images\modifier.png" ></a ><br> ';
+            echo '<p> <a href="index.php?action=update&controller=proposition&idProposition=' .
+                rawurlencode($proposition->getId()) . '"><img class="modifier" src = "..\web\images\modifier.png" ></a ><br></p> ';
         }
+        if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
+            ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
+            if ($proposition->isEstEliminee()) {
+                echo '<p><a href="index.php?controller=proposition&action=annulerEliminer&idProposition=' . $idPropositionURL . '">Annuler l\'élimination</a><br></p>';
+            } else {
+                echo '<p><a href="index.php?controller=proposition&action=eliminer&idProposition=' . $idPropositionURL . '">Eliminer</a><br></p>';
+            }
+        }
+
         if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable() && $question->getPhase() == 'ecriture') {
 
-            echo ' <a class="nav suppProp" 
-            href=index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '>Supprimer</a>';
+            echo '<p> <a class="nav suppProp" 
+            href=index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '>Supprimer</a><br></p>';
         }
         $i++;
-        echo '<a href="" >par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a >';
+        echo '<p><a href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($proposition->getIdResponsable()) . '" >par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a></p>';
         echo '</div>';
     }
     ?>

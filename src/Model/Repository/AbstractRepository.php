@@ -186,15 +186,13 @@ abstract class AbstractRepository
     }
 
 
-    /**
-     * Permet de construire une requete sql grace aux contraintes passées en paramètres
-     * @param $clef //Clef primaire
-     * @param string $rowSelect //Les colonnes que vous voulez selectionner '*' par défaut si le parametre n'est pas renseigné
-     * @param $whereCondition //La condition qui sera placée dans le WHERE,
-     * //null par défaut qui sera remplacé dans la requete pas la clé primaire si le parametre n'est pas renseigné
-     * @param $nomTable //le nom de la table, null par défaut qui sera remplacé dans la requete par la table par défaut
-     * @return array
-     */
+        // Cette fonction sélectionne des données dans une base de données en utilisant une condition WHERE
+        // $clef : valeur à chercher dans la colonne de la clé primaire ou dans les colonnes spécifiées dans $whereCondition
+        // $rowSelect : les colonnes à sélectionner (par défaut : * pour toutes)
+        // $whereCondition : les colonnes à utiliser dans la condition WHERE (si null, utilise la clé primaire)
+        // $nomTable : le nom de la table où sélectionner les données (si null, utilise la table de l'objet courant)
+        // $conditionTrie : colonne sur laquelle trier les résultats
+        // $ordre : ordre de tri ('ASC' ou 'DESC', optionnel)
     public function selectWhere($clef, string $rowSelect = '*', $whereCondition = null, $nomTable = null,
                                     $conditionTrie = null, $ordre = null): array
     {

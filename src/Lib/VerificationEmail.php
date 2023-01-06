@@ -1,15 +1,24 @@
 <?php
 
 namespace App\Vote\Lib;
+require_once '../vendor/autoload.php';
 
 use App\Vote\Config\Conf;
 use App\Vote\Controller\Controller;
 use App\Vote\Model\DataObject\Utilisateur;
 use App\Vote\Lib\MessageFlash;
 use App\Vote\Model\Repository\UtilisateurRepository;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Email;
+
 
 class VerificationEmail
 {
+    /**
+     * @throws TransportExceptionInterface
+     */
     public static function envoiEmailValidation(Utilisateur $utilisateur): void
     {
         $loginURL = rawurlencode($utilisateur->getIdentifiant());
@@ -18,8 +27,22 @@ class VerificationEmail
         $lienValidationEmail = "$absoluteURL?action=validerEmail&controller=utilisateur&login=$loginURL&nonce=$nonceURL";
         $corpsEmail = "<a href=\"$lienValidationEmail\">Validation</a>";
 
-// Temporairement avant d'envoyer un vrai mail
-        mail($utilisateur->getEmailAValider(), 'Vérification email', $corpsEmail);
+        $transport = Transport::fromDsn('smtp://vote.IUTms@gmail.com:kilbhfnytfuxgsuu@smtp.gmail.com:587?verify_peer=0');
+
+        $mailer = new Mailer($transport);
+
+        $email = (new Email())
+            ->from('vote.IUTms@gmail.com')
+            ->to($utilisateur->getEmailAValider())
+            //->cc('cc@example.com')
+            //->bcc('bcc@example.com')
+            //->replyTo('fabien@example.com')
+            //->priority(Email::PRIORITY_HIGH)
+            ->subject('Lien de vérification')
+            //->text($corpsEmail)
+            ->html($corpsEmail);
+
+        $mailer->send($email);
     }
 
     public static function traiterEmailValidation($login, $nonce): bool
@@ -41,7 +64,9 @@ class VerificationEmail
 
     public static function aValideEmail(Utilisateur $utilisateur): bool
     {
-// À compléter
-        return true;
+        if ($utilisateur->getEmail() != "") {
+            return true;
+        }
+        return false;
     }
 }
