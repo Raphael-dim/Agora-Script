@@ -44,7 +44,7 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
             <h1><strong class='color-blue'>Titre</strong></h1>
             <p><?= htmlspecialchars($Titre) ?></p>
             <h1><strong class='color-blue'>Description</strong></h1>
-            <p><?= htmlspecialchars($Description) ?></p>
+            <p class = "mdparse"><?= htmlspecialchars($Description) ?></p>
         </div>
         <div id="participants" class="info">
             <h1><strong class='color-yellow'>Participants</strong></h1>
@@ -119,7 +119,12 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
     </div>
 </div>
 
-<form method="post" class="nav">
-    <input type="submit" name=previous value="Retour" id="precedent" formnovalidate>
-    <input type="submit" name=next value="Suivant" id="suivant">
-</form>
+    <form method="post" class="nav">
+        <input type="submit" name=previous value="Retour" id="precedent" formnovalidate>
+        <input type="submit" name=next value="Suivant" id="suivant">
+    </form>
+<script>
+    Array.from(document.getElementsByClassName('mdparse')).forEach(elem =>{
+        elem.innerHTML = marked.parse(elem.innerHTML);
+    });
+</script>

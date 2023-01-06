@@ -61,7 +61,7 @@ class ControllerProposition
         $view = "";
         $step = $_GET['step'] ?? 1;
         $params = array();
-        $params['question'] = (new QuestionRepository())->select($_GET['idQuestion']);
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
         switch ($step) {
             case 1:
                 $view = "step-1";
@@ -70,7 +70,7 @@ class ControllerProposition
                 if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row" != "") {
                     $row = $_POST['row'];
                     $keyword = $_POST['keyword'];
-                    $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, $row);
+                    $utilisateurs = (new UtilisateurRepository())->selectKeywordUtilisateur($keyword);
                     $params['utilisateurs'] = $utilisateurs;
                 }
                 $view = "step-2";
@@ -79,7 +79,8 @@ class ControllerProposition
 
         Controller::afficheVue('view.php',
             array_merge(["pagetitle" => "Créer une question",
-                "cheminVueBody" => "Proposition/create/" . $view . ".php"], $params));
+                "cheminVueBody" => "Proposition/create/" . $view . ".php",
+                "question" => $question],$params));
     }
 
 
@@ -326,24 +327,19 @@ class ControllerProposition
     }
 
     public
-    static function eliminer()
+    static function eliminer(): void
     {
-        $bool = false;
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         $question = (new QuestionRepository())->select($proposition->getIdQuestion());
         $propositions = $question->getPropositionsTrie();
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant()
-            && ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') & $question->aPassePhase()) {
+            && ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
             $proposition->setEstEliminee(true);
             (new PropositionRepository())->update($proposition);
-            foreach ($propositions as $propo) {
-                if ($propo->getId() == $_GET['idProposition']) {
-                    $bool = true;
-                }
-                if ($bool && !$propo->isEstEliminee()) {
-                    $propo->setEstEliminee(true);
-                    (new PropositionRepository())->update($propo);
-                }
+            $tab = array_slice($propositions, array_search($proposition, $propositions));
+            foreach ($tab as $propo) {
+                $propo->setEstEliminee(true);
+                (new PropositionRepository())->update($propo);
             }
             MessageFlash::ajouter('success', 'Les propositions sélectionnées ont été éliminées.');
         } else {
@@ -353,21 +349,18 @@ class ControllerProposition
     }
 
     public
-    static function annulerEliminer()
+    static function annulerEliminer(): void
     {
-        $bool = true;
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         $question = (new QuestionRepository())->select($proposition->getIdQuestion());
         $propositions = $question->getPropositionsTrie();
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant()
-            && ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') & $question->aPassePhase()) {
+            && ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
             $proposition->setEstEliminee(false);
             (new PropositionRepository())->update($proposition);
             foreach ($propositions as $propo) {
-                if ($propo->getId() == $_GET['idProposition']) {
-                    $bool = false;
-                }
-                if ($bool && $propo->isEstEliminee()) {
+                if (array_search($propo, $propositions) > array_search($proposition, $propositions)
+                    && $propo->isEstEliminee()) {
                     $propo->setEstEliminee(false);
                     (new PropositionRepository())->update($propo);
                 }
