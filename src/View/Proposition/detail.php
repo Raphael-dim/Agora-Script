@@ -64,7 +64,7 @@ foreach ($sections as $section) {
     echo '
     <p>
         <span> Contenu</span> :
-        ' . htmlspecialchars($contenu[$i - 1]->getContenu()) . '
+        ' . htmlspecialchars($propSection[$i - 1]->getContenu()) . '
     </p></div>';
 
     $i = $i + 1;
