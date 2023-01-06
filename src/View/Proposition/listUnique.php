@@ -91,9 +91,9 @@
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
             ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
             if ($proposition->isEstEliminee()) {
-                echo '<p><a href="index.php?controller=proposition&action=annulerEliminer&idProposition=' . $idPropositionURL . '">Eliminer</a><br></p>';
+                echo '<p><a href="index.php?controller=proposition&action=annulerEliminer&idProposition=' . $idPropositionURL . '">Annuler l\'élimination</a><br></p>';
             } else {
-                echo '<p><a href="index.php?controller=proposition&action=eliminer&idProposition=' . $idPropositionURL . '">Annuler l\'élimination</a><br></p>';
+                echo '<p><a href="index.php?controller=proposition&action=eliminer&idProposition=' . $idPropositionURL . '">Eliminer</a><br></p>';
             }
         }
 
