@@ -6,24 +6,14 @@ use App\Vote\Lib\ConnexionUtilisateur;
 use App\Vote\Model\Repository\PropositionRepository;
 
 
-if (!isset($_GET['idQuestion'])) {
-    $idQuestion = $question->getId();
-} else {
-    $idQuestion = $_GET['idQuestion'];
-}
 $readOnly = "";
-if (isset($_GET['idProposition']) or isset($_SESSION[FormConfig::$arr]['idProposition'])) {
+if (isset($_GET['idProposition'])) {
     echo "<h1>Modification de la Proposition</h1>";
-    $readOnly = "readonly";
-
-
+    if ($proposition->getIdResponsable() != ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
+        $readOnly = "readonly";
+    }
 } else {
     echo "<h1>Création d'une Proposition</h1>";
-}
-
-
-if (isset($_SESSION[FormConfig::$arr]['idProposition'])) {
-    (new PropositionRepository())->select($_SESSION[FormConfig::$arr]['idProposition'])->getIdResponsable();
 }
 if (isset($_POST['titre'])) {
     FormConfig::postSession();
@@ -31,30 +21,20 @@ if (isset($_POST['titre'])) {
     if (!isset($_SESSION[FormConfig::$arr]['co-auteur'])) {
         $_SESSION[FormConfig::$arr]['co-auteur'] = array();
     }
-    if (isset($_SESSION[FormConfig::$arr]['idProposition'])) {
-        if ((new PropositionRepository())->select($_SESSION[FormConfig::$arr]['idProposition'])->getIdResponsable() != ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
-            FormConfig::redirect('index.php?controller=proposition&action=updated');
-        }
+    if (isset($_GET['idProposition'])) {
+        FormConfig::redirect("index.php?controller=proposition&action=form&step=2&idQuestion=" . $question->getId());
     }
-    FormConfig::redirect("index.php?controller=proposition&action=form&step=2&idQuestion=" . $idQuestion);
-
 }
-
-
 ?>
-
-
-<h2>Titre : <?= $question->getTitre() ?></h2>
-<h2>Description : <?= $question->getDescription() ?></h2>
+<h2>Titre : <?= htmlspecialchars($question->getTitre()) ?></h2>
+<h2>Description : <?= htmlspecialchars($question->getDescription()) ?></h2>
 
 <form method="post" class="custom-form">
-
     <p>
-        <label>Titre de votre proposition
-            <input type="text" maxlength="500" id="titre_id" size="80"
-                   value="<?= FormConfig::TextField('titre') ?> " <?= $readOnly ?>
-            name="titre">
-        </label>
+        <label for="titre_id">Titre de votre proposition </label>
+        <input type="text" maxlength="500" id="titre_id" size="80"
+               value="<?= FormConfig::TextField('titre') ?> " <?= $readOnly ?>
+               name="titre">
         <label>480 caractères maximum</label>
     </p>
     <!--<h2>Désigner les co-auteurs qui vous aideront à rédiger votre proposition :</h2>-->
@@ -65,8 +45,8 @@ if (isset($_POST['titre'])) {
     foreach ($sections as $section) {
         $i++;
         echo '<h2>Section n°' . $i . '</h2>';
-        echo '<p>Titre : ' . $section->getTitre() . ' </p > ';
-        echo '<p>Description : ' . $section->getDescription() . ' </p > ';
+        echo '<p>Titre : ' . htmlspecialchars($section->getTitre()) . ' </p > ';
+        echo '<p>Description : ' . htmlspecialchars($section->getDescription()) . ' </p > ';
         echo '
     <p class="champ">
         <label for=contenu_id> Contenu</label > :

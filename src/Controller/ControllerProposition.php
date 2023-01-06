@@ -193,11 +193,10 @@ class ControllerProposition
     {
         if (!isset($_GET['idProposition'])) {
             MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
-            Controller::redirect('index.php?controller=proposition&action=readAll');
+            Controller::redirect('index.php');
         }
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
-        $idquestion = $proposition->getIdQuestion();
-        $question = (new QuestionRepository)->select($idquestion);
+        $question = (new QuestionRepository)->select($proposition->getIdQuestion());
         $bool = true;
         $coauteurs = $proposition->getCoAuteurs();
         $coauteursid = array();
@@ -225,9 +224,6 @@ class ControllerProposition
             if ($proposition == null) {
                 MessageFlash::ajouter("warning", "Proposition introuvable");
                 $bool = false;
-            } else {
-                $_SESSION[FormConfig::$arr]['idProposition'] = $_GET['idProposition'];
-                FormConfig::initialiserSessionsProposition($proposition);
             }
         }
         if (!$bool) {
@@ -235,9 +231,11 @@ class ControllerProposition
         } else {
             FormConfig::setArr('SessionProposition');
             FormConfig::startSession();
+            $_SESSION[FormConfig::$arr]['idProposition'] = $_GET['idProposition'];
+            FormConfig::initialiserSessionsProposition($proposition);
             Controller::afficheVue('view.php', ["pagetitle" => "Modifier une proposition",
                 "cheminVueBody" => "Proposition/create/step-1.php",
-                "idProposition" => $_GET['idProposition'],
+                "proposition" => $proposition,
                 "question" => $question]);
         }
     }

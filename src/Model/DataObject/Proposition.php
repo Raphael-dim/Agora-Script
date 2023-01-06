@@ -4,6 +4,7 @@ namespace App\Vote\Model\DataObject;
 
 use App\Vote\Model\Repository\CoAuteurRepository;
 use App\Vote\Model\Repository\PropositionSectionRepository;
+use App\Vote\Model\Repository\ResponsableRepository;
 
 class Proposition extends AbstractDataObject
 {
@@ -64,6 +65,7 @@ class Proposition extends AbstractDataObject
     {
         return $this->estEliminee;
     }
+
 
     /**
      * @param bool $estEliminee
