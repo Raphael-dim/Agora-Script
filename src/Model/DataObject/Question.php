@@ -199,6 +199,15 @@ class Question extends AbstractDataObject
             'Propositions', 'nbVotes', 'DESC');
     }
 
+    public function getPropositionsTrieMajoritaire()
+    {
+        $propositions = $this->getPropositions();
+        foreach ($propositions as $proposition){
+            $p[$proposition->getId()][$proposition] = $proposition->getMedian();
+        }
+        sort($p);
+    }
+
     /**
      * On obtient la phase en cours pour une question
      * @return string
