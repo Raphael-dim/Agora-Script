@@ -12,8 +12,9 @@ if (isset($_POST["keyword"])) {
 } else {
     $keyword = "";
 }
-
+echo $keyword;
 ?>
+
 
 <form method=post >
     <?php
