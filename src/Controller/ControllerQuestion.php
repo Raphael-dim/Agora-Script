@@ -112,7 +112,7 @@ class ControllerQuestion
                 if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row" != "") {
                     $row = $_POST['row'];
                     $keyword = $_POST['keyword'];
-                    $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, $row);
+                    $utilisateurs = (new UtilisateurRepository())->selectKeywordUtilisateur($keyword);
                     $params['utilisateurs'] = $utilisateurs;
                 }
                 $view = "step-4";
@@ -121,7 +121,7 @@ class ControllerQuestion
                 if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row" != "") {
                     $row = $_POST['row'];
                     $keyword = $_POST['keyword'];
-                    $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, $row);
+                    $utilisateurs = (new UtilisateurRepository())->selectKeywordUtilisateur($keyword);
                     $params['utilisateurs'] = $utilisateurs;
                 }
                 $view = "step-5";
