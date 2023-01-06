@@ -17,7 +17,7 @@ if (isset($_POST['previous'])) {
 
 
 extract($_SESSION[FormConfig::$arr]);
-
+var_dump($_SESSION[FormConfig::$arr]['systemeVote']);
 $_SESSION[FormConfig::$arr]['Sections'] = array();
 $ct = 0;
 foreach ($_SESSION[FormConfig::$arr] as $key => $value) {

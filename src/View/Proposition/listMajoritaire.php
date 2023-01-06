@@ -16,7 +16,7 @@
     ?>
     <h2><?= $modeScrutin ?></h2>
     <p class="survol">
-        <img class="imageAide" src="images/aide_logo.png" alt=""/>
+        <img class="imageAide" src="images/aide_logo.png" alt="">
         <span><?= $message ?></span>
     </p>
     <?php
@@ -33,19 +33,28 @@
         $peutVoter = true;
         $interval = (new DateTime(date("d-m-Y H:i")))->diff(new DateTime($calendrier->getFinVote(true)));
         echo '<h2>Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
-    }
+    } ?>
+    <ul>
+        <li>
+            <a href="index.php?action=readAll&controller=proposition&idQuestion=<?= $question->getId() ?>">Toutes</a>
+        </li>
+        <li>
+            <a href="index.php?action=readAll&selection=date&controller=proposition&idQuestion=<?= $question->getId() ?>">Les
+                plus récentes</a>
+        </li>
+        <li>
+            <a href="index.php?action=readAll&selection=note&controller=proposition&idQuestion=<?= $question->getId() ?>">Les
+                mieux notées</a>
+        </li>
+    </ul>
+    <?php
     foreach ($propositions as $proposition) {
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
-        if ($proposition->isEstEliminee()){
-            echo '<div style="background: #000e17" class=proposition>';
-            echo '<h3>(Eliminé)</h3>';
-        }else{
-            echo '<div class=proposition>';
-        }
+        echo '<div class=proposition>';
         echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
             $idPropositionURL . '"> <h2>' . $titreHTML . '</h2>   </a>';
-        if ($peutVoter && !$proposition->isEstEliminee()) {
+        if ($peutVoter) {
             $vote = Votant::aVote($proposition, $votes, 'majoritaire');
             for ($val = 1; $val <= 6; $val++) {
                 switch ($val) {
@@ -82,31 +91,26 @@
             }
             $nbVotes = htmlspecialchars($proposition->getNbVotes());
             $nbEtoiles = htmlspecialchars($proposition->getNbEtoiles());
+
             echo '<br > ';
             echo '<h3>Nombre de votes : ' . $nbVotes . '</h3>';
             $votesProposition = (new VoteRepository())->selectWhere($proposition->getId(), '*',
                 'idProposition', 'Votes', 'valeurvote');
             if ($nbVotes > 0) {
-                if ($nbVotes == 1) {
+                $median = $votesProposition[($nbVotes/2)-1 + $nbVotes%2];
+                /*if ($nbVotes == 1) {
                     $median = $votesProposition[0];
                 } else {
-                    if (sizeof($votesProposition) % 2 == 0) {
-                        $median = $votesProposition[(sizeof($votesProposition) / 2) - 1];
+                    if ($nbVotes % 2 == 0) {
+                        $median = $votesProposition[($nbVotes / 2) - 1];
                     } else {
-                        $median = $votesProposition[((sizeof($votesProposition) + 1) / 2) - 1];
+                        $median = $votesProposition[(($nbVotes + $nbVotes%2) / 2) - 1];
                     }
-                }
+                }*/
                 echo '<h3>Moyenne des votes : ' . htmlspecialchars($nbEtoiles / $nbVotes) . '</h3>';
                 echo '<h3>Médianne :  ' . htmlspecialchars($median->getValeur()) . '</h3>';
             }
         }
-
-
-        if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
-            $question->getPhase() == 'entre' && $question->aPassePhase()) {
-            echo '<a href="index.php?controller=proposition&action=eliminer&idProposition=' . $idPropositionURL . '">Eliminer</a><br>';
-        }
-
 
 
         if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
@@ -117,6 +121,7 @@
                 rawurlencode($proposition->getId()) . '"><img class="modifier" src = "..\web\images\modifier.png" ></a ><br> ';
         }
         if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable() && $question->getPhase() == 'ecriture') {
+
             echo ' <a class="nav suppProp" 
             href=index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '>Supprimer</a>';
         }

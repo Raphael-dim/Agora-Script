@@ -37,14 +37,14 @@ foreach ($messages as $message) {
     }
     // Si c'est le dernier message du tableau, ajoute l'identifiant "dernierMessage"
     if ($i == sizeof($messages)) {
-        $id = 'dernierMessage';
+        $id = 'id="dernierMessage"';
     }
     if ($message->getAuteur()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
-        echo ' <p id = "' . $id . '"  style = "margin-left: 50%" class="date" >Vous, il y a ' . $diff . ' </p > ';
+        echo ' <p ' . $id . '  style = "margin-left: 50%" class="date" >Vous, il y a ' . $diff . ' </p > ';
         echo '<div style = "margin-left: 60%;" class="messageChat" > ' . htmlspecialchars($message->getContenu()) . '</div > ';
 
     } else {
-        echo '<p id = "' . $id . '" class="date" >' . htmlspecialchars($message->getAuteur()->getPrenom()) . ', il y a ' . $diff . ' </p > ';
+        echo '<p ' . $id . ' class="date" >' . htmlspecialchars($message->getAuteur()->getPrenom()) . ', il y a ' . $diff . ' </p > ';
         echo '<div class="messageChat" > ' . htmlspecialchars($message->getContenu()) . '</div > ';
     }
     $i++;
@@ -54,8 +54,7 @@ foreach ($messages as $message) {
 <form class="zoneTexte" method="post" action="index.php?action=created&controller=message">
     <input type="hidden" name="idContact" value="<?= $_GET['idContact'] ?>">
     <p class="champ">
-        <label for="message_id">Message : </label>
-        <textarea id="message_id" maxlength="350" name="message" rows="7" cols="50" required> </textarea>
+        <textarea id="message_id" maxlength="350" name="message" rows="7" cols="50" style="max-width: 90%;" placeholder="Écrire un nouveau message" required></textarea>
         <label>350 caractères maximum</label>
     </p>
     <input id="suivant" type="submit" value="Envoyer" class="nav">

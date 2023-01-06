@@ -14,6 +14,7 @@
 
 body {
     overflow-x: auto;
+    margin:0;
 }
 
 main {
@@ -438,6 +439,7 @@ a.vote:hover img {
     color: white;
     background-color: #1a3341;
     border-color: #dff5f4;
+    cursor: pointer;
 }
 
 
@@ -709,6 +711,14 @@ a.vote:hover img {
     z-index: 0;
 }
 
+.user{
+    margin:25px 0;
+    width:fit-content;
+    padding-right:100px;
+    border-radius:5px;
+    background-color:CornflowerBlue;
+}
+
 .alert-success {
     color: #3c763d;
     background-color: #dff0d8;
@@ -975,10 +985,10 @@ input, textarea{
 }
 
 input:invalid + span:after {
-    position: absolute;
+    display:inline-block;
     content: '✖';
     color: red;
-    padding-left: 5px;
+    padding: 50%;
 }
 
 .validity {
@@ -986,10 +996,10 @@ input:invalid + span:after {
 }
 
 input:valid + span:after {
-    position: absolute;
+    display:inline-block;
     content: '✓';
     color: green;
-    padding-left: 5px;
+    padding: 50%;
 }
 
 .footer {
@@ -1195,7 +1205,7 @@ select {
 .zoneTexte {
     color: white;
     margin-top: 5%;
-    max-width: max-content;
+    width:60%;
     padding: 10px 10px 60px 10px;
     margin-left: 20%;
     /*background-color: #012e49;*/

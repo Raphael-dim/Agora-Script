@@ -52,7 +52,7 @@ class ControllerMessage
         Controller::afficheVue('view.php',
             ["recus" => $recus,
                 "envoyes" => $envoyes,
-                "pagetitle" => "Conversation",
+                "pagetitle" => "Conversation / " . $_GET['idContact'],
                 "contact" => (new UtilisateurRepository())->select($_GET['idContact']),
                 "cheminVueBody" => "Message/discussion.php"]);
     }

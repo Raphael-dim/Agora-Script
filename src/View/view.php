@@ -8,11 +8,11 @@
     <link href="css/keyframes.css" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="images/logo_vote.ico">
 
-    /* Editeur Markdown */
+    <!-- Editeur Markdown -->
     <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
     <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
 
-    /* Parseur Markdown */
+    <!-- Parseur Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 </head>
