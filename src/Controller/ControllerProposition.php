@@ -9,6 +9,7 @@ use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\CoAuteur;
 use App\Vote\Model\DataObject\Proposition;
 use App\Vote\Model\DataObject\PropositionSection;
+use App\Vote\Model\DataObject\Question;
 use App\Vote\Model\DataObject\Responsable;
 use App\Vote\Model\HTTP\Session;
 use App\Vote\Model\Repository\CalendrierRepository;
@@ -114,7 +115,7 @@ class ControllerProposition
         // Au lieu de faire un appel supplémentaire à la base de donnée, on vérifie s'il existe une proposition,
         // si oui, on récupère la question grâce à l'objet Proposition.
         $votants = $question->getVotants();
-        $propositions = $question->getPropositionsTrie();
+        $propositions = $question-> getPropositionsTrie();
 
         if ($question->getSystemeVote() == 'majoritaire' || $question->getSystemeVote() == 'valeur') {
 
@@ -330,7 +331,7 @@ class ControllerProposition
                 }
             }
         }
-        MessageFlash::ajouter('succes', 'Les propositions sélectionnées ont été mise à jour');
+        MessageFlash::ajouter('succes', 'Les propositions sélectionnées ont été éliminées.');
         Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
     }
 
