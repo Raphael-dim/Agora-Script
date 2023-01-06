@@ -10,13 +10,13 @@
     if ($question->getSystemeVote() == 'majoritaire') {
         $modeScrutin = 'Scrutin par jugement majoritaire (médiane) ';
         $message = 'Le scrutin majoritaire établit un \'vote médian\' pour chaque proposition, 
-                    par défaut, la mention \'passable\' est sélectionnée.
-                    Notez chaque proposition entre 1 et 6 ci-dessous.';
+                    par défaut, la mention \'passable\' est sélectionnée.<br>
+                    Vous devez choisir une mention pour chaque proposition.';
     } else if ($question->getSystemeVote() == 'valeur') {
         $modeScrutin = 'Scrutin par jugement majoritaire (moyenne) ';
         $message = 'Ce système de vote établit une moyenne de vote pour chaque proposition, 
-                    par défaut, la mention \'passable\' est sélectionnée.
-                    Notez chaque proposition entre 1 et 6 ci-dessous.';
+                    par défaut, la mention \'passable\' est sélectionnée.<br>
+                    Vous devez choisir une mention pour chaque proposition.';
     }
 
 
@@ -88,15 +88,24 @@
                 echo '<span style="font-size: 18px">' . $attribut . '</span></a>';
             }
         }
-        $nbVotes = htmlspecialchars($proposition->getNbVotes());
         $nbEtoiles = htmlspecialchars($proposition->getNbEtoiles());
         echo '<br > ';
-        echo '<h3>Nombre de votes : ' . $nbVotes . '</h3>';
+
+        /*
+            On récupère les votes dans la vue pour éviter de faire plusieurs appel à la base de donnée
+        dans le controller. La méthode ReadAll() n'est pas appelée par le controllerVote lors du vote / modification de vote.
+        Si c'était le cas, on devrait refaire un appel à la base de donnée pour récupérer la question, les propositions et les votants
+        à chaque interaction avec le système de vote.
+
+        */
+
+
         $votesProposition = (new VoteRepository())->selectWhere($proposition->getId(), '*',
             'idProposition', 'Votes', 'valeurvote');
-        if ($nbVotes > 0) {
+        echo '<h3>Nombre de votes : ' . sizeof($votesProposition) . '</h3>';
+        if (sizeof($votesProposition) > 0) {
             if ($question->getSystemeVote() == 'majoritaire') {
-                if ($nbVotes == 1) {
+                if (sizeof($votesProposition) == 1) {
                     $median = $votesProposition[0];
                 } else {
                     if (sizeof($votesProposition) % 2 == 0) {
@@ -107,7 +116,7 @@
                 }
                 echo '<h3>Vote médian :  ' . htmlspecialchars(number_format($median->getValeur(), 3)) . '</h3>';
             } else {
-                echo '<h3>Moyenne des votes : ' . htmlspecialchars(number_format($nbEtoiles / $nbVotes, 3), ) . '</h3>';
+                echo '<h3>Moyenne des votes : ' . htmlspecialchars(number_format($nbEtoiles / sizeof($votesProposition), 3), ) . '</h3>';
             }
         }
 

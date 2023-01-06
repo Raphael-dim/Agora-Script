@@ -103,11 +103,11 @@ class ControllerVote
         }
         $votants = $question->getVotants();
         if (!ConnexionUtilisateur::estConnecte() || !Votant::estVotant($votants, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas voter, vous n'êtes pas votant pour cette question.");
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas voter, vous n'êtes pas votant pour cette question.");
             $bool = false;
         }
         if ($question->getPhase() != 'vote') {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas voter tant que la phase de vote n'a pas débuté.");
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas voter tant que la phase de vote n'a pas débuté.");
             $bool = false;
         }
         if (!$bool) {
@@ -147,14 +147,14 @@ class ControllerVote
     public static function delete()
     {
         if (!isset($_GET['idProposition'])) {
-            MessageFlash::ajouter('warning', 'Proposition introuvable');
-            Controller::redirect('index.php?action=readAll&controller=proposition&idQuestion=' . $question->getId());
+            MessageFlash::ajouter('danger', 'Proposition introuvable');
+            Controller::redirect('index.php');
         }
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         $question = (new QuestionRepository())->select($proposition->getIdQuestion());
         $aVote = Votant::aVote($proposition, Votant::getVotes(ConnexionUtilisateur::getLoginUtilisateurConnecte()));
         if (is_null($aVote)) {
-            MessageFlash::ajouter('warning', 'Vous n\'avez pas voté pour cette proposition');
+            MessageFlash::ajouter('danger', 'Vous n\'avez pas voté pour cette proposition');
             Controller::redirect('index.php?action=readAll&controller=proposition&idQuestion=' . $question->getId());
         }
         (new VoteRepository())->delete($aVote->getIdvote());

@@ -44,6 +44,15 @@ class Votant extends Utilisateur
 
     public static function aVote($proposition, $votes, $modeScrutin = 'unique'): ?Vote
     {
+        /*
+         * Cette méthode vérifie si l'utilisateur connecté a déjà voté pour une proposition
+         * Pour économiser du temps, on lui fournit un tableau de tous les votes de l'utilisateur qui
+         * est utilisé ailleurs dans le code dans le fichier listMajoritaire notamment.
+         * Si c'est le cas, elle renvoie l'objet vote.
+         * Sinon elle renvoie null si le mode de scrutin est différent de majoritaire.
+         * Si l'utilisateur n'a pas encore voté et que le mode de scrutin est majoritaire.
+         * On enregistre dans la base de donnée le vote par défaut qui est 'Passable', soit 3.
+         */
         foreach ($votes as $vote) {
             if ($vote->getProposition()->getId() == $proposition->getId()) {
                 return $vote;
@@ -52,7 +61,6 @@ class Votant extends Utilisateur
         if ($modeScrutin == 'majoritaire') {
             $votant = new Votant((new QuestionRepository())->select($proposition->getIdQuestion()));
             $votant->setIdentifiant(ConnexionUtilisateur::getLoginUtilisateurConnecte());
-            $proposition->setNbVotes(1);
             $vote = new Vote($votant, $proposition, 3);
             (new VoteRepository())->sauvegarder($vote, true);
             return $vote;

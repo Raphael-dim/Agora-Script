@@ -211,6 +211,9 @@ class Question extends AbstractDataObject
 
     function trieMoyenne(Proposition $proposition1, Proposition $proposition2)
     {
+        if ($proposition1->getNbVotes() == 0 && $proposition2->getNbVotes() == 0) {
+            return 0;
+        }
         $moyenneProposition1 = $proposition1->getNbEtoiles() / $proposition1->getNbVotes();
         $moyenneProposition2 = $proposition2->getNbEtoiles() / $proposition2->getNbVotes();
         if ($moyenneProposition1 == $moyenneProposition2) {
