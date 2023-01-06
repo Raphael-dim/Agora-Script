@@ -7,17 +7,24 @@
     use App\Vote\Model\DataObject\Votant;
     use App\Vote\Model\Repository\VoteRepository;
 
-    $modeScrutin = 'Scrutin par jugement majoritaire (médiane) ';
-    $message = 'Le scrutin majoritaire établit un \'vote médian\' pour chaque proposition, 
+    if ($question->getSystemeVote() == 'majoritaire') {
+        $modeScrutin = 'Scrutin par jugement majoritaire (médiane) ';
+        $message = 'Le scrutin majoritaire établit un \'vote médian\' pour chaque proposition, 
                     par défaut, la mention \'passable\' est sélectionnée.
                     Notez chaque proposition entre 1 et 6 ci-dessous.';
+    } else if ($question->getSystemeVote() == 'valeur') {
+        $modeScrutin = 'Scrutin par jugement majoritaire (moyenne) ';
+        $message = 'Ce système de vote établit une moyenne de vote pour chaque proposition, 
+                    par défaut, la mention \'passable\' est sélectionnée.
+                    Notez chaque proposition entre 1 et 6 ci-dessous.';
+    }
 
 
     ?>
     <h2><?= $modeScrutin ?></h2>
     <p class="survol">
         <img class="imageAide" src="images/aide_logo.png" alt=""/>
-        <span><?= $message ?></span>
+        <span class="messageInfo"><?= $message ?></span>
     </p>
     <?php
     $i = 1;
@@ -88,17 +95,20 @@
         $votesProposition = (new VoteRepository())->selectWhere($proposition->getId(), '*',
             'idProposition', 'Votes', 'valeurvote');
         if ($nbVotes > 0) {
-            if ($nbVotes == 1) {
-                $median = $votesProposition[0];
-            } else {
-                if (sizeof($votesProposition) % 2 == 0) {
-                    $median = $votesProposition[(sizeof($votesProposition) / 2) - 1];
+            if ($question->getSystemeVote() == 'majoritaire') {
+                if ($nbVotes == 1) {
+                    $median = $votesProposition[0];
                 } else {
-                    $median = $votesProposition[((sizeof($votesProposition) + 1) / 2) - 1];
+                    if (sizeof($votesProposition) % 2 == 0) {
+                        $median = $votesProposition[(sizeof($votesProposition) / 2) - 1];
+                    } else {
+                        $median = $votesProposition[((sizeof($votesProposition) + 1) / 2) - 1];
+                    }
                 }
+                echo '<h3>Vote médian :  ' . htmlspecialchars(number_format($median->getValeur(), 3)) . '</h3>';
+            } else {
+                echo '<h3>Moyenne des votes : ' . htmlspecialchars(number_format($nbEtoiles / $nbVotes, 3), ) . '</h3>';
             }
-            echo '<h3>Moyenne des votes : ' . htmlspecialchars($nbEtoiles / $nbVotes) . '</h3>';
-            echo '<h3>Médianne :  ' . htmlspecialchars($median->getValeur()) . '</h3>';
         }
 
 
@@ -106,7 +116,6 @@
             $question->getPhase() == 'entre' && $question->aPassePhase()) {
             if ($proposition->isEstEliminee()) {
                 echo '<a href="index.php?controller=proposition&action=annulerEliminer&idProposition=' . $idPropositionURL . '">Eliminer</a><br>';
-
             } else {
                 echo '<a href="index.php?controller=proposition&action=eliminer&idProposition=' . $idPropositionURL . '">Eliminer</a><br>';
             }

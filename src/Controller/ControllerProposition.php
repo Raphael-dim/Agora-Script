@@ -333,7 +333,6 @@ class ControllerProposition
             MessageFlash::ajouter('success', 'Les propositions sélectionnées ont été éliminées.');
         } else {
             MessageFlash::ajouter('danger', 'Vous n\'êtes pas responsable de cette question');
-
         }
         Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
     }
