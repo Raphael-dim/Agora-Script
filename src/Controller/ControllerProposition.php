@@ -145,16 +145,16 @@ class ControllerProposition
         $bool = true;
 
         if (!ConnexionUtilisateur::estConnecte() || !Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition, 
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas créer de proposition, 
             vous n'êtes pas responsable pour cette question.");
             $bool = false;
         }
         if ($question->getPhase() != 'ecriture') {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition en dehors de la phase d'écriture.");
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas créer de proposition en dehors de la phase d'écriture.");
             $bool = false;
         }
         if (Responsable::aCreeProposition($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
-            MessageFlash::ajouter("warning", "Vous avez déjà crée une proposition pour cette question.");
+            MessageFlash::ajouter("danger", "Vous avez déjà crée une proposition pour cette question.");
             $bool = false;
         }
         if (!$bool) {
@@ -168,7 +168,7 @@ class ControllerProposition
         $coAuteursSelec = $_SESSION[FormConfig::$arr]['co-auteur'];
         $proposition->setId($propositionBD);
         foreach ($coAuteursSelec as $coAutSelec) {
-            $aut = new CoAuteur((new UtilisateurRepository())->select($coAutSelec), (new PropositionRepository())->select($propositionBD));
+            $aut = new CoAuteur((new UtilisateurRepository())->select($coAutSelec), $proposition);
             (new CoAuteurRepository())->sauvegarder($aut);
         }
         $sections = $question->getSections();
@@ -216,6 +216,19 @@ class ControllerProposition
         if ($question->getPhase() != 'ecriture') {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier cette proposition en dehors de la phase d'écriture.");
             $bool = false;
+        }
+        if (!isset($_GET['idProposition'])) {
+            MessageFlash::ajouter("warning", "Proposition introuvable");
+            $bool = false;
+        } else {
+            $proposition = (new PropositionRepository())->select($_GET['idProposition']);
+            if ($proposition == null) {
+                MessageFlash::ajouter("warning", "Proposition introuvable");
+                $bool = false;
+            } else {
+                $_SESSION[FormConfig::$arr]['idProposition'] = $_GET['idProposition'];
+                FormConfig::initialiserSessionsProposition($proposition);
+            }
         }
         if (!$bool) {
             Controller::redirect("index.php?action=readAll&controller=proposition");
@@ -314,7 +327,8 @@ class ControllerProposition
         }
     }
 
-    public static function eliminer()
+    public
+    static function eliminer()
     {
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         $question = (new QuestionRepository())->select($proposition->getIdQuestion());
@@ -337,7 +351,8 @@ class ControllerProposition
         Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
     }
 
-    public static function annulerEliminer()
+    public
+    static function annulerEliminer()
     {
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         $question = (new QuestionRepository())->select($proposition->getIdQuestion());

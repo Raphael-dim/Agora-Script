@@ -133,7 +133,7 @@ if ($_SESSION[FormConfig::$arr]['nbCalendriers'] > 1) {
     <p>
         <label for="finVote">Date de fin des votes :</label>
         <input type="datetime-local" id="finVote" name="finVote' . $n . '"
-               value="' . FormConfig::TextField(" finVote" . $n) . '"
+               value="' . FormConfig::TextField("finVote" . $n) . '"
         min="' . date("Y-m-d H:i") . '" required>
     </p>';
     }
