@@ -8,6 +8,7 @@ use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\Repository\SectionRepository;
 use App\Vote\Model\Repository\ResponsableRepository;
 use App\Vote\Model\Repository\VotantRepository;
+use App\Vote\Model\Repository\VoteRepository;
 use Exception;
 use mysql_xdevapi\XSession;
 
@@ -180,9 +181,40 @@ class Question extends AbstractDataObject
 
     public function getPropositionsTrie()
     {
-        return (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion",
+        $propositions = (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion",
             'Propositions', 'nbEtoiles', 'DESC');
+        if ($this->systemeVote == 'majoritaire') {
+            $propositionsTrie = array();
+            foreach ($propositions as $proposition) {
+                $votesProposition = (new VoteRepository())->selectWhere($proposition->getId(), '*',
+                    'idProposition', 'Votes', 'valeurvote');
+                $nbVotes = $proposition->getNbVotes();
+                if ($nbVotes > 0) {
+                    if ($nbVotes == 1) {
+                        $proposition->setVoteMedian($votesProposition[0]->getValeur());
+                    } else {
+                        if (sizeof($votesProposition) % 2 == 0) {
+                            $proposition->setVoteMedian($votesProposition[(sizeof($votesProposition) / 2) - 1]->getValeur());
+                        } else {
+                            $proposition->setVoteMedian($votesProposition[((sizeof($votesProposition) + 1) / 2) - 1]->getValeur());
+                        }
+                    }
+                }
+                $propositionsTrie[] = $proposition;
+            }
+            usort($propositionsTrie, array($this, "trieMedianne"));
+        }
+        return $propositions;
     }
+
+    function trieMedianne(Proposition $proposition1, Proposition $proposition2)
+    {
+        if ($proposition1->getVotemedian() == $proposition2->getVotemedian()) {
+            return 0;
+        }
+        return ($proposition1->getVotemedian() < $proposition2->getVotemedian()) ? -1 : 1;
+    }
+
 
     /**
      * On obtient la phase en cours pour une question
@@ -221,7 +253,7 @@ class Question extends AbstractDataObject
         }
         $date = date('Y-m-d H:i:s');
         foreach ($this->calendriers as $calendrier) {
-            if ($date < $calendrier->getDebutVote(true)  || ($date > $calendrier->getDebutEcriture(true) && $date < $calendrier->getFinVote(true))) {
+            if ($date < $calendrier->getDebutVote(true) || ($date > $calendrier->getDebutEcriture(true) && $date < $calendrier->getFinVote(true))) {
                 return $calendrier;
             }// Si la date courante est comprise dans le calendrier, on retourne le calendrier.
         }
@@ -253,8 +285,8 @@ class Question extends AbstractDataObject
         return false;
     }
 
-        // Cette fonction vérifie si la phase actuelle est la dernière phase du calendrier.
-        // Elle retourne un booléen : vrai si c'est la dernière phase, faux sinon.
+    // Cette fonction vérifie si la phase actuelle est la dernière phase du calendrier.
+    // Elle retourne un booléen : vrai si c'est la dernière phase, faux sinon.
     public function estDernierePhase(): bool
     {
         // Récupère tous les calendriers

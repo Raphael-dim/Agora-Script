@@ -14,6 +14,23 @@ class Proposition extends AbstractDataObject
     private int $nbEtoiles;
     private int $nbVotes;
     private bool $estEliminee;
+    private float $Votemedian = 0;
+
+    /**
+     * @return float
+     */
+    public function getVotemedian(): float
+    {
+        return $this->Votemedian;
+    }
+
+    /**
+     * @param float $Votemedian
+     */
+    public function setVotemedian(float $Votemedian): void
+    {
+        $this->Votemedian = $Votemedian;
+    }
 
     /**
      * @param int $id
