@@ -24,7 +24,7 @@ foreach ($contacts as $contact) {
     }
     echo '<div class="contact">
             <img style="max-height: 40px" src="images/profil.png" alt="">
-            <a class="" href="">' . $contact->getPrenom() . ' ' . $contact->getNom() . '</a>
+            <a class="" href="">' . htmlspecialchars($contact->getPrenom()) . ' ' . htmlspecialchars($contact->getNom()) . '</a>
             <a style="min-width: 100%" href="index.php?controller=message&action=read&idContact=' . rawurlencode($contact->getIdentifiant()) . '#dernierMessage">' . $message . '</a>
             ';
     if ($message == 'Nouveau message') {
