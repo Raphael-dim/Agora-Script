@@ -115,7 +115,7 @@ class ControllerProposition
         // Au lieu de faire un appel supplémentaire à la base de donnée, on vérifie s'il existe une proposition,
         // si oui, on récupère la question grâce à l'objet Proposition.
         $votants = $question->getVotants();
-        $propositions = $question-> getPropositionsTrie();
+        $propositions = $question->getPropositionsTrie();
 
         if ($question->getSystemeVote() == 'majoritaire' || $question->getSystemeVote() == 'valeur') {
 
@@ -330,8 +330,34 @@ class ControllerProposition
                     (new PropositionRepository())->update($propo);
                 }
             }
+            MessageFlash::ajouter('success', 'Les propositions sélectionnées ont été éliminées.');
+        } else {
+            MessageFlash::ajouter('danger', 'Vous n\'êtes pas responsable de cette question');
+
         }
-        MessageFlash::ajouter('succes', 'Les propositions sélectionnées ont été éliminées.');
+        Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
+    }
+
+    public static function annulerEliminer()
+    {
+        $proposition = (new PropositionRepository())->select($_GET['idProposition']);
+        $question = (new QuestionRepository())->select($proposition->getIdQuestion());
+        $propositions = $question->getPropositionsTrie();
+        if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant()
+            && $question->getPhase() == 'entre' && $question->aPassePhase()) {
+            $proposition->setEstEliminee(false);
+            (new PropositionRepository())->update($proposition);
+            foreach ($propositions as $propo) {
+                if (array_search($propo, $propositions) > array_search($proposition, $propositions)
+                    && $propo->isEstEliminee()) {
+                    $propo->setEstEliminee(false);
+                    (new PropositionRepository())->update($propo);
+                }
+            }
+            MessageFlash::ajouter('success', 'Vous avez annulé l\'élimination de ces propositions.');
+        } else {
+            MessageFlash::ajouter('danger', 'Vous n\'êtes pas responsable de cette question');
+        }
         Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
     }
 

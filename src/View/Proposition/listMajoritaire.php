@@ -37,10 +37,10 @@
     foreach ($propositions as $proposition) {
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
-        if ($proposition->isEstEliminee()){
+        if ($proposition->isEstEliminee()) {
             echo '<div style="background: #000e17" class=proposition>';
             echo '<h3>(Eliminé)</h3>';
-        }else{
+        } else {
             echo '<div class=proposition>';
         }
         echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
@@ -80,33 +80,37 @@
                 }
                 echo '<span style="font-size: 18px">' . $attribut . '</span></a>';
             }
-            $nbVotes = htmlspecialchars($proposition->getNbVotes());
-            $nbEtoiles = htmlspecialchars($proposition->getNbEtoiles());
-            echo '<br > ';
-            echo '<h3>Nombre de votes : ' . $nbVotes . '</h3>';
-            $votesProposition = (new VoteRepository())->selectWhere($proposition->getId(), '*',
-                'idProposition', 'Votes', 'valeurvote');
-            if ($nbVotes > 0) {
-                if ($nbVotes == 1) {
-                    $median = $votesProposition[0];
+        }
+        $nbVotes = htmlspecialchars($proposition->getNbVotes());
+        $nbEtoiles = htmlspecialchars($proposition->getNbEtoiles());
+        echo '<br > ';
+        echo '<h3>Nombre de votes : ' . $nbVotes . '</h3>';
+        $votesProposition = (new VoteRepository())->selectWhere($proposition->getId(), '*',
+            'idProposition', 'Votes', 'valeurvote');
+        if ($nbVotes > 0) {
+            if ($nbVotes == 1) {
+                $median = $votesProposition[0];
+            } else {
+                if (sizeof($votesProposition) % 2 == 0) {
+                    $median = $votesProposition[(sizeof($votesProposition) / 2) - 1];
                 } else {
-                    if (sizeof($votesProposition) % 2 == 0) {
-                        $median = $votesProposition[(sizeof($votesProposition) / 2) - 1];
-                    } else {
-                        $median = $votesProposition[((sizeof($votesProposition) + 1) / 2) - 1];
-                    }
+                    $median = $votesProposition[((sizeof($votesProposition) + 1) / 2) - 1];
                 }
-                echo '<h3>Moyenne des votes : ' . htmlspecialchars($nbEtoiles / $nbVotes) . '</h3>';
-                echo '<h3>Médianne :  ' . htmlspecialchars($median->getValeur()) . '</h3>';
             }
+            echo '<h3>Moyenne des votes : ' . htmlspecialchars($nbEtoiles / $nbVotes) . '</h3>';
+            echo '<h3>Médianne :  ' . htmlspecialchars($median->getValeur()) . '</h3>';
         }
 
 
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
             $question->getPhase() == 'entre' && $question->aPassePhase()) {
-            echo '<a href="index.php?controller=proposition&action=eliminer&idProposition=' . $idPropositionURL . '">Eliminer</a><br>';
-        }
+            if ($proposition->isEstEliminee()) {
+                echo '<a href="index.php?controller=proposition&action=annulerEliminer&idProposition=' . $idPropositionURL . '">Eliminer</a><br>';
 
+            } else {
+                echo '<a href="index.php?controller=proposition&action=eliminer&idProposition=' . $idPropositionURL . '">Eliminer</a><br>';
+            }
+        }
 
 
         if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
