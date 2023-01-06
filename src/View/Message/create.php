@@ -10,7 +10,7 @@
         <?php
         if (isset($utilisateurs)) {
             foreach ($utilisateurs as $utilisateur) {
-                echo '<br><a href="index.php?action=read&controller=message&idContact=' . $utilisateur->getIdentifiant() . '">
+                echo '<br><a href="index.php?action=read&controller=message&idContact=' . rawurlencode($utilisateur->getIdentifiant()) . '">
                 ' . $utilisateur->getIdentifiant() . '</a>';
             }
         }

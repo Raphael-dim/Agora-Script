@@ -96,11 +96,11 @@
                 }
                 if ($val <= $vote->getValeur()) {
                     echo '<a class=vote style="background:#a94442" 
-                        href="index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '">
+                        href="index.php?controller=vote&action=choix&idProposition=' . rawurlencode($proposition->getId()) . '&valeur=' . rawurlencode($val) . '">
                         <img src=../web/images/coeur_logo.png alt="">';
                 } else {
                     echo '<a class=vote 
-                    href="index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '">
+                    href="index.php?controller=vote&action=choix&idProposition=' . rawurlencode($proposition->getId()) . '&valeur=' . rawurlencode($val) . '">
                         <img src=../web/images/coeur_logo.png alt="">
                         ';
                 }
