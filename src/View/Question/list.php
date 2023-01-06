@@ -74,7 +74,7 @@ if (isset($_GET['selection'])) {
 
         echo ' <p class=titre> ' . $titreHTML . ' </p>
             <a href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($question->getOrganisateur()->getIdentifiant()) . '" class = "auteur link-custom">par ' . $organisateur . ' </a >';
-        echo '<p class="description">' . htmlspecialchars($question->getDescription()) . '</p>';
+        echo '<p class="description mdparse" >' . htmlspecialchars($question->getDescription()) . '</p>';
         if ($question->getPhase() == 'debut' || ConnexionUtilisateur::estAdministrateur()) {
             if (ConnexionUtilisateur::estAdministrateur() || (ConnexionUtilisateur::estConnecte() &&
                     ConnexionUtilisateur::getLoginUtilisateurConnecte() == $organisateur)) {
@@ -113,3 +113,9 @@ if (isset($_GET['selection'])) {
     }
     ?>
 </ul>
+
+<script>
+    Array.from(document.getElementsByClassName('mdparse')).forEach(elem =>{
+        elem.innerHTML = marked.parse(elem.innerHTML);
+    });
+</script>

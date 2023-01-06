@@ -1,5 +1,6 @@
 <?php
 echo '<div  class ="custom-form">';
+
 use App\Vote\Config\FormConfig as FormConfig;
 use App\Vote\Model\DataObject\Responsable;
 
@@ -11,12 +12,16 @@ if (isset($_POST['next'])) {
         FormConfig::redirect('index.php?controller=proposition&action=updated');
     } else {
         FormConfig::postSession();
-        FormConfig::redirect("index.php?controller=proposition&action=created&idQuestion=".$_GET['idQuestion']);
+        FormConfig::redirect("index.php?controller=proposition&action=created&idQuestion=" . $question->getId());
     }
-}
-else if (isset($_POST['previous'])) {
+} else if (isset($_POST['previous'])) {
     FormConfig::postSession();
-    FormConfig::redirect("index.php?controller=proposition&action=form&step=1&idQuestion=".$_GET['idQuestion']);
+    if (isset($_GET['idProposition'])) {
+        FormConfig::redirect("index.php?controller=proposition&action=form&step=1&idProposition=" . $_GET['idProposition']);
+    } else {
+        FormConfig::redirect("index.php?controller=proposition&action=form&step=1&idQuestion=");
+
+    }
 }
 
 
@@ -42,6 +47,7 @@ function removeuser(string $id): void
 }
 
 require_once "../src/View/Utilisateurs/select.php";
+
 ?>
 <form method="post" class="nav">
     <input type="submit" name=previous id="precedent" value="Retour">

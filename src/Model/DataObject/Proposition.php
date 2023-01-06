@@ -4,7 +4,7 @@ namespace App\Vote\Model\DataObject;
 
 use App\Vote\Model\Repository\CoAuteurRepository;
 use App\Vote\Model\Repository\PropositionSectionRepository;
-use App\Vote\Model\Repository\VoteRepository;
+use App\Vote\Model\Repository\ResponsableRepository;
 
 class Proposition extends AbstractDataObject
 {
@@ -15,6 +15,23 @@ class Proposition extends AbstractDataObject
     private int $nbEtoiles;
     private int $nbVotes;
     private bool $estEliminee;
+    private float $Votemedian = 0;
+
+    /**
+     * @return float
+     */
+    public function getVotemedian(): float
+    {
+        return $this->Votemedian;
+    }
+
+    /**
+     * @param float $Votemedian
+     */
+    public function setVotemedian(float $Votemedian): void
+    {
+        $this->Votemedian = $Votemedian;
+    }
 
     /**
      * @param int $id
@@ -49,6 +66,7 @@ class Proposition extends AbstractDataObject
         return $this->estEliminee;
     }
 
+
     /**
      * @param bool $estEliminee
      */
@@ -63,13 +81,6 @@ class Proposition extends AbstractDataObject
     public function getNbEtoiles(): int
     {
         return $this->nbEtoiles;
-    }
-
-    public function getMedian(): int
-    {
-        $votesProposition = (new VoteRepository())->selectWhere($this->id, '*',
-            'idProposition', 'Votes', 'valeurvote');
-        return $median = $votesProposition[($this->nbVotes/2)-1 + $this->nbVotes%2]->getValeur();
     }
 
     /**

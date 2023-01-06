@@ -9,6 +9,7 @@ use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\CoAuteur;
 use App\Vote\Model\DataObject\Proposition;
 use App\Vote\Model\DataObject\PropositionSection;
+use App\Vote\Model\DataObject\Question;
 use App\Vote\Model\DataObject\Responsable;
 use App\Vote\Model\HTTP\Session;
 use App\Vote\Model\Repository\CalendrierRepository;
@@ -60,7 +61,7 @@ class ControllerProposition
         $view = "";
         $step = $_GET['step'] ?? 1;
         $params = array();
-        $params['question'] = (new QuestionRepository())->select($_GET['idQuestion']);
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
         switch ($step) {
             case 1:
                 $view = "step-1";
@@ -69,7 +70,7 @@ class ControllerProposition
                 if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row" != "") {
                     $row = $_POST['row'];
                     $keyword = $_POST['keyword'];
-                    $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, $row);
+                    $utilisateurs = (new UtilisateurRepository())->selectKeywordUtilisateur($keyword);
                     $params['utilisateurs'] = $utilisateurs;
                 }
                 $view = "step-2";
@@ -78,7 +79,8 @@ class ControllerProposition
 
         Controller::afficheVue('view.php',
             array_merge(["pagetitle" => "Créer une question",
-                "cheminVueBody" => "Proposition/create/" . $view . ".php"], $params));
+                "cheminVueBody" => "Proposition/create/" . $view . ".php",
+                "question" => $question], $params));
     }
 
 
@@ -144,16 +146,16 @@ class ControllerProposition
         $bool = true;
 
         if (!ConnexionUtilisateur::estConnecte() || !Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition, 
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas créer de proposition, 
             vous n'êtes pas responsable pour cette question.");
             $bool = false;
         }
         if ($question->getPhase() != 'ecriture') {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition en dehors de la phase d'écriture.");
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas créer de proposition en dehors de la phase d'écriture.");
             $bool = false;
         }
         if (Responsable::aCreeProposition($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
-            MessageFlash::ajouter("warning", "Vous avez déjà crée une proposition pour cette question.");
+            MessageFlash::ajouter("danger", "Vous avez déjà crée une proposition pour cette question.");
             $bool = false;
         }
         if (!$bool) {
@@ -167,7 +169,7 @@ class ControllerProposition
         $coAuteursSelec = $_SESSION[FormConfig::$arr]['co-auteur'];
         $proposition->setId($propositionBD);
         foreach ($coAuteursSelec as $coAutSelec) {
-            $aut = new CoAuteur((new UtilisateurRepository())->select($coAutSelec), (new PropositionRepository())->select($propositionBD));
+            $aut = new CoAuteur((new UtilisateurRepository())->select($coAutSelec), $proposition);
             (new CoAuteurRepository())->sauvegarder($aut);
         }
         $sections = $question->getSections();
@@ -192,11 +194,10 @@ class ControllerProposition
     {
         if (!isset($_GET['idProposition'])) {
             MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
-            Controller::redirect('index.php?controller=proposition&action=readAll');
+            Controller::redirect('index.php');
         }
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
-        $idquestion = $proposition->getIdQuestion();
-        $question = (new QuestionRepository)->select($idquestion);
+        $question = (new QuestionRepository)->select($proposition->getIdQuestion());
         $bool = true;
         $coauteurs = $proposition->getCoAuteurs();
         $coauteursid = array();
@@ -216,14 +217,26 @@ class ControllerProposition
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier cette proposition en dehors de la phase d'écriture.");
             $bool = false;
         }
+        if (!isset($_GET['idProposition'])) {
+            MessageFlash::ajouter("warning", "Proposition introuvable");
+            $bool = false;
+        } else {
+            $proposition = (new PropositionRepository())->select($_GET['idProposition']);
+            if ($proposition == null) {
+                MessageFlash::ajouter("warning", "Proposition introuvable");
+                $bool = false;
+            }
+        }
         if (!$bool) {
             Controller::redirect("index.php?action=readAll&controller=proposition");
         } else {
             FormConfig::setArr('SessionProposition');
             FormConfig::startSession();
+            $_SESSION[FormConfig::$arr]['idProposition'] = $_GET['idProposition'];
+            FormConfig::initialiserSessionsProposition($proposition);
             Controller::afficheVue('view.php', ["pagetitle" => "Modifier une proposition",
                 "cheminVueBody" => "Proposition/create/step-1.php",
-                "idProposition" => $_GET['idProposition'],
+                "proposition" => $proposition,
                 "question" => $question]);
         }
     }
@@ -313,24 +326,57 @@ class ControllerProposition
         }
     }
 
-    public static function eliminer()
+    public
+    static function eliminer()
     {
+        $bool = false;
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         $question = (new QuestionRepository())->select($proposition->getIdQuestion());
         $propositions = $question->getPropositionsTrie();
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant()
-            && $question->getPhase() == 'entre' && $question->aPassePhase()) {
+            && ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') & $question->aPassePhase()) {
             $proposition->setEstEliminee(true);
             (new PropositionRepository())->update($proposition);
             foreach ($propositions as $propo) {
-                if (array_search($propo, $propositions) > array_search($proposition, $propositions)
-                    && !$propo->isEstEliminee()) {
+                if ($propo->getId() == $_GET['idProposition']) {
+                    $bool = true;
+                }
+                if ($bool && !$propo->isEstEliminee()) {
                     $propo->setEstEliminee(true);
                     (new PropositionRepository())->update($propo);
                 }
             }
+            MessageFlash::ajouter('success', 'Les propositions sélectionnées ont été éliminées.');
+        } else {
+            MessageFlash::ajouter('danger', 'Vous n\'êtes pas responsable de cette question');
         }
-        MessageFlash::ajouter('succes', 'Les propositions sélectionnées ont été mise à jour');
+        Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
+    }
+
+    public
+    static function annulerEliminer()
+    {
+        $bool = true;
+        $proposition = (new PropositionRepository())->select($_GET['idProposition']);
+        $question = (new QuestionRepository())->select($proposition->getIdQuestion());
+        $propositions = $question->getPropositionsTrie();
+        if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant()
+            && ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') & $question->aPassePhase()) {
+            $proposition->setEstEliminee(false);
+            (new PropositionRepository())->update($proposition);
+            foreach ($propositions as $propo) {
+                if ($propo->getId() == $_GET['idProposition']) {
+                    $bool = false;
+                }
+                if ($bool && $propo->isEstEliminee()) {
+                    $propo->setEstEliminee(false);
+                    (new PropositionRepository())->update($propo);
+                }
+            }
+            MessageFlash::ajouter('success', 'Vous avez annulé l\'élimination de ces propositions.');
+        } else {
+            MessageFlash::ajouter('danger', 'Vous n\'êtes pas responsable de cette question');
+        }
         Controller::redirect('index.php?controller=proposition&action=readAll&idQuestion=' . $question->getId());
     }
 
