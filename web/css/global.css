@@ -145,6 +145,7 @@ fieldset {
 
 
 .questions .listes {
+    padding: 8px;
     position: relative;
     border-radius: 7px;
     border-width: 1px;
@@ -795,7 +796,7 @@ h1 > strong.color-orange {
     /*max-width: max-content;*/
     word-wrap: break-word;
     white-space: normal;
-    max-width: 50%;
+    max-width: 60%;
 }
 
 div p {
