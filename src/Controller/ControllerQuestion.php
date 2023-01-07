@@ -214,7 +214,7 @@ class ControllerQuestion
             } else {
                 (new QuestionRepository())->delete($question->getId());
                 MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
-                Controller::redirect("index.php?action=form&controller=question&step=6");
+                //Controller::redirect("index.php?action=form&controller=question&step=6");
             }
         }
 

@@ -117,6 +117,10 @@ class ControllerProposition
         // si oui, on récupère la question grâce à l'objet Proposition.
         $votants = $question->getVotants();
         $propositions = $question->getPropositionsTrie();
+        if (sizeof($propositions) == 0) {
+            MessageFlash::ajouter('info', 'Il n\'y a pas de propositions pour cette question.');
+            Controller::redirect('index.php?action=readAll&controller=question');
+        }
 
         if ($question->getSystemeVote() == 'majoritaire' || $question->getSystemeVote() == 'valeur') {
 

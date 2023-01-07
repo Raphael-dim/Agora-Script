@@ -59,6 +59,8 @@ class ControllerUtilisateur
             }
             if (!VerificationEmail::aValideEmail($utilisateur)) {
                 MessageFlash::ajouter('warning', 'Vous devez valider votre compte, vérifiez votre boite mail, ainsi que vos spams.');
+                MessageFlash::ajouter('info', 'Cliquez <a style="color: black" href="index.php?action=renvoyerMailValidation&controller=utilisateur&idUtilisateur=' . $utilisateur->getIdentifiant() . '">
+                ici</a> pour renvoyer un mail.');
                 Controller::redirect('index.php?controller=utilisateur&action=connexion');
             } else {
                 ConnexionUtilisateur::connecter($utilisateur->getIdentifiant());
@@ -66,6 +68,18 @@ class ControllerUtilisateur
                 Controller::redirect("index.php?controller=accueil&action=home");
             }
         }
+    }
+
+    public static function renvoyerMailValidation()
+    {
+        try {
+            VerificationEmail::envoiEmailValidation((new UtilisateurRepository())->select($_GET['idUtilisateur']));
+        } catch (TransportExceptionInterface $e) {
+            MessageFlash::ajouter('warning', 'L\'envoie du mail a échoué');
+            Controller::redirect('index.php?action=connexion&controller=utilisateur');
+        }
+        MessageFlash::ajouter('info', 'Le mail a été renvoyé, vérifiez vos spams');
+        Controller::redirect('index.php?action=connexion&controller=utilisateur');
     }
 
     public static function read()
@@ -127,7 +141,7 @@ class ControllerUtilisateur
             }
             (new UtilisateurRepository())->sauvegarder($utilisateur);
             MessageFlash::ajouter("success", "Le compte a bien été crée");
-            MessageFlash::ajouter("success", "Pour valider votre compte, vérifiez votre boite mail et vos spams");
+            MessageFlash::ajouter("info", "Pour valider votre compte, vérifiez votre boite mail et vos spams");
             //ConnexionUtilisateur::connecter($utilisateur->getIdentifiant());
             Controller::redirect("index.php?controller=utilisateur&action=connexion");
         }
