@@ -7,17 +7,43 @@
     use App\Vote\Model\DataObject\Votant;
     use App\Vote\Model\Repository\VoteRepository;
 
-    $modeScrutin = 'Scrutin par jugement majoritaire (médiane) ';
-    $message = 'Le scrutin majoritaire établit un \'vote médian\' pour chaque proposition, 
-                    par défaut, la mention \'passable\' est sélectionnée.
-                    Notez chaque proposition entre 1 et 6 ci-dessous.';
-
+    if ($question->getSystemeVote() == 'majoritaire') {
+        $methodeTrie = 'en fonction de leur vote médian';
+        $inferieur = 'un vote médian';
+        $modeScrutin = 'Scrutin par jugement majoritaire (médiane) ';
+        $message = 'Le scrutin majoritaire établit un \'vote médian\' pour chaque proposition, 
+                    par défaut, la mention \'passable\' est sélectionnée.<br>
+                    Vous devez choisir une mention pour chaque proposition.';
+    } else if ($question->getSystemeVote() == 'valeur') {
+        $methodeTrie = 'par moyenne de votes';
+        $inferieur = 'une moyenne de votes';
+        $modeScrutin = 'Scrutin par jugement majoritaire (moyenne) ';
+        $message = 'Ce système de vote établit une moyenne de vote pour chaque proposition, 
+                    par défaut, la mention \'passable\' est sélectionnée.<br>
+                    Vous devez choisir une mention pour chaque proposition.';
+    }
+    if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
+        ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
+        $organisateurRole = 'Vous êtes responsable pour cette question multiphase';
+        $messageOrganisateur = 'Vous pouvez éliminer les propositions les moins attractives. <br>
+                Par défaut, elles sont triées ' . $methodeTrie . ', si vous éliminez
+            une proposition, vous éliminez aussi celles qui ont ' . $inferieur . ' inférieur.<br>
+            A l\'inverse si vous annuler l\'élimination d\'une proposition, vous annulez l\'élimination de celles qui ' . $inferieur . ' supérieur.';
+        ?>
+        <h2><?= $organisateurRole ?></h2>
+        <p class="survol">
+            <img class="imageAide" src="images/aide_logo.png" alt=""/>
+            <span class="messageInfo"><?= $messageOrganisateur ?></span>
+        </p>
+        <?php
+        echo '<h2></h2>';
+    }
 
     ?>
     <h2><?= $modeScrutin ?></h2>
     <p class="survol">
         <img class="imageAide" src="images/aide_logo.png" alt=""/>
-        <span><?= $message ?></span>
+        <span class="messageInfo"><?= $message ?></span>
     </p>
     <?php
     $i = 1;
@@ -37,10 +63,10 @@
     foreach ($propositions as $proposition) {
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
-        if ($proposition->isEstEliminee()){
+        if ($proposition->isEstEliminee()) {
             echo '<div style="background: #000e17" class=proposition>';
             echo '<h3>(Eliminé)</h3>';
-        }else{
+        } else {
             echo '<div class=proposition>';
         }
         echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
@@ -80,14 +106,25 @@
                 }
                 echo '<span style="font-size: 18px">' . $attribut . '</span></a>';
             }
-            $nbVotes = htmlspecialchars($proposition->getNbVotes());
-            $nbEtoiles = htmlspecialchars($proposition->getNbEtoiles());
-            echo '<br > ';
-            echo '<h3>Nombre de votes : ' . $nbVotes . '</h3>';
-            $votesProposition = (new VoteRepository())->selectWhere($proposition->getId(), '*',
-                'idProposition', 'Votes', 'valeurvote');
-            if ($nbVotes > 0) {
-                if ($nbVotes == 1) {
+        }
+        $nbEtoiles = htmlspecialchars($proposition->getNbEtoiles());
+        echo '<br > ';
+
+        /*
+            On récupère les votes dans la vue pour éviter de faire plusieurs appel à la base de donnée
+        dans le controller. La méthode ReadAll() n'est pas appelée par le controllerVote lors du vote / modification de vote.
+        Si c'était le cas, on devrait refaire un appel à la base de donnée pour récupérer la question, les propositions et les votants
+        à chaque interaction avec le système de vote.
+
+        */
+
+
+        $votesProposition = (new VoteRepository())->selectWhere($proposition->getId(), '*',
+            'idProposition', 'Votes', 'valeurvote');
+        echo '<h3>Nombre de votes : ' . sizeof($votesProposition) . '</h3>';
+        if (sizeof($votesProposition) > 0) {
+            if ($question->getSystemeVote() == 'majoritaire') {
+                if (sizeof($votesProposition) == 1) {
                     $median = $votesProposition[0];
                 } else {
                     if (sizeof($votesProposition) % 2 == 0) {
@@ -96,32 +133,36 @@
                         $median = $votesProposition[((sizeof($votesProposition) + 1) / 2) - 1];
                     }
                 }
-                echo '<h3>Moyenne des votes : ' . htmlspecialchars($nbEtoiles / $nbVotes) . '</h3>';
-                echo '<h3>Médianne :  ' . htmlspecialchars($median->getValeur()) . '</h3>';
+                echo '<h3>Vote médian :  ' . htmlspecialchars(number_format($median->getValeur(), 3)) . '</h3>';
+            } else {
+                echo '<h3>Moyenne des votes : ' . htmlspecialchars(number_format($nbEtoiles / sizeof($votesProposition), 3),) . '</h3>';
             }
         }
 
 
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
-            $question->getPhase() == 'entre' && $question->aPassePhase()) {
-            echo '<a href="index.php?controller=proposition&action=eliminer&idProposition=' . $idPropositionURL . '">Eliminer</a><br>';
+            ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
+            if ($proposition->isEstEliminee()) {
+                echo '<p><a href="index.php?controller=proposition&action=annulerEliminer&idProposition=' . $idPropositionURL . '">Annuler l\'élimination</a><br></p>';
+            } else {
+                echo '<p><a href="index.php?controller=proposition&action=eliminer&idProposition=' . $idPropositionURL . '">Eliminer</a><br></p>';
+            }
         }
-
-
 
         if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
             $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte() &&
             $question->getPhase() == 'ecriture') {
 
-            echo ' <a href="index.php?action=update&controller=proposition&idProposition=' .
-                rawurlencode($proposition->getId()) . '"><img class="modifier" src = "..\web\images\modifier.png" ></a ><br> ';
+            echo ' <p><a href="index.php?action=update&controller=proposition&idProposition=' .
+                rawurlencode($proposition->getId()) . '"><img class="modifier" src = "..\web\images\modifier.png" ></a ><br></p> ';
         }
+
         if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable() && $question->getPhase() == 'ecriture') {
-            echo ' <a class="nav suppProp" 
-            href=index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '>Supprimer</a>';
+            echo ' <p><a class="nav suppProp" 
+            href=index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '>Supprimer</a><br></p>';
         }
         $i++;
-        echo '<a href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($proposition->getIdResponsable()) . '" >par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a >';
+        echo '<p><a href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($proposition->getIdResponsable()) . '" >par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a></p>';
         echo '</div>';
     }
     ?>

@@ -42,9 +42,9 @@ $nbSection = $_SESSION[FormConfig::$arr]['nbSections'];
                 </p>
                 <p class ="champ">
                     <label>Description :</label>
-                    <textarea maxlength="350" name=description' . $i . ' rows="7" cols="50" required>' . FormConfig::TextField('description' . $i) . '</textarea>
-                     <script>
-                        const easyMDE = new EasyMDE({ forceSync: true});
+                    <textarea maxlength="350" name=description' . $i . ' rows="7" cols="50" required id = "ta'.$i.'">' . FormConfig::TextField('description' . $i) . '</textarea>
+                    <script>
+                         const easyMDE'.$i.' = new createMarkdownEditor({forceSync: true, element: document.getElementById("ta'.$i.'")});
                     </script>
                     <label>350 caractères maximum</label>
                </p>';

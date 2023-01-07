@@ -203,8 +203,23 @@ class Question extends AbstractDataObject
                 $propositionsTrie[] = $proposition;
             }
             usort($propositionsTrie, array($this, "trieMedianne"));
+        } else if ($this->systemeVote == 'valeur') {
+            usort($propositions, array($this, "trieMoyenne"));
         }
         return $propositions;
+    }
+
+    function trieMoyenne(Proposition $proposition1, Proposition $proposition2)
+    {
+        if ($proposition1->getNbVotes() == 0 && $proposition2->getNbVotes() == 0) {
+            return 0;
+        }
+        $moyenneProposition1 = $proposition1->getNbEtoiles() / $proposition1->getNbVotes();
+        $moyenneProposition2 = $proposition2->getNbEtoiles() / $proposition2->getNbVotes();
+        if ($moyenneProposition1 == $moyenneProposition2) {
+            return 0;
+        }
+        return ($moyenneProposition1 > $moyenneProposition2) ? -1 : 1;
     }
 
     function trieMedianne(Proposition $proposition1, Proposition $proposition2)
