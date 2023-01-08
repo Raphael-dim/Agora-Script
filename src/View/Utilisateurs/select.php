@@ -21,7 +21,7 @@ if (isset($_POST["keyword"])) {
     foreach ($_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']] as $responsable) {
         echo '
                 <span class="utilisateurs">
-                <button class="nav" type = submit value = "' . htmlspecialchars($responsable). '" name = "delete">' . htmlspecialchars($responsable) . '</button>
+                <button class="utilisateur" type = submit value = "' . htmlspecialchars($responsable). '" name = "delete">' . htmlspecialchars($responsable) . '</button>
                 
                 </span>
             ';
