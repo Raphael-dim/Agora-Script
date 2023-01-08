@@ -57,7 +57,7 @@ foreach ($messages as $message) {
     <p class="champ">
         <label for="message_id">Message : </label>
         <textarea id="message_id" maxlength="350" name="message" rows="7" cols="50" required> </textarea>
-        <label>350 caractères maximum</label>
+        <label class="maximum">350 caractères maximum</label>
     </p>
     <input id="suivant" type="submit" value="Envoyer" class="nav">
 

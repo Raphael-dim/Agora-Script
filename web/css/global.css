@@ -1129,9 +1129,10 @@ select {
 .zoneTexte {
     color: white;
     margin-top: 5%;
-    max-width: max-content;
+    max-width: 60%;
     padding: 10px 10px 60px 10px;
-    margin-left: 20%;
+    margin-left: auto;
+    margin-right: auto;
     /*background-color: #012e49;*/
     border: 2px #9c9da0 solid;
     border-radius: 5px;
@@ -1139,7 +1140,7 @@ select {
 
 .zoneTexte textarea {
     color: white;
-    background-color: rgba(91, 179, 231, 0.33);
+    background-color: rgba(232, 239, 243, 0.45);
 }
 
 .messageInfo {
@@ -1165,4 +1166,10 @@ input {
 
 .editor-toolbar {
     margin-top: 7px;
+}
+
+.maximum {
+    display-inside: ruby-text;
+    float: right;
+    display: flex;
 }
