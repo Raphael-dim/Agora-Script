@@ -26,9 +26,10 @@
     if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
         ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
         $organisateurRole = 'Vous êtes responsable pour cette question multiphase';
-        $messageOrganisateur = 'Vous pouvez éliminer les propositions les moins attractives. 
+        $messageOrganisateur = 'Vous pouvez éliminer les propositions les moins attractives. <br>
                 Par défaut, elles sont triées ' . $methodeTrie . ', si vous éliminez
-            une proposition, vous éliminez aussi celles qui ont ' . $inferieur . ' inférieur.';
+            une proposition, vous éliminez aussi celles qui ont ' . $inferieur . ' inférieur.<br>
+            A l\'inverse si vous annuler l\'élimination d\'une proposition, vous annulez l\'élimination de celles qui ' . $inferieur . ' supérieur.';
         ?>
         <h2><?= $organisateurRole ?></h2>
         <p class="survol">

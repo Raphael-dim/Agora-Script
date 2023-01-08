@@ -4,6 +4,7 @@
         <div class="detail_question ">
             <h1><strong class="custom_strong color-blue">Titre :</strong></h1>
             <p> <?= htmlspecialchars($question->getTitre()) ?></p>
+
             <h1><strong class="custom_strong color-blue">Description :</strong></h1>
             <p class = "mdparse"> <?= htmlspecialchars($question->getDescription()) ?></p>
 
@@ -75,34 +76,33 @@
                     if ($i != 1) {
                         echo '<h2 style="color: #012e49">' . $i . '<sup>e</sup> phase</h2>';
                     }
-                    if (!is_null($calendrier->getDebutEcriture())) {
-                        if ($question->getPhase() == 'debut' && $calendrierActuel == $calendrier) {
-                            echo $cercle;
-                        }
-                        echo '<span class="vertical-line-petite" style="background: grey"></span>';
-                        ?>
+                    if ($question->getPhase() == 'debut' && $calendrierActuel == $calendrier) {
+                        echo $cercle;
+                    }
+                    echo '<span class="vertical-line-petite" style="background: grey"></span>';
+                    ?>
 
-                        <p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_debut">
-                            Début
-                            d'écriture des
-                            propositions
-                            : <br>
-                            <?= htmlspecialchars($calendrier->getDebutEcriture()) ?></p>
-                        <?php
-                        if ($question->getPhase() == 'ecriture' && $calendrierActuel == $calendrier) {
-                            echo '<span class="vertical-line-petite" style="background: rgba(206,22,22,0.61)"></span>';
-                            echo $cercle;
+                    <p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_debut">
+                        Début
+                        d'écriture des
+                        propositions
+                        : <br>
+                        <?= htmlspecialchars($calendrier->getDebutEcriture()) ?></p>
+                    <?php
+                    if ($question->getPhase() == 'ecriture' && $calendrierActuel == $calendrier) {
+                        echo '<span class="vertical-line-petite" style="background: rgba(206,22,22,0.61)"></span>';
+                        echo $cercle;
 
-                            echo '<span class="vertical-line-petite" style="background: #CE16169B"></span>';
-                        } else {
-                            echo '<span class="vertical-line" style="background: #CE16169B"></span>';
-                        } ?>
-                        <p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_fin">Fin
-                            d'écriture des
-                            propositions :
-                            <br>
-                            <?= htmlspecialchars($calendrier->getFinEcriture()) ?></p>
-                    <?php }
+                        echo '<span class="vertical-line-petite" style="background: #CE16169B"></span>';
+                    } else {
+                        echo '<span class="vertical-line" style="background: #CE16169B"></span>';
+                    } ?>
+                    <p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_fin">Fin
+                        d'écriture des
+                        propositions :
+                        <br>
+                        <?= htmlspecialchars($calendrier->getFinEcriture()) ?></p>
+                    <?php
 
 
                     if ($question->getPhase() == 'entre' && $calendrierActuel == $calendrier) {
@@ -145,7 +145,7 @@
 
 
 <script>
-    Array.from(document.getElementsByClassName('mdparse')).forEach(elem =>{
+    Array.from(document.getElementsByClassName('mdparse')).forEach(elem => {
         elem.innerHTML = marked.parse(elem.innerHTML);
     });
 </script>

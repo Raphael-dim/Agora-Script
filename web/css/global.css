@@ -108,6 +108,7 @@ fieldset {
 
 
 .questions .listes {
+    padding: 8px;
     position: relative;
     border-radius: 7px;
     border-width: 1px;
@@ -732,7 +733,7 @@ h1 > .custom_strong.color-orange {
     /*max-width: max-content;*/
     word-wrap: break-word;
     white-space: normal;
-    max-width: 50%;
+    max-width: 60%;
 }
 
 div p {
@@ -927,24 +928,6 @@ div p {
 
 input, textarea{
     font-size: 18px;
-}
-
-input:invalid + span:after {
-    position: absolute;
-    content: '✖';
-    color: red;
-    padding-left: 5px;
-}
-
-.validity {
-    background-color: transparent;
-}
-
-input:valid + span:after {
-    position: absolute;
-    content: '✓';
-    color: green;
-    padding-left: 5px;
 }
 
 .footer {
