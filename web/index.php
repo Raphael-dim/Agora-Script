@@ -2,7 +2,9 @@
 
 require_once '../src/Lib/Psr4AutoloaderClass.php';
 
+use App\Vote\Controller\Controller;
 use App\Vote\Controller\ControllerAccueil;
+use App\Vote\Lib\MessageFlash;
 use App\Vote\Model\DatabaseConnection as Model;
 use App\Vote\Model\HTTP\Session;
 
@@ -52,9 +54,11 @@ if (class_exists($controllerClassName)) {
     if (in_array($action, get_class_methods(new $controllerClassName)) == true) {
         $controllerClassName::$action();
     } else {
-        ControllerAccueil::erreur();
+        MessageFlash::ajouter('warning', 'Page introuvable');
+        Controller::redirect('index.php');
     }
 } else {
-    ControllerAccueil::erreur();
+    MessageFlash::ajouter('warning', 'Page introuvable');
+    Controller::redirect('index.php');
 }
 

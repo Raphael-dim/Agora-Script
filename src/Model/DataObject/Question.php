@@ -241,11 +241,11 @@ class Question extends AbstractDataObject
         $date = date('Y-m-d H:i');
         if ($date < $this->getCalendrier()->getDebutEcriture(true)) {
             return 'debut';
-        } else if ($date > $this->getCalendrier()->getDebutEcriture(true) && $date < $this->getCalendrier()->getFinEcriture(true)) {
+        } else if ($date >= $this->getCalendrier()->getDebutEcriture(true) && $date < $this->getCalendrier()->getFinEcriture(true)) {
             return 'ecriture';
         } else if ($date > $this->getCalendrier()->getFinEcriture(true) && $date < $this->getCalendrier()->getDebutVote(true)) {
             return 'entre';
-        } else if ($date > $this->getCalendrier()->getDebutVote(true) && $date < $this->getCalendrier()->getFinVote(true)) {
+        } else if ($date >= $this->getCalendrier()->getDebutVote(true) && $date < $this->getCalendrier()->getFinVote(true)) {
             return 'vote';
         } else {
             return 'fini';
@@ -268,7 +268,7 @@ class Question extends AbstractDataObject
         }
         $date = date('Y-m-d H:i:s');
         foreach ($this->calendriers as $calendrier) {
-            if ($date < $calendrier->getDebutVote(true) || ($date > $calendrier->getDebutEcriture(true) && $date < $calendrier->getFinVote(true))) {
+            if ($date <= $calendrier->getDebutVote(true) || ($date >= $calendrier->getDebutEcriture(true) && $date <= $calendrier->getFinVote(true))) {
                 return $calendrier;
             }// Si la date courante est comprise dans le calendrier, on retourne le calendrier.
         }
@@ -278,7 +278,7 @@ class Question extends AbstractDataObject
          * supérieure à la date courante.
          * */
         foreach ($this->calendriers as $calendrier) {
-            if ($date < $calendrier->getDebutEcriture(true)) {
+            if ($date <= $calendrier->getDebutEcriture(true)) {
                 return $calendrier;
             }
         }

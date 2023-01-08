@@ -1,3 +1,4 @@
+<link href="css/ListePropositions.css" rel="stylesheet">
 <div class="propositions">
     <?php
 
@@ -32,7 +33,7 @@
         ?>
         <h2><?= $organisateurRole ?></h2>
         <p class="survol">
-            <img class="imageAide" src="images/aide_logo.png" alt=""/>
+            <img class="imageAide" src="images/aide_logo.png" alt="aide"/>
             <span class="messageInfo"><?= $messageOrganisateur ?></span>
         </p>
         <?php
@@ -42,7 +43,7 @@
     ?>
     <h2><?= $modeScrutin ?></h2>
     <p class="survol">
-        <img class="imageAide" src="images/aide_logo.png" alt=""/>
+        <img class="imageAide" src="images/aide_logo.png" alt="aide"/>
         <span class="messageInfo"><?= $message ?></span>
     </p>
     <?php
@@ -69,8 +70,8 @@
         } else {
             echo '<div class=proposition>';
         }
-        echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
-            $idPropositionURL . '"> <h2>' . $titreHTML . '</h2>   </a>';
+
+        echo '<p class=titre> <h2>' . $titreHTML . ' </h2 </p>';
         if ($peutVoter && !$proposition->isEstEliminee()) {
             $vote = Votant::aVote($proposition, $votes, 'majoritaire');
             for ($val = 1; $val <= 6; $val++) {
@@ -96,14 +97,15 @@
                 }
                 if ($val <= $vote->getValeur()) {
                     echo '<a class=vote style="background:#a94442" 
-                        href="index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '">
-                        <img src=../web/images/coeur_logo.png alt="">';
+                        href="index.php?controller=vote&action=choix&idProposition=' . rawurlencode($proposition->getId()) . '&valeur=' . $val . '">
+                        <img src=../web/images/coeur_logo.png alt="coeur">';
                 } else {
                     echo '<a class=vote 
-                    href="index.php?controller=vote&action=choix&idProposition=' . $proposition->getId() . '&valeur=' . $val . '">
-                        <img src=../web/images/coeur_logo.png alt="">
+                    href="index.php?controller=vote&action=choix&idProposition=' . rawurlencode($proposition->getId()) . '&valeur=' . $val . '">
+                        <img src=../web/images/coeur_logo.png alt="coeur">
                         ';
                 }
+
                 echo '<span style="font-size: 18px">' . $attribut . '</span></a>';
             }
         }
@@ -111,7 +113,7 @@
         echo '<br > ';
 
         /*
-            On récupère les votes dans la vue pour éviter de faire plusieurs appel à la base de donnée
+            On récupère les votes dans la vue pour éviter de faire plusieurs appels à la base de donnée
         dans le controller. La méthode ReadAll() n'est pas appelée par le controllerVote lors du vote / modification de vote.
         Si c'était le cas, on devrait refaire un appel à la base de donnée pour récupérer la question, les propositions et les votants
         à chaque interaction avec le système de vote.
@@ -154,15 +156,17 @@
             $question->getPhase() == 'ecriture') {
 
             echo ' <p><a href="index.php?action=update&controller=proposition&idProposition=' .
-                rawurlencode($proposition->getId()) . '"><img class="modifier" src = "..\web\images\modifier.png" ></a ><br></p> ';
+                rawurlencode($proposition->getId()) . '"><img class="modifier" src = "../web/images/modifier.png"  alt="modifier"></a ><br></p> ';
         }
 
         if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable() && $question->getPhase() == 'ecriture') {
             echo ' <p><a class="nav suppProp" 
-            href=index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '>Supprimer</a><br></p>';
+            href="index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '">Supprimer</a><br></p>';
         }
         $i++;
-        echo '<p><a href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($proposition->getIdResponsable()) . '" >par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a></p>';
+        echo '<p><a class = "link-custom" href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($proposition->getIdResponsable()) . '" >par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a></p>';
+        echo '<a class = "link-custom" href= "index.php?action=read&controller=proposition&idProposition=' .
+            $idPropositionURL . '">Lire plus</a>';
         echo '</div>';
     }
     ?>

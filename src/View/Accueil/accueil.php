@@ -1,5 +1,5 @@
 <link href="css/accueil.css" rel="stylesheet">
-<h1>Bienvenue sur <strong class = "color-blue">Agora Script </strong> !</h1>
+<h1 class = "custom_titre">Bienvenue sur <strong class = "custom_strong color-blue">Agora Script </strong> !</h1>
     <div id="acceuil_search_form">
         <h1><span>Trouve les réponses à tes questions</span></h1>
         <img id="imgsearch" src="../web/images/background.bmp" alt="background">

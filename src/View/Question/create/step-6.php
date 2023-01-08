@@ -41,15 +41,15 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
 <div class="detail_question ">
     <div class="infos">
         <div class="detail_question ">
-            <h1><strong class='color-blue'>Titre</strong></h1>
+            <h1><strong class='custom_strong color-blue'>Titre</strong></h1>
             <p><?= htmlspecialchars($Titre) ?></p>
-            <h1><strong class='color-blue'>Description</strong></h1>
-            <p class = "mdparse"><?= htmlspecialchars($Description) ?></p>
+            <h1><strong class='custom_strong color-blue'>Description</strong></h1>
+            <p class="mdparse"><?= htmlspecialchars($Description) ?></p>
         </div>
         <div id="participants" class="info">
-            <h1><strong class='color-yellow'>Participants</strong></h1>
+            <h1><strong class='custom_strong color-yellow'>Participants</strong></h1>
             <div id="responsables">
-                <h1><strong class='color-yellow'>Responsables</strong></h1>
+                <h1><strong class='custom_strong color-yellow'>Responsables</strong></h1>
                 <?php
                 foreach ($_SESSION[FormConfig::$arr]['responsables'] as $responsable) {
                     echo "<p> " . htmlspecialchars($responsable) . " </p>";
@@ -58,7 +58,7 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
             </div>
 
             <div id="votants">
-                <h1><strong class='color-yellow'>Votants</strong></h1>
+                <h1><strong class='custom_strong color-yellow'>Votants</strong></h1>
                 <?php
                 foreach ($_SESSION[FormConfig::$arr]['votants'] as $votant) {
                     echo "<p> " . htmlspecialchars($votant) . " </p>";
@@ -69,7 +69,7 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
 
 
         <div class="sections  info">
-            <h1><strong class='color-orange'>Sections</strong></h1>
+            <h1><strong class='custom_strong color-orange'>Sections</strong></h1>
             <?php
             $i = 1;
             foreach ($_SESSION[FormConfig::$arr]['Sections'] as $Section) {
@@ -85,31 +85,41 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
         </div>
         <div class="info">
             <div class="calendrier">
-                <h1><strong class='color-green'>Calendrier</strong></h1>
+                <h1><strong class='custom_strong color-green'>Calendrier</strong></h1>
                 <?php
                 for ($i = 1; $i <= $_SESSION[FormConfig::$arr]['nbCalendriers']; $i++) {
+
+                    if ($i != 1) {
+                        echo '<h2 style="color: #012e49">' . $i . '<sup>e</sup> phase</h2>';
+                    }
+
+
                     echo '<span class="vertical-line-petite" style="background:grey "></span>';
                     $cercle = '<div id="cercle"></div>';
                     ?>
 
-                    <p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_debut">
-                        Début d'écriture des propositions : <br>
-                        <?= (new DateTime(htmlspecialchars(FormConfig::TextField('debutEcriture' . $i))))->format('d-m-Y à H:i:s')  ?></p>
-                    <!--        <span class="vertical-line-petite" style="background: #CE16169B"></span>-->
-                    <span class="vertical-line" style="background: #CE16169B"></span>
-                    <p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_fin">
-                        Fin d'écriture des propositions : <br>
-                        <?= (new DateTime(htmlspecialchars(FormConfig::TextField('finEcriture' . $i))))->format('d-m-Y à H:i:s')  ?></p>
-                    <span class="vertical-line" style="background:grey "></span>
+                    <?php
+                    echo '<p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_debut' . $i . '">
+                                            Début d\'écriture des propositions : <br>
+                                    ' . (new DateTime(htmlspecialchars(FormConfig::TextField("debutEcriture" . $i))))->format("d-m-Y à H:i:s") . '</p>
+                                    <span class="vertical-line" style="background: #CE16169B"></span>
+                                    
+                                <p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_fin' . $i . '">
+                                            Fin d\'écriture des propositions : <br>
+                                    ' . (new DateTime(htmlspecialchars(FormConfig::TextField("finEcriture" . $i))))->format("d-m-Y à H:i:s") . '</p>
+                        <span class="vertical-line" style="background:grey "></span>';
+
+                    ?>
                     <p style="background : rgba(65,112,56,0.76); color: white; padding: 6px" class="cal"
-                       id="vote_debut">Début des votes :
-                        <br>
-                        <?= (new DateTime(htmlspecialchars(FormConfig::TextField('debutVote' . $i))))->format('d-m-Y à H:i:s')  ?></p>
+                       id="vote_debut<?= $i ?>">Début des votes : <br>
+                        <?= (new DateTime(htmlspecialchars(FormConfig::TextField('debutVote' . $i))))->format('d-m-Y à H:i:s') ?>
+                    </p>
                     <span class="vertical-line" style="background: rgba(65,112,56,0.76);"></span>
                     <p style="background: rgba(65,112,56,0.76); color: white; padding: 6px" class="cal"
-                       id="vote_fin">
+                       id="vote_fin<?= $i ?>">
                         Fin des votes : <br>
-                        <?= (new DateTime(htmlspecialchars(FormConfig::TextField('finVote' . $i))))->format('d-m-Y à H:i:s')  ?></p>
+                        <?= (new DateTime(htmlspecialchars(FormConfig::TextField('finVote' . $i))))->format('d-m-Y à H:i:s') ?>
+                    </p>
                     <span class="vertical-line-petite" style="background:grey "></span>
                     <?php
                 }
@@ -119,12 +129,12 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
     </div>
 </div>
 
-    <form method="post" class="nav">
-        <input type="submit" name=previous value="Retour" id="precedent" formnovalidate>
-        <input type="submit" name=next value="Suivant" id="suivant">
-    </form>
+<form method="post" class="nav">
+    <input type="submit" name=previous value="Retour" id="precedent" formnovalidate>
+    <input type="submit" name=next value="Suivant" id="suivant">
+</form>
 <script>
-    Array.from(document.getElementsByClassName('mdparse')).forEach(elem =>{
+    Array.from(document.getElementsByClassName('mdparse')).forEach(elem => {
         elem.innerHTML = marked.parse(elem.innerHTML);
     });
 </script>

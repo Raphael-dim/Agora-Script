@@ -5,60 +5,74 @@ use App\Vote\Lib\ConnexionUtilisateur;
 ?>
 <form class="custom-form" method="post" action="index.php?controller=utilisateur&action=updated">
     <fieldset>
-        <h2>Mise à jour de votre compte :</h2>
+        <?php
+        if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $utilisateur->getIdentifiant()) {
+            echo '<h2>Mise à jour de votre compte :</h2>';
+        } else {
+            echo '<h2>Mise à jour du compte de ' . htmlspecialchars($utilisateur->getIdentifiant()) . ':</h2>';
+        }
+        echo '
         <p class="InputAddOn">
             <label class="InputAddOn-item" for="username">Identifiant : </label>
-            <input class="InputAddOn-field" type="text" value="<?= $utilisateur->getIdentifiant() ?>" name="identifiant"
+            <input class="InputAddOn-field" type="text" value="'. htmlspecialchars($utilisateur->getIdentifiant()) .'" name="identifiant"
                    id="username"
                    readonly required>
         </p>
         <p class="InputAddOn">
             <label class="InputAddOn-item" for="lastname">Nom&#42; : </label>
-            <input class="InputAddOn-field" type="text" value="<?= $utilisateur->getNom() ?>" name="nom" id="lastname"
+            <input class="InputAddOn-field" type="text" value="'.  htmlspecialchars($utilisateur->getNom()) .'" name="nom" id="lastname"
                    required>
             <span class="validity"></span>
         </p>
         <p class="InputAddOn">
             <label class="InputAddOn-item" for="firstname">Prénom&#42; : </label>
-            <input class="InputAddOn-field" type="text" value="<?= $utilisateur->getPrenom() ?>" name="prenom"
+            <input class="InputAddOn-field" type="text" value="'.  htmlspecialchars($utilisateur->getPrenom()) .'" name="prenom"
                    id="firstname" required>
             <span class="validity"></span>
 
         </p>
         <p class="InputAddOn">
             <label class="InputAddOn-item" for="mail">Email : </label>
-            <input class="InputAddOn-field" type="text" value="<?= $utilisateur->getEMail() ?>" name="mail"
-                   id="mail" required >
+            <input class="InputAddOn-field" type="text" value="'.  htmlspecialchars($utilisateur->getEmail()) .'" name="mail"
+                   id="mail" required>
         </p>
         <p class="InputAddOn">
-            <label class="InputAddOn-item" for="mdp_id">Ancien mot de passe&#42; : </label>
-            <input class="InputAddOn-field" type="password" value="" placeholder="" name="ancienMDP" id="mdp_id"
+            <label class="InputAddOn-item" for="mdp_id1">Ancien mot de passe&#42; : </label>
+            <input class="InputAddOn-field" type="password" name="ancienMDP" id="mdp_id1"
                    required>
         </p>
         <p class="InputAddOn">
-            <label class="InputAddOn-item" for="mdp_id">Mot de passe&#42; : </label>
-            <input class="InputAddOn-field" type="password" value="" placeholder="" name="mdp" id="mdp_id" required>
+            <label class="InputAddOn-item" for="mdp_id2">Mot de passe&#42; : </label>
+            <input class="InputAddOn-field" type="password" name="mdp" id="mdp_id2" required>
 
         </p>
         <p class="InputAddOn">
             <label class="InputAddOn-item" for="mdp2_id">Vérification du mot de passe&#42; : </label>
-            <input class="InputAddOn-field" type="password" value="" placeholder="" name="mdp2" id="mdp2_id" required>
-        </p>
+            <input class="InputAddOn-field" type="password" name="mdp2" id="mdp2_id" required>
+        </p>';
 
-        <?php
         if (ConnexionUtilisateur::estAdministrateur()) {
             echo '<p class="InputAddOn">
                     <label class="InputAddOn-item" for="estAdmin_id">Administrateur&#42; : </label>
-                    <input class="InputAddOn-field" type="checkbox" placeholder="" name="estAdmin" id="estAdmin_id"';
+                    <input class="InputAddOn-field" type="checkbox" name="estAdmin" id="estAdmin_id"';
             if ($utilisateur->isEstAdmin()) {
                 echo ' checked ';
             }
             echo '></p>';
         }
+
+
+        $mdp = '';
+        $message = 'Votre mot de passe doit contenir au moins 6 caractères, dont des chiffres et des lettres.';
         ?>
 
         <p>
             <input type="submit" value="Mettre à jour" class="nav">
+        </p>
+
+        <p class="survol">
+            <img class="imageAide" src="images/aide_logo.png" alt="">
+            <span class="messageInfo"><?= $message ?></span>
         </p>
     </fieldset>
 </form>

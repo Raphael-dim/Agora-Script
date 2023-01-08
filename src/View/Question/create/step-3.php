@@ -38,7 +38,7 @@ $nbSection = $_SESSION[FormConfig::$arr]['nbSections'];
                     <input type="text" name=titre' . $i . '  size="77" maxlength="70"
                     value = "' . FormConfig::TextField('titre' . $i) . '" 
                     required>
-                    <label>70 caractères maximum</label>
+                    <label class="maximum">70 caractères maximum</label>
                 </p>
                 <p class ="champ">
                     <label>Description :</label>
@@ -46,7 +46,7 @@ $nbSection = $_SESSION[FormConfig::$arr]['nbSections'];
                     <script>
                          const easyMDE'.$i.' = new createMarkdownEditor({forceSync: true, element: document.getElementById("ta'.$i.'")});
                     </script>
-                    <label>350 caractères maximum</label>
+                    <label class="maximum">350 caractères maximum</label>
                </p>';
     }
 

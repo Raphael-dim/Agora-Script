@@ -59,6 +59,8 @@ class ControllerUtilisateur
             }
             if (!VerificationEmail::aValideEmail($utilisateur)) {
                 MessageFlash::ajouter('warning', 'Vous devez valider votre compte, vérifiez votre boite mail, ainsi que vos spams.');
+                MessageFlash::ajouter('info', 'Cliquez <a style="color: black" href="index.php?action=renvoyerMailValidation&controller=utilisateur&idUtilisateur=' . $utilisateur->getIdentifiant() . '">
+                ici</a> pour renvoyer un mail.');
                 Controller::redirect('index.php?controller=utilisateur&action=connexion');
             } else {
                 ConnexionUtilisateur::connecter($utilisateur->getIdentifiant());
@@ -66,6 +68,18 @@ class ControllerUtilisateur
                 Controller::redirect("index.php?controller=accueil&action=home");
             }
         }
+    }
+
+    public static function renvoyerMailValidation()
+    {
+        try {
+            VerificationEmail::envoiEmailValidation((new UtilisateurRepository())->select($_GET['idUtilisateur']));
+        } catch (TransportExceptionInterface $e) {
+            MessageFlash::ajouter('warning', 'L\'envoie du mail a échoué');
+            Controller::redirect('index.php?action=connexion&controller=utilisateur');
+        }
+        MessageFlash::ajouter('info', 'Le mail a été renvoyé, vérifiez vos spams');
+        Controller::redirect('index.php?action=connexion&controller=utilisateur');
     }
 
     public static function read()
@@ -127,7 +141,7 @@ class ControllerUtilisateur
             }
             (new UtilisateurRepository())->sauvegarder($utilisateur);
             MessageFlash::ajouter("success", "Le compte a bien été crée");
-            MessageFlash::ajouter("success", "Pour valider votre compte, vérifiez votre boite mail et vos spams");
+            MessageFlash::ajouter("info", "Pour valider votre compte, vérifiez votre boite mail et vos spams");
             //ConnexionUtilisateur::connecter($utilisateur->getIdentifiant());
             Controller::redirect("index.php?controller=utilisateur&action=connexion");
         }
@@ -181,9 +195,12 @@ class ControllerUtilisateur
     public static function update()
     {
         $utilisateur = (new UtilisateurRepository())->select($_GET['idUtilisateur']);
+        if (is_null($utilisateur)) {
+            MessageFlash::ajouter('danger', 'Utilisateur introuvable');
+        }
         if (!ConnexionUtilisateur::estAdministrateur() && (!ConnexionUtilisateur::estConnecte() ||
                 ConnexionUtilisateur::getLoginUtilisateurConnecte() != $utilisateur->getIdentifiant())) {
-            MessageFlash::ajouter("warning", "Connectez-vous à votre compte pour le modifier.");
+            MessageFlash::ajouter("danger", "Connectez-vous à votre compte pour le modifier.");
             Controller::redirect("index.php?action=connexion&controller=utilisateur");
         } else {
             Controller::afficheVue('view.php',
@@ -207,12 +224,16 @@ class ControllerUtilisateur
          informations de l'utilisateur dans la base de données*/
 
         $utilisateur = (new UtilisateurRepository())->select($_POST['identifiant']);
+        if (is_null($utilisateur)) {
+            MessageFlash::ajouter('danger', 'utilisateur introuvable');
+            Controller::redirect('index.php');
+        }
         if (!ConnexionUtilisateur::estConnecte()) {
-            MessageFlash::ajouter("warning", "Connectez-vous à votre compte pour le modifier.");
+            MessageFlash::ajouter("danger", "Connectez-vous à votre compte pour le modifier.");
             Controller::redirect("index.php?action=connexion&controller=utilisateur");
         }
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() != $utilisateur->getIdentifiant() && !ConnexionUtilisateur::estAdministrateur()) {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier un compte qui ne vous appartient pas.");
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas modifier un compte qui ne vous appartient pas.");
             Controller::redirect("index.php?action=readAll&controller=question");
         }
         if (!MotDePasse::verifier($_POST['ancienMDP'], $utilisateur->getMdpHache())) {
@@ -226,6 +247,20 @@ class ControllerUtilisateur
         if (!filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) {
             MessageFlash::ajouter('warning', 'Le format du mail saisi est invalide');
             Controller::redirect('index.php?controller=utilisateur&action=update');
+            Controller::redirect('index.php?controller=utilisateur&action=update&idUtilisateur=' . $utilisateur->getIdentifiant());
+        }
+        if (strlen($_POST['mdp']) < 6) {
+            MessageFlash::ajouter('info', 'Votre mot de passe doit contenir au moins 6 caractères.');
+            Controller::redirect('index.php?controller=utilisateur&action=update&idUtilisateur=' . $utilisateur->getIdentifiant());
+        }
+        $bool = false;
+        for ($i = 0; $i < 10 && !$bool; $i++) {
+            if (strpos($_POST['mdp'], $i)) {
+                $bool = true;
+            }
+        }
+        if (!$bool) {
+            MessageFlash::ajouter('info', 'Votre mot de passe doit contenir au moins 1 chiffre et une lettre.');
             Controller::redirect('index.php?controller=utilisateur&action=update&idUtilisateur=' . $utilisateur->getIdentifiant());
         } else {
             $utilisateur->setNom($_POST['nom']);
@@ -278,7 +313,7 @@ class ControllerUtilisateur
             Controller::redirect('index.php?controller=accueil');
         }
         if (!ConnexionUtilisateur::estAdministrateur() && (!ConnexionUtilisateur::estConnecte() || ConnexionUtilisateur::getLoginUtilisateurConnecte() != $_GET['idUtilisateur'])) {
-            MessageFlash::ajouter('info', 'Vous ne pouvez pas supprimer ce compte');
+            MessageFlash::ajouter('danger', 'Vous ne pouvez pas supprimer ce compte');
             Controller::redirect('index.php?controller=accueil');
         } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
             if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $_GET['idUtilisateur']) {

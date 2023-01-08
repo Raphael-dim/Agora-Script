@@ -8,10 +8,10 @@ use App\Vote\Model\DataObject\Question;
 
 ?>
 
-<h1><strong class="color-orange">Détail de la proposition</strong></h1>
-<h1><strong class="color-grey">Titre question : </strong></h1>
+<h1><strong class="custom_strong color-orange">Détail de la proposition</strong></h1>
+<h1><strong class="custom_strong color-grey">Titre question : </strong></h1>
 <h2><?= htmlspecialchars($question->getTitre()) ?></h2>
-<h1><strong class="color-grey">Description question : </strong></h1>
+<h1><strong class="custom_strong color-grey">Description question : </strong></h1>
 <h2><?= htmlspecialchars($question->getDescription()) ?></h2>
 
 <?php
@@ -25,7 +25,7 @@ echo '
 <div id="participants" class="detail_question">';
 echo '
     <div>';
-echo '<h1><strong class="color-yellow">Auteur</strong></h1>';
+echo '<h1><strong class=" custom_strongcolor-yellow">Auteur</strong></h1>';
 
 if (!is_null($proposition->getIdResponsable())) {
     echo "<p>" . htmlspecialchars($proposition->getIdResponsable()) . "</p>";
@@ -36,7 +36,7 @@ echo '
     ';
 echo '
     <div id="votants">';
-echo '<h1><strong class="color-yellow">Co-Auteurs</strong></h1>';
+echo '<h1><strong class=" custom_strongcolor-yellow">Co-Auteurs</strong></h1>';
 if (!is_null($coAuts)) {
     if (is_array($coAuts)) {
         foreach ($coAuts as $coAut) {
