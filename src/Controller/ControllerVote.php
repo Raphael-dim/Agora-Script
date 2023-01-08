@@ -35,15 +35,15 @@ class ControllerVote
         $votants = $question->getVotants();
         $bool = true;
         if (!ConnexionUtilisateur::estConnecte() || !Votant::estVotant($votants, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas voter, vous n'êtes pas votant pour cette question.");
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas voter, vous n'êtes pas votant pour cette question.");
             $bool = false;
         }
         if ($question->getPhase() != 'vote') {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas voter tant que la phase de vote n'a pas débuté.");
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas voter tant que la phase de vote n'a pas débuté.");
             $bool = false;
         }
         if (!isset($_GET['valeur']) || $_GET['valeur'] > 6 || $_GET['valeur'] < 0) {
-            MessageFlash::ajouter('warning', "Valeur de vote invalide");
+            MessageFlash::ajouter('danger', "Valeur de vote invalide");
             $bool = false;
         }
         if ($question->getSystemeVote() == 'unique') {
@@ -153,6 +153,10 @@ class ControllerVote
             Controller::redirect('index.php');
         }
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
+        if (is_null($proposition)){
+            MessageFlash::ajouter('danger', 'Proposition introuvable');
+            Controller::redirect('index.php');
+        }
         $question = (new QuestionRepository())->select($proposition->getIdQuestion());
         $aVote = Votant::aVote($proposition, Votant::getVotes(ConnexionUtilisateur::getLoginUtilisateurConnecte()));
         if (is_null($aVote)) {

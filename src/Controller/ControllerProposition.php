@@ -28,19 +28,22 @@ class ControllerProposition
     {
         $bool = true;
         $question = (new QuestionRepository())->select($_GET["idQuestion"]);
-
+        if (is_null($question)) {
+            MessageFlash::ajouter("danger", "Question introuvable");
+            Controller::redirect("index.php?controller=question&action=readAll");
+        }
         if (!ConnexionUtilisateur::estConnecte() || !Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition, 
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas créer de proposition, 
             vous n'êtes pas responsable pour cette question.");
             $bool = false;
         }
         if ($question->getPhase() != 'ecriture') {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas créer de proposition en dehors 
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas créer de proposition en dehors 
             de la phase d'écriture.");
             $bool = false;
         }
         if (Responsable::aCreeProposition($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
-            MessageFlash::ajouter("warning", "Vous avez déjà crée une proposition pour cette question.");
+            MessageFlash::ajouter("danger", "Vous avez déjà crée une proposition pour cette question.");
             $bool = false;
         }
         if (!$bool) {
@@ -117,6 +120,10 @@ class ControllerProposition
         // si oui, on récupère la question grâce à l'objet Proposition.
         $votants = $question->getVotants();
         $propositions = $question->getPropositionsTrie();
+        if (sizeof($propositions) == 0) {
+            MessageFlash::ajouter('info', 'Il n\'y a pas de propositions pour cette question.');
+            Controller::redirect('index.php?action=readAll&controller=question');
+        }
 
         if ($question->getSystemeVote() == 'majoritaire' || $question->getSystemeVote() == 'valeur') {
 
@@ -143,6 +150,10 @@ class ControllerProposition
         $user = Session::getInstance()->lire('user');
 
         $question = (new QuestionRepository())->select($_GET["idQuestion"]);
+        if (is_null($question)) {
+            MessageFlash::ajouter("danger", "Question introuvable");
+            Controller::redirect("index.php?controller=question&action=readAll");
+        }
         $bool = true;
 
         if (!ConnexionUtilisateur::estConnecte() || !Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
@@ -156,6 +167,10 @@ class ControllerProposition
         }
         if (Responsable::aCreeProposition($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
             MessageFlash::ajouter("danger", "Vous avez déjà crée une proposition pour cette question.");
+            $bool = false;
+        }
+        if (strlen($_SESSION[FormConfig::$arr]['titre']) > 480) {
+            MessageFlash::ajouter("danger", "Vous n'avez pas respecté les contraintes.");
             $bool = false;
         }
         if (!$bool) {
@@ -174,6 +189,10 @@ class ControllerProposition
         }
         $sections = $question->getSections();
         foreach ($sections as $section) {
+            if (strlen($_SESSION[FormConfig::$arr]['contenu' . $section->getId()]) > 1400) {
+                MessageFlash::ajouter("danger", "Vous n'avez pas respecté les contraintes.");
+                Controller::redirect("index.php?controller=question&action=readAll");
+            }
             $propositionSection = new PropositionSection($proposition, $section, $_SESSION[FormConfig::$arr]['contenu' . $section->getId()]);
             (new PropositionSectionRepository())->sauvegarder($propositionSection);
         }

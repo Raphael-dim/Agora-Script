@@ -53,15 +53,22 @@ class FormConfig
 
     static public function initialiserSessions($question): void
     {
-        $calendrier = $question->getCalendrier();
+        $calendriers = $question->getCalendrier(true);
         $tabSections = $question->getSections();
         $_SESSION[FormConfig::$arr]['Titre'] = $question->getTitre();
         $_SESSION[FormConfig::$arr]['Description'] = $question->getDescription();
         $_SESSION[FormConfig::$arr]['nbSections'] = count($question->getSections());
-        $_SESSION[FormConfig::$arr]['debutEcriture'] = $calendrier->getDebutEcriture(true);
-        $_SESSION[FormConfig::$arr]['finEcriture'] = $calendrier->getFinEcriture(true);
-        $_SESSION[FormConfig::$arr]['debutVote'] = $calendrier->getDebutVote(true);
-        $_SESSION[FormConfig::$arr]['finVote'] = $calendrier->getFinVote(true);
+        $_SESSION[FormConfig::$arr]['nbCalendriers'] = sizeof($calendriers);
+
+        $i = 1;
+        foreach ($calendriers as $calendrier) {
+            $_SESSION[FormConfig::$arr]['debutEcriture' . $i] = $calendrier->getDebutEcriture(true);
+            $_SESSION[FormConfig::$arr]['finEcriture' . $i] = $calendrier->getFinEcriture(true);
+            $_SESSION[FormConfig::$arr]['debutVote' . $i] = $calendrier->getDebutVote(true);
+            $_SESSION[FormConfig::$arr]['finVote' . $i] = $calendrier->getFinVote(true);
+            $i++;
+        }
+
         $_SESSION[FormConfig::$arr]['idQuestion'] = $question->getId();
         for ($i = 1; $i <= count($tabSections); $i++) {
             $_SESSION[FormConfig::$arr]['titre' . $i] = $tabSections[$i - 1]->getTitre();
@@ -80,19 +87,20 @@ class FormConfig
         }
     }
 
-    static public function initialiserSessionsProposition($proposition): void{
+    static public function initialiserSessionsProposition($proposition): void
+    {
         $titre = $proposition->getTitre();
         $_SESSION[FormConfig::$arr]['titre'] = $titre;
 
         $contenus = $proposition->getContenus();
 
-        foreach ($contenus as $contenu){
-            $_SESSION[FormConfig::$arr]['contenu'.$contenu->getSection()->getId()] = $contenu->getContenu();
+        foreach ($contenus as $contenu) {
+            $_SESSION[FormConfig::$arr]['contenu' . $contenu->getSection()->getId()] = $contenu->getContenu();
         }
 
         $coauteurs = $proposition->getCoAuteurs();
         $_SESSION[FormConfig::$arr]['co-auteur'] = array();
-        foreach ($coauteurs as $coauteur){
+        foreach ($coauteurs as $coauteur) {
             $_SESSION[FormConfig::$arr]['co-auteur'][] = $coauteur->getUtilisateur()->getIdentifiant();
         }
 
@@ -135,8 +143,9 @@ class FormConfig
 
     }
 
-    public static function formatDate($date){
-        $date = explode("-",$date);
+    public static function formatDate($date)
+    {
+        $date = explode("-", $date);
         echo $date;
     }
 }

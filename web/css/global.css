@@ -146,6 +146,7 @@ fieldset {
 
 
 .questions .listes {
+    padding: 8px;
     position: relative;
     border-radius: 7px;
     border-width: 1px;
@@ -412,7 +413,7 @@ a.vote:hover img {
 
 
 #suivant {
-    margin: 0 50px;
+    margin: 10px 100px 10px 50px;
     float: right;
 }
 
@@ -717,14 +718,6 @@ a.vote:hover img {
     z-index: 0;
 }
 
-.user{
-    margin:25px 0;
-    width:fit-content;
-    padding-right:100px;
-    border-radius:5px;
-    background-color:CornflowerBlue;
-}
-
 .alert-success {
     color: #3c763d;
     background-color: #dff0d8;
@@ -809,7 +802,7 @@ h1 > strong.color-orange {
     /*max-width: max-content;*/
     word-wrap: break-word;
     white-space: normal;
-    max-width: 50%;
+    max-width: 60%;
 }
 
 div p {
@@ -1229,7 +1222,7 @@ select {
 .zoneTexte {
     color: white;
     margin-top: 5%;
-    width:60%;
+    max-width: max-content;
     padding: 10px 10px 60px 10px;
     margin-left: 20%;
     /*background-color: #012e49;*/
