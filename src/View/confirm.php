@@ -10,6 +10,7 @@
     }
 
     .over {
+        border-radius: 8px;
         position: absolute;
         top: 25%;
         left: 50%;
@@ -36,7 +37,7 @@
 </div>
 <div class="over">
     <form method="post" action=<?= $url ?>>
-        <p><label style="color: white"><?php echo $message ?></label></p>
+        <p style="padding: 20px; max-width: 80%; margin: auto"><label style="color: white"><?php echo $message ?></label></p>
         <Button id="bt1" class="nav" type="submit" name="cancel" value="Annuler">Annuler</Button>
         <Button id="bt2" class="nav" type="submit" name="confirm" value="Confirmer">Confirmer</Button>
 

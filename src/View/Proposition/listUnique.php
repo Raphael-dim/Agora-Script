@@ -1,3 +1,4 @@
+<link href="css/ListePropositions.css" rel="stylesheet">
 <div class="propositions">
     <?php
 
@@ -13,7 +14,7 @@
     ?>
     <h2><?= $modeScrutin ?></h2>
     <p class="survol">
-        <img class="imageAide" src="images/aide_logo.png" alt=""/>
+        <img class="imageAide" src="images/aide_logo.png" alt="aide"/>
         <span class="messageInfo"><?= $message ?></span>
     </p>
     <?php
@@ -26,7 +27,7 @@
         ?>
         <h2><?= $organisateurRole ?></h2>
         <p class="survol">
-            <img class="imageAide" src="images/aide_logo.png" alt=""/>
+            <img class="imageAide" src="images/aide_logo.png" alt="aide"/>
             <span class="messageInfo"><?= $messageOrganisateur ?></span>
         </p>
         <?php
@@ -57,7 +58,7 @@
             echo '<div class=proposition>';
         }
         echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
-            $idPropositionURL . '"> <h2>' . $titreHTML . '</h2>   </a>';
+            $idPropositionURL . '"> <h2 class = "Titre_proposition">' . $titreHTML . '</h2>   </a>';
         if ($peutVoter && !$proposition->isEstEliminee()) {
             $vote = Votant::aVote($proposition, $votes);
             if (is_null($vote)) {
@@ -86,7 +87,7 @@
             $question->getPhase() == 'ecriture') {
 
             echo '<p> <a href="index.php?action=update&controller=proposition&idProposition=' .
-                rawurlencode($proposition->getId()) . '"><img class="modifier" src = "..\web\images\modifier.png" ></a ><br></p> ';
+                rawurlencode($proposition->getId()) . '"><img class="modifier" src = "../web/images/modifier.png"  alt="modifier"></a ><br></p> ';
         }
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
             ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
@@ -100,7 +101,7 @@
         if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable() && $question->getPhase() == 'ecriture') {
 
             echo '<p> <a class="nav suppProp" 
-            href=index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '>Supprimer</a><br></p>';
+            href="index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '">Supprimer</a><br></p>';
         }
         $i++;
         echo '<p><a href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($proposition->getIdResponsable()) . '" >par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a></p>';

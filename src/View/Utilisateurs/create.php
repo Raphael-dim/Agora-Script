@@ -40,13 +40,11 @@
                 </p>';
         }
 
-        $mdp = '';
         $message = 'Votre mot de passe doit contenir au moins 6 caractères, dont des chiffres et des lettres.';
         ?>
         <input id="suivant" type="submit" value="Inscription" class="nav">
-        <h2><?= $mdp ?></h2>
         <p class="survol">
-            <img class="imageAide" src="images/aide_logo.png" alt=""/>
+            <img class="imageAide" src="images/aide_logo.png" alt="">
             <span class="messageInfo"><?= $message ?></span>
         </p>
     </fieldset>

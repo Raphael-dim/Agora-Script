@@ -75,13 +75,16 @@ class ControllerProposition
                     $keyword = $_POST['keyword'];
                     $utilisateurs = (new UtilisateurRepository())->selectKeywordUtilisateur($keyword);
                     $params['utilisateurs'] = $utilisateurs;
+                } else{
+                    $utilisateurs = (new UtilisateurRepository())->selectAll();
+                    $params['utilisateurs'] = $utilisateurs;
                 }
                 $view = "step-2";
                 break;
         }
 
         Controller::afficheVue('view.php',
-            array_merge(["pagetitle" => "Créer une question",
+            array_merge(["pagetitle" => "Créer une proposition",
                 "cheminVueBody" => "Proposition/create/" . $view . ".php",
                 "question" => $question], $params));
     }

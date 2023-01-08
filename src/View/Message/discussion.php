@@ -13,6 +13,7 @@ function compare(Message $message1, Message $message2): int
     }
     return ($message1->getDate() < $message2->getDate()) ? -1 : 1;
 }
+
 // Fusionne les tableaux $recus et $envoyes en un seul tableau $messages
 
 $messages = array_merge($recus, $envoyes);
@@ -37,7 +38,7 @@ foreach ($messages as $message) {
     }
     // Si c'est le dernier message du tableau, ajoute l'identifiant "dernierMessage"
     if ($i == sizeof($messages)) {
-        $id = 'id="dernierMessage"';
+        $id = 'id = "dernierMessage"';
     }
     if ($message->getAuteur()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
         echo ' <p ' . $id . '  style = "margin-left: 50%" class="date" >Vous, il y a ' . $diff . ' </p > ';
@@ -54,8 +55,9 @@ foreach ($messages as $message) {
 <form class="zoneTexte" method="post" action="index.php?action=created&controller=message">
     <input type="hidden" name="idContact" value="<?= $_GET['idContact'] ?>">
     <p class="champ">
-        <textarea id="message_id" maxlength="350" name="message" rows="7" cols="50" style="max-width: 90%;" placeholder="Écrire un nouveau message" required></textarea>
-        <label>350 caractères maximum</label>
+        <label for="message_id">Message : </label>
+        <textarea id="message_id" maxlength="350" name="message" rows="7" cols="50" required> </textarea>
+        <label class="maximum">350 caractères maximum</label>
     </p>
     <input id="suivant" type="submit" value="Envoyer" class="nav">
 
