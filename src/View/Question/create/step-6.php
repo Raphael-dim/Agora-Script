@@ -48,7 +48,7 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
         </div>
         <div id="participants" class="info">
             <h1><strong class='custom_strong color-yellow'>Participants</strong></h1>
-            <div id="responsables">
+            <div>
                 <h1><strong class='custom_strong color-yellow'>Responsables</strong></h1>
                 <?php
                 foreach ($_SESSION[FormConfig::$arr]['responsables'] as $responsable) {
@@ -57,7 +57,7 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
                 ?>
             </div>
 
-            <div id="votants">
+            <div>
                 <h1><strong class='custom_strong color-yellow'>Votants</strong></h1>
                 <?php
                 foreach ($_SESSION[FormConfig::$arr]['votants'] as $votant) {

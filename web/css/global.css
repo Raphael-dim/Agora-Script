@@ -10,11 +10,11 @@
 * {
     font-family: Georgia;
     box-sizing: border-box;
+    overflow-wrap: break-word;
 }
 
 body {
     overflow-x: auto;
-    margin:0;
 }
 
 main {
@@ -295,7 +295,7 @@ li#vote.phases > a {
     width: 90% !important;
     background: #dff5f4;
     padding: 10px;
-    text-align: center;
+    /*text-align: center;*/
 }
 
 a.vote {
@@ -384,11 +384,7 @@ a.vote:hover img {
 
 #precedent {
     float: left;
-    margin: 0 50px;
-}
-
-.titreForm{
-    max-width:100%
+    margin: 10px 50px 10px 100px;
 }
 
 .nav *, form .nav {
@@ -405,7 +401,6 @@ a.vote:hover img {
     color: white;
     background-color: #1a3341;
     border-color: #dff5f4;
-    cursor: pointer;
 }
 
 
@@ -465,7 +460,7 @@ a.vote:hover img {
     #participants * {
         min-width: max-content;
         /*width: 100%;*/
-        display: block;
+        /*display: block;*/
         float: none;
     }
 
@@ -734,8 +729,9 @@ h1 > .custom_strong.color-orange {
 }
 
 .detail_question div {
-    vertical-align: middle;
+    vertical-align: top;
     display: inline-block;
+    text-align: center;
 }
 
 .detail_question p {
@@ -836,14 +832,17 @@ div p {
     background: #dff5f4;
 }
 
-#responsables {
-    width: 45%;
+#participants > div {
+    width: 49%;
 }
 
-#votants {
-    width: 45%;
-    float: right;
-}
+/*#votants {
+    width: 45%;;
+}*/
+
+/*#responsables {
+    width: 45%;;
+}*/
 
 .sections > .section:nth-child(odd) {
     background: #b8fff9;
@@ -934,30 +933,12 @@ div p {
     border: none;
     border-radius: 0;
     padding: 2px;
-    margin: 0;
+    /*margin: 0;*/
 }
 
 
 input, textarea {
     font-size: 18px;
-}
-
-input:invalid + span:after {
-    display:inline-block;
-    content: '✖';
-    color: red;
-    padding: 80%;
-}
-
-.validity {
-    background-color: transparent;
-}
-
-input:valid + span:after {
-    display:inline-block;
-    content: '✓';
-    color: green;
-    padding: 80%;
 }
 
 .footer {
