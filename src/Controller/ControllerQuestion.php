@@ -388,6 +388,10 @@ class ControllerQuestion
             Controller::redirect('index.php?controller=question&action=readAll');
         }
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        if (is_null($question)) {
+            MessageFlash::ajouter("danger", "Question introuvable");
+            Controller::redirect("index.php?controller=question&action=readAll");
+        }
         if ((!ConnexionUtilisateur::estConnecte() ||
                 ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant()) &&
             !ConnexionUtilisateur::estAdministrateur()) {
@@ -431,6 +435,10 @@ class ControllerQuestion
             $bool = false;
         }
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        if (is_null($question)) {
+            MessageFlash::ajouter("danger", "Question introuvable");
+            $bool = false;
+        }
         if ($question->getPhase() != 'fini') {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas consulter la page des résultats pour l'instant.");
             $bool = false;
@@ -451,6 +459,18 @@ class ControllerQuestion
 
     /**
      * @return void
+     */
+
+    /*
+     *
+     * vérifie la validité des données de la question passée en paramètre.
+     * Si la longueur du titre ou de la description dépasse une certaine limite,
+     * Si le mode de scrutin n'est pas "valeur", "majoritaire" ou "unique",
+     * Si le calendrier n'est pas valide (par exemple si la fin de la période d'écriture précède
+     * le début de la période d'écriture, ou si la fin de la période de vote précède le début de la
+     * période de vote),
+     * Si toutes les vérifications sont passées avec succès, le calendrier est enregistré
+     * en base de données.
      */
     private static function verifBD(Question $question): void
     {
@@ -479,7 +499,7 @@ class ControllerQuestion
                 MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
                 Controller::redirect("index.php?action=form&controller=question&step=2");
             }
-            if ($i < $nbCalendriers && $calendrier->getFinVote() > FormConfig::TextField('finVote' . $i + 1)) {
+            if ($i < $nbCalendriers && $calendrier->getFinVote() > FormConfig::TextField('debutEcriture' . $i + 1)) {
                 MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
                 Controller::redirect("index.php?action=form&controller=question&step=2");
             }
@@ -493,6 +513,4 @@ class ControllerQuestion
             }
         }
     }
-
-
 }
