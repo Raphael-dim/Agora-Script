@@ -993,24 +993,6 @@ input, textarea{
     font-size: 18px;
 }
 
-input:invalid + span:after {
-    position: absolute;
-    content: '✖';
-    color: red;
-    padding-left: 5px;
-}
-
-.validity {
-    background-color: transparent;
-}
-
-input:valid + span:after {
-    position: absolute;
-    content: '✓';
-    color: green;
-    padding-left: 5px;
-}
-
 .footer {
     background-color: rgba(29, 29, 30, 0.99);
     vertical-align: middle;
