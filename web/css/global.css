@@ -596,6 +596,10 @@ a.vote:hover img {
 
 @media screen and (max-width: 700px) {
 
+    .questions {
+        margin: auto;
+        width: 90%;
+    }
 
     .listes_sans_puces > * {
         width: 50%;

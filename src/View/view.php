@@ -43,7 +43,7 @@ echo '</main>';
             <a href="index.php?controller=accueil&action=credits">Crédits</a>
         </li>
         <li>
-            <a href="index.php?controller=message&action=read&idContact=raph">Nous contacter</a>
+            <a href="index.php?controller=message&action=read&idContact=administrateur">Nous contacter</a>
         </li>
     </ul>
 </footer>
