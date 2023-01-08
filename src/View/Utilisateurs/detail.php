@@ -3,9 +3,13 @@
 use App\Vote\Lib\ConnexionUtilisateur;
 
 ?>
+    <link href="css/profile.css" rel="stylesheet">
     <div class="barre_utilisateur">
-        <h1>Profil
-            de <?= htmlspecialchars($utilisateur->getPrenom()) ?> <?= htmlspecialchars($utilisateur->getNom()) ?></h1>
+        <img id = "picture" src = "../web/images/profile_pic.jpg">
+        <div id = "infos_utilisateur">
+            <h1 id = "nom"> <?= htmlspecialchars($utilisateur->getPrenom()) ?> <?= htmlspecialchars($utilisateur->getNom()) ?></h1>
+            <h2 id = "identifiant"> <?= htmlspecialchars($utilisateur->getIdentifiant()) ?></h2>
+        </div>
         <?php
         $bool = false;
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $utilisateur->getIdentifiant()) {
@@ -18,7 +22,7 @@ use App\Vote\Lib\ConnexionUtilisateur;
         } ?>
 
     </div>
-    <div style="margin-bottom: 60px">
+    <div id = "modif" style="margin-bottom: 60px">
         <?php
         if ($bool) {
             echo '<a class="lien"
@@ -26,29 +30,29 @@ use App\Vote\Lib\ConnexionUtilisateur;
         Modifier les informations</a>';
         } ?>
     </div>
-    <h2><?= $pronom ?> questions : </h2>
+    <h2 class = custom_titre><?= $pronom ?> questions : </h2>
     <ul class=" listes_sans_puces">
         <?php foreach ($questions as $question) {
-            echo '<li><p><a href = "index.php?controller=question&action=read&idQuestion=' . rawurlencode($question->getId()) . '">
-    ' . $question->getTitre() . '</a></p></li>';
+            echo '<li class = "user_questions"><a href = "index.php?controller=question&action=read&idQuestion=' . rawurlencode($question->getId()) . '">
+    ' . $question->getTitre() . '</a></li>';
         }
         ?>
     </ul>
 
-    <h2><?= $pronom ?> propositions : </h2>
+    <h2 class = custom_titre><?= $pronom ?> propositions : </h2>
     <ul class="listes_sans_puces">
         <?php foreach ($propositions as $proposition) {
-            echo '<li><p><a href = "index.php?controller=proposition&action=read&idProposition=' . rawurlencode($proposition->getId()) . '">
-    ' . $proposition->getTitre() . '</a></p></li>';
+            echo '<li class = "user_propositions"><a href = "index.php?controller=proposition&action=read&idProposition=' . rawurlencode($proposition->getId()) . '">
+    ' . $proposition->getTitre() . '</a></li>';
         }
         ?>
     </ul>
 
 <?php
 if ($bool) {
-    echo '<p><a href="index.php?action=delete&controller=utilisateur&idUtilisateur=' . rawurlencode($utilisateur->getIdentifiant()) . '">Supprimer
+    echo '<p  id = "suppression"><a href="index.php?action=delete&controller=utilisateur&idUtilisateur=' . rawurlencode($utilisateur->getIdentifiant()) . '">Supprimer
     mon compte </a></p>';
     if (ConnexionUtilisateur::estAdministrateur()) {
-        echo '<p><a href="index.php?action=create&controller=utilisateur">Créer un autre compte </a></p>';
+        echo '<p id = "new"><a href="index.php?action=create&controller=utilisateur">Créer un autre compte </a></p>';
     }
 }

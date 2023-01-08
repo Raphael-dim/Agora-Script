@@ -1,3 +1,4 @@
+<link href="css/ListePropositions.css" rel="stylesheet">
 <div class="propositions">
     <?php
 
@@ -57,7 +58,7 @@
             echo '<div class=proposition>';
         }
         echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
-            $idPropositionURL . '"> <h2>' . $titreHTML . '</h2>   </a>';
+            $idPropositionURL . '"> <h2 class = "Titre_proposition">' . $titreHTML . '</h2>   </a>';
         if ($peutVoter && !$proposition->isEstEliminee()) {
             $vote = Votant::aVote($proposition, $votes);
             if (is_null($vote)) {

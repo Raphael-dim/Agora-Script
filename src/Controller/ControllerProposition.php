@@ -75,6 +75,9 @@ class ControllerProposition
                     $keyword = $_POST['keyword'];
                     $utilisateurs = (new UtilisateurRepository())->selectKeywordUtilisateur($keyword);
                     $params['utilisateurs'] = $utilisateurs;
+                } else{
+                    $utilisateurs = (new UtilisateurRepository())->selectAll();
+                    $params['utilisateurs'] = $utilisateurs;
                 }
                 $view = "step-2";
                 break;

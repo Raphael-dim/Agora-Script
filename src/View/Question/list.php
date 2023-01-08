@@ -2,16 +2,16 @@
 <?php
 if (isset($_GET['selection'])) {
     if ($_GET['selection'] == 'ecriture') {
-        echo "<h1>Nos questions en phase d'<strong class ='color-orange'>écriture</strong></h1>";
+        echo "<h1 class = 'custom_titre'>Nos questions en phase d'<strong class ='custom_strong color-orange'>écriture</strong></h1>";
     } else if ($_GET['selection'] == 'vote') {
-        echo "<h1>Nos questions en phase de <strong class ='color-yellow'>vote</strong></h1>";
+        echo "<h1 class = 'custom_titre'>Nos questions en phase de <strong class ='custom_strong color-yellow'>vote</strong></h1>";
     } else if ($_GET['selection'] == 'terminees') {
-        echo "<h1>Nos questions <strong class ='color-green'>terminées</strong></h1>";
+        echo "<h1 class = 'custom_titre'>Nos questions <strong class ='custom_strong color-green'>terminées</strong></h1>";
     } else {
-        echo "<h1>Consultez nos <strong class ='color-grey'>questions </strong> et trouvez des réponses</h1>";
+        echo "<h1 class = 'custom_titre'>Consultez nos <strong class ='custom_strong color-grey'>questions </strong> et trouvez des réponses</h1>";
     }
 } else {
-    echo "<h1>Consultez nos <strong class ='color-grey'>questions </strong> et trouvez des réponses</h1>";
+    echo "<h1 class = 'custom_titre'>Consultez nos <strong class ='color-grey'>questions </strong> et trouvez des réponses</h1>";
 }
 ?>
 
@@ -72,8 +72,8 @@ if (isset($_GET['selection'])) {
             echo '<li class="listes status_attente shadow-effect">';
         }
 
-        echo ' <p class=titre> ' . $titreHTML . ' </p>
-            <a href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($question->getOrganisateur()->getIdentifiant()) . '" class = "auteur link-custom">par ' . $organisateur . ' </a >';
+        echo '<h1 class=titre>' . $titreHTML . ' </h1>
+            <a class = "link-custom" style = "position:absolute; right: 5px; top:10px ;"href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($question->getOrganisateur()->getIdentifiant()) . '" class = "auteur link-custom">par ' . $organisateur . ' </a >';
         echo '<p class="description mdparse" >' . htmlspecialchars($question->getDescription()) . '</p>';
         if ($question->getPhase() == 'debut' || ConnexionUtilisateur::estAdministrateur()) {
             if (ConnexionUtilisateur::estAdministrateur() || (ConnexionUtilisateur::estConnecte() &&
