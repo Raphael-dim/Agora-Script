@@ -13,6 +13,7 @@ function compare(Message $message1, Message $message2): int
     }
     return ($message1->getDate() < $message2->getDate()) ? -1 : 1;
 }
+
 // Fusionne les tableaux $recus et $envoyes en un seul tableau $messages
 
 $messages = array_merge($recus, $envoyes);
@@ -37,14 +38,14 @@ foreach ($messages as $message) {
     }
     // Si c'est le dernier message du tableau, ajoute l'identifiant "dernierMessage"
     if ($i == sizeof($messages)) {
-        $id = 'dernierMessage';
+        $id = 'id = "dernierMessage"';
     }
     if ($message->getAuteur()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
-        echo ' <p id = "' . $id . '"  style = "margin-left: 50%" class="date" >Vous, il y a ' . $diff . ' </p > ';
+        echo ' <p ' . $id . '  style = "margin-left: 50%" class="date" >Vous, il y a ' . $diff . ' </p > ';
         echo '<div style = "margin-left: 60%;" class="messageChat" > ' . htmlspecialchars($message->getContenu()) . '</div > ';
 
     } else {
-        echo '<p id = "' . $id . '" class="date" >' . htmlspecialchars($message->getAuteur()->getPrenom()) . ', il y a ' . $diff . ' </p > ';
+        echo '<p ' . $id . ' class="date" >' . htmlspecialchars($message->getAuteur()->getPrenom()) . ', il y a ' . $diff . ' </p > ';
         echo '<div class="messageChat" > ' . htmlspecialchars($message->getContenu()) . '</div > ';
     }
     $i++;

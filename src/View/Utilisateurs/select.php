@@ -20,8 +20,8 @@ if (isset($_POST["keyword"])) {
     <?php
     foreach ($_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']] as $responsable) {
         echo '
-                <span id="utilisateurs" class="listes">
-                <button type = submit value = "' . htmlspecialchars($responsable). '" name = "delete">' . htmlspecialchars($responsable) . '</button>
+                <span class="utilisateurs">
+                <button class="nav" type = submit value = "' . htmlspecialchars($responsable). '" name = "delete">' . htmlspecialchars($responsable) . '</button>
                 
                 </span>
             ';
