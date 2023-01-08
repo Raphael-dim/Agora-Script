@@ -525,6 +525,13 @@ class ControllerQuestion
                 MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
                 Controller::redirect("index.php?action=form&controller=question&step=2");
             }
+            if (FormConfig::TextField('debutEcriture' . $i) < date("d-m-Y") ||
+                FormConfig::TextField('finEcriture' . $i) < date("d-m-Y") ||
+                FormConfig::TextField('debutVote' . $i) < date("d-m-Y") ||
+                FormConfig::TextField('finVote' . $i) < date("d-m-Y")) {
+                MessageFlash::ajouter('warning', "test");
+                Controller::redirect('index.php?controller=question&action=form&step=2');
+            }
             $calendrierBD = (new CalendrierRepository())->sauvegarder($calendrier, true);
             if ($calendrierBD != null) {
                 $calendrier->setId($calendrierBD);

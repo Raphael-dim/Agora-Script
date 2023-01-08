@@ -87,7 +87,7 @@ if (isset($_GET['selection'])) {
             if ($question->getPhase() == 'debut') {
                 echo '<p class="debut" >Début de la phase d\'écriture dans : ' . Calendrier::diff($interval);
                 if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $organisateur) {
-                    echo '<br><a class = "link-custom" style="color: rgb(246,121,82)" href="index.php?action=passerPhase&controller=question&idQuestion=' . $idQuestionURL . '"><strong> Passer à la phase d\'écriture</strong></a>';
+                    echo '<br><a class = "link-custom" style="color: #ffc55c" href="index.php?action=passerPhase&controller=question&idQuestion=' . $idQuestionURL . '"><strong> Passer à la phase d\'écriture</strong></a>';
                 }
                 echo '</p>';
             }
@@ -104,7 +104,7 @@ if (isset($_GET['selection'])) {
             $interval = (new DateTime($date))->diff(new DateTime($calendrier->getFinVote(true)));
             echo '<p class="debut"> Fin de la phase de vote dans : ' . Calendrier::diff($interval);
             if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $organisateur) {
-                echo '<br><a class = "link-custom" style="color: rgb(246,121,82)" href="index.php?action=passerPhase&controller=question&idQuestion=' . $idQuestionURL . '"><strong> Passer à la phase de dépouillement des votes</strong></a>';
+                echo '<br><a class = "link-custom" style="color: #73d393" href="index.php?action=passerPhase&controller=question&idQuestion=' . $idQuestionURL . '"><strong> Passer à la phase de dépouillement des votes</strong></a>';
             }
             echo '</p>';
         }

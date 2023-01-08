@@ -40,6 +40,11 @@ if (isset($_POST['next'])) {
             MessageFlash::ajouter('warning', "La date de fin des votes doit être supérieure à la date de début des votes");
             Controller::redirect('index.php?controller=question&action=form&step=2');
         }
+
+        if ($debutEcriture < date("d-m-Y") || $finEcriture < date("d-m-Y") || $debutVote < date("d-m-Y") || $finVote < date("d-m-Y")) {
+            MessageFlash::ajouter('warning', "test");
+            Controller::redirect('index.php?controller=question&action=form&step=2');
+        }
     }
 
     FormConfig::postSession();
@@ -60,11 +65,20 @@ if (isset($_POST['ajoutPhase'])) {
     FormConfig::postSession();
     if ($_SESSION[FormConfig::$arr]['nbCalendriers'] < 7) {
         $_SESSION[FormConfig::$arr]['nbCalendriers']++;
+    }else{
+        MessageFlash::ajouter('info', 'Le nombre de calendriers maximum est de 7');
     }
+    FormConfig::redirect("index.php?controller=question&action=form&step=2");
+
 } else if (isset($_POST['supprimerPhase'])) {
     if ($_SESSION[FormConfig::$arr]['nbCalendriers'] > 1) {
         $_SESSION[FormConfig::$arr]['nbCalendriers']--;
+    }else{
+        MessageFlash::ajouter('info', 'Une question doit avoir au moins un calendrier');
+
     }
+    FormConfig::redirect("index.php?controller=question&action=form&step=2");
+
 }
 ?>
 <h1>Selection du calendrier</h1>
