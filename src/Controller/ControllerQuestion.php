@@ -183,6 +183,7 @@ class ControllerQuestion
         } else {
             Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
         }
+
         self::verifBD($question);
 
 
@@ -293,8 +294,6 @@ class ControllerQuestion
         foreach ($question->getCalendrier(true) as $calendrier) {
             (new CalendrierRepository())->delete($calendrier->getId());
         }
-
-
 
 
         $ancSections = $question->getSections();
@@ -471,13 +470,16 @@ class ControllerQuestion
         for ($i = 1; $i <= $nbCalendriers; $i++) {
             $calendrier = new Calendrier($question, FormConfig::TextField('debutEcriture' . $i), FormConfig::TextField('finEcriture' . $i),
                 FormConfig::TextField('debutVote' . $i), FormConfig::TextField('finVote' . $i));
-            if ($calendrier->getDebutEcriture() != "" && $calendrier->getFinEcriture() != ""
-                && ($calendrier->getDebutEcriture(true) >= $calendrier->getFinEcriture(true)
-                    || $calendrier->getDebutVote(true) < $calendrier->getFinEcriture(true))) {
+            if ($calendrier->getDebutEcriture(true) >= $calendrier->getFinEcriture(true)
+                || $calendrier->getDebutVote(true) < $calendrier->getFinEcriture(true)) {
                 MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
                 Controller::redirect("index.php?action=form&controller=question&step=2");
             }
             if ($calendrier->getDebutVote(true) >= $calendrier->getFinVote(true)) {
+                MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
+                Controller::redirect("index.php?action=form&controller=question&step=2");
+            }
+            if ($i < $nbCalendriers && $calendrier->getFinVote() > FormConfig::TextField('finVote' . $i + 1)) {
                 MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
                 Controller::redirect("index.php?action=form&controller=question&step=2");
             }

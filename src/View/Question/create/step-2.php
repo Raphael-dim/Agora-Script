@@ -19,29 +19,22 @@ if (isset($_POST['next'])) {
         $debutVote = $_POST['debutVote' . $n];
         $finVote = $_POST['finVote' . $n];
 
-        if ($n == 1 && ($debutEcriture == "" || $finEcriture == "" || $debutVote == "" || $finVote == "")) {
-            MessageFlash::ajouter("warning", "La phase d'écriture et de vote sont obligatoire pour le premier calendrier");
+        if ($debutEcriture == "" || $finEcriture == "" || $debutVote == "" || $finVote == "") {
+            MessageFlash::ajouter("warning", "La phase d'écriture et de vote sont obligatoire.");
             Controller::redirect('index.php?controller=question&action=form&step=2');
         }
+        if ($debutEcriture >= $finEcriture) {
+            MessageFlash::ajouter("warning", "La date de fin d'écriture doit être supérieure à la date de début d'écriture");
+            Controller::redirect('index.php?controller=question&action=form&step=2');
+        }
+        if ($debutVote <= $debutEcriture || $debutVote < $finEcriture) {
+            MessageFlash::ajouter('warning', "La phase de vote doit commencer après la phase d'écriture");
+            Controller::redirect('index.php?controller=question&action=form&step=2');
+        }
+        if ($n < $_SESSION[FormConfig::$arr]['nbCalendriers'] && $_POST['finVote' . $n] > $_POST['debutEcriture' . $n + 1]) {
+            MessageFlash::ajouter("warning", "Les phases doivent se succéder et ne peuvent être simultanées.");
+            Controller::redirect('index.php?controller=question&action=form&step=2');
 
-        if (($debutEcriture != "" && $finEcriture == "") || ($debutEcriture == "" && $finEcriture != "")) {
-            MessageFlash::ajouter("warning", "Calendrier invalide");
-            Controller::redirect('index.php?controller=question&action=form&step=2');
-        }
-        if ($debutEcriture != "") {
-            if ($debutEcriture >= $finEcriture) {
-                MessageFlash::ajouter("warning", "La date de fin d'écriture doit être supérieure à la date de début d'écriture");
-                Controller::redirect('index.php?controller=question&action=form&step=2');
-            }
-            if ($debutVote <= $debutEcriture || $debutVote < $finEcriture) {
-                MessageFlash::ajouter('warning', "La phase de vote doit commencer après la phase d'écriture");
-                Controller::redirect('index.php?controller=question&action=form&step=2');
-            }
-            if ($n < $_SESSION[FormConfig::$arr]['nbCalendriers'] && $_POST['debutEcriture' . $n + 1] != ""
-                && $_POST['finVote' . $n] > $_POST['debutEcriture' . $n + 1]) {
-                MessageFlash::ajouter("warning", "Les phases doivent se succéder et ne peuvent être simultanées.");
-                Controller::redirect('index.php?controller=question&action=form&step=2');
-            }
         }
         if ($debutVote >= $finVote) {
             MessageFlash::ajouter('warning', "La date de fin des votes doit être supérieure à la date de début des votes");
@@ -78,8 +71,7 @@ if (isset($_POST['ajoutPhase'])) {
 <?php
 if ($_SESSION[FormConfig::$arr]['nbCalendriers'] > 1) {
     $calendrier = 'Calendrier multiphase';
-    $message = 'Le calendrier multiphase permet de définir plusieurs phases d\'écriture et de vote pour une même question.
-                       <br> À part la première, les phases d\'écritures ne sont pas obligatoire.<br>
+    $message = 'Le calendrier multiphase permet de définir plusieurs phases d\'écriture et de vote pour une même question.<br>
                          Si vous décidez d\'ajouter des phases de votes, vous devrez vous-même sélectionner les propositions gagnantes entre 2 phase de vote.';
 
 
@@ -108,21 +100,13 @@ if ($_SESSION[FormConfig::$arr]['nbCalendriers'] > 1) {
         <label for="debutEcriture">Date de début d\'écriture des propositions :</label>
         <input type="datetime-local" id="debutEcriture" name="debutEcriture' . $n . '"
                value="' . FormConfig::TextField('debutEcriture' . $n) . '"
-               min="' . date(" Y-m-d H:i") . '"';
-        if ($n == 1) {
-            echo ' required';
-        }
-        echo '>
+               min="' . date(" Y-m-d H:i") . '" required
     </p>
     <p>
         <label for="finEcriture">Date de fin d\'écriture des propositions :</label>
         <input type="datetime-local" id="finEcriture" name="finEcriture' . $n . '"
                value="' . FormConfig::TextField('finEcriture' . $n) . '"
-               min="' . date(" Y-m-d H:i") . '"';
-        if ($n == 1) {
-            echo ' required';
-        }
-        echo '>
+               min="' . date(" Y-m-d H:i") . '" required
     </p>
     <p>
         <label for="debutVote">Date de début des votes :</label>

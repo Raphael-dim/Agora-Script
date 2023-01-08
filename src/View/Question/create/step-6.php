@@ -99,8 +99,7 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
                     ?>
 
                     <?php
-                    if (FormConfig::TextField('debutEcriture' . $i) != "") {
-                        echo '<p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_debut">
+                    echo '<p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_debut">
                                             Début d\'écriture des propositions : <br>
                                     ' . (new DateTime(htmlspecialchars(FormConfig::TextField("debutEcriture" . $i))))->format("d-m-Y à H:i:s") . '</p>
                                     <span class="vertical-line" style="background: #CE16169B"></span>
@@ -109,7 +108,6 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
                                     ' . (new DateTime(htmlspecialchars(FormConfig::TextField("finEcriture" . $i))))->format("d-m-Y à H:i:s") . '</p>
                         <span class="vertical-line" style="background:grey "></span>';
 
-                    }
                     ?>
                     <p style="background : rgba(65,112,56,0.76); color: white; padding: 6px" class="cal"
                        id="vote_debut">Début des votes :
