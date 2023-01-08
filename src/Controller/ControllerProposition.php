@@ -84,7 +84,7 @@ class ControllerProposition
         }
 
         Controller::afficheVue('view.php',
-            array_merge(["pagetitle" => "Créer une question",
+            array_merge(["pagetitle" => "Créer une proposition",
                 "cheminVueBody" => "Proposition/create/" . $view . ".php",
                 "question" => $question], $params));
     }
