@@ -37,16 +37,16 @@ form {
     margin-bottom: 10px;
 }
 
-#utilisateurs {
+.utilisateurs {
     background: none;
     border: none;
 }
 
-#utilisateurs > button {
+.utilisateurs > button {
     border: solid 1px;
 }
 
-#utilisateurs > button:after {
+.utilisateurs > button:after {
     content: "";
     background-image: url("../images/delete.png");
     background-size: 10px 10px;
@@ -57,11 +57,11 @@ form {
     display: none;
 }
 
-#utilisateurs > button:hover {
+.utilisateurs > button:hover {
     border: red solid 1px;
 }
 
-#utilisateurs > button:hover::after {
+.utilisateurs > button:hover::after {
     display: inline-block;
 }
 
@@ -865,7 +865,7 @@ div p {
     z-index: 1;
     position: absolute;
     top: 13px;
-    left: -25px;
+    left: -32px;
 }
 
 #participants {
@@ -1048,7 +1048,7 @@ input, textarea{
 }
 
 .shadow-effect:hover {
-    transform: scale(101%);
+    transform: scale(100%);
     box-shadow: -3px 3px 0 0 var(--brand)
 }
 

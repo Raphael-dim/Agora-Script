@@ -18,7 +18,7 @@ if (isset($_GET['selection'])) {
 <div class="barreHaut">
     <form method="post" action="index.php?controller=question&action=readKeyword">
         <p>
-            <label for="motclef"></label><input placeholder="Rechercher une question" type="text" placeholder=""
+            <label for="motclef"></label><input placeholder="Rechercher une question" type="text"
                                                 name="keyword" id="motclef"
                                                 required>
             <input type="image" alt="Submit" src="../web/images/search.png" class="search">
