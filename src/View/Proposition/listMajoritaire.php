@@ -1,3 +1,4 @@
+<link href="css/ListePropositions.css" rel="stylesheet">
 <div class="propositions">
     <?php
 
@@ -68,8 +69,8 @@
         } else {
             echo '<div class=proposition>';
         }
-        echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
-            $idPropositionURL . '"> <h2>' . $titreHTML . '</h2>   </a>';
+
+        echo '<p class=titre> <h2>' . $titreHTML . ' </h2 </p>';
         if ($peutVoter && !$proposition->isEstEliminee()) {
             $vote = Votant::aVote($proposition, $votes, 'majoritaire');
             for ($val = 1; $val <= 6; $val++) {
@@ -103,6 +104,7 @@
                         <img src=../web/images/coeur_logo.png alt="">
                         ';
                 }
+
                 echo '<span style="font-size: 18px">' . $attribut . '</span></a>';
             }
         }
@@ -161,7 +163,9 @@
             href=index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '>Supprimer</a><br></p>';
         }
         $i++;
-        echo '<p><a href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($proposition->getIdResponsable()) . '" >par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a></p>';
+        echo '<p><a class = "link-custom" href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($proposition->getIdResponsable()) . '" >par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a></p>';
+        echo '<a class = "link-custom" href= "index.php?action=read&controller=proposition&idProposition=' .
+            $idPropositionURL . '">Lire plus</a>';
         echo '</div>';
     }
     ?>

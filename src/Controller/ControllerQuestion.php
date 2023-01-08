@@ -93,11 +93,20 @@ class ControllerQuestion
      */
     public static function form(): void
     {
+        // Récupère l'instance de la session
         Session::getInstance();
+
+        // Définit la configuration du formulaire
         FormConfig::setArr('SessionQuestion');
+
+        // Initialise les variables de vue et de paramètres
         $view = "";
-        $step = $_GET['step'] ?? 1;
         $params = array();
+
+        // Récupère la variable étape de la requête GET, ou la définit à 1 par défaut si elle n'est pas définie
+        $step = $_GET['step'] ?? 1;
+
+        // Selon la valeur de la variable étape, détermine quelle vue afficher
         switch ($step) {
             case 1:
                 $view = "step-1";
@@ -109,19 +118,31 @@ class ControllerQuestion
                 $view = "step-3";
                 break;
             case 4:
-                if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row" != "") {
+                // Si les variables POST row et keyword sont définies et que la variable row n'est pas vide,
+                // récupère la variable utilisateurs et la définit dans le tableau de paramètres
+                if (isset($_POST["row"]) && isset($_POST["keyword"])) {
                     $row = $_POST['row'];
                     $keyword = $_POST['keyword'];
                     $utilisateurs = (new UtilisateurRepository())->selectKeywordUtilisateur($keyword);
                     $params['utilisateurs'] = $utilisateurs;
                 }
+                else{
+                    $utilisateurs = (new UtilisateurRepository())->selectAll();
+                    $params['utilisateurs'] = $utilisateurs;
+                }
                 $view = "step-4";
                 break;
             case 5:
-                if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row" != "") {
+                // Si les variables POST row et keyword sont définies et que la variable row n'est pas vide,
+                // récupère la variable utilisateurs et la définit dans le tableau de paramètres
+                if (isset($_POST["row"]) && isset($_POST["keyword"])) {
                     $row = $_POST['row'];
                     $keyword = $_POST['keyword'];
                     $utilisateurs = (new UtilisateurRepository())->selectKeywordUtilisateur($keyword);
+                    $params['utilisateurs'] = $utilisateurs;
+                }
+                else{
+                    $utilisateurs = (new UtilisateurRepository())->selectAll();
                     $params['utilisateurs'] = $utilisateurs;
                 }
                 $view = "step-5";
@@ -132,6 +153,7 @@ class ControllerQuestion
 
         }
 
+        // Affiche la vue avec le titre de page et le chemin de vue spécifiés, et passe le tableau de paramètres en tant que variables
         Controller::afficheVue('view.php',
             array_merge(["pagetitle" => "Créer une question",
                 "cheminVueBody" => "Question/create/" . $view . ".php"], $params));

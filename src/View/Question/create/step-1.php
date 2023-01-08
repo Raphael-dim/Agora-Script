@@ -16,7 +16,7 @@ if (isset($_GET['idQuestion']) or isset($_SESSION[FormConfig::$arr]['idQuestion'
     }
 
 } else {
-    echo "<h1>Création d'une question</h1>";
+    echo "<h1 class = 'custom_titre'>Création d'une question</h1>";
 }
 
 
