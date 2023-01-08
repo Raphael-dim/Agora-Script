@@ -851,6 +851,15 @@ div p {
     display: block;
 }
 
+#detail_section{
+    width: 90% !important;
+    background: #dff5f4;
+    padding: 10px;
+    text-align: center;
+}
+#description{
+    word-wrap: break-word;
+}
 
 .vertical-line {
     display: block;
