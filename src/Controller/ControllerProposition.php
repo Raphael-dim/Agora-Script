@@ -38,7 +38,7 @@ class ControllerProposition
             vous n'êtes pas responsable pour cette question.");
             $bool = false;
         }
-        if ($question->getPhase() != 'ecriture') {
+        if ($question->getPhase() != 'ecriture' || $question->aPassePhase()) {
             MessageFlash::ajouter("danger", "Vous ne pouvez pas créer de proposition en dehors 
             de la phase d'écriture.");
             $bool = false;
@@ -165,7 +165,7 @@ class ControllerProposition
             vous n'êtes pas responsable pour cette question.");
             $bool = false;
         }
-        if ($question->getPhase() != 'ecriture') {
+        if ($question->getPhase() != 'ecriture' || $question->aPassePhase()) {
             MessageFlash::ajouter("danger", "Vous ne pouvez pas créer de proposition en dehors de la phase d'écriture.");
             $bool = false;
         }

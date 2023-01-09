@@ -81,28 +81,27 @@
         }
         $nbVotes = htmlspecialchars($proposition->getNbEtoiles());
         echo '<h3>Nombre de votes : ' . $nbVotes . '</h3>';
+        if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
+            ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
+            if ($proposition->isEstEliminee()) {
+                echo '<p><a class="link-custom" href="index.php?controller=proposition&action=annulerEliminer&idProposition=' . $idPropositionURL . '">Annuler l\'élimination</a><br></p>';
+            } else {
+                echo '<p><a class="link-custom" href="index.php?controller=proposition&action=eliminer&idProposition=' . $idPropositionURL . '">Eliminer</a><br></p>';
+            }
+        }
 
         if (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
             $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte() &&
             $question->getPhase() == 'ecriture') {
 
-            echo '<p> <a href="index.php?action=update&controller=proposition&idProposition=' .
-                rawurlencode($proposition->getId()) . '"><img class="modifier" src = "../web/images/modifier.png"  alt="modifier"></a ><br></p> ';
-        }
-        if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
-            ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
-            if ($proposition->isEstEliminee()) {
-                echo '<p><a href="index.php?controller=proposition&action=annulerEliminer&idProposition=' . $idPropositionURL . '">Annuler l\'élimination</a><br></p>';
-            } else {
-                echo '<p><a href="index.php?controller=proposition&action=eliminer&idProposition=' . $idPropositionURL . '">Eliminer</a><br></p>';
-            }
+            echo ' <p><a href="index.php?action=update&controller=proposition&idProposition=' .
+                rawurlencode($proposition->getId()) . '"><img class="modifier" src = "../web/images/modifier.png"  alt="modifier"></a > ';
         }
 
-        if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable() && $question->getPhase() == 'ecriture') {
-
-            echo '<p> <a class="nav suppProp" 
-            href="index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '">Supprimer</a><br></p>';
+        if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable() && $question->getPhase() != 'vote') {
+            echo ' <a href="index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '"><img class="delete" src = "../web/images/delete.png"  alt="supprimer"></a>';
         }
+        echo '</p>';
         $i++;
         echo '<p><a href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($proposition->getIdResponsable()) . '" >par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a></p>';
         echo '</div>';
