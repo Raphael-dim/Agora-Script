@@ -107,26 +107,26 @@ if ($_SESSION[FormConfig::$arr]['nbCalendriers'] > 1) {
     for ($n = 1; $n <= $_SESSION[FormConfig::$arr]['nbCalendriers']; $n++) {
 
         echo '<h2>Phase n°' . $n . '</h2>';
-        echo ' <p>
-        <label for="debutEcriture' . $n . '">Date de début d\'écriture des propositions :</label>
-        <input type="datetime-local" id="debutEcriture' . $n . '" name="debutEcriture' . $n . '"
+        echo ' <p class="InputAddOn">
+        <label class="InputAddOn-item" for="debutEcriture' . $n . '">Date de début d\'écriture des propositions :</label>
+        <input  type="datetime-local" id="debutEcriture' . $n . '" name="debutEcriture' . $n . '"
                value="' . FormConfig::TextField('debutEcriture' . $n) . '"
                min="' . date("Y-m-d H:i") . '" required>
     </p>
-    <p>
-        <label for="finEcriture' . $n . '">Date de fin d\'écriture des propositions :</label>
+    <p class="InputAddOn">
+        <label class="InputAddOn-item" for="finEcriture' . $n . '">Date de fin d\'écriture des propositions :</label>
         <input type="datetime-local" id="finEcriture' . $n . '" name="finEcriture' . $n . '"
                value="' . FormConfig::TextField('finEcriture' . $n) . '"
                min="' . date("Y-m-d H:i") . '" required>
     </p>
-    <p>
-        <label for="debutVote' . $n . '">Date de début des votes :</label>
+    <p class="InputAddOn">
+        <label class="InputAddOn-item" for="debutVote' . $n . '">Date de début des votes :</label>
         <input type="datetime-local" id="debutVote' . $n . '" name="debutVote' . $n . '"
                value="' . FormConfig::TextField('debutVote' . $n) . '"
                min="' . date("Y-m-d H:i") . '" required>
     </p>
-    <p>
-        <label for="finVote' . $n . '">Date de fin des votes :</label>
+    <p class="InputAddOn">
+        <label class="InputAddOn-item" for="finVote' . $n . '">Date de fin des votes :</label>
         <input type="datetime-local" id="finVote' . $n . '" name="finVote' . $n . '"
                value="' . FormConfig::TextField("finVote" . $n) . '"
                 min="' . date("Y-m-d H:i") . '" required>

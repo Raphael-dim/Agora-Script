@@ -131,6 +131,10 @@ class ControllerUtilisateur
         } else if (Utilisateur::identifiantExiste($_POST['identifiant'])) {
             MessageFlash::ajouter('warning', 'Cet identifiant existe déjà');
             Controller::redirect('index.php?controller=utilisateur&action=create');
+        } else if (strlen($_POST['identifiant']) > 30 || strlen($_POST['nom']) > 30 || strlen($_POST['prenom']) > 30 ||
+            strlen($_POST['mdp']) > 256 || strlen($_POST['mdp2']) > 256 || strlen($_POST['email']) > 256) {
+            MessageFlash::ajouter('danger', 'Vous n\'avez pas respecté les contraintes');
+            Controller::redirect('index.php?controller=utilisateur&action=create');
         } else {
             $utilisateur = Utilisateur::construireDepuisFormulaire($_POST);
             try {
@@ -252,6 +256,11 @@ class ControllerUtilisateur
         if (strlen($_POST['mdp']) < 6) {
             MessageFlash::ajouter('info', 'Votre mot de passe doit contenir au moins 6 caractères.');
             Controller::redirect('index.php?controller=utilisateur&action=update&idUtilisateur=' . $utilisateur->getIdentifiant());
+        }
+        if (strlen($_POST['identifiant']) > 30 || strlen($_POST['nom']) > 30 || strlen($_POST['prenom']) > 30 ||
+            strlen($_POST['mdp']) > 256 || strlen($_POST['mdp2']) > 256 || strlen($_POST['email']) > 256) {
+            MessageFlash::ajouter('danger', 'Vous n\'avez pas respecté les contraintes');
+            Controller::redirect('index.php?controller=utilisateur&action=create');
         }
         $bool = false;
         for ($i = 0; $i < 10 && !$bool; $i++) {
