@@ -956,6 +956,7 @@ input, textarea {
 
 
 .link-custom {
+    font-size: 18px;
     position: relative;
 }
 
@@ -1144,6 +1145,7 @@ select {
 }
 
 .messageInfo {
+    border: 1px rgba(255, 255, 255, 0.51) solid;
     margin-left: 15px;
     max-width: 550px;
 }
@@ -1172,4 +1174,8 @@ input {
     display-inside: ruby-text;
     float: right;
     display: flex;
+}
+
+.delete:hover, .modifier:hover {
+   width: 26px;
 }

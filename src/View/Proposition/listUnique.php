@@ -65,14 +65,14 @@
                 echo '<form method="get" action="../web/index.php">
                 <input type="hidden" name="action" value="create">
                 <input type="hidden" name="controller" value="vote">
-                <input type="hidden" name="idProposition" value="' . $proposition->getId() . '">
+                <input type="hidden" name="idProposition" value="' . rawurlencode($proposition->getId()) . '">
                 <input type="submit" value="Voter" class="nav">
                     </form>';
             } else {
                 echo '<form method="get" action="../web/index.php">
                 <input type="hidden" name="action" value="delete">
                 <input type="hidden" name="controller" value="vote">
-                <input type="hidden" name="idProposition" value="' . $proposition->getId() . '">
+                <input type="hidden" name="idProposition" value="' . rawurlencode($proposition->getId()) . '">
                 <input type="submit" value="Supprimer le vote" class="nav">
                     </form>';
             }

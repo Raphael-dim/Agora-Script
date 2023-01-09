@@ -65,7 +65,7 @@ if (isset($_POST['ajoutPhase'])) {
     FormConfig::postSession();
     if ($_SESSION[FormConfig::$arr]['nbCalendriers'] < 7) {
         $_SESSION[FormConfig::$arr]['nbCalendriers']++;
-    }else{
+    } else {
         MessageFlash::ajouter('info', 'Le nombre de calendriers maximum est de 7');
     }
     FormConfig::redirect("index.php?controller=question&action=form&step=2");
@@ -73,12 +73,10 @@ if (isset($_POST['ajoutPhase'])) {
 } else if (isset($_POST['supprimerPhase'])) {
     if ($_SESSION[FormConfig::$arr]['nbCalendriers'] > 1) {
         $_SESSION[FormConfig::$arr]['nbCalendriers']--;
-    }else{
+    } else {
         MessageFlash::ajouter('info', 'Une question doit avoir au moins un calendrier');
-
     }
     FormConfig::redirect("index.php?controller=question&action=form&step=2");
-
 }
 ?>
 <h1>Selection du calendrier</h1>
@@ -99,7 +97,6 @@ if ($_SESSION[FormConfig::$arr]['nbCalendriers'] > 1) {
 } ?>
 
 <form method="post">
-    <!--    <input type="image" style="max-width: 30px" name="click" src="../web/images/add.png" alt="">-->
     <input class="nav" type="submit" name="ajoutPhase" value="Ajouter une phase">
     <input class="nav" type="submit" name="supprimerPhase" value="Supprimer une phase">
 

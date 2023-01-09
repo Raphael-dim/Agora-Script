@@ -65,10 +65,10 @@
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
         if ($proposition->isEstEliminee()) {
-            echo '<div style="background: #000e17" class=proposition>';
+            echo '<div style="background: #000e17" class="proposition shadow-effect">';
             echo '<h3>(Eliminé)</h3>';
         } else {
-            echo '<div class=proposition>';
+            echo '<div class="proposition shadow-effect">';
         }
 
         echo '<p class=titre> <h2>' . $titreHTML . ' </h2 </p>';
