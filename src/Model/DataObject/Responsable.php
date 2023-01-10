@@ -5,6 +5,7 @@ namespace App\Vote\Model\DataObject;
 use App\Vote\Model\Repository\AbstractRepository;
 use App\Vote\Model\Repository\CoAuteurRepository;
 use App\Vote\Model\Repository\PropositionRepository;
+use App\Vote\Model\Repository\ResponsableRepository;
 
 class Responsable extends Utilisateur
 {
@@ -21,15 +22,11 @@ class Responsable extends Utilisateur
     }
 
     /* On vérifie si l'utilisateur est responsable pour une question*/
-    public static function estResponsable($question, $utilisateur): bool
+    public static function estResponsable(string $question, $utilisateur): bool
     {
-        $responsables = $question->getResponsables();
-        foreach ($responsables as $responsable) {
-            if ($responsable->getIdentifiant() == $utilisateur) {
-                return true;
-            }
-        }
-        return false;
+        $Responsable = (new ResponsableRepository())->selectWhere(array('clef0' => $utilisateur, 'clef1' => $question),"*",array('clef0' => 'idutilisateur', 'clef1' => 'idquestion'));
+        if(!$Responsable) return false;
+        return true;
     }
 
     /* On vérifie si le responsable a déjà crée une proposition pour une question*/

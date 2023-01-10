@@ -36,7 +36,7 @@ if (array_key_exists('delete', $_POST)) {
 
 function adduser(Question $question, string $id): void
 {
-    if (Responsable::estResponsable($question, $id)) {
+    if (Responsable::estResponsable($_GET['idQuestion'], $id)) {
         MessageFlash::ajouter('warning', 'Cet utilisateur est responsable d\'une proposition et ne peut être co-auteur.');
     }
     else if (!in_array($id, $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']])) {
