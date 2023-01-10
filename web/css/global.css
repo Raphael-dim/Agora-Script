@@ -270,13 +270,6 @@ a {
 }
 
 
-.propositionsResultat {
-    margin-top: 15px;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-}
-
 
 #all.phases > a {
     background: #8699A3;
@@ -586,7 +579,8 @@ a.vote:hover img {
     }
 
     .propositionsResultat {
-
+        padding-bottom: 9px;
+        padding-top: 9px;
         display: flex;
         flex-direction: column;
     }
@@ -596,6 +590,10 @@ a.vote:hover img {
     }
 
 
+}
+
+.propositionsResultat {
+    margin-top: 30px;
 }
 
 .modifier, .delete {
@@ -1216,3 +1214,6 @@ input {
    width: 26px;
 }
 
+.medaille {
+    margin-left: 25px;
+}

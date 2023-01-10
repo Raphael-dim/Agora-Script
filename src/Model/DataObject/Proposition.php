@@ -15,23 +15,8 @@ class Proposition extends AbstractDataObject
     private int $nbEtoiles;
     private int $nbVotes;
     private bool $estEliminee;
-    private float $Votemedian = 0;
-
-    /**
-     * @return float
-     */
-    public function getVotemedian(): float
-    {
-        return $this->Votemedian;
-    }
-
-    /**
-     * @param float $Votemedian
-     */
-    public function setVotemedian(float $Votemedian): void
-    {
-        $this->Votemedian = $Votemedian;
-    }
+    private float $votemedian = 0;
+    private float $moyenneVote = 0;
 
     /**
      * @param int $id
@@ -56,6 +41,38 @@ class Proposition extends AbstractDataObject
         $this->nbEtoiles = $nbEtoiles;
         $this->nbVotes = $nbVotes;
         $this->estEliminee = $estEliminee;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMoyenneVote(): float
+    {
+        return $this->moyenneVote;
+    }
+
+    /**
+     * @param float $moyenneVote
+     */
+    public function setMoyenneVote(float $moyenneVote): void
+    {
+        $this->moyenneVote = $moyenneVote;
+    }
+
+    /**
+     * @return float
+     */
+    public function getVotemedian(): float
+    {
+        return $this->votemedian;
+    }
+
+    /**
+     * @param float $votemedian
+     */
+    public function setVotemedian(float $votemedian): void
+    {
+        $this->votemedian = $votemedian;
     }
 
     /**

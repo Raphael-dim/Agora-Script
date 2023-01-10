@@ -66,11 +66,20 @@ class ControllerProposition
         $step = $_GET['step'] ?? 1;
         $params = array();
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        $readOnly = "";
+        if (isset($_GET['idProposition'])) {
+            if (!Responsable::estResponsable($_GET['idQuestion'],ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
+                $readOnly = "readonly";
+            }
+        }
         switch ($step) {
             case 1:
                 $view = "step-1";
                 break;
             case 2:
+                if (isset($_GET["idProposition"]) and CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(),$_GET["idProposition"])){
+                    FormConfig::redirect('index.php?controller=proposition&action=updated');
+                }
                 if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row" != "") {
                     $row = $_POST['row'];
                     $keyword = $_POST['keyword'];
@@ -87,7 +96,8 @@ class ControllerProposition
         Controller::afficheVue('view.php',
             array_merge(["pagetitle" => "Créer une proposition",
                 "cheminVueBody" => "Proposition/create/" . $view . ".php",
-                "question" => $question], $params));
+                "question" => $question,"readOnly" => $readOnly], $params));
+
     }
 
 
@@ -264,10 +274,8 @@ class ControllerProposition
             FormConfig::startSession();
             $_SESSION[FormConfig::$arr]['idProposition'] = $_GET['idProposition'];
             FormConfig::initialiserSessionsProposition($proposition);
-            Controller::afficheVue('view.php', ["pagetitle" => "Modifier une proposition",
-                "cheminVueBody" => "Proposition/create/step-1.php",
-                "proposition" => $proposition,
-                "question" => $question]);
+            FormConfig::redirect("index.php?controller=proposition&action=form&step=1&idProposition=" . $proposition->getId() . "&idQuestion=" . $question->getId());
+
         }
     }
 
@@ -282,7 +290,7 @@ class ControllerProposition
         $question = (new QuestionRepository)->select($idquestion);
 
         $bool = true;
-        if (!ConnexionUtilisateur::estConnecte() || (!Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte()) && !CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $_SESSION[FormConfig::$arr]["idProposition"]))) {
+        if (!ConnexionUtilisateur::estConnecte() || (!Responsable::estResponsable($question->getId(), ConnexionUtilisateur::getLoginUtilisateurConnecte()) && !CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $_SESSION[FormConfig::$arr]["idProposition"]))) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier cette proposition, 
         vous n'êtes ni responsable ni co-auteur pour cette proposition.");
             $bool = false;
@@ -313,14 +321,14 @@ class ControllerProposition
             $prop->setId($_SESSION[FormConfig::$arr]["idProposition"]);
             (new PropositionRepository())->update($prop);
 
-            if (Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
+            if (Responsable::estResponsable($question->getId(), ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
                 $coAuteursSelec = $_SESSION[FormConfig::$arr]['co-auteur'];
                 $coAuteurs = (new CoAuteurRepository())->selectWhere($_SESSION[FormConfig::$arr]["idProposition"], '*', "idproposition");
                 foreach ($coAuteurs as $coAut) {
                     (new CoAuteurRepository())->deleteSpecific($coAut);
                 }
                 foreach ($coAuteursSelec as $coAutSelec) {
-                    if (Responsable::estResponsable($question, $coAutSelec)) {
+                    if (Responsable::estResponsable($question->getId(), $coAutSelec)) {
                         MessageFlash::ajouter('danger', 'Vous n\'avez pas respecté les contraintes');
                         Controller::redirect("index.php?controller=question&action=readAll");
                     } else {

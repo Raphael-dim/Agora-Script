@@ -7,13 +7,7 @@ use App\Vote\Model\Repository\PropositionRepository;
 use App\Vote\Model\DataObject\CoAuteur as CoAuteur;
 
 
-$readOnly = "";
 if (isset($_GET['idProposition'])) {
-    echo "<h1 class='custom_titre'>Modification de la Proposition</h1>";
-    if ($proposition->getIdResponsable() != ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
-        $readOnly = "readonly";
-    }
-} else {
     echo "<h1 class='custom_titre'>Création d'une Proposition</h1>";
 }
 if (isset($_POST['titre'])) {
@@ -22,8 +16,8 @@ if (isset($_POST['titre'])) {
     if (!isset($_SESSION[FormConfig::$arr]['co-auteur'])) {
         $_SESSION[FormConfig::$arr]['co-auteur'] = array();
     }
-    if (isset($proposition) and CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(),$proposition->getId())){
-        FormConfig::redirect('index.php?controller=proposition&action=updated');
+    if (isset($_GET['idProposition'])) {
+        FormConfig::redirect("index.php?controller=proposition&action=form&step=2&idProposition=" . $_GET['idProposition'] . "&idQuestion=" . $question->getId());
     }
     FormConfig::redirect("index.php?controller=proposition&action=form&step=2&idQuestion=".rawurlencode($question->getId()));
 }
@@ -38,7 +32,7 @@ if (isset($_POST['titre'])) {
 
                value="<?= FormConfig::TextField('titre') ?> " <?= $readOnly ?>
                name="titre">
-        <label class="maximum">480 caractères maximum</label>
+        <label class="maximum" style="margin-left: 15px">480 caractères maximum</label>
     </p>
     <!--<h2>Désigner les co-auteurs qui vous aideront à rédiger votre proposition :</h2>-->
 
@@ -54,9 +48,9 @@ if (isset($_POST['titre'])) {
     <p class="champ">
 
         <label class="InputAddOn-item" for=contenu_id> Contenu : </label > 
-        <textarea name=contenu' . $section->getId() . ' id = contenu_id maxlength=1400 rows = 8 cols = 80 >' . FormConfig::TextField('contenu' . $section->getId()) . '</textarea >
-         <script>
-            const easyMDE = new createMarkdownEditor({ forceSync: true});
+        <textarea name=contenu' . $section->getId() . ' id = "ta' . $i . '"  maxlength=1400 rows = 8 cols = 80 >' . FormConfig::TextField('contenu' . $section->getId()) . '</textarea >
+        <script>
+             const easyMDE' . $i . ' = new createMarkdownEditor({forceSync: true, element: document.getElementById("ta' . $i . '")});
         </script>
         <label>1400 caractères maximum</label>
     </p> ';

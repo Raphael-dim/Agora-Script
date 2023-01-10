@@ -70,12 +70,24 @@ ul[id="Menu"] li {
 .profil {
     filter: invert(0.9);
     position:absolute !important;
-    top:10px;
+    top:15px;
     right:100px;
     width:auto !important;
     transition: ease-in-out 0.5s;
 }
 .profil>img{
+    min-width:34px ;
+}
+
+.messagerie {
+    filter: invert(0.9);
+    position:absolute !important;
+    top:10px;
+    right:100px;
+    width:auto !important;
+    transition: ease-in-out 0.5s;
+}
+.messagerie>img{
     min-width:34px ;
 }
 

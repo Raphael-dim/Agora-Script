@@ -17,10 +17,11 @@
         } else {
 
                    
-                  echo'</ul> <a class=profil href="index.php?action=readAll&controller=message&idUtilisateur=' . ConnexionUtilisateur::getLoginUtilisateurConnecte() . '"
+                  echo'</ul> <a class=messagerie href="index.php?action=readAll&controller=message&idUtilisateur=' . ConnexionUtilisateur::getLoginUtilisateurConnecte() . '"
                     style="margin-right: 80px">
                     <img style="min-width: 40px;"  src=images/logo_lettre.png alt=messagerie></a>
-                    <a class=profil href = "index.php?action=read&controller=utilisateur&idUtilisateur=' . ConnexionUtilisateur::getLoginUtilisateurConnecte() . '">
-                                        <img src = images/profil.png alt=Profil ></a> ';
+                    <a style = "text-decoration: none; color:black" class=profil href = "index.php?action=read&controller=utilisateur&idUtilisateur=' . ConnexionUtilisateur::getLoginUtilisateurConnecte() . '">
+                                        <img src = images/profil.png alt=Profil ><p style = "position:absolute; top:-8px; left:40px;">' .ConnexionUtilisateur::getLoginUtilisateurConnecte().'</p></a>'
+                                        ;
         } ?>
 </nav>
