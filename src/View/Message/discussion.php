@@ -20,7 +20,7 @@ $messages = array_merge($recus, $envoyes);
 usort($messages, "compare");
 // Trie le tableau $messages en utilisant la fonction compare()
 
-echo '<h2>Votre conversation avec ' . htmlspecialchars($contact->getPrenom()) . ' ' . htmlspecialchars($contact->getNom()) . ' </h2>
+echo '<h2 class="custom_titre">Votre conversation avec ' . htmlspecialchars($contact->getPrenom()) . ' ' . htmlspecialchars($contact->getNom()) . ' </h2>
 <hr style="margin-bottom: 20px">
 <div id="conversation">';
 
