@@ -23,6 +23,12 @@
     justify-content: center;
 }
 
+.proposition > img {
+    max-width: 70px;
+    position: absolute;
+}
+
+
 .Titre_proposition{
     text-decoration: none;
     color:black;

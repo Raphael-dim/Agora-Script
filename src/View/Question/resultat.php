@@ -1,3 +1,6 @@
+<link href="css/ListePropositions.css" rel="stylesheet">
+
+
 <ul class="propositionsResultat">
 
     <?php
