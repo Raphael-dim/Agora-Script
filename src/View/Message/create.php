@@ -2,7 +2,7 @@
     <fieldset>
         <h2 style="color: #022234">Envoyer un message :</h2>
         <p>
-            <label for="motclef"></label><input placeholder="Rechercher un utilisateur" type="text" placeholder=""
+            <label for="motclef"></label><input placeholder="Rechercher un utilisateur" type="text"
                                                 name="keyword" id="motclef"
                                                 required>
             <input style="max-height: 35px" type="image" alt="Submit" src="../web/images/search.png" class="search">
@@ -10,8 +10,8 @@
         <?php
         if (isset($utilisateurs)) {
             foreach ($utilisateurs as $utilisateur) {
-                echo '<br><a href="index.php?action=read&controller=message&idContact=' . $utilisateur->getIdentifiant() . '">
-                ' . $utilisateur->getIdentifiant() . '</a>';
+                echo '<br><a href="index.php?action=read&controller=message&idContact=' . rawurlencode($utilisateur->getIdentifiant()) . '">
+                ' . htmlspecialchars($utilisateur->getIdentifiant()) . '</a>';
             }
         }
         ?>

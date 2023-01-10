@@ -17,8 +17,8 @@
     echo'<div class="podium">
             <div class="premier">
                 <div class="proposition">
-                    <a href= index.php?action=read&controller=proposition&idProposition=' .
-                    $idPropositionURL . '> <h2>1. ' . $titreHTML . '</h2>   </a>
+                    <a href="index.php?action=read&controller=proposition&idProposition=' .
+                    $idPropositionURL . '"> <h2>1. ' . $titreHTML . '</h2>   </a>
                     <br>
                     <h3>Nombre de votes : ' . $propositions[0]->getNbVotes() . '</h3>
                     <a href="" id = "auteur">par ' . $propositions[0]->getIdResponsable() . ' </a >
@@ -29,8 +29,8 @@
                  echo '<div class="deuxTrois">
                      <div class="deuxieme">  
                         <div class=proposition>
-                            <a href= index.php?action=read&controller=proposition&idProposition=' .
-                            rawurlencode($propositions[1]->getId()) . '> <h2>2. ' . htmlspecialchars($propositions[1]->getTitre()) . '</h2>   </a>
+                            <a href="index.php?action=read&controller=proposition&idProposition=' .
+                            rawurlencode($propositions[1]->getId()) . '"> <h2>2. ' . htmlspecialchars($propositions[1]->getTitre()) . '</h2>   </a>
                             <br>
                             <h3>Nombre de votes : ' . $propositions[1]->getNbVotes() . '</h3>
                             <a href="" id = "auteur">par ' . $propositions[1]->getIdResponsable() . ' </a >
@@ -42,8 +42,8 @@
             if(sizeof($propositions)>=3) {
                 echo '<div class="troisieme">  
                     <div class=proposition>
-                        <a href= index.php?action=read&controller=proposition&idProposition=' .
-                    rawurlencode($propositions[2]->getId()) . '> <h2>3. ' . htmlspecialchars($propositions[2]->getTitre()) . '</h2>   </a>
+                        <a href="index.php?action=read&controller=proposition&idProposition=' .
+                    rawurlencode($propositions[2]->getId()) . '"> <h2>3. ' . htmlspecialchars($propositions[2]->getTitre()) . '</h2>   </a>
                         <br>
                         <h3>Nombre de votes : ' . $propositions[2]->getNbVotes() . '</h3>
                         <a href="" id = "auteur">par ' . $propositions[2]->getIdResponsable() . ' </a >
@@ -58,8 +58,8 @@
         $idPropositionURL = rawurlencode($propositions[$i]->getId());
         $titreHTML = htmlspecialchars($propositions[$i]->getTitre());
         echo '<div class=proposition>';
-        echo ' <a href= index.php?action=read&controller=proposition&idProposition=' .
-            $idPropositionURL . '> <h2>' . $i+1 .'. '. $titreHTML . '</h2>   </a>';
+        echo ' <a href="index.php?action=read&controller=proposition&idProposition=' .
+            $idPropositionURL . '"> <h2>' . $i+1 .'. '. $titreHTML . '</h2>   </a>';
         echo '<br > ';
         echo '<h3>Nombre de votes : ' . $propositions[$i]->getNbVotes() . '</h3>';
         echo '<a href="" id = "auteur">par ' . $propositions[$i]->getIdResponsable() . ' </a >';

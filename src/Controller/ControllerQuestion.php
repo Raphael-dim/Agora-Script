@@ -6,7 +6,6 @@ namespace App\Vote\Controller;
 use App\Vote\Lib\ConnexionUtilisateur;
 use App\Vote\Config\FormConfig;
 use App\Vote\Lib\MessageFlash;
-use App\Vote\Lib\MotDePasse;
 use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Question;
 use App\Vote\Model\DataObject\Responsable;
@@ -191,6 +190,7 @@ class ControllerQuestion
             Controller::redirect("index.php?action=readAll&controller=question");
         }
         FormConfig::setArr('SessionQuestion');
+        $nbCalendriers = $_SESSION[FormConfig::$arr]['nbCalendriers'];
 
         $creation = date("Y/m/d H:i:s");
         $organisateur = (new UtilisateurRepository)->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
@@ -224,10 +224,6 @@ class ControllerQuestion
         }
 
         $sections = $_SESSION[FormConfig::$arr]['Sections'];
-        if (sizeof($sections) > 10) {
-            MessageFlash::ajouter('danger', 'Le nombre de section est invalide');
-            Controller::redirect("index.php?action=form&controller=question&step=3");
-        }
         foreach ($sections as $value) {
             $section = new Section($value['titre'], $value['description'], $question);
             if (strlen($value['titre']) > 80 || strlen($value['description']) > 360) {
@@ -308,17 +304,18 @@ class ControllerQuestion
             MessageFlash::ajouter("danger", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
             $bool = false;
         }
+        self::verifBD($question);
         if (!$bool) {
             Controller::redirect("index.php?action=readAll&controller=question");
         }
         FormConfig::setArr('SessionQuestion');
-        foreach ($question->getCalendrier(true) as $calendrier) {
-            (new CalendrierRepository())->delete($calendrier->getId());
-        }
-        self::verifBD($question);
         $question->setTitre($_SESSION[FormConfig::$arr]['Titre']);
         $question->setDescription($_SESSION[FormConfig::$arr]['Description']);
         (new QuestionRepository())->update($question);
+
+        foreach ($question->getCalendrier(true) as $calendrier) {
+            (new CalendrierRepository())->delete($calendrier->getId());
+        }
 
 
         $ancSections = $question->getSections();
@@ -426,20 +423,13 @@ class ControllerQuestion
             Controller::afficheVue('view.php', ["pagetitle" => "Demande de confirmation",
                 "cheminVueBody" => "confirm.php",
                 "message" => "Êtes vous sûr de vouloir supprimer cette question?",
-                "mdp" => true,
                 "url" => 'index.php?action=delete&controller=question&idQuestion=' . $_GET['idQuestion']]);
         } else if (isset($_POST["cancel"])) {
             Controller::redirect('index.php?controller=question&action=readAll');
         } else if (isset($_POST["confirm"])) {
-            $utilisateur = (new UtilisateurRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
-            if (!MotDePasse::verifier($_POST['mdp'], $utilisateur->getMdpHache())) {
-                MessageFlash::ajouter('warning', 'Mot de passe incorrect.');
-                Controller::redirect('index.php?action=delete&controller=question&idQuestion=' . $_GET['idQuestion']);
-            } else {
-                (new QuestionRepository())->delete($_GET['idQuestion']);
-                MessageFlash::ajouter('success', 'La question a bien été supprimée');
-                Controller::redirect("index.php?controller=question&action=readAll");
-            }
+            (new QuestionRepository())->delete($_GET['idQuestion']);
+            MessageFlash::ajouter('success', 'La question a bien été supprimée');
+            Controller::redirect("index.php?controller=question&action=readAll");
         }
     }
 
@@ -480,11 +470,15 @@ class ControllerQuestion
         }
         $propositions = $question->getPropositionsTrie();
 
-        if ($question->getSystemeVote() == 'majoritaire') {
+        if ($question->getSystemVote() == 'majoritaire') {
+            $propositions = array_keys($question->getPropositionsTrieMajoritaire());
+            $medians = array_values($question->getPropositionsTrieMajoritaire());
             Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
                 'cheminVueBody' => "Question/resultatMajoritaire.php",
-                'propositions' => $propositions]);
+                'propositions' => $propositions,
+                'medians' => $medians]);
         } else {
+            $propositions = $question->getPropositionsTrie();
             Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
                 'cheminVueBody' => "Question/resultat.php",
                 'propositions' => $propositions]);
@@ -520,10 +514,6 @@ class ControllerQuestion
             Controller::redirect("index.php?action=form&controller=question&step=5");
         }
         $nbCalendriers = $_SESSION[FormConfig::$arr]['nbCalendriers'];
-        if ($nbCalendriers > 7) {
-            MessageFlash::ajouter("danger", "Le nombre de calendrier est invalide");
-            Controller::redirect("index.php?action=form&controller=question&step=2");
-        }
 
         for ($i = 1; $i <= $nbCalendriers; $i++) {
             $calendrier = new Calendrier($question, FormConfig::TextField('debutEcriture' . $i), FormConfig::TextField('finEcriture' . $i),
@@ -537,7 +527,7 @@ class ControllerQuestion
                 MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
                 Controller::redirect("index.php?action=form&controller=question&step=2");
             }
-            if ($i < $nbCalendriers && $calendrier->getFinVote(true) > FormConfig::TextField('debutEcriture' . $i + 1)) {
+            if ($i < $nbCalendriers && $calendrier->getFinVote() > FormConfig::TextField('debutEcriture' . $i + 1)) {
                 MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
                 Controller::redirect("index.php?action=form&controller=question&step=2");
             }

@@ -2,7 +2,7 @@
 
 use App\Vote\Config\FormConfig as FormConfig;
 $_SESSION[FormConfig::$arr]['type'] = "co-auteur";
-$idproposition = $_GET['idProposition'];
+$idproposition = htmlspecialchars($_GET['idProposition']);
 
 
 if (array_key_exists('user', $_POST)) {

@@ -1,2 +1,6 @@
-<div class="message"><p><img src="../web/images/attention.png" class="attention"  alt="Warning">
-<?="Erreur"?>
+<div class="message">
+    <p>
+        <img src="../web/images/attention.png" class="attention"  alt="Warning">
+        Erreur
+    </p>
+</div>
