@@ -7,6 +7,26 @@
 
             <h1><strong class="custom_strong color-blue">Description :</strong></h1>
             <p class = "mdparse"> <?= htmlspecialchars($question->getDescription()) ?></p>
+            <h1><strong class="custom_strong color-grey">Système de vote :</strong></h1>
+            <?php
+            $message = 'Le système de vote \'Jugement majoritaire\' et \'Vote par valeurs\' sont les mêmes, la différence réside 
+            dans le classement des propositions. <br>Le jugement majoritaire établit un vote médian tandis que le vote par valeur établit une moyenne.<br>
+            Les votants doivent noter toutes les propositions avec ces 2 systèmes de vote.<br><br>
+            Le système de vote unique permet de voter pour une seule proposition.';
+                if($question->getSystemeVote() == "majoritaire"){
+                    echo "Scrutin majoritaire";
+                }
+                else if($question->getSystemeVote() == "unique"){
+                    echo "Vote unique";
+                }
+                else if($question->getSystemeVote() == "valeur"){
+                    echo "Vote par valeurs";
+                }
+            echo'<p class="survol">
+                    <img id="aide_question" class="imageAide" src="images/aide_logo.png" alt="aide">
+                    <span class="messageInfo">'.$message.'</span>
+                    </p>';
+            ?>
 
         </div>
 
@@ -61,6 +81,7 @@
         <div class="date_creation info">
             <h1><strong class="custom_strong color-grey">Date de création :</strong></h1>
             <?= htmlspecialchars($question->getCreation()) ?>
+
         </div>
         <div class="info">
             <div class="calendrier">

@@ -865,6 +865,11 @@ div p {
     /*margin-left: 5%;*/
 }
 
+#aide_question{
+    filter: initial;
+    margin-left: 0px;
+}
+
 #detail_section{
     width: 90% !important;
     background: #dff5f4;
