@@ -48,9 +48,9 @@ if (isset($_POST['titre'])) {
     <p class="champ">
 
         <label class="InputAddOn-item" for=contenu_id> Contenu : </label > 
-        <textarea name=contenu' . $section->getId() . ' id = contenu_id maxlength=1400 rows = 8 cols = 80 >' . FormConfig::TextField('contenu' . $section->getId()) . '</textarea >
-         <script>
-            const easyMDE = new createMarkdownEditor({ forceSync: true});
+        <textarea name=contenu' . $section->getId() . ' id = "ta' . $i . '"  maxlength=1400 rows = 8 cols = 80 >' . FormConfig::TextField('contenu' . $section->getId()) . '</textarea >
+        <script>
+             const easyMDE' . $i . ' = new createMarkdownEditor({forceSync: true, element: document.getElementById("ta' . $i . '")});
         </script>
         <label>1400 caractères maximum</label>
     </p> ';
