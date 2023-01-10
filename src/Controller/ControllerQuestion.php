@@ -186,7 +186,6 @@ class ControllerQuestion
         */
 
 
-
         //On vérifie si l'utilisateur est connecté
         if (!ConnexionUtilisateur::estConnecte()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas créer une question si vous n'êtes pas connecté.");
@@ -261,27 +260,28 @@ class ControllerQuestion
             MessageFlash::ajouter("danger", "Question introuvable");
             Controller::redirect("index.php?controller=question&action=readAll");
         }
-        $bool = true;
-        if ($question->getPhase() != 'debut' || $question->aPassePhase()) {
-            MessageFlash::ajouter("danger", "Vous ne pouvez pas modifier une question dont la phase d'écriture a déjà commencée.");
-            $bool = false;
+        if (!ConnexionUtilisateur::estAdministrateur()) {
+            $bool = true;
+            if ($question->getPhase() != 'debut' || $question->aPassePhase()) {
+                MessageFlash::ajouter("danger", "Vous ne pouvez pas modifier une question dont la phase d'écriture a déjà commencée.");
+                $bool = false;
+            }
+            if (!ConnexionUtilisateur::estConnecte() ||
+                ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant() &&
+                !ConnexionUtilisateur::estAdministrateur()) {
+                MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
+                $bool = false;
+            }
+            if (!$bool) {
+                Controller::redirect("index.php?action=readAll&controller=question");
+            }
         }
-        if (!ConnexionUtilisateur::estConnecte() ||
-            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant() &&
-            !ConnexionUtilisateur::estAdministrateur()) {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
-            $bool = false;
-        }
+        FormConfig::setArr('SessionQuestion');
+        FormConfig::startSession();
+        Controller::afficheVue('view.php', ["pagetitle" => "Modifier une question",
+            "cheminVueBody" => "question/create/step-1.php",
+            "idQuestion" => $_GET['idQuestion']]);
 
-        if (!$bool) {
-            Controller::redirect("index.php?action=readAll&controller=question");
-        } else {
-            FormConfig::setArr('SessionQuestion');
-            FormConfig::startSession();
-            Controller::afficheVue('view.php', ["pagetitle" => "Modifier une question",
-                "cheminVueBody" => "question/create/step-1.php",
-                "idQuestion" => $_GET['idQuestion']]);
-        }
     }
 
 
@@ -289,29 +289,31 @@ class ControllerQuestion
     {
         /* On vérifie au préalable si l'utilisateur a le droit de modifier une question
         dans l'éventualité où il a tenté de le faire depuis la barre d'adresse. */
-        $bool = true;
-        FormConfig::setArr('SessionQuestion');
-        Session::getInstance();
-        // var_dump($_SESSION);
-        $question = (new QuestionRepository())->select($_SESSION[FormConfig::$arr]['idQuestion']);
-        if (is_null($question)) {
-            MessageFlash::ajouter("danger", "Question introuvable");
-            Controller::redirect("index.php?controller=question&action=readAll");
-        }
-        if ($question->getPhase() != 'debut' || $question->aPassePhase()) {
-            MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont la phase d'écriture a déjà commencée.");
-            $bool = false;
-        }
-        if (!ConnexionUtilisateur::estConnecte() ||
-            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant() &&
-            !ConnexionUtilisateur::estAdministrateur()) {
-            MessageFlash::ajouter("danger", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
-            $bool = false;
+        if (!ConnexionUtilisateur::estAdministrateur()) {
+            $bool = true;
+            FormConfig::setArr('SessionQuestion');
+            Session::getInstance();
+            // var_dump($_SESSION);
+            $question = (new QuestionRepository())->select($_SESSION[FormConfig::$arr]['idQuestion']);
+            if (is_null($question)) {
+                MessageFlash::ajouter("danger", "Question introuvable");
+                Controller::redirect("index.php?controller=question&action=readAll");
+            }
+            if ($question->getPhase() != 'debut' || $question->aPassePhase()) {
+                MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont la phase d'écriture a déjà commencée.");
+                $bool = false;
+            }
+            if (!ConnexionUtilisateur::estConnecte() ||
+                ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant() &&
+                !ConnexionUtilisateur::estAdministrateur()) {
+                MessageFlash::ajouter("danger", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
+                $bool = false;
+            }
+            if (!$bool) {
+                Controller::redirect("index.php?action=readAll&controller=question");
+            }
         }
         self::verifBD($question);
-        if (!$bool) {
-            Controller::redirect("index.php?action=readAll&controller=question");
-        }
         FormConfig::setArr('SessionQuestion');
         $question->setTitre($_SESSION[FormConfig::$arr]['Titre']);
         $question->setDescription($_SESSION[FormConfig::$arr]['Description']);
@@ -485,9 +487,12 @@ class ControllerQuestion
         }
         $propositions = $question->getPropositionsTrie();
 
-        Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
-            'cheminVueBody' => "Question/resultat.php",
-            'propositions' => $propositions]);
+
+        Controller::afficheVue('view.php',
+            ['pagetitle' => 'Page de résultat',
+                'cheminVueBody' => "Question/resultat.php",
+                'propositions' => $propositions,
+                'question' => $question]);
 
     }
 

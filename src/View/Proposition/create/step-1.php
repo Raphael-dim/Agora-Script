@@ -34,7 +34,7 @@ if (isset($_POST['titre'])) {
 
                value="<?= FormConfig::TextField('titre') ?> " <?= $readOnly ?>
                name="titre">
-        <label class="maximum">480 caractères maximum</label>
+        <label class="maximum" style="margin-left: 15px">480 caractères maximum</label>
     </p>
     <!--<h2>Désigner les co-auteurs qui vous aideront à rédiger votre proposition :</h2>-->
 

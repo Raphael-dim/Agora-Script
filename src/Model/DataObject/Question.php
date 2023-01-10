@@ -214,12 +214,18 @@ class Question extends AbstractDataObject
         if ($proposition1->getNbVotes() == 0 && $proposition2->getNbVotes() == 0) {
             return 0;
         }
-        $moyenneProposition1 = $proposition1->getNbEtoiles() / $proposition1->getNbVotes();
-        $moyenneProposition2 = $proposition2->getNbEtoiles() / $proposition2->getNbVotes();
-        if ($moyenneProposition1 == $moyenneProposition2) {
+        if ($proposition1->getNbVotes() == 0) {
+            return 1;
+        }
+        if ($proposition2->getNbVotes() == 0) {
+            return -1;
+        }
+        $proposition1->setMoyenneVote($proposition1->getNbEtoiles() / $proposition1->getNbVotes());
+        $proposition2->setMoyenneVote($proposition2->getNbEtoiles() / $proposition2->getNbVotes());
+        if ($proposition1->getMoyenneVote() == $proposition2->getMoyenneVote()) {
             return 0;
         }
-        return ($moyenneProposition1 > $moyenneProposition2) ? -1 : 1;
+        return ($proposition1->getMoyenneVote() > $proposition2->getMoyenneVote()) ? -1 : 1;
     }
 
     function trieMedianne(Proposition $proposition1, Proposition $proposition2)

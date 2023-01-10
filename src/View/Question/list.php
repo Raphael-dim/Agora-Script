@@ -113,7 +113,7 @@ if (isset($_GET['selection'])) {
             }
             echo '</p>';
         }
-        if ($question->aPassePhase() || ($question->getPhase() != 'debut' && $question->getPhase() != 'fini')) {
+        if ($question->getPhase() != 'fini' && ($question->aPassePhase() || $question->getPhase() != 'debut')) {
             echo '<a class = "link-custom" style = "position:absolute; " href ="index.php?action=readAll&controller=proposition&idQuestion=' . $idQuestionURL . '">Liste des propositions</a>';
         }
         if (!$question->aPassePhase() && $question->getPhase() == 'ecriture' && ConnexionUtilisateur::estConnecte() &&
