@@ -29,7 +29,7 @@ $titreHTML = htmlspecialchars($propositions[0]->getTitre());
 ?>
 <div class="podium">
     <div class="premier">
-        <div class="proposition">
+        <div class="proposition shadow-effect">
             <a href="index.php?action=read&controller=proposition&idProposition=<?= $idPropositionURL ?>">
                 <h2><?= $titreHTML ?></h2></a>
             <?php
@@ -41,7 +41,7 @@ $titreHTML = htmlspecialchars($propositions[0]->getTitre());
             if (sizeof($propositions) >= 2) {
             echo '<div class="deuxTrois">
                      <div class="deuxieme">  
-                        <div class=proposition>
+                        <div class="proposition shadow-effect" >
                             <a href="index.php?action=read&controller=proposition&idProposition=' .
                 rawurlencode($propositions[1]->getId()) . '"> <h2>' . htmlspecialchars($propositions[1]->getTitre()) . '</h2>   </a>';
             ?>
@@ -58,7 +58,7 @@ $titreHTML = htmlspecialchars($propositions[0]->getTitre());
     if (sizeof($propositions) >= 3) {
         echo '
     <div class="troisieme">
-        <div class=proposition>
+        <div class="proposition shadow-effect">
             <a href="index.php?action=read&controller=proposition&idProposition=' .
             rawurlencode($propositions[2]->getId()) . '"><h2> ' . htmlspecialchars($propositions[2]->getTitre())
             . ' </h2></a>';
@@ -79,7 +79,7 @@ $titreHTML = htmlspecialchars($propositions[0]->getTitre());
         $idPropositionURL = rawurlencode($propositions[$i]->getId());
         $titreHTML = htmlspecialchars($propositions[$i]->getTitre());
         echo '
-    <div class=proposition> ';
+    <div class="proposition shadow-effect"> ';
         echo ' <a href="index.php?action=read&controller=proposition&idProposition=' .
             $idPropositionURL . '"><h2> ' . $i + 1 . ' . ' . $titreHTML . '</h2></a> ';
         echo getResultat($propositions[$i], $question);
