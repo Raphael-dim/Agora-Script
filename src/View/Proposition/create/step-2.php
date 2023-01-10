@@ -2,6 +2,8 @@
 echo '<div  class ="custom-form">';
 
 use App\Vote\Config\FormConfig as FormConfig;
+use App\Vote\Lib\MessageFlash;
+use App\Vote\Model\DataObject\Question;
 use App\Vote\Model\DataObject\Responsable;
 
 $_SESSION[FormConfig::$arr]['type'] = "co-auteur";
@@ -26,15 +28,18 @@ if (isset($_POST['next'])) {
 
 
 if (array_key_exists('user', $_POST)) {
-    adduser($_POST["user"]);
+    adduser($question, $_POST["user"]);
 }
 if (array_key_exists('delete', $_POST)) {
     removeuser($_POST["delete"]);
 }
 
-function adduser(string $id): void
+function adduser(Question $question, string $id): void
 {
-    if (!in_array($id, $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']])) {
+    if (Responsable::estResponsable($question, $id)) {
+        MessageFlash::ajouter('warning', 'Cet utilisateur est responsable d\'une proposition et ne peut être co-auteur.');
+    }
+    else if (!in_array($id, $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']])) {
         $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']][] = $id;
     }
 }

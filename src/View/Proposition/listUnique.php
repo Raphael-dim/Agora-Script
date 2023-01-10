@@ -12,7 +12,7 @@
     $message = 'Vous pouvez voter pour une seule et unique proposition, la proposition qui emporte le plus
         de voix est désignée gagnante.';
     ?>
-    <h2><?= $modeScrutin ?></h2>
+    <h2 class="custom_titre"><?= $modeScrutin ?></h2>
     <p class="survol">
         <img class="imageAide" src="images/aide_logo.png" alt="aide"/>
         <span class="messageInfo"><?= $message ?></span>
@@ -23,9 +23,9 @@
         $organisateurRole = 'Vous êtes responsable pour cette question multiphase';
         $messageOrganisateur = 'Vous pouvez éliminer les propositions les moins attractives. 
                 Par défaut, elles sont triées par nombre de votes, si vous éliminez
-            une proposition, vous éliminez aussi celles qui ont un nombre de votes inférieur.';
+            une proposition, vous éliminez aussi celles qui ont un nombre de votes inférieurs.';
         ?>
-        <h2><?= $organisateurRole ?></h2>
+        <h2 class="custom_titre"><?= $organisateurRole ?></h2>
         <p class="survol">
             <img class="imageAide" src="images/aide_logo.png" alt="aide"/>
             <span class="messageInfo"><?= $messageOrganisateur ?></span>
@@ -36,26 +36,23 @@
     $i = 1;
     $peutVoter = false;
     $calendrier = $question->getCalendrier();
-    if (sizeof($propositions) == 0) {
-        echo '<h2>Il n\'y a pas de propositions pour cette question</h2>';
-    }
     if ($question->getPhase() == 'vote' && ConnexionUtilisateur::estConnecte()
         && Votant::estVotant($votants, ConnexionUtilisateur::getLoginUtilisateurConnecte())
     ) {
         $votes = Votant::getVotes(ConnexionUtilisateur::getLoginUtilisateurConnecte());
         $peutVoter = true;
         $interval = (new DateTime(date("d-m-Y H:i")))->diff(new DateTime($calendrier->getFinVote(true)));
-        echo '<h2>Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
+        echo '<h2 class="custom_titre">Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
     }
     foreach ($propositions as $proposition) {
 
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
         if ($proposition->isEstEliminee()) {
-            echo '<div style="background: #000e17" class=proposition>';
-            echo '<h3>(Eliminé)</h3>';
+            echo '<div style="background: rgba(58,69,75,0.55)" class="proposition shadow-effect eliminee">';
+            echo '<h1><strong class="custom_strong color-grey">Eliminé</strong></h1>';
         } else {
-            echo '<div class=proposition>';
+            echo '<div class="proposition shadow-effect">';
         }
         echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
             $idPropositionURL . '"> <h2 class = "Titre_proposition">' . $titreHTML . '</h2>   </a>';

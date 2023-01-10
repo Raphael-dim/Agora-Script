@@ -4,16 +4,17 @@ use App\Vote\Config\FormConfig as FormConfig;
 use App\Vote\Controller\ControllerAccueil;
 use App\Vote\Lib\ConnexionUtilisateur;
 use App\Vote\Model\Repository\PropositionRepository;
+use App\Vote\Model\DataObject\CoAuteur as CoAuteur;
 
 
 $readOnly = "";
 if (isset($_GET['idProposition'])) {
-    echo "<h1>Modification de la Proposition</h1>";
+    echo "<h1 class='custom_titre'>Modification de la Proposition</h1>";
     if ($proposition->getIdResponsable() != ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
         $readOnly = "readonly";
     }
 } else {
-    echo "<h1>Création d'une Proposition</h1>";
+    echo "<h1 class='custom_titre'>Création d'une Proposition</h1>";
 }
 if (isset($_POST['titre'])) {
     FormConfig::postSession();
@@ -21,11 +22,14 @@ if (isset($_POST['titre'])) {
     if (!isset($_SESSION[FormConfig::$arr]['co-auteur'])) {
         $_SESSION[FormConfig::$arr]['co-auteur'] = array();
     }
+    if (isset($proposition) and CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(),$proposition->getId())){
+        FormConfig::redirect('index.php?controller=proposition&action=updated');
+    }
     FormConfig::redirect("index.php?controller=proposition&action=form&step=2&idQuestion=".rawurlencode($question->getId()));
 }
 ?>
-<h2>Titre : <?= htmlspecialchars($question->getTitre()) ?></h2>
-<h2>Description : <?= htmlspecialchars($question->getDescription()) ?></h2>
+<h2 class="custom_titre">Titre et description de la question : <?= htmlspecialchars($question->getTitre()) ?></h2>
+<h2 class="custom_titre"><?= htmlspecialchars($question->getDescription()) ?></h2>
 
 <form method="post" class="custom-form">
     <p class="InputAddOn">

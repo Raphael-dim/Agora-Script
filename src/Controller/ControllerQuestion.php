@@ -6,6 +6,7 @@ namespace App\Vote\Controller;
 use App\Vote\Lib\ConnexionUtilisateur;
 use App\Vote\Config\FormConfig;
 use App\Vote\Lib\MessageFlash;
+use App\Vote\Lib\MotDePasse;
 use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Question;
 use App\Vote\Model\DataObject\Responsable;
@@ -184,12 +185,15 @@ class ControllerQuestion
         Théoriquement, un utilisateur lambda qui arrive à cette étape n'a pas pu déroger à ces contraintes.
         */
 
+
+
         //On vérifie si l'utilisateur est connecté
         if (!ConnexionUtilisateur::estConnecte()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas créer une question si vous n'êtes pas connecté.");
             Controller::redirect("index.php?action=readAll&controller=question");
         }
         FormConfig::setArr('SessionQuestion');
+
         $nbCalendriers = $_SESSION[FormConfig::$arr]['nbCalendriers'];
 
         $creation = date("Y/m/d H:i:s");
@@ -258,7 +262,7 @@ class ControllerQuestion
             Controller::redirect("index.php?controller=question&action=readAll");
         }
         $bool = true;
-        if ($question->getPhase() != 'debut') {
+        if ($question->getPhase() != 'debut' || $question->aPassePhase()) {
             MessageFlash::ajouter("danger", "Vous ne pouvez pas modifier une question dont la phase d'écriture a déjà commencée.");
             $bool = false;
         }
@@ -294,7 +298,7 @@ class ControllerQuestion
             MessageFlash::ajouter("danger", "Question introuvable");
             Controller::redirect("index.php?controller=question&action=readAll");
         }
-        if ($question->getPhase() != 'debut') {
+        if ($question->getPhase() != 'debut' || $question->aPassePhase()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont la phase d'écriture a déjà commencée.");
             $bool = false;
         }
@@ -419,17 +423,28 @@ class ControllerQuestion
             !ConnexionUtilisateur::estAdministrateur()) {
             MessageFlash::ajouter("danger", "Vous ne pouvez pas supprimer une question dont vous n'êtes par l'organisateur.");
             Controller::redirect('index.php?controller=question&action=readAll');
+        }
+        if ($question->getPhase() == 'fini') {
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas supprimer une question terminée.");
+            Controller::redirect('index.php?controller=question&action=readAll');
         } else if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
             Controller::afficheVue('view.php', ["pagetitle" => "Demande de confirmation",
                 "cheminVueBody" => "confirm.php",
                 "message" => "Êtes vous sûr de vouloir supprimer cette question?",
+                "mdp" => true,
                 "url" => 'index.php?action=delete&controller=question&idQuestion=' . $_GET['idQuestion']]);
         } else if (isset($_POST["cancel"])) {
             Controller::redirect('index.php?controller=question&action=readAll');
         } else if (isset($_POST["confirm"])) {
-            (new QuestionRepository())->delete($_GET['idQuestion']);
-            MessageFlash::ajouter('success', 'La question a bien été supprimée');
-            Controller::redirect("index.php?controller=question&action=readAll");
+            $utilisateur = (new UtilisateurRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
+            if (!MotDePasse::verifier($_POST['mdp'], $utilisateur->getMdpHache())) {
+                MessageFlash::ajouter('warning', 'Mot de passe incorrect.');
+                Controller::redirect("index.php?action=delete&controller=question&idQuestion=" . $_GET['idQuestion']);
+            } else {
+                (new QuestionRepository())->delete($_GET['idQuestion']);
+                MessageFlash::ajouter('success', 'La question a bien été supprimée');
+                Controller::redirect("index.php?controller=question&action=readAll");
+            }
         }
     }
 
@@ -469,7 +484,6 @@ class ControllerQuestion
             Controller::redirect('index.php?controller=question&action=readAll');
         }
         $propositions = $question->getPropositionsTrie();
-
 
         Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
             'cheminVueBody' => "Question/resultat.php",
