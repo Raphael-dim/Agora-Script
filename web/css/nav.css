@@ -60,7 +60,6 @@ ul[id="Menu"] li.grosmenu > a {
 ul[id="Menu"] li a:hover {
     color: #012e49;
     background: #c1d9d7;
-    transition: opacity 0.2s linear;
 }
 
 
@@ -81,8 +80,6 @@ ul[id="Menu"] li {
 }
 
 nav img{
-    margin-left: 10px;
-    display: inline;
     max-width: 25px;
 }
 @media screen and (max-width: 1000px) {

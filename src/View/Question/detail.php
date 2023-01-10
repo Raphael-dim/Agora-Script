@@ -12,7 +12,7 @@
 
         <div id="participants" class="info">
             <h1><strong class=' custom_strong color-yellow'>Participants</strong></h1>
-            <div id="responsables">
+            <div>
                 <h1><strong class=' custom_strong color-yellow'>Responsables</strong></h1>
                 <?php
                 if (is_array($responsables)) {
@@ -25,7 +25,7 @@
                 ?>
             </div>
 
-            <div id="votants">
+            <div>
                 <h1><strong class='custom_strong color-yellow'>Votants</strong></h1>
                 <?php
                 if (is_array($votants)) {
@@ -49,7 +49,7 @@
                 echo '<div class = "section">';
                 echo '<h3 style = "color:black; font-size: 21px;" > Section n° ' . $i . '</h3>';
                 echo '<p style = "color:black; font-size: 20px;"> Titre :<br> ' . htmlspecialchars($Section->getTitre()) . '</p>';
-                echo '<p style = "color:black; font-size: 20px;"> Description :<br> ' . htmlspecialchars($Section->getDescription()) . '</p>';
+                echo '<p class = "mdparse" style = "color:black; font-size: 20px;"> Description :<br> ' . htmlspecialchars($Section->getDescription()) . '</p>';
                 echo '&nbsp;';
                 echo '</div>';
                 $i++;

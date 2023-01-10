@@ -52,7 +52,7 @@ class ControllerMessage
         Controller::afficheVue('view.php',
             ["recus" => $recus,
                 "envoyes" => $envoyes,
-                "pagetitle" => "Conversation",
+                "pagetitle" => "Conversation / " . $_GET['idContact'],
                 "contact" => (new UtilisateurRepository())->select($_GET['idContact']),
                 "cheminVueBody" => "Message/discussion.php"]);
     }
@@ -65,7 +65,7 @@ class ControllerMessage
         }
         Controller::afficheVue('view.php', [
             "cheminVueBody" => "Message/create.php",
-            "pagetitle" => "Créer un message"
+            "pagetitle" => "Envoyer un message"
         ]);
 
     }
@@ -76,7 +76,7 @@ class ControllerMessage
         $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, 'identifiant');
         Controller::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,
-                "pagetitle" => "Créer un message",
+                "pagetitle" => "Envoyer un message",
                 "cheminVueBody" => "Message/create.php"]);
     }
 

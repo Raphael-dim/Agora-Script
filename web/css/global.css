@@ -10,6 +10,7 @@
 * {
     font-family: Georgia;
     box-sizing: border-box;
+    overflow-wrap: break-word;
 }
 
 body {
@@ -294,7 +295,7 @@ li#vote.phases > a {
     width: 90% !important;
     background: #dff5f4;
     padding: 10px;
-    text-align: center;
+    /*text-align: center;*/
 }
 
 a.vote {
@@ -460,7 +461,7 @@ a.vote:hover img {
     #participants * {
         min-width: max-content;
         /*width: 100%;*/
-        display: block;
+        /*display: block;*/
         float: none;
     }
 
@@ -729,8 +730,9 @@ h1 > .custom_strong.color-orange {
 }
 
 .detail_question div {
-    vertical-align: middle;
+    vertical-align: top;
     display: inline-block;
+    text-align: center;
 }
 
 .detail_question p {
@@ -831,14 +833,17 @@ div p {
     background: #dff5f4;
 }
 
-#responsables {
-    width: 45%;
+#participants > div {
+    width: 49%;
 }
 
-#votants {
-    width: 45%;
-    float: right;
-}
+/*#votants {
+    width: 45%;;
+}*/
+
+/*#responsables {
+    width: 45%;;
+}*/
 
 .sections > .section:nth-child(odd) {
     background: #b8fff9;
@@ -938,7 +943,7 @@ div p {
     border: none;
     border-radius: 0;
     padding: 2px;
-    margin: 0;
+    /*margin: 0;*/
 }
 
 
@@ -1186,6 +1191,12 @@ input {
     display: flex;
 }
 
+
+.titre_id{
+    width:70%;
+}
+
 .delete:hover, .modifier:hover {
    width: 26px;
 }
+

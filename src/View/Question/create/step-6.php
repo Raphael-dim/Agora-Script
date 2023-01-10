@@ -40,16 +40,19 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
 ?>
 <div class="detail_question ">
     <div class="infos">
-        <div class="info_question ">
+
+        <div class="detail_question ">
+
             <h1><strong class='custom_strong color-blue'>Titre</strong></h1>
             <p><?= htmlspecialchars($Titre) ?></p>
             <h1><strong class='custom_strong color-blue'>Description</strong></h1>
             <p class="mdparse"><?= htmlspecialchars($Description) ?></p>
         </div>
         <div id="participants" class="info">
-            <h1><strong class='custom_strong color-yellow'>Participants</strong></h1>
+
+            <h1><strong class='custom_strong  color-yellow'>Participants</strong></h1>
             <div id="responsables">
-                <h1><strong class='custom_strong color-yellow'>Responsables</strong></h1>
+                <h1><strong class=' custom_strong  color-yellow'>Responsables</strong></h1>
                 <?php
                 foreach ($_SESSION[FormConfig::$arr]['responsables'] as $responsable) {
                     echo "<p> " . htmlspecialchars($responsable) . " </p>";

@@ -21,7 +21,7 @@ if (isset($_POST['titre'])) {
     if (!isset($_SESSION[FormConfig::$arr]['co-auteur'])) {
         $_SESSION[FormConfig::$arr]['co-auteur'] = array();
     }
-    FormConfig::redirect("index.php?controller=proposition&action=form&step=2&idQuestion=".$question->getId());
+    FormConfig::redirect("index.php?controller=proposition&action=form&step=2&idQuestion=".rawurlencode($question->getId()));
 }
 ?>
 <h2>Titre : <?= htmlspecialchars($question->getTitre()) ?></h2>
@@ -31,6 +31,7 @@ if (isset($_POST['titre'])) {
     <p class="InputAddOn">
         <label class="InputAddOn-item" for="titre_id">Titre de votre proposition </label>
         <input class="InputAddOn-field" type="text" maxlength="480" id="titre_id" size="80"
+
                value="<?= FormConfig::TextField('titre') ?> " <?= $readOnly ?>
                name="titre">
         <label class="maximum">480 caractères maximum</label>
@@ -47,9 +48,13 @@ if (isset($_POST['titre'])) {
         echo '<p>Description : ' . htmlspecialchars($section->getDescription()) . ' </p > ';
         echo '
     <p class="champ">
+
         <label class="InputAddOn-item" for=contenu_id> Contenu : </label > 
         <textarea name=contenu' . $section->getId() . ' id = contenu_id maxlength=1400 rows = 8 cols = 80 >' . FormConfig::TextField('contenu' . $section->getId()) . '</textarea >
-        <label class="maximum">1400 caractères maximum</label>
+         <script>
+            const easyMDE = new createMarkdownEditor({ forceSync: true});
+        </script>
+        <label>1400 caractères maximum</label>
     </p> ';
     }
     ?>

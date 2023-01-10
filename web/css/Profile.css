@@ -67,7 +67,7 @@
     height:200px;
     margin:auto;
     border: solid black 1px;
-    overflow-y:scroll;
+    overflow-y:auto;
     justify-content: normal;
 }
 #new>a{
