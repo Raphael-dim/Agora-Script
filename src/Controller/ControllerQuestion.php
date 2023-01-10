@@ -470,15 +470,11 @@ class ControllerQuestion
         }
         $propositions = $question->getPropositionsTrie();
 
-        if ($question->getSystemVote() == 'majoritaire') {
-            $propositions = array_keys($question->getPropositionsTrieMajoritaire());
-            $medians = array_values($question->getPropositionsTrieMajoritaire());
+        if ($question->getSystemeVote() == 'majoritaire') {
             Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
                 'cheminVueBody' => "Question/resultatMajoritaire.php",
-                'propositions' => $propositions,
-                'medians' => $medians]);
+                'propositions' => $propositions]);
         } else {
-            $propositions = $question->getPropositionsTrie();
             Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
                 'cheminVueBody' => "Question/resultat.php",
                 'propositions' => $propositions]);
