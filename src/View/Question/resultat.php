@@ -35,7 +35,7 @@ $titreHTML = htmlspecialchars($propositions[0]->getTitre());
             <?php
             echo getResultat($propositions[0], $question) . ' <a class="link-custom" href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($propositions[0]->getIdResponsable()) . '"
      >par ' . htmlspecialchars($propositions[0]->getIdResponsable()) . ' </a>
-                    <img src="images/premier.png" alt="">
+                    <img class="medaille" src="images/premier.png" alt="">
                 </div>
             </div>';
             if (sizeof($propositions) >= 2) {
@@ -49,7 +49,7 @@ $titreHTML = htmlspecialchars($propositions[0]->getTitre());
             <a class="link-custom"
                href="index.php?action=read&controller=utilisateur&idUtilisateur=<?= rawurlencode($propositions[0]->getIdResponsable()) ?>"
             > par <?= htmlspecialchars($propositions[1]->getIdResponsable()) ?> </a>
-            <img src="images/deuxieme.png" alt="">
+            <img class="medaille" src="images/deuxieme.png" alt="">
 
         </div>
     </div>
@@ -65,7 +65,7 @@ $titreHTML = htmlspecialchars($propositions[0]->getTitre());
         echo getResultat($propositions[2], $question) . '
             <a class="link-custom" href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($propositions[0]->getIdResponsable()) . '"
             > par ' . htmlspecialchars($propositions[2]->getIdResponsable()) . ' </a>
-            <img src="images/troisieme.png" alt="">
+            <img class="medaille" src="images/troisieme.png" alt="">
         </div>
     </div>
     ';

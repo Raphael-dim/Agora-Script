@@ -578,7 +578,6 @@ a.vote:hover img {
     }
 
     .propositionsResultat {
-
         padding-bottom: 9px;
         padding-top: 9px;
         display: flex;
@@ -590,6 +589,10 @@ a.vote:hover img {
     }
 
 
+}
+
+.propositionsResultat {
+    margin-top: 30px;
 }
 
 .modifier, .delete {
@@ -1210,3 +1213,6 @@ input {
    width: 26px;
 }
 
+.medaille {
+    margin-left: 25px;
+}
