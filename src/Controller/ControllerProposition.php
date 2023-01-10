@@ -188,8 +188,15 @@ class ControllerProposition
         $coAuteursSelec = $_SESSION[FormConfig::$arr]['co-auteur'];
         $proposition->setId($propositionBD);
         foreach ($coAuteursSelec as $coAutSelec) {
-            $aut = new CoAuteur((new UtilisateurRepository())->select($coAutSelec), $proposition);
-            (new CoAuteurRepository())->sauvegarder($aut);
+            if (Responsable::estResponsable($question, $coAutSelec)) {
+                MessageFlash::ajouter('danger', 'Vous n\'avez pas respecté les contraintes');
+                (new PropositionRepository())->delete($propositionBD);
+                Controller::redirect("index.php?controller=question&action=readAll");
+            } else {
+                $aut = new CoAuteur((new UtilisateurRepository())->select($coAutSelec), $proposition);
+                (new CoAuteurRepository())->sauvegarder($aut);
+
+            }
         }
         $sections = $question->getSections();
         foreach ($sections as $section) {
@@ -297,9 +304,10 @@ class ControllerProposition
                 if (strlen($_SESSION[FormConfig::$arr]['contenu' . $section->getId()]) > 1500) {
                     MessageFlash::ajouter("danger", "Vous n'avez pas respecté les contraintes.");
                     Controller::redirect("index.php?controller=question&action=readAll");
+                } else {
+                    $propositionSection = new PropositionSection((new PropositionRepository())->select($_SESSION[FormConfig::$arr]["idProposition"]), $section, $_SESSION[FormConfig::$arr]['contenu' . $section->getId()]);
+                    (new PropositionSectionRepository())->sauvegarder($propositionSection);
                 }
-                $propositionSection = new PropositionSection((new PropositionRepository())->select($_SESSION[FormConfig::$arr]["idProposition"]), $section, $_SESSION[FormConfig::$arr]['contenu' . $section->getId()]);
-                (new PropositionSectionRepository())->sauvegarder($propositionSection);
             }
             $prop = new Proposition($_SESSION[FormConfig::$arr]['titre'], $proposition->getIdResponsable(), $idquestion, $proposition->getNbEtoiles(), $proposition->getNbVotes(), false);
             $prop->setId($_SESSION[FormConfig::$arr]["idProposition"]);
@@ -312,8 +320,13 @@ class ControllerProposition
                     (new CoAuteurRepository())->deleteSpecific($coAut);
                 }
                 foreach ($coAuteursSelec as $coAutSelec) {
-                    $aut = new CoAuteur((new UtilisateurRepository())->select($coAutSelec), (new PropositionRepository())->select($_SESSION[FormConfig::$arr]["idProposition"]));
-                    (new CoAuteurRepository())->sauvegarder($aut);
+                    if (Responsable::estResponsable($question, $coAutSelec)) {
+                        MessageFlash::ajouter('danger', 'Vous n\'avez pas respecté les contraintes');
+                        Controller::redirect("index.php?controller=question&action=readAll");
+                    } else {
+                        $aut = new CoAuteur((new UtilisateurRepository())->select($coAutSelec), (new PropositionRepository())->select($_SESSION[FormConfig::$arr]["idProposition"]));
+                        (new CoAuteurRepository())->sauvegarder($aut);
+                    }
                 }
                 unset($_SESSION[FormConfig::$arr]['co-auteur']);
             }

@@ -39,7 +39,7 @@ if (isset($_POST['Titre'])) {
 
 
     <p class="InputAddOn">
-        <label class="InputAddOn-item" for="titre_id">Titre : </label>
+        <label class="InputAddOn-item custom_titre" for="titre_id">Titre : </label>
         <input type="text" placeholder="L'oeuf ou la poule ? " size="70" maxlength="70" name="Titre" id="titre_id"
 
                value="<?= FormConfig::TextField('Titre') ?>"

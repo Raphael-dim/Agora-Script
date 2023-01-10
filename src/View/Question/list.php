@@ -73,16 +73,21 @@ if (isset($_GET['selection'])) {
         }
 
         echo '<h1 class=titre>' . $titreHTML . ' </h1>
-            <a class = "link-custom" style = "position:absolute; right: 5px; top:10px ;"href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($question->getOrganisateur()->getIdentifiant()) . '" class = "auteur link-custom">par ' . $organisateur . ' </a >';
+            <a class = "link-custom" style = "position:absolute; right: 5px; top:10px ;" href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($question->getOrganisateur()->getIdentifiant()) . '" class = "auteur link-custom">par ' . $organisateur . ' </a >';
         echo '<p class="description mdparse" >' . htmlspecialchars($question->getDescription()) . '</p>';
-        if ($question->getPhase() == 'debut' || ConnexionUtilisateur::estAdministrateur()) {
-            if (ConnexionUtilisateur::estAdministrateur() || (ConnexionUtilisateur::estConnecte() &&
-                    ConnexionUtilisateur::getLoginUtilisateurConnecte() == $organisateur)) {
-                echo '<div class="action" style="display: inline"><a href ="index.php?action=update&controller=question&idQuestion=' .
-                    $idQuestionURL . '"><img class="modifier" src = "../web/images/modifier.png"  alt="modifier"></a >
-                     <a href ="index.php?action=delete&controller=question&idQuestion=' .
-                    $idQuestionURL . '"><img class="delete" src = "../web/images/delete.png"  alt="supprimer"></a></div>';
+        if (ConnexionUtilisateur::estAdministrateur() || (ConnexionUtilisateur::estConnecte() &&
+                ConnexionUtilisateur::getLoginUtilisateurConnecte() == $organisateur)) {
+            echo '<div style="display: inline" class="action">';
+            if ($question->getPhase() == 'debut' || ConnexionUtilisateur::estAdministrateur()) {
+                echo '<a href ="index.php?action=update&controller=question&idQuestion=' .
+                    $idQuestionURL . '"><img class="modifier" src = "../web/images/modifier.png"  alt="modifier"></a >';
             }
+            if ($question->getPhase() != 'fini') {
+                echo '
+                     <a href ="index.php?action=delete&controller=question&idQuestion=' .
+                    $idQuestionURL . '" style="margin-left: 30px"><img class="delete" src = "../web/images/delete.png"  alt="supprimer"></a>';
+            }
+            echo '</div>';
             $interval = (new DateTime($date))->diff(new DateTime($calendrier->getDebutEcriture(true)));
             if ($question->getPhase() == 'debut') {
                 echo '<p class="debut" >Début de la phase d\'écriture dans : ' . Calendrier::diff($interval);

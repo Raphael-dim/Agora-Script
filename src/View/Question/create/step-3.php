@@ -17,7 +17,7 @@ if (isset($_POST['next'])) {
 
 $nbSection = $_SESSION[FormConfig::$arr]['nbSections'];
 ?>
-<h1>Organisation des sections</h1>
+<h1 class="custom_titre">Organisation des sections</h1>
 
 
 <form method=post class="custom-form">
@@ -40,7 +40,7 @@ $nbSection = $_SESSION[FormConfig::$arr]['nbSections'];
 
                     value = "' . FormConfig::TextField('titre' . $i) . '" 
                     required>
-                    <label class="maximum">70 caractères maximum</label>
+                    <label class="maximum" style="margin-left: 15px" >70 caractères maximum</label>
                 </p>
                 <p>
                     <label class="InputAddOn-item" >Description :</label>

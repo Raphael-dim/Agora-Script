@@ -39,7 +39,7 @@ function adduser(Question $question, string $id): void
     if (Responsable::estResponsable($question, $id)) {
         MessageFlash::ajouter('warning', 'Cet utilisateur est responsable d\'une proposition et ne peut être co-auteur.');
     }
-    if (!in_array($id, $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']])) {
+    else if (!in_array($id, $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']])) {
         $_SESSION[FormConfig::$arr][$_SESSION[FormConfig::$arr]['type']][] = $id;
     }
 }

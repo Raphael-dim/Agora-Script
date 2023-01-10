@@ -157,7 +157,8 @@ fieldset {
 }
 
 .action {
-    margin-left: 10px;
+    padding-right: 30px;
+    margin-left: 40%;
     display: inline;
     max-width: 25px;
 }
@@ -1064,29 +1065,7 @@ input, textarea {
     background: rgba(255, 255, 255, 0.62);
 }
 
-.survol span {
-    width: auto;
-    visibility: hidden;
-    display: none;
-    background-color: #012e49;
-    color: white;
-    border-radius: 10px;
-    padding: 5px;
-    font-size: 20px;
-}
 
-.survol img:hover + span {
-    margin: auto;
-    display: block;
-    width: auto;
-    visibility: visible;
-}
-
-.imageAide {
-    margin-left: 50%;
-    min-width: 50px;
-    filter: invert(1);
-}
 
 /* Works on Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
@@ -1159,15 +1138,47 @@ select {
     background-color: rgba(232, 239, 243, 0.45);
 }
 
+.survol span {
+    width: auto;
+    visibility: hidden;
+    display: none;
+    background-color: #012e49;
+    color: white;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 20px;
+}
+
+.survol img:hover + span {
+    margin: auto;
+    display: block;
+    width: auto;
+    visibility: visible;
+}
+
+.imageAide {
+    margin-left: 50%;
+    min-width: 50px;
+    filter: invert(1);
+}
+
 .messageInfo {
     border: 1px rgba(255, 255, 255, 0.51) solid;
     margin-left: 15px;
     max-width: 550px;
 }
 
-.custom_titre {
-    color: white;
+.messageInfo:hover {
+    margin: auto;
+    display: block;
+    width: auto;
+    visibility: visible;
 }
+
+.custom_titre {
+    color: #d9d7d7;
+}
+
 
 textarea {
     max-width: 80%;

@@ -31,7 +31,7 @@
             une proposition, vous éliminez aussi celles qui ont ' . $inferieur . ' inférieur.<br>
             A l\'inverse si vous annuler l\'élimination d\'une proposition, vous annulez l\'élimination de celles qui ' . $inferieur . ' supérieur.';
         ?>
-        <h2><?= $organisateurRole ?></h2>
+        <h2 class="custom_titre"><?= $organisateurRole ?></h2>
         <p class="survol">
             <img class="imageAide" src="images/aide_logo.png" alt="aide"/>
             <span class="messageInfo"><?= $messageOrganisateur ?></span>
@@ -41,7 +41,7 @@
     }
 
     ?>
-    <h2><?= $modeScrutin ?></h2>
+    <h2 class="custom_titre"><?= $modeScrutin ?></h2>
     <p class="survol">
         <img class="imageAide" src="images/aide_logo.png" alt="aide"/>
         <span class="messageInfo"><?= $message ?></span>

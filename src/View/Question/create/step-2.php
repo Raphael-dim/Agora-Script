@@ -79,7 +79,7 @@ if (isset($_POST['ajoutPhase'])) {
     FormConfig::redirect("index.php?controller=question&action=form&step=2");
 }
 ?>
-<h1>Selection du calendrier</h1>
+<h1 class="custom_titre">Selection du calendrier</h1>
 <?php
 if ($_SESSION[FormConfig::$arr]['nbCalendriers'] > 1) {
     $calendrier = 'Calendrier multiphase';
