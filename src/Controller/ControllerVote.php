@@ -87,7 +87,7 @@ class ControllerVote
     public static function create()
     {
         // Booléen indiquant si la requête de vote est valide ou non
-
+            // FONCTION UTILISE POUR LE SYSTEME DE VOTE UNIQUE
         $bool = true;
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         if (is_null($proposition)) {
@@ -147,7 +147,8 @@ class ControllerVote
     }
 
     public static function delete()
-    {
+    {            // FONCTION UTILISE POUR LE SYSTEME DE VOTE UNIQUE
+
         if (!isset($_GET['idProposition'])) {
             MessageFlash::ajouter('danger', 'Proposition introuvable');
             Controller::redirect('index.php');
