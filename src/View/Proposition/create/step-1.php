@@ -4,6 +4,7 @@ use App\Vote\Config\FormConfig as FormConfig;
 use App\Vote\Controller\ControllerAccueil;
 use App\Vote\Lib\ConnexionUtilisateur;
 use App\Vote\Model\Repository\PropositionRepository;
+use App\Vote\Model\DataObject\CoAuteur as CoAuteur;
 
 
 $readOnly = "";
@@ -20,6 +21,9 @@ if (isset($_POST['titre'])) {
     $_SESSION[FormConfig::$arr]['step'][1] = 1;
     if (!isset($_SESSION[FormConfig::$arr]['co-auteur'])) {
         $_SESSION[FormConfig::$arr]['co-auteur'] = array();
+    }
+    if (isset($proposition) and CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(),$proposition->getId())){
+        FormConfig::redirect('index.php?controller=proposition&action=updated');
     }
     FormConfig::redirect("index.php?controller=proposition&action=form&step=2&idQuestion=".rawurlencode($question->getId()));
 }
