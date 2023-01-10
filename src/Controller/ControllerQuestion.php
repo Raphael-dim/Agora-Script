@@ -185,12 +185,15 @@ class ControllerQuestion
         Théoriquement, un utilisateur lambda qui arrive à cette étape n'a pas pu déroger à ces contraintes.
         */
 
+
+
         //On vérifie si l'utilisateur est connecté
         if (!ConnexionUtilisateur::estConnecte()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas créer une question si vous n'êtes pas connecté.");
             Controller::redirect("index.php?action=readAll&controller=question");
         }
         FormConfig::setArr('SessionQuestion');
+
         $nbCalendriers = $_SESSION[FormConfig::$arr]['nbCalendriers'];
 
         $creation = date("Y/m/d H:i:s");
@@ -259,7 +262,7 @@ class ControllerQuestion
             Controller::redirect("index.php?controller=question&action=readAll");
         }
         $bool = true;
-        if ($question->getPhase() != 'debut') {
+        if ($question->getPhase() != 'debut' || $question->aPassePhase()) {
             MessageFlash::ajouter("danger", "Vous ne pouvez pas modifier une question dont la phase d'écriture a déjà commencée.");
             $bool = false;
         }
@@ -295,7 +298,7 @@ class ControllerQuestion
             MessageFlash::ajouter("danger", "Question introuvable");
             Controller::redirect("index.php?controller=question&action=readAll");
         }
-        if ($question->getPhase() != 'debut') {
+        if ($question->getPhase() != 'debut' || $question->aPassePhase()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont la phase d'écriture a déjà commencée.");
             $bool = false;
         }

@@ -78,7 +78,7 @@ if (isset($_GET['selection'])) {
         if (ConnexionUtilisateur::estAdministrateur() || (ConnexionUtilisateur::estConnecte() &&
                 ConnexionUtilisateur::getLoginUtilisateurConnecte() == $organisateur)) {
             echo '<div style="display: inline" class="action">';
-            if ($question->getPhase() == 'debut' || ConnexionUtilisateur::estAdministrateur()) {
+            if ($question->getPhase() == 'debut' && !$question->aPassePhase() || ConnexionUtilisateur::estAdministrateur()) {
                 echo '<a href ="index.php?action=update&controller=question&idQuestion=' .
                     $idQuestionURL . '"><img class="modifier" src = "../web/images/modifier.png"  alt="modifier"></a >';
             }

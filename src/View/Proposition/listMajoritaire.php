@@ -14,14 +14,14 @@
         $modeScrutin = 'Scrutin par jugement majoritaire (médiane) ';
         $message = 'Le scrutin majoritaire établit un \'vote médian\' pour chaque proposition, 
                     par défaut, la mention \'passable\' est sélectionnée.<br>
-                    Vous devez choisir une mention pour chaque proposition.';
+                    Il est nécessaire de choisir une mention pour chaque proposition.';
     } else if ($question->getSystemeVote() == 'valeur') {
         $methodeTrie = 'par moyenne de votes';
         $inferieur = 'une moyenne de votes';
         $modeScrutin = 'Scrutin par jugement majoritaire (moyenne) ';
         $message = 'Ce système de vote établit une moyenne de vote pour chaque proposition, 
                     par défaut, la mention \'passable\' est sélectionnée.<br>
-                    Vous devez choisir une mention pour chaque proposition.';
+                    Il est nécessaire de choisir une mention pour chaque proposition.';
     }
     if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
         ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
@@ -29,7 +29,7 @@
         $messageOrganisateur = 'Vous pouvez éliminer les propositions les moins attractives. <br>
                 Par défaut, elles sont triées ' . $methodeTrie . ', si vous éliminez
             une proposition, vous éliminez aussi celles qui ont ' . $inferieur . ' inférieur.<br>
-            A l\'inverse si vous annuler l\'élimination d\'une proposition, vous annulez l\'élimination de celles qui ' . $inferieur . ' supérieur.';
+            A l\'inverse si vous annulez l\'élimination d\'une proposition, vous annulerez également l\'élimination de celles qui ' . $inferieur . ' supérieurs.';
         ?>
         <h2 class="custom_titre"><?= $organisateurRole ?></h2>
         <p class="survol">
@@ -50,23 +50,20 @@
     $i = 1;
     $peutVoter = false;
     $calendrier = $question->getCalendrier();
-    if (sizeof($propositions) == 0) {
-        echo '<h2>Il n\'y a pas de propositions pour cette question</h2>';
-    }
     if ($question->getPhase() == 'vote' && ConnexionUtilisateur::estConnecte()
         && Votant::estVotant($votants, ConnexionUtilisateur::getLoginUtilisateurConnecte())
     ) {
         $votes = Votant::getVotes(ConnexionUtilisateur::getLoginUtilisateurConnecte());
         $peutVoter = true;
         $interval = (new DateTime(date("d-m-Y H:i")))->diff(new DateTime($calendrier->getFinVote(true)));
-        echo '<h2>Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
+        echo '<h2 class="custom_titre">Il vous reste ' . Calendrier::diff($interval) . ' pour voter ! </h2>';
     }
     foreach ($propositions as $proposition) {
         $idPropositionURL = rawurlencode($proposition->getId());
         $titreHTML = htmlspecialchars($proposition->getTitre());
         if ($proposition->isEstEliminee()) {
-            echo '<div style="background: #000e17" class="proposition shadow-effect">';
-            echo '<h3>(Eliminé)</h3>';
+            echo '<div style="background: rgba(58,69,75,0.55)" class="proposition shadow-effect eliminee">';
+            echo '<h1><strong class="custom_strong color-grey">Eliminé</strong></h1>';
         } else {
             echo '<div class="proposition shadow-effect">';
         }

@@ -130,6 +130,10 @@ fieldset {
     width: 33%;
 }
 
+.travers {
+    transform: rotate(8deg);
+}
+
 .listes .titre {
     font-size: 20px;
     text-overflow: ellipsis;
