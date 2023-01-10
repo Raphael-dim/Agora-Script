@@ -33,7 +33,7 @@ class ControllerProposition
             MessageFlash::ajouter("danger", "Question introuvable");
             Controller::redirect("index.php?controller=question&action=readAll");
         }
-        if (!ConnexionUtilisateur::estConnecte() || !Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
+        if (!ConnexionUtilisateur::estConnecte() || !Responsable::estResponsable($question->getId(), ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
             MessageFlash::ajouter("danger", "Vous ne pouvez pas créer de proposition, 
             vous n'êtes pas responsable pour cette question.");
             $bool = false;
