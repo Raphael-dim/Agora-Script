@@ -170,7 +170,7 @@ class ControllerProposition
         }
         $bool = true;
 
-        if (!ConnexionUtilisateur::estConnecte() || !Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
+        if (!ConnexionUtilisateur::estConnecte() || !Responsable::estResponsable($question->getId(), ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
             MessageFlash::ajouter("danger", "Vous ne pouvez pas créer de proposition, 
             vous n'êtes pas responsable pour cette question.");
             $bool = false;
@@ -198,7 +198,7 @@ class ControllerProposition
         $coAuteursSelec = $_SESSION[FormConfig::$arr]['co-auteur'];
         $proposition->setId($propositionBD);
         foreach ($coAuteursSelec as $coAutSelec) {
-            if (Responsable::estResponsable($question, $coAutSelec)) {
+            if (Responsable::estResponsable($question->getId(), $coAutSelec)) {
                 MessageFlash::ajouter('danger', 'Vous n\'avez pas respecté les contraintes');
                 (new PropositionRepository())->delete($propositionBD);
                 Controller::redirect("index.php?controller=question&action=readAll");
