@@ -7,22 +7,27 @@ use App\Vote\Model\DataObject\Question;
 
 
 ?>
-
 <h1><strong class="custom_strong color-orange">Détail de la proposition</strong></h1>
-<h1><strong class="custom_strong color-grey">Titre question : </strong></h1>
-<h2><?= htmlspecialchars($question->getTitre()) ?></h2>
-<h1><strong class="custom_strong color-grey">Description question : </strong></h1>
 
-<p class = "mdparse" id="description"><?= htmlspecialchars($question->getDescription()) ?></p>
+<div class="detail_question">
+    <div class="infos">
+        <div class="info_question">
+            <h1><strong class="custom_strong color-grey">Titre question : </strong></h1>
+            <h2><?= htmlspecialchars($question->getTitre()) ?></h2>
+            <h1><strong class="custom_strong color-grey">Description question : </strong></h1>
+            <p class = "mdparse" id="description"><?= htmlspecialchars($question->getDescription()) ?></p>
+        </div>
+
 
 
 <?php
 
 $i = 1;
 ?>
+        <div class="info">
 <h1><strong class="custom_strong color-blue">Titre de la proposition : </strong></h1>
 <?php
-echo '<h1>' . htmlspecialchars($proposition->getTitre()) . '</h1>';
+echo '<h1>' . htmlspecialchars($proposition->getTitre()) . '</h1></div>';
 echo '
 <div id="participants" class="detail_question">';
 echo '
@@ -61,10 +66,10 @@ foreach ($sections as $section) {
     echo '
 
 <div id="detail_section" class="detail_question" >';
-    echo '<h1><strong class=" custom_strong color-yellow">Section n°' . $i . '</strong></h1></h1>';
+    echo '<h1><strong class="custom_strong color-yellow">Section n°' . $i . '</strong></h1></h1>';
     echo '<h2><strong >Titre Section : </strong></h2><p>' . htmlspecialchars($section->getTitre()) . ' </p> ';
     echo '<h2><strong >Description Section : </strong></h2><p>' . htmlspecialchars($section->getDescription()) . ' </p> ';
-    echo '<span> Contenu :</span> 
+    echo '<h2><strong >contenu : </strong></h2><p>
     <p class = "mdparse">' . htmlspecialchars($propSection[$i - 1]->getContenu()) . '</p></div>
     ';
 
@@ -72,6 +77,8 @@ foreach ($sections as $section) {
     $i = $i + 1;
 }
 ?>
+    </div>
+</div>
 <script>
     Array.from(document.getElementsByClassName("mdparse")).forEach(elem => {
         elem.innerHTML = marked.parse(elem.innerHTML);

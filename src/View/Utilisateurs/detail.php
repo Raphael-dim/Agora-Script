@@ -42,7 +42,7 @@ use App\Vote\Lib\ConnexionUtilisateur;
     <h2 class = custom_titre><?= $pronom ?> propositions : </h2>
     <ul class="listes_sans_puces">
         <?php foreach ($propositions as $proposition) {
-            echo '<li class = "user_propositions"><a href = "index.php?controller=proposition&action=read&idProposition=' . rawurlencode($proposition->getId()) . '">
+            echo '<li class = "user_questions"><a href = "index.php?controller=proposition&action=read&idProposition=' . rawurlencode($proposition->getId()) . '">
     ' . $proposition->getTitre() . '</a></li>';
         }
         ?>
