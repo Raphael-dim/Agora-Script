@@ -56,12 +56,12 @@ Le système de vote unique permet de voter pour une seule proposition.';
             <option value="unique" <?= FormConfig::DropDown("systemeVote", "unique") ?>>Unique</option>
         </select>
     <p class="survol">
-        <img class="imageAide" src="images/aide_logo.png" alt=""/>
+        <img class="imageAide" src="images/aide_logo.png" alt="aide">
         <span class="messageInfo"><?= $message ?></span>
-    </p>
     </p>
     <input type="submit" name=previous value="Retour" class="nav" id="precedent" formnovalidate>
     <input type="submit" name=next value="Suivant" class="nav" id="suivant">
-
 </form>
+</div>
+
 

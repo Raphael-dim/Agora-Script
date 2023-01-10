@@ -6,6 +6,7 @@ namespace App\Vote\Controller;
 use App\Vote\Lib\ConnexionUtilisateur;
 use App\Vote\Config\FormConfig;
 use App\Vote\Lib\MessageFlash;
+use App\Vote\Lib\MotDePasse;
 use App\Vote\Model\DataObject\Calendrier;
 use App\Vote\Model\DataObject\Question;
 use App\Vote\Model\DataObject\Responsable;
@@ -125,8 +126,7 @@ class ControllerQuestion
                     $keyword = $_POST['keyword'];
                     $utilisateurs = (new UtilisateurRepository())->selectKeywordUtilisateur($keyword);
                     $params['utilisateurs'] = $utilisateurs;
-                }
-                else{
+                } else {
                     $utilisateurs = (new UtilisateurRepository())->selectAll();
                     $params['utilisateurs'] = $utilisateurs;
                 }
@@ -140,8 +140,7 @@ class ControllerQuestion
                     $keyword = $_POST['keyword'];
                     $utilisateurs = (new UtilisateurRepository())->selectKeywordUtilisateur($keyword);
                     $params['utilisateurs'] = $utilisateurs;
-                }
-                else{
+                } else {
                     $utilisateurs = (new UtilisateurRepository())->selectAll();
                     $params['utilisateurs'] = $utilisateurs;
                 }
@@ -192,7 +191,6 @@ class ControllerQuestion
             Controller::redirect("index.php?action=readAll&controller=question");
         }
         FormConfig::setArr('SessionQuestion');
-        $nbCalendriers = $_SESSION[FormConfig::$arr]['nbCalendriers'];
 
         $creation = date("Y/m/d H:i:s");
         $organisateur = (new UtilisateurRepository)->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
@@ -226,6 +224,10 @@ class ControllerQuestion
         }
 
         $sections = $_SESSION[FormConfig::$arr]['Sections'];
+        if (sizeof($sections) > 10) {
+            MessageFlash::ajouter('danger', 'Le nombre de section est invalide');
+            Controller::redirect("index.php?action=form&controller=question&step=3");
+        }
         foreach ($sections as $value) {
             $section = new Section($value['titre'], $value['description'], $question);
             if (strlen($value['titre']) > 80 || strlen($value['description']) > 360) {
@@ -265,7 +267,8 @@ class ControllerQuestion
             $bool = false;
         }
         if (!ConnexionUtilisateur::estConnecte() ||
-            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant()) {
+            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant() &&
+            !ConnexionUtilisateur::estAdministrateur()) {
             MessageFlash::ajouter("warning", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
             $bool = false;
         }
@@ -300,22 +303,22 @@ class ControllerQuestion
             $bool = false;
         }
         if (!ConnexionUtilisateur::estConnecte() ||
-            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant()) {
+            ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant() &&
+            !ConnexionUtilisateur::estAdministrateur()) {
             MessageFlash::ajouter("danger", "Vous ne pouvez pas modifier une question dont vous n'êtes par l'organisateur.");
             $bool = false;
         }
-        self::verifBD($question);
         if (!$bool) {
             Controller::redirect("index.php?action=readAll&controller=question");
         }
         FormConfig::setArr('SessionQuestion');
-        $question->setTitre($_SESSION[FormConfig::$arr]['Titre']);
-        $question->setDescription($_SESSION[FormConfig::$arr]['Description']);
-        (new QuestionRepository())->update($question);
-
         foreach ($question->getCalendrier(true) as $calendrier) {
             (new CalendrierRepository())->delete($calendrier->getId());
         }
+        self::verifBD($question);
+        $question->setTitre($_SESSION[FormConfig::$arr]['Titre']);
+        $question->setDescription($_SESSION[FormConfig::$arr]['Description']);
+        (new QuestionRepository())->update($question);
 
 
         $ancSections = $question->getSections();
@@ -423,13 +426,20 @@ class ControllerQuestion
             Controller::afficheVue('view.php', ["pagetitle" => "Demande de confirmation",
                 "cheminVueBody" => "confirm.php",
                 "message" => "Êtes vous sûr de vouloir supprimer cette question?",
+                "mdp" => true,
                 "url" => 'index.php?action=delete&controller=question&idQuestion=' . $_GET['idQuestion']]);
         } else if (isset($_POST["cancel"])) {
-            self::readAll();
+            Controller::redirect('index.php?controller=question&action=readAll');
         } else if (isset($_POST["confirm"])) {
-            (new QuestionRepository())->delete($_GET['idQuestion']);
-            MessageFlash::ajouter('success', 'La question a bien été supprimée');
-            Controller::redirect("index.php?controller=question&action=readAll");
+            $utilisateur = (new UtilisateurRepository())->select(ConnexionUtilisateur::getLoginUtilisateurConnecte());
+            if (!MotDePasse::verifier($_POST['mdp'], $utilisateur->getMdpHache())) {
+                MessageFlash::ajouter('warning', 'Mot de passe incorrect.');
+                Controller::redirect('index.php?action=delete&controller=question&idQuestion=' . $_GET['idQuestion']);
+            } else {
+                (new QuestionRepository())->delete($_GET['idQuestion']);
+                MessageFlash::ajouter('success', 'La question a bien été supprimée');
+                Controller::redirect("index.php?controller=question&action=readAll");
+            }
         }
     }
 
@@ -471,7 +481,9 @@ class ControllerQuestion
         $propositions = $question->getPropositionsTrie();
 
         if ($question->getSystemeVote() == 'majoritaire') {
-
+            Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
+                'cheminVueBody' => "Question/resultatMajoritaire.php",
+                'propositions' => $propositions]);
         } else {
             Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
                 'cheminVueBody' => "Question/resultat.php",
@@ -508,6 +520,10 @@ class ControllerQuestion
             Controller::redirect("index.php?action=form&controller=question&step=5");
         }
         $nbCalendriers = $_SESSION[FormConfig::$arr]['nbCalendriers'];
+        if ($nbCalendriers > 7) {
+            MessageFlash::ajouter("danger", "Le nombre de calendrier est invalide");
+            Controller::redirect("index.php?action=form&controller=question&step=2");
+        }
 
         for ($i = 1; $i <= $nbCalendriers; $i++) {
             $calendrier = new Calendrier($question, FormConfig::TextField('debutEcriture' . $i), FormConfig::TextField('finEcriture' . $i),
@@ -521,9 +537,16 @@ class ControllerQuestion
                 MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
                 Controller::redirect("index.php?action=form&controller=question&step=2");
             }
-            if ($i < $nbCalendriers && $calendrier->getFinVote() > FormConfig::TextField('debutEcriture' . $i + 1)) {
+            if ($i < $nbCalendriers && $calendrier->getFinVote(true) > FormConfig::TextField('debutEcriture' . $i + 1)) {
                 MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
                 Controller::redirect("index.php?action=form&controller=question&step=2");
+            }
+            if (FormConfig::TextField('debutEcriture' . $i) < date("d-m-Y") ||
+                FormConfig::TextField('finEcriture' . $i) < date("d-m-Y") ||
+                FormConfig::TextField('debutVote' . $i) < date("d-m-Y") ||
+                FormConfig::TextField('finVote' . $i) < date("d-m-Y")) {
+                MessageFlash::ajouter('warning', "test");
+                Controller::redirect('index.php?controller=question&action=form&step=2');
             }
             $calendrierBD = (new CalendrierRepository())->sauvegarder($calendrier, true);
             if ($calendrierBD != null) {
@@ -533,6 +556,63 @@ class ControllerQuestion
                 MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
                 Controller::redirect("index.php?action=form&controller=question&step=2");
             }
+        }
+    }
+
+    public static function passerPhase()
+    {
+        $bool = true;
+        if (!isset($_GET['idQuestion'])) {
+            MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
+            $bool = false;
+        }
+        $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        if (is_null($question)) {
+            MessageFlash::ajouter("danger", "Question introuvable");
+            $bool = false;
+        }
+        if (!ConnexionUtilisateur::estConnecte() || ConnexionUtilisateur::getLoginUtilisateurConnecte() != $question->getOrganisateur()->getIdentifiant()) {
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas modifier cette question.");
+            $bool = false;
+        }
+        if (!$bool) {
+            Controller::redirect('index.php?controller=question&action=readAll');
+        }
+        $phase = $question->getPhase();
+        $calendrier = $question->getCalendrier();
+        $nexPhase = "";
+        if ($phase == 'debut') {
+            $nextPhase = "d'écriture";
+        } else if ($phase == 'ecriture' || $phase == 'entre') {
+            $nextPhase = "de vote";
+        } else if ($phase == 'vote') {
+            $nextPhase = "de dépouillement des votes";
+
+        }
+        if (!isset($_POST["cancel"]) && !isset($_POST["confirm"])) {
+            Controller::afficheVue('view.php', ["pagetitle" => "Demande de confirmation",
+                "cheminVueBody" => "confirm.php",
+                "message" => "Êtes vous sûr de vouloir passer directement à la phase " . $nextPhase . " ?",
+                "url" => 'index.php?action=passerPhase&controller=question&idQuestion=' . $_GET['idQuestion']]);
+        } else if (isset($_POST["cancel"])) {
+            Controller::redirect('index.php?controller=question&action=readAll');
+        } else if (isset($_POST["confirm"])) {
+            if ($phase == 'debut') {
+                MessageFlash::ajouter('success', 'La question est passée en phase d\'écriture');
+                $calendrier->setDebutEcriture(date("Y-m-d H:i"));
+            } else if ($phase == 'entre') {
+                MessageFlash::ajouter('success', 'La question est passée en phase de vote');
+                $calendrier->setDebutVote(date("Y-m-d H:i"));
+            } else if ($phase == 'ecriture') {
+                MessageFlash::ajouter('success', 'La question est passée en phase de vote');
+                $calendrier->setFinEcriture(date("Y-m-d H:i"));
+                $calendrier->setDebutVote(date("Y-m-d H:i"));
+            } else if ($phase == 'vote') {
+                MessageFlash::ajouter('success', 'La question est passée en phase de dépouillement des votes');
+                $calendrier->setFinVote(date("Y-m-d H:i"));
+            }
+            (new CalendrierRepository())->update($calendrier);
+            Controller::redirect('index.php?controller=question&action=readAll');
         }
     }
 }

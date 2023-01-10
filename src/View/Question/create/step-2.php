@@ -40,6 +40,11 @@ if (isset($_POST['next'])) {
             MessageFlash::ajouter('warning', "La date de fin des votes doit être supérieure à la date de début des votes");
             Controller::redirect('index.php?controller=question&action=form&step=2');
         }
+
+        if ($debutEcriture < date("d-m-Y") || $finEcriture < date("d-m-Y") || $debutVote < date("d-m-Y") || $finVote < date("d-m-Y")) {
+            MessageFlash::ajouter('warning', "test");
+            Controller::redirect('index.php?controller=question&action=form&step=2');
+        }
     }
 
     FormConfig::postSession();
@@ -60,11 +65,18 @@ if (isset($_POST['ajoutPhase'])) {
     FormConfig::postSession();
     if ($_SESSION[FormConfig::$arr]['nbCalendriers'] < 7) {
         $_SESSION[FormConfig::$arr]['nbCalendriers']++;
+    } else {
+        MessageFlash::ajouter('info', 'Le nombre de calendriers maximum est de 7');
     }
+    FormConfig::redirect("index.php?controller=question&action=form&step=2");
+
 } else if (isset($_POST['supprimerPhase'])) {
     if ($_SESSION[FormConfig::$arr]['nbCalendriers'] > 1) {
         $_SESSION[FormConfig::$arr]['nbCalendriers']--;
+    } else {
+        MessageFlash::ajouter('info', 'Une question doit avoir au moins un calendrier');
     }
+    FormConfig::redirect("index.php?controller=question&action=form&step=2");
 }
 ?>
 <h1>Selection du calendrier</h1>
@@ -78,14 +90,13 @@ if ($_SESSION[FormConfig::$arr]['nbCalendriers'] > 1) {
     ?>
     <h2><?= $calendrier ?></h2>
     <p class="survol">
-        <img class="imageAide" src="images/aide_logo.png" alt=""/>
+        <img class="imageAide" src="images/aide_logo.png" alt="aide">
         <span class="messageInfo"><?= $message ?></span>
     </p>
     <?php
 } ?>
 
 <form method="post">
-    <!--    <input type="image" style="max-width: 30px" name="click" src="../web/images/add.png" alt="">-->
     <input class="nav" type="submit" name="ajoutPhase" value="Ajouter une phase">
     <input class="nav" type="submit" name="supprimerPhase" value="Supprimer une phase">
 
@@ -96,29 +107,29 @@ if ($_SESSION[FormConfig::$arr]['nbCalendriers'] > 1) {
     for ($n = 1; $n <= $_SESSION[FormConfig::$arr]['nbCalendriers']; $n++) {
 
         echo '<h2>Phase n°' . $n . '</h2>';
-        echo ' <p>
-        <label for="debutEcriture">Date de début d\'écriture des propositions :</label>
-        <input type="datetime-local" id="debutEcriture" name="debutEcriture' . $n . '"
+        echo ' <p class="InputAddOn">
+        <label class="InputAddOn-item" for="debutEcriture' . $n . '">Date de début d\'écriture des propositions :</label>
+        <input  type="datetime-local" id="debutEcriture' . $n . '" name="debutEcriture' . $n . '"
                value="' . FormConfig::TextField('debutEcriture' . $n) . '"
-               min="' . date(" Y-m-d H:i") . '" required
+               min="' . date("Y-m-d H:i") . '" required>
     </p>
-    <p>
-        <label for="finEcriture">Date de fin d\'écriture des propositions :</label>
-        <input type="datetime-local" id="finEcriture" name="finEcriture' . $n . '"
+    <p class="InputAddOn">
+        <label class="InputAddOn-item" for="finEcriture' . $n . '">Date de fin d\'écriture des propositions :</label>
+        <input type="datetime-local" id="finEcriture' . $n . '" name="finEcriture' . $n . '"
                value="' . FormConfig::TextField('finEcriture' . $n) . '"
-               min="' . date(" Y-m-d H:i") . '" required
+               min="' . date("Y-m-d H:i") . '" required>
     </p>
-    <p>
-        <label for="debutVote">Date de début des votes :</label>
-        <input type="datetime-local" id="debutVote" name="debutVote' . $n . '"
+    <p class="InputAddOn">
+        <label class="InputAddOn-item" for="debutVote' . $n . '">Date de début des votes :</label>
+        <input type="datetime-local" id="debutVote' . $n . '" name="debutVote' . $n . '"
                value="' . FormConfig::TextField('debutVote' . $n) . '"
-               min="' . date(" Y-m-d H:i") . '" required>
+               min="' . date("Y-m-d H:i") . '" required>
     </p>
-    <p>
-        <label for="finVote">Date de fin des votes :</label>
-        <input type="datetime-local" id="finVote" name="finVote' . $n . '"
+    <p class="InputAddOn">
+        <label class="InputAddOn-item" for="finVote' . $n . '">Date de fin des votes :</label>
+        <input type="datetime-local" id="finVote' . $n . '" name="finVote' . $n . '"
                value="' . FormConfig::TextField("finVote" . $n) . '"
-        min="' . date("Y-m-d H:i") . '" required>
+                min="' . date("Y-m-d H:i") . '" required>
     </p>';
     }
     ?>

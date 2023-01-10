@@ -29,18 +29,15 @@ class VerificationEmail
 <head>
     <meta charset="utf-8">
     <title>Vérification de compte</title>
-        <style>
-            p{ color: #012e49; }
-        </style>
 </head>
-<body style="background-color: #012e49">
-    <h1>Bienvenue sur notre plateforme de vote en ligne !</h1>
-    <p>Merci de vous être inscrit sur notre plateforme. Pour finaliser votre inscription, veuillez cliquer sur le bouton
+<body style="background-color: #012e49; margin-left: 15px; padding: 15px">
+    <h1 style="color: white">Bienvenue sur notre plateforme de vote en ligne !</h1>
+    <p style="color: white">Merci de vous être inscrit sur notre plateforme. Pour finaliser votre inscription, veuillez cliquer sur le bouton
         ci-dessous pour vérifier votre compte.</p>
-    <a href="' . $lienValidationEmail . '">Vérifier mon compte</a>
-    <p>Si vous n\'avez pas demandé à vous inscrire sur notre plateforme, veuillez ignorer cet e-mail.</p>
-    <p>Cordialement,</p>
-    <p">L\'équipe de vote en ligne</p>
+    <a style="color: #3c763d" href="' . $lienValidationEmail . '">Vérifier mon compte</a>
+    <p style="color: white">Si vous n\'avez pas demandé à vous inscrire sur notre plateforme, veuillez ignorer cet e-mail.</p>
+    <p style="color: white">Cordialement,</p>
+    <p style="color: white">L\'équipe de vote en ligne</p>
 </body>
 </html>';
 

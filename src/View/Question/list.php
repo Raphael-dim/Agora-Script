@@ -18,7 +18,7 @@ if (isset($_GET['selection'])) {
 <div class="barreHaut">
     <form method="post" action="index.php?controller=question&action=readKeyword">
         <p>
-            <label for="motclef"></label><input placeholder="Rechercher une question" type="text" placeholder=""
+            <label for="motclef"></label><input placeholder="Rechercher une question" type="text"
                                                 name="keyword" id="motclef"
                                                 required>
             <input type="image" alt="Submit" src="../web/images/search.png" class="search">
@@ -85,21 +85,33 @@ if (isset($_GET['selection'])) {
             }
             $interval = (new DateTime($date))->diff(new DateTime($calendrier->getDebutEcriture(true)));
             if ($question->getPhase() == 'debut') {
-                echo '<p class="debut" >Début de la phase d\'écriture dans : ' . Calendrier::diff($interval) . '</p>';
+                echo '<p class="debut" >Début de la phase d\'écriture dans : ' . Calendrier::diff($interval);
+                if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $organisateur) {
+                    echo '<br><a class = "link-custom" style="color: #ffc55c" href="index.php?action=passerPhase&controller=question&idQuestion=' . $idQuestionURL . '"><strong> Passer à la phase d\'écriture</strong></a>';
+                }
+                echo '</p>';
             }
         }
         if ($question->getPhase() == 'ecriture' || $question->getPhase() == 'entre') {
             $interval = (new DateTime($date))->diff(new DateTime($calendrier->getDebutVote(true)));
-            echo '<p class="debut">Début de la phase de vote dans : ' . Calendrier::diff($interval) . '</p>';
+            echo '<p class="debut">Début de la phase de vote dans : ' . Calendrier::diff($interval);
+            if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $organisateur) {
+                echo '<br><a class = "link-custom" style="color: rgb(246,121,82)" href="index.php?action=passerPhase&controller=question&idQuestion=' . $idQuestionURL . '"><strong> Passer à la phase de vote</strong></a>';
+            }
+            echo '</p>';
         }
         if ($question->getPhase() == 'vote') {
             $interval = (new DateTime($date))->diff(new DateTime($calendrier->getFinVote(true)));
-            echo '<p class="debut"> Fin de la phase de vote dans : ' . Calendrier::diff($interval) . '</p>';
+            echo '<p class="debut"> Fin de la phase de vote dans : ' . Calendrier::diff($interval);
+            if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $organisateur) {
+                echo '<br><a class = "link-custom" style="color: #73d393" href="index.php?action=passerPhase&controller=question&idQuestion=' . $idQuestionURL . '"><strong> Passer à la phase de dépouillement des votes</strong></a>';
+            }
+            echo '</p>';
         }
         if ($question->aPassePhase() || ($question->getPhase() != 'debut' && $question->getPhase() != 'fini')) {
-            echo '<a class = "link-custom" style = "position:absolute" href ="index.php?action=readAll&controller=proposition&idQuestion=' . $idQuestionURL . '">Liste des propositions</a>';
+            echo '<a class = "link-custom" style = "position:absolute; " href ="index.php?action=readAll&controller=proposition&idQuestion=' . $idQuestionURL . '">Liste des propositions</a>';
         }
-        if ($question->getPhase() == 'ecriture' && ConnexionUtilisateur::estConnecte() &&
+        if (!$question->aPassePhase() && $question->getPhase() == 'ecriture' && ConnexionUtilisateur::estConnecte() &&
             Responsable::estResponsable($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())
             && !Responsable::aCreeProposition($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
             echo '<a class = "link-custom" style = "position:absolute; margin-top:25px" href ="index.php?action=create&controller=proposition&idQuestion=' . $idQuestionURL . '">Créer une proposition</a>';
@@ -115,7 +127,7 @@ if (isset($_GET['selection'])) {
 </ul>
 
 <script>
-    Array.from(document.getElementsByClassName('mdparse')).forEach(elem =>{
+    Array.from(document.getElementsByClassName('mdparse')).forEach(elem => {
         elem.innerHTML = marked.parse(elem.innerHTML);
     });
 </script>

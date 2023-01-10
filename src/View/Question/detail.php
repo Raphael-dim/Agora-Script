@@ -1,7 +1,7 @@
 <div class="detail_question ">
     <div class="infos">
 
-        <div class="detail_question ">
+        <div class="info_question ">
             <h1><strong class="custom_strong color-blue">Titre :</strong></h1>
             <p> <?= htmlspecialchars($question->getTitre()) ?></p>
 
@@ -82,7 +82,7 @@
                     echo '<span class="vertical-line-petite" style="background: grey"></span>';
                     ?>
 
-                    <p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_debut">
+                    <p style="background: #CE16169B; color: white; padding: 6px" class="cal">
                         Début
                         d'écriture des
                         propositions
@@ -97,7 +97,7 @@
                     } else {
                         echo '<span class="vertical-line" style="background: #CE16169B"></span>';
                     } ?>
-                    <p style="background: #CE16169B; color: white; padding: 6px" class="cal" id="ecriture_fin">Fin
+                    <p style="background: #CE16169B; color: white; padding: 6px" class="cal" >Fin
                         d'écriture des
                         propositions :
                         <br>
@@ -115,7 +115,7 @@
                     ?>
 
                     <p style="background : rgba(65,112,56,0.76); color: white; padding: 6px" class="cal"
-                       id="vote_debut">Début des votes :
+                       >Début des votes :
                         <br>
                         <?= htmlspecialchars($calendrier->getDebutVote()) ?></p>
                     <?php
@@ -126,7 +126,7 @@
                     } else {
                         echo '<span class="vertical-line" style="background: rgba(65,112,56,0.76);"></span>';
                     } ?>
-                    <p style="background: rgba(65,112,56,0.76); color: white; padding: 6px" class="cal" id="vote_fin">
+                    <p style="background: rgba(65,112,56,0.76); color: white; padding: 6px" class="cal" >
                         Fin des votes : <br>
                         <?= htmlspecialchars($calendrier->getFinVote()) ?></p>
                     <?php

@@ -70,7 +70,10 @@
 }
 
 .debut {
-    background-color: rgba(1,46,73,0.14);
+    border-radius: 4px;
+    color: white !important;
+    background-color: rgba(1, 46, 73, 0.52);
     margin-left: 11px;
+    padding: 5px;
 
 }
