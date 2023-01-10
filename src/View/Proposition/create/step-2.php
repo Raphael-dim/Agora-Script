@@ -17,9 +17,9 @@ if (isset($_POST['next'])) {
 } else if (isset($_POST['previous'])) {
     FormConfig::postSession();
     if (isset($_GET['idProposition'])) {
-        FormConfig::redirect("index.php?controller=proposition&action=form&step=1&idProposition=" . $_GET['idProposition']);
+        FormConfig::redirect("index.php?controller=proposition&action=form&step=1&idProposition=" . $_GET['idProposition'] . "&idQuestion=" . $question->getId());
     } else {
-        FormConfig::redirect("index.php?controller=proposition&action=form&step=1&idQuestion=");
+        FormConfig::redirect("index.php?controller=proposition&action=form&step=1&idQuestion=". $question->getId());
 
     }
 }
