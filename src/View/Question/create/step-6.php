@@ -41,15 +41,15 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
 <div class="detail_question ">
     <div class="infos">
         <div class="detail_question ">
-            <h1><strong class='color-blue'>Titre</strong></h1>
+            <h1><strong class='custom_strong color-blue'>Titre</strong></h1>
             <p><?= htmlspecialchars($Titre) ?></p>
-            <h1><strong class='color-blue'>Description</strong></h1>
+            <h1><strong class='custom_strong color-blue'>Description</strong></h1>
             <p class="mdparse"><?= htmlspecialchars($Description) ?></p>
         </div>
         <div id="participants" class="info">
-            <h1><strong class='color-yellow'>Participants</strong></h1>
+            <h1><strong class='custom_strong  color-yellow'>Participants</strong></h1>
             <div id="responsables">
-                <h1><strong class='color-yellow'>Responsables</strong></h1>
+                <h1><strong class=' custom_strong  color-yellow'>Responsables</strong></h1>
                 <?php
                 foreach ($_SESSION[FormConfig::$arr]['responsables'] as $responsable) {
                     echo "<p> " . htmlspecialchars($responsable) . " </p>";
@@ -58,7 +58,7 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
             </div>
 
             <div id="votants">
-                <h1><strong class='color-yellow'>Votants</strong></h1>
+                <h1><strong class='custom_strong color-yellow'>Votants</strong></h1>
                 <?php
                 foreach ($_SESSION[FormConfig::$arr]['votants'] as $votant) {
                     echo "<p> " . htmlspecialchars($votant) . " </p>";
@@ -69,7 +69,7 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
 
 
         <div class="sections  info">
-            <h1><strong class='color-orange'>Sections</strong></h1>
+            <h1><strong class='custom_strong color-orange'>Sections</strong></h1>
             <?php
             $i = 1;
             foreach ($_SESSION[FormConfig::$arr]['Sections'] as $Section) {
@@ -85,7 +85,7 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
         </div>
         <div class="info">
             <div class="calendrier">
-                <h1><strong class='color-green'>Calendrier</strong></h1>
+                <h1><strong class='custom_strong color-green'>Calendrier</strong></h1>
                 <?php
                 for ($i = 1; $i <= $_SESSION[FormConfig::$arr]['nbCalendriers']; $i++) {
 

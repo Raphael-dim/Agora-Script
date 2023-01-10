@@ -35,7 +35,7 @@ $nbSection = $_SESSION[FormConfig::$arr]['nbSections'];
                 <h2>Section n°' . $i . '</h2>
                 <p>
                     <label>Titre :</label>
-                    <input type="text" name=titre' . $i . '  size="77" maxlength="70"
+                    <input class="titre_id" type="text" name=titre' . $i . '  size="77" maxlength="70"
                     value = "' . FormConfig::TextField('titre' . $i) . '" 
                     required>
                     <label>70 caractères maximum</label>

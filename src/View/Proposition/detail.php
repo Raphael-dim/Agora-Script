@@ -12,7 +12,7 @@ use App\Vote\Model\DataObject\Question;
 <h1><strong class="custom_strong color-grey">Titre question : </strong></h1>
 <h2><?= htmlspecialchars($question->getTitre()) ?></h2>
 <h1><strong class="custom_strong color-grey">Description question : </strong></h1>
-<h2><?= htmlspecialchars($question->getDescription()) ?></h2>
+<p class = "mdparse"><?= htmlspecialchars($question->getDescription()) ?></p>
 
 <?php
 
@@ -60,16 +60,17 @@ foreach ($sections as $section) {
 <div>';
     echo '<h2>Section n°' . $i . '</h2>';
     echo '<p>Titre : ' . htmlspecialchars($section->getTitre()) . ' </p> ';
-    echo '<p>Description : ' . htmlspecialchars($section->getDescription()) . ' </p> ';
-    echo '
-    <p>
-        <span> Contenu</span> :
-        ' . htmlspecialchars($propSection[$i - 1]->getContenu()) . '
-    </p></div>';
+    echo '<p class = "mdparse">Description : ' . htmlspecialchars($section->getDescription()) . ' </p> ';
+    echo '<span> Contenu :</span> 
+    <p class = "mdparse">' . htmlspecialchars($propSection[$i - 1]->getContenu()) . '</p></div>
+    ';
 
     $i = $i + 1;
 }
 ?>
-
-
+<script>
+    Array.from(document.getElementsByClassName("mdparse")).forEach(elem => {
+        elem.innerHTML = marked.parse(elem.innerHTML);
+    });
+</script>
 
