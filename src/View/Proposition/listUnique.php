@@ -23,7 +23,7 @@
         $organisateurRole = 'Vous êtes responsable pour cette question multiphase';
         $messageOrganisateur = 'Vous pouvez éliminer les propositions les moins attractives. 
                 Par défaut, elles sont triées par nombre de votes, si vous éliminez
-            une proposition, vous éliminez aussi celles qui ont un nombre de votes inférieur.';
+            une proposition, vous éliminez aussi celles qui ont un nombre de votes inférieurs.';
         ?>
         <h2 class="custom_titre"><?= $organisateurRole ?></h2>
         <p class="survol">

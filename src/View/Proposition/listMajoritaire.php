@@ -28,7 +28,7 @@
         $organisateurRole = 'Vous êtes responsable pour cette question multiphase';
         $messageOrganisateur = 'Vous pouvez éliminer les propositions les moins attractives. <br>
                 Par défaut, elles sont triées ' . $methodeTrie . ', si vous éliminez
-            une proposition, vous éliminez aussi celles qui ont ' . $inferieur . ' inférieur.<br>
+            une proposition, vous éliminez aussi celles qui ont ' . $inferieur . ' inférieurs.<br>
             A l\'inverse si vous annulez l\'élimination d\'une proposition, vous annulerez également l\'élimination de celles qui ' . $inferieur . ' supérieurs.';
         ?>
         <h2 class="custom_titre"><?= $organisateurRole ?></h2>
