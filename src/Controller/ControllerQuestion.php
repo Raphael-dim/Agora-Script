@@ -470,15 +470,10 @@ class ControllerQuestion
         }
         $propositions = $question->getPropositionsTrie();
 
-        if ($question->getSystemeVote() == 'majoritaire') {
-            Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
-                'cheminVueBody' => "Question/resultatMajoritaire.php",
-                'propositions' => $propositions]);
-        } else {
-            Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
-                'cheminVueBody' => "Question/resultat.php",
-                'propositions' => $propositions]);
-        }
+        Controller::afficheVue('view.php', ['pagetitle' => 'Page de résultat',
+            'cheminVueBody' => "Question/resultat.php",
+            'propositions' => $propositions]);
+
     }
 
     /**
