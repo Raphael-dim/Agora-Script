@@ -241,6 +241,7 @@ a {
 .deuxTrois {
     width: 100%;
     display: flex;
+    margin-top: 30px;
 }
 
 .premier {
@@ -861,7 +862,7 @@ div p {
 }
 
 .info_question {
-    margin-left: 5%;
+    /*margin-left: 5%;*/
 }
 
 #detail_section{
