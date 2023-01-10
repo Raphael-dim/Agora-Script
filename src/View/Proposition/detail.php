@@ -12,7 +12,9 @@ use App\Vote\Model\DataObject\Question;
 <h1><strong class="custom_strong color-grey">Titre question : </strong></h1>
 <h2><?= htmlspecialchars($question->getTitre()) ?></h2>
 <h1><strong class="custom_strong color-grey">Description question : </strong></h1>
-<h2 id="description"><?= htmlspecialchars($question->getDescription()) ?></h2>
+
+<p class = "mdparse" id="description"><?= htmlspecialchars($question->getDescription()) ?></p>
+
 
 <?php
 
@@ -57,19 +59,22 @@ echo '
 $propSection = (new PropositionSectionRepository())->selectWhere($proposition->getId(), '*', 'idproposition', 'Proposition_section');
 foreach ($sections as $section) {
     echo '
+
 <div id="detail_section" class="detail_question" >';
     echo '<h1><strong class=" custom_strong color-yellow">Section n°' . $i . '</strong></h1></h1>';
     echo '<h2><strong >Titre Section : </strong></h2><p>' . htmlspecialchars($section->getTitre()) . ' </p> ';
     echo '<h2><strong >Description Section : </strong></h2><p>' . htmlspecialchars($section->getDescription()) . ' </p> ';
-    echo '
-    <p>
-        <h2><strong >Contenu : </strong></h2><p>
-        ' . htmlspecialchars($propSection[$i - 1]->getContenu()) . '
-    </p></div>';
+    echo '<span> Contenu :</span> 
+    <p class = "mdparse">' . htmlspecialchars($propSection[$i - 1]->getContenu()) . '</p></div>
+    ';
+
 
     $i = $i + 1;
 }
 ?>
-
-
+<script>
+    Array.from(document.getElementsByClassName("mdparse")).forEach(elem => {
+        elem.innerHTML = marked.parse(elem.innerHTML);
+    });
+</script>
 

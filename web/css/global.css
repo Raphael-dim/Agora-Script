@@ -1190,6 +1190,12 @@ input {
     display: flex;
 }
 
+
+.titre_id{
+    width:70%;
+}
+
 .delete:hover, .modifier:hover {
    width: 26px;
 }
+

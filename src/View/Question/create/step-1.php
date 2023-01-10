@@ -37,9 +37,11 @@ if (isset($_POST['Titre'])) {
 
 <form method="post" class = "custom-form">
 
+
     <p class="InputAddOn">
         <label class="InputAddOn-item" for="titre_id">Titre : </label>
         <input type="text" placeholder="L'oeuf ou la poule ? " size="70" maxlength="70" name="Titre" id="titre_id"
+
                value="<?= FormConfig::TextField('Titre') ?>"
                required>
         <label class="maximum">70 caractères maximum</label>

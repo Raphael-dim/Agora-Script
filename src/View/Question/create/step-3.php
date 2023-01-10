@@ -33,9 +33,11 @@ $nbSection = $_SESSION[FormConfig::$arr]['nbSections'];
     for ($i = 1; $i <= $nb; $i++) {
         echo '  
                 <h2>Section n°' . $i . '</h2>
+
                 <p  class="InputAddOn">
                     <label class="InputAddOn-item">Titre :</label>
                     <input class="InputAddOn-field" type="text" name=titre' . $i . '  size="50" maxlength="70" style="min-width: 40%"
+
                     value = "' . FormConfig::TextField('titre' . $i) . '" 
                     required>
                     <label class="maximum">70 caractères maximum</label>
