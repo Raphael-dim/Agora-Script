@@ -65,7 +65,7 @@ class ControllerMessage
         }
         Controller::afficheVue('view.php', [
             "cheminVueBody" => "Message/create.php",
-            "pagetitle" => "Créer un message"
+            "pagetitle" => "Envoyer un message"
         ]);
 
     }
@@ -76,7 +76,7 @@ class ControllerMessage
         $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, 'identifiant');
         Controller::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,
-                "pagetitle" => "Créer un message",
+                "pagetitle" => "Envoyer un message",
                 "cheminVueBody" => "Message/create.php"]);
     }
 
