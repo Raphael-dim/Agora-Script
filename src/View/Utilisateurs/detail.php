@@ -3,7 +3,7 @@
 use App\Vote\Lib\ConnexionUtilisateur;
 
 ?>
-    <link href="css/profile.css" rel="stylesheet">
+    <link href="css/Profile.css" rel="stylesheet">
     <div class="barre_utilisateur">
         <img id = "picture" src = "../web/images/profile_pic.jpg">
         <div id = "infos_utilisateur">
