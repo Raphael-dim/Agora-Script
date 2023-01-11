@@ -288,6 +288,7 @@ class Question extends AbstractDataObject
                 return $calendrier;
             }
         }
+
         // Si on arrive ici, c'est qu'on est dans le cas où la question est terminée. On retourne le dernier calendrier.
         return $this->calendriers[sizeof($this->calendriers) - 1];
     }
