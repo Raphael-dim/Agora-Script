@@ -1013,7 +1013,7 @@ input, textarea {
 }
 
 .shadow-effect:hover {
-    transform: scale(1);
+    transform: scale(100%);
     box-shadow: -3px 3px 0 0 var(--brand)
 }
 
