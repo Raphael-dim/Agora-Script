@@ -43,7 +43,7 @@ if (isset($_POST['titre'])) {
         $i++;
         echo '<h2>Section n°' . $i . '</h2>';
         echo '<p>Titre : ' . htmlspecialchars($section->getTitre()) . ' </p > ';
-        echo '<p>Description : ' . htmlspecialchars($section->getDescription()) . ' </p > ';
+        echo '<p class = "mdparse">Description : ' . htmlspecialchars($section->getDescription()) . ' </p > ';
         echo '
     <p class="champ">
 
@@ -59,5 +59,11 @@ if (isset($_POST['titre'])) {
     <input type="submit" name="next" value="Suivant" class="nav" id="suivant">
 </form>
 
+
+<script>
+    Array.from(document.getElementsByClassName("mdparse")).forEach(elem => {
+        elem.innerHTML = marked.parse(elem.innerHTML);
+    });
+</script>
 
 
