@@ -279,7 +279,7 @@ class ControllerQuestion
         FormConfig::setArr('SessionQuestion');
         FormConfig::startSession();
         Controller::afficheVue('view.php', ["pagetitle" => "Modifier une question",
-            "cheminVueBody" => "question/create/step-1.php",
+            "cheminVueBody" => "Question/create/step-1.php",
             "idQuestion" => $_GET['idQuestion']]);
 
     }
