@@ -99,7 +99,7 @@ class ControllerMessage
     {
         $keyword = $_POST['keyword'];
         // Récupère les utilisateurs correspondant au mot-clé donné
-        $utilisateurs = (new UtilisateurRepository())->selectKeyword($keyword, 'identifiant');
+        $utilisateurs = (new UtilisateurRepository())->selectKeywordUtilisateur($keyword);
         // Affiche la vue avec les utilisateurs récupérés
         Controller::afficheVue('view.php',
             ["utilisateurs" => $utilisateurs,
