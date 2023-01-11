@@ -160,9 +160,10 @@
         }
         echo '</p>';
         $i++;
-        echo '<p><a class = "link-custom" href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($proposition->getIdResponsable()) . '" >par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a></p>';
-        echo '<a class = "link-custom" href= "index.php?action=read&controller=proposition&idProposition=' .
-            $idPropositionURL . '">Lire plus</a>';
+        echo '<p><a style="float: left" class = "link-custom" href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($proposition->getIdResponsable()) . '" >
+        par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a>';
+        echo '<a style="float: right" class = "link-custom" href= "index.php?action=read&controller=proposition&idProposition=' .
+            $idPropositionURL . '">Lire plus</a></p>';
         echo '</div>';
     }
     ?>

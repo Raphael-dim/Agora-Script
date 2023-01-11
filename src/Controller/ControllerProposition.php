@@ -68,7 +68,7 @@ class ControllerProposition
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $readOnly = "";
         if (isset($_GET['idProposition'])) {
-            if (!Responsable::estResponsable($_GET['idQuestion'],ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
+            if (!Responsable::estResponsable($_GET['idQuestion'], ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
                 $readOnly = "readonly";
             }
         }
@@ -77,7 +77,7 @@ class ControllerProposition
                 $view = "step-1";
                 break;
             case 2:
-                if (isset($_GET["idProposition"]) and CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(),$_GET["idProposition"])){
+                if (isset($_GET["idProposition"]) and CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $_GET["idProposition"])) {
                     FormConfig::redirect('index.php?controller=proposition&action=updated');
                 }
                 if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row" != "") {
@@ -96,7 +96,7 @@ class ControllerProposition
         Controller::afficheVue('view.php',
             array_merge(["pagetitle" => "Créer une proposition",
                 "cheminVueBody" => "Proposition/create/" . $view . ".php",
-                "question" => $question,"readOnly" => $readOnly], $params));
+                "question" => $question, "readOnly" => $readOnly], $params));
 
     }
 

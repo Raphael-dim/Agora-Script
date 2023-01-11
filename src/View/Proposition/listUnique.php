@@ -55,7 +55,7 @@
             echo '<div class="proposition shadow-effect">';
         }
         echo ' <a href= "index.php?action=read&controller=proposition&idProposition=' .
-            $idPropositionURL . '"> <h2 class = "Titre_proposition">' . $titreHTML . '</h2>   </a>';
+            $idPropositionURL . '"> <h2 style="font-size: 22px" class = "Titre_proposition ">' . $titreHTML . '</h2>   </a>';
         if ($peutVoter && !$proposition->isEstEliminee()) {
             $vote = Votant::aVote($proposition, $votes);
             if (is_null($vote)) {
@@ -87,7 +87,7 @@
             }
         }
         if ((CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
-            $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) &&
+                $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) &&
             $question->getPhase() == 'ecriture') {
 
             echo ' <p><a href="index.php?action=update&controller=proposition&idProposition=' .
@@ -95,11 +95,14 @@
         }
 
         if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable() && $question->getPhase() != 'vote') {
-            echo ' <a href="index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '"><img class="delete" src = "../web/images/delete.png"  alt="supprimer"></a>';
+            echo ' <a style="margin-left: 20px" href="index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '"><img class="delete" src = "../web/images/delete.png"  alt="supprimer"></a>';
         }
         echo '</p>';
         $i++;
-        echo '<p><a href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($proposition->getIdResponsable()) . '" >par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a></p>';
+        echo '<p><a style="float: left" class="link-custom" href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($proposition->getIdResponsable()) . '" >
+        par ' . htmlspecialchars($proposition->getIdResponsable()) . ' </a>';
+        echo '<a style="float:right" class = "link-custom" href= "index.php?action=read&controller=proposition&idProposition=' .
+            $idPropositionURL . '">Lire plus</a></p>';
         echo '</div>';
     }
     ?>
