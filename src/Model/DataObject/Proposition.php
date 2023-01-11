@@ -5,6 +5,7 @@ namespace App\Vote\Model\DataObject;
 use App\Vote\Model\Repository\CoAuteurRepository;
 use App\Vote\Model\Repository\PropositionSectionRepository;
 use App\Vote\Model\Repository\ResponsableRepository;
+use App\Vote\Model\Repository\VoteRepository;
 
 class Proposition extends AbstractDataObject
 {
@@ -191,6 +192,12 @@ class Proposition extends AbstractDataObject
     public function getContenus()
     {
         return (new PropositionSectionRepository())->selectWhere($this->getId(), '*', 'idproposition', 'Proposition_section');
+    }
+
+    public function getVotes()
+    {
+        return (new VoteRepository())->selectWhere($this->id, '*',
+            'idProposition', 'Votes', 'valeurvote');
     }
 
     public function formatTableau($update = false): array

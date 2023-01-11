@@ -107,17 +107,9 @@
         }
         $nbEtoiles = htmlspecialchars($proposition->getNbEtoiles());
 
-        /*
-            On récupère les votes dans la vue pour éviter de faire plusieurs appels à la base de donnée
-        dans le controller. La méthode ReadAll() n'est pas appelée par le controllerVote lors du vote / modification de vote.
-        Si c'était le cas, on devrait refaire un appel à la base de donnée pour récupérer la question, les propositions et les votants
-        à chaque interaction avec le système de vote.
-
-        */
+        $votesProposition = $proposition->getVotes();
 
 
-        $votesProposition = (new VoteRepository())->selectWhere($proposition->getId(), '*',
-            'idProposition', 'Votes', 'valeurvote');
         echo '<h3>Nombre de votes : ' . sizeof($votesProposition) . '</h3>';
         if (sizeof($votesProposition) > 0) {
             if ($question->getSystemeVote() == 'majoritaire') {

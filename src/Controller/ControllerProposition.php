@@ -78,8 +78,10 @@ class ControllerProposition
         $step = $_GET['step'] ?? 1; // Récupère l'étape actuelle si elle est définie, sinon définit l'étape 1 par défaut
         $params = array();
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
-        $proposition = (new PropositionRepository())->select($_GET['idProposition']);
-        if ($proposition->getIdResponsable() != ConnexionUtilisateur::getLoginUtilisateurConnecte() &&
+        if (isset($_GET['idProposition'])) {
+            $proposition = (new PropositionRepository())->select($_GET['idProposition']);
+        }
+        if (isset($proposition) && $proposition->getIdResponsable() != ConnexionUtilisateur::getLoginUtilisateurConnecte() &&
             !CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $_GET["idProposition"])) {
             MessageFlash::ajouter('danger', 'Vous ne pouvez pas modifier cette proposition');
             Controller::redirect('index.php');
