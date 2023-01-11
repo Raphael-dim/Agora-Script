@@ -115,6 +115,8 @@ class ControllerProposition
                 }
                 $view = "step-2";
                 break;
+            default :
+                Controller::redirect('index.php');
         }
 
         Controller::afficheVue('view.php',
