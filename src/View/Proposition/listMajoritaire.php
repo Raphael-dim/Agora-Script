@@ -33,17 +33,16 @@
         ?>
         <h2 class="custom_titre"><?= $organisateurRole ?></h2>
         <p class="survol">
-            <img class="imageAide" src="images/aide_logo.png" alt="aide"/>
+            <img class="imageAide" src="images/aide_logo.png" alt="aide">
             <span class="messageInfo"><?= $messageOrganisateur ?></span>
         </p>
         <?php
-        echo '<h2></h2>';
     }
 
     ?>
     <h2 class="custom_titre"><?= $modeScrutin ?></h2>
     <p class="survol">
-        <img class="imageAide" src="images/aide_logo.png" alt="aide"/>
+        <img class="imageAide" src="images/aide_logo.png" alt="aide">
         <span class="messageInfo"><?= $message ?></span>
     </p>
     <?php
@@ -156,7 +155,8 @@
         }
 
         if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable() && $question->getPhase() != 'vote') {
-            echo ' <a href="index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '"><img style="margin-left: 10px" class="delete" src = "../web/images/delete.png"  alt="supprimer"></a>';
+            echo ' <a href="index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '">
+                        <img style="margin-left: 10px" class="delete" src = "../web/images/delete.png"  alt="supprimer"></a>';
         }
         echo '</p>';
         $i++;

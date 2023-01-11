@@ -31,7 +31,6 @@
             <span class="messageInfo"><?= $messageOrganisateur ?></span>
         </p>
         <?php
-        echo '<h2></h2>';
     }
     $i = 1;
     $peutVoter = false;
@@ -95,7 +94,8 @@
         }
 
         if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable() && $question->getPhase() != 'vote') {
-            echo ' <a style="margin-left: 20px" href="index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '"><img class="delete" src = "../web/images/delete.png"  alt="supprimer"></a>';
+            echo ' <a style="margin-left: 20px" href="index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '">
+                    <img class="delete" src = "../web/images/delete.png"  alt="supprimer"></a>';
         }
         echo '</p>';
         $i++;
