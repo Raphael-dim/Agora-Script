@@ -14,7 +14,7 @@
     ?>
     <h2 class="custom_titre"><?= $modeScrutin ?></h2>
     <p class="survol">
-        <img class="imageAide" src="images/aide_logo.png" alt="aide"/>
+        <img class="imageAide" src="images/aide_logo.png" alt="aide">
         <span class="messageInfo"><?= $message ?></span>
     </p>
     <?php
@@ -27,7 +27,7 @@
         ?>
         <h2 class="custom_titre"><?= $organisateurRole ?></h2>
         <p class="survol">
-            <img class="imageAide" src="images/aide_logo.png" alt="aide"/>
+            <img class="imageAide" src="images/aide_logo.png" alt="aide">
             <span class="messageInfo"><?= $messageOrganisateur ?></span>
         </p>
         <?php
@@ -85,11 +85,12 @@
                 echo '<p><a class="link-custom" href="index.php?controller=proposition&action=eliminer&idProposition=' . $idPropositionURL . '">Eliminer</a><br></p>';
             }
         }
+        echo '<p>';
         if ((CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
                 $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) &&
             $question->getPhase() == 'ecriture') {
 
-            echo ' <p><a href="index.php?action=update&controller=proposition&idProposition=' .
+            echo ' <a href="index.php?action=update&controller=proposition&idProposition=' .
                 rawurlencode($proposition->getId()) . '"><img class="modifier" src = "../web/images/modifier.png"  alt="modifier"></a > ';
         }
 

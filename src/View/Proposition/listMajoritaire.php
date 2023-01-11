@@ -67,7 +67,7 @@
             echo '<div class="proposition shadow-effect">';
         }
 
-        echo '<p class=titre> <h2>' . $titreHTML . ' </h2 </p>';
+        echo '<h2>' . $titreHTML . ' </h2>';
         if ($peutVoter && !$proposition->isEstEliminee()) {
             $vote = Votant::aVote($proposition, $votes, 'majoritaire');
             for ($val = 1; $val <= 6; $val++) {
@@ -145,12 +145,12 @@
                 echo '<p><a class="link-custom" href="index.php?controller=proposition&action=eliminer&idProposition=' . $idPropositionURL . '">Eliminer</a></p>';
             }
         }
-
+        echo '<p>';
         if ((CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
-            $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) &&
+                $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) &&
             $question->getPhase() == 'ecriture') {
 
-            echo ' <p><a href="index.php?action=update&controller=proposition&idProposition=' .
+            echo ' <a href="index.php?action=update&controller=proposition&idProposition=' .
                 rawurlencode($proposition->getId()) . '"><img class="modifier" src = "../web/images/modifier.png"  alt="modifier"></a > ';
         }
 
