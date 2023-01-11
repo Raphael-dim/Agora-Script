@@ -5,10 +5,10 @@ use App\Vote\Lib\ConnexionUtilisateur;
 ?>
     <link href="css/Profile.css" rel="stylesheet">
     <div class="barre_utilisateur">
-        <img id = "picture" src = "../web/images/profile_pic.jpg">
-        <div id = "infos_utilisateur">
-            <h1 id = "nom"> <?= htmlspecialchars($utilisateur->getPrenom()) ?> <?= htmlspecialchars($utilisateur->getNom()) ?></h1>
-            <h2 id = "identifiant"> <?= htmlspecialchars($utilisateur->getIdentifiant()) ?></h2>
+        <img id="picture" src="../web/images/profile_pic.jpg" alt="profile">
+        <div id="infos_utilisateur">
+            <h1 id="nom"> <?= htmlspecialchars($utilisateur->getPrenom()) ?> <?= htmlspecialchars($utilisateur->getNom()) ?></h1>
+            <h2 id="identifiant"> <?= htmlspecialchars($utilisateur->getIdentifiant()) ?></h2>
         </div>
         <?php
         $bool = false;
@@ -22,7 +22,7 @@ use App\Vote\Lib\ConnexionUtilisateur;
         } ?>
 
     </div>
-    <div id = "modif" style="margin-bottom: 60px">
+    <div id="modif" style="margin-bottom: 60px">
         <?php
         if ($bool) {
             echo '<a class="lien"
@@ -30,7 +30,7 @@ use App\Vote\Lib\ConnexionUtilisateur;
         Modifier les informations</a>';
         } ?>
     </div>
-    <h2 class = custom_titre><?= $pronom ?> questions : </h2>
+    <h2 class=custom_titre><?= $pronom ?> questions : </h2>
     <ul class=" listes_sans_puces">
         <?php foreach ($questions as $question) {
             echo '<li class = "user_questions"><a href = "index.php?controller=question&action=read&idQuestion=' . rawurlencode($question->getId()) . '">
@@ -39,7 +39,7 @@ use App\Vote\Lib\ConnexionUtilisateur;
         ?>
     </ul>
 
-    <h2 class = custom_titre><?= $pronom ?> propositions : </h2>
+    <h2 class=custom_titre><?= $pronom ?> propositions : </h2>
     <ul class="listes_sans_puces">
         <?php foreach ($propositions as $proposition) {
             echo '<li class = "user_questions"><a href = "index.php?controller=proposition&action=read&idProposition=' . rawurlencode($proposition->getId()) . '">
