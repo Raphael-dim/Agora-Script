@@ -10,7 +10,7 @@
             <input class="InputAddOn-field" type="password" value="" placeholder="" name="mdp" id="mdp_id" required>
         </p>
         <input type="submit" value="Connexion" id="suivant" class="nav">
-        <a id="precedent" style="color: black" href="index.php?controller=utilisateur&action=create">Pas encore de
+        <a class="link-custom" id="precedent" style="text-decoration: none; color: #000e17" href="index.php?controller=utilisateur&action=create">Pas encore de
             compte ?</a>
     </fieldset>
 
