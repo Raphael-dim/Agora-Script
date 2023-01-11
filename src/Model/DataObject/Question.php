@@ -181,8 +181,8 @@ class Question extends AbstractDataObject
 
     public function getPropositionsTrie()
     {
-        $propositions = (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion",
-            'Propositions', 'nbEtoiles', 'DESC');
+        $propositions = (new PropositionRepository())->selectWhere($this->id, '*', "idquestion",
+            'Propositions', 'nbetoiles', 'DESC');
         if ($this->systemeVote == 'majoritaire') {
             $propositionsTrie = array();
             foreach ($propositions as $proposition) {
