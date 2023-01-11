@@ -187,7 +187,7 @@ class Question extends AbstractDataObject
             $propositionsTrie = array();
             foreach ($propositions as $proposition) {
                 $votesProposition = (new VoteRepository())->selectWhere($proposition->getId(), '*',
-                    'idProposition', 'Votes', 'valeurvote');
+                    'idproposition', 'Votes', 'valeurvote');
                 $nbVotes = $proposition->getNbVotes();
                 if ($nbVotes > 0) {
                     if ($nbVotes == 1) {
