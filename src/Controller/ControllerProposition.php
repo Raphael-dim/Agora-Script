@@ -78,6 +78,12 @@ class ControllerProposition
         $step = $_GET['step'] ?? 1; // Récupère l'étape actuelle si elle est définie, sinon définit l'étape 1 par défaut
         $params = array();
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
+        $proposition = (new PropositionRepository())->select($_GET['idProposition']);
+        if ($proposition->getIdResponsable() != ConnexionUtilisateur::getLoginUtilisateurConnecte() &&
+            !CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $_GET["idProposition"])) {
+            MessageFlash::ajouter('danger', 'Vous ne pouvez pas modifier cette proposition');
+            Controller::redirect('index.php');
+        }
         $readOnly = "";
         // Vérifie si une proposition est en cours d'édition
         if (isset($_GET['idProposition'])) {
@@ -119,8 +125,8 @@ class ControllerProposition
     }
 
     /**
-      *Cette fonction affiche les détails de la proposition sélectionnée
-      */
+     *Cette fonction affiche les détails de la proposition sélectionnée
+     */
     public static function read()
     {
         // Récupère les informations sur la proposition sélectionnée
@@ -133,13 +139,13 @@ class ControllerProposition
         $idProposition = $_GET['idProposition'];
         // Affiche la vue avec les informations récupérées
         Controller::afficheVue('view.php', [
-        "question" => $question,
-        "idProposition" => $idProposition,
-        "proposition" => $proposition,
-        "sections" => $sections,
-        "coAuts" => $coAuts,
-        "pagetitle" => "Detail proposition",
-        "cheminVueBody" => "Proposition/detail.php"]);
+            "question" => $question,
+            "idProposition" => $idProposition,
+            "proposition" => $proposition,
+            "sections" => $sections,
+            "coAuts" => $coAuts,
+            "pagetitle" => "Detail proposition",
+            "cheminVueBody" => "Proposition/detail.php"]);
     }
 
     /**
@@ -168,10 +174,10 @@ class ControllerProposition
         // Affiche la vue en fonction du système de vote
         if ($question->getSystemeVote() == 'majoritaire' || $question->getSystemeVote() == 'valeur') {
 
-                Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
-                    "cheminVueBody" => "Proposition/listMajoritaire.php",
-                    "votants" => $votants,
-                    "propositions" => $propositions, "question" => $question]);
+            Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
+                "cheminVueBody" => "Proposition/listMajoritaire.php",
+                "votants" => $votants,
+                "propositions" => $propositions, "question" => $question]);
         } else {
 
             Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
