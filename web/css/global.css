@@ -589,6 +589,7 @@ a.vote:hover img {
     }
 
     #conversation {
+        width: 95%;
         margin-left: 2%;
     }
 
