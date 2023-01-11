@@ -79,7 +79,7 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
                 echo '<div class = "section">';
                 echo '<h3 style = "color:black"> Section n° ' . $i . '</h3>';
                 echo '<p>Titre : ' . htmlspecialchars($Section["titre"]) . '  </p>';
-                echo '<p>Description : </p>'
+                echo '<p>Description : </p>';
                 echo '<p class = "mdparse">' . htmlspecialchars($Section["description"]) . '  </p>';
                 echo '&nbsp;';
                 echo '</div>';
