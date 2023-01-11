@@ -448,6 +448,9 @@ a.vote:hover img {
         width: 100%;
     }
 
+    .detail_question p {
+        min-width: 80%;
+    }
 
     #suivant {
         margin: 10px 20px 10px 50px;
@@ -596,8 +599,13 @@ a.vote:hover img {
     margin-top: 30px;
 }
 
-.modifier, .delete {
+.modifier {
     width: 27px;
+}
+
+.delete {
+    width: 29px;
+
 }
 
 @media screen and (max-width: 700px) {
@@ -746,7 +754,7 @@ h1 > .custom_strong.color-orange {
     /*max-width: max-content;*/
     word-wrap: break-word;
     white-space: normal;
-    max-width: 60%;
+    max-width: 70%;
 }
 
 div p {
@@ -1215,7 +1223,11 @@ input {
     width:70%;
 }
 
-.delete:hover, .modifier:hover {
+.delete:hover{
+    width: 28px;
+}
+
+.modifier:hover {
    width: 26px;
 }
 
