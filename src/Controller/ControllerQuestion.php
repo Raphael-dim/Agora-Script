@@ -487,7 +487,6 @@ class ControllerQuestion
         }
         $propositions = $question->getPropositionsTrie();
 
-
         Controller::afficheVue('view.php',
             ['pagetitle' => 'Page de résultat',
                 'cheminVueBody' => "Question/resultat.php",

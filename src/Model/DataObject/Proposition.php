@@ -63,7 +63,7 @@ class Proposition extends AbstractDataObject
     /**
      * @return float
      */
-    public function getVotemedian(): float
+    public function getVoteMedian(): float
     {
         return $this->votemedian;
     }
@@ -71,7 +71,7 @@ class Proposition extends AbstractDataObject
     /**
      * @param float $votemedian
      */
-    public function setVotemedian(float $votemedian): void
+    public function setVoteMedian(float $votemedian): void
     {
         $this->votemedian = $votemedian;
     }

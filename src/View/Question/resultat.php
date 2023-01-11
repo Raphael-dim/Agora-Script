@@ -12,13 +12,13 @@ $i = 1;
 function getResultat(Proposition $proposition, Question $question): string
 {
     if ($question->getSystemeVote() == 'majoritaire') {
-        $voteMedian = number_format($proposition->getMoyenneVote(), 3);
+        $voteMedian = number_format($proposition->getVoteMedian(), 3);
         return '<h3>Vote médian : ' . $voteMedian . '</h3>';
     } else if ($question->getSystemeVote() == 'unique') {
         $nbr = number_format($proposition->getMoyenneVote(), 3);
         return '<h3>Nombre de votes : ' . $nbr . '</h3>';
     } else if ($question->getSystemeVote() == 'valeur') {
-        $moyenne = number_format($proposition->getMoyenneVote(), 3);
+        $moyenne = number_format($proposition->getNbVotes(), 3);
         return '<h3>Moyenne des votes : ' . $moyenne . '</h3>';
     }
     return "";

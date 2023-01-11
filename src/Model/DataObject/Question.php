@@ -230,10 +230,10 @@ class Question extends AbstractDataObject
 
     function trieMedianne(Proposition $proposition1, Proposition $proposition2)
     {
-        if ($proposition1->getVotemedian() == $proposition2->getVotemedian()) {
+        if ($proposition1->getVoteMedian() == $proposition2->getVoteMedian()) {
             return 0;
         }
-        return ($proposition1->getVotemedian() < $proposition2->getVotemedian()) ? -1 : 1;
+        return ($proposition1->getVoteMedian() < $proposition2->getVoteMedian()) ? -1 : 1;
     }
 
 
