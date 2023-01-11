@@ -63,7 +63,7 @@
         $titreHTML = htmlspecialchars($proposition->getTitre());
         if ($proposition->isEstEliminee()) {
             echo '<div style="background: rgba(58,69,75,0.55)" class="proposition shadow-effect eliminee">';
-            echo '<h1><strong class="custom_strong color-grey" style="color: #292e2f; max-height: 10px">Eliminé</strong></h1>';
+            echo '<h1 class="estEliminee"><strong class="custom_strong color-grey " style="color: rgba(37,47,47,0.66);" >Eliminé</strong></h1>';
         } else {
             echo '<div class="proposition shadow-effect">';
         }
