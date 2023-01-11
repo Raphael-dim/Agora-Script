@@ -87,7 +87,7 @@ class ControllerVote
     public static function create()
     {
         // Booléen indiquant si la requête de vote est valide ou non
-            // FONCTION UTILISE POUR LE SYSTEME DE VOTE UNIQUE
+        // FONCTION UTILISE POUR LE SYSTEME DE VOTE UNIQUE
         $bool = true;
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         if (is_null($proposition)) {
@@ -154,11 +154,23 @@ class ControllerVote
             Controller::redirect('index.php');
         }
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
-        if (is_null($proposition)){
+        if (is_null($proposition)) {
             MessageFlash::ajouter('danger', 'Proposition introuvable');
             Controller::redirect('index.php');
         }
         $question = (new QuestionRepository())->select($proposition->getIdQuestion());
+        if ($question->getSystemeVote() != 'unique') {
+            MessageFlash::ajouter('danger', 'Système de vote incorrecte');
+            Controller::redirect('index.php?action=readAll&controller=proposition&idQuestion=' . $question->getId());
+        }
+        if ($question->getPhase() != 'vote') {
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas voter tant que la phase de vote n'a pas débuté.");
+            Controller::redirect('index.php?action=readAll&controller=proposition&idQuestion=' . $question->getId());
+        }
+        if ($proposition->isEstEliminee()) {
+            MessageFlash::ajouter('danger', 'Cette proposition est éliminée.');
+            Controller::redirect('index.php?action=readAll&controller=proposition&idQuestion=' . $question->getId());
+        }
         $aVote = Votant::aVote($proposition, Votant::getVotes(ConnexionUtilisateur::getLoginUtilisateurConnecte()));
         if (is_null($aVote)) {
             MessageFlash::ajouter('danger', 'Vous n\'avez pas voté pour cette proposition');
