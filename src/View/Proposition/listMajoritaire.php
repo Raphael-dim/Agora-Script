@@ -67,7 +67,7 @@
             echo '<div class="proposition shadow-effect">';
         }
 
-        echo '<h2 class = "Titre_proposition">' . $titreHTML . ' </h2class>';
+        echo '<h2 class = "Titre_proposition">' . $titreHTML . ' </h2>';
         if ($peutVoter && !$proposition->isEstEliminee()) {
             $vote = Votant::aVote($proposition, $votes, 'majoritaire');
             for ($val = 1; $val <= 6; $val++) {

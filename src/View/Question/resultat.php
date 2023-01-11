@@ -46,7 +46,7 @@ $titreHTML = htmlspecialchars($propositions[0]->getTitre());
     <div class="premier">
         <div class="proposition shadow-effect">
             <a href="index.php?action=read&controller=proposition&idProposition=<?= $idPropositionURL ?>">
-                <h2><?= $titreHTML ?></h2></a>
+                <h2 class = "Titre_proposition"><?= $titreHTML ?></h2></a>
             <?php
             echo getResultat($propositions[0], $question) . ' <a class="link-custom" href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($propositions[0]->getIdResponsable()) . '"
      >par ' . htmlspecialchars($propositions[0]->getIdResponsable()) . ' </a>
