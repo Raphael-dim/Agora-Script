@@ -69,7 +69,8 @@
                 echo '<div class = "section">';
                 echo '<h3 style = "color:black; font-size: 21px;" > Section n° ' . $i . '</h3>';
                 echo '<p style = "color:black; font-size: 20px;"> Titre :<br> ' . htmlspecialchars($Section->getTitre()) . '</p>';
-                echo '<p class = "mdparse" style = "color:black; font-size: 20px;"> Description :<br> ' . htmlspecialchars($Section->getDescription()) . '</p>';
+                echo '<p>Description :</p>';
+                echo '<p class = "mdparse" style = "color:black; font-size: 20px;">' . htmlspecialchars($Section->getDescription()) . '</p>';
                 echo '&nbsp;';
                 echo '</div>';
                 $i++;
