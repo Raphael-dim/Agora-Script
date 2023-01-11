@@ -1074,7 +1074,7 @@ input, textarea {
     min-height: 25px;
     height: auto;
     margin: 10px 10px 10px 10%;
-    min-width: fit-content;
+    min-width: content-box;
     max-width: max-content;
     word-wrap: break-word;
     white-space: normal;
@@ -1214,7 +1214,7 @@ input {
 }
 
 .maximum {
-    /*display-inside: ruby-text;*/
+    display-inside: ruby-text;
     float: right;
     display: flex;
 }
