@@ -25,8 +25,13 @@ use App\Vote\Model\Repository\VoteRepository;
 class ControllerProposition
 {
 
+    /**
+     * Cette fonction permet à un utilisateur connecté qui est responsable de la question de créer une proposition pour cette question.
+     * @return void
+     */
     public static function create(): void
     {
+        // Vérifie si l'utilisateur est connecté et si c'est le responsable de la question
         $bool = true;
         $question = (new QuestionRepository())->select($_GET["idQuestion"]);
         if (is_null($question)) {
@@ -34,19 +39,24 @@ class ControllerProposition
             Controller::redirect("index.php?controller=question&action=readAll");
         }
         if (!ConnexionUtilisateur::estConnecte() || !Responsable::estResponsable($question->getId(), ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
-            MessageFlash::ajouter("danger", "Vous ne pouvez pas créer de proposition, 
-            vous n'êtes pas responsable pour cette question.");
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas créer de proposition, vous n'êtes pas responsable pour cette question.");
             $bool = false;
         }
+
+        // Vérifie si la question est en phase d'écriture et n'a pas dépassé cette phase
         if ($question->getPhase() != 'ecriture' || $question->aPassePhase()) {
-            MessageFlash::ajouter("danger", "Vous ne pouvez pas créer de proposition en dehors 
-            de la phase d'écriture.");
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas créer de proposition en dehors de la phase d'écriture.");
             $bool = false;
         }
+
+        // Vérifie si l'utilisateur n'a pas déjà créé une proposition pour cette question
         if (Responsable::aCreeProposition($question, ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
             MessageFlash::ajouter("danger", "Vous avez déjà crée une proposition pour cette question.");
             $bool = false;
         }
+
+        // Si aucune condition n'est remplie, l'utilisateur est redirigé vers la liste des questions
+        // Sinon, la méthode 'form' est appelée
         if (!$bool) {
             Controller::redirect("index.php?controller=question&action=readAll");
         } else {
@@ -56,36 +66,44 @@ class ControllerProposition
         }
     }
 
-
-    public
-    static function form()
+    /**
+     * Cette fonction gère les différents étapes du formulaire de création de proposition
+     */
+    public static function form()
     {
+        // Initialise la session pour la création de proposition
         Session::getInstance();
         FormConfig::setArr('SessionProposition');
         $view = "";
-        $step = $_GET['step'] ?? 1;
+        $step = $_GET['step'] ?? 1; // Récupère l'étape actuelle si elle est définie, sinon définit l'étape 1 par défaut
         $params = array();
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
         $readOnly = "";
+        // Vérifie si une proposition est en cours d'édition
         if (isset($_GET['idProposition'])) {
+            // Si l'utilisateur n'est pas responsable, il ne peut pas éditer le titre de la proposition
             if (!Responsable::estResponsable($_GET['idQuestion'], ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
                 $readOnly = "readonly";
             }
         }
+        // Gère l'affichage en fonction de l'étape actuelle
         switch ($step) {
             case 1:
                 $view = "step-1";
                 break;
             case 2:
+                // Si une proposition est en cours d'édition et que l'utilisateur est co-auteur
                 if (isset($_GET["idProposition"]) and CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $_GET["idProposition"])) {
                     FormConfig::redirect('index.php?controller=proposition&action=updated');
                 }
                 if (isset($_POST["row"]) && isset($_POST["keyword"]) && "row" != "") {
+                    // Recherche les utilisateurs correspondant au mot-clé
                     $row = $_POST['row'];
                     $keyword = $_POST['keyword'];
                     $utilisateurs = (new UtilisateurRepository())->selectKeywordUtilisateur($keyword);
                     $params['utilisateurs'] = $utilisateurs;
                 } else {
+                    // Récupère tous les utilisateurs
                     $utilisateurs = (new UtilisateurRepository())->selectAll();
                     $params['utilisateurs'] = $utilisateurs;
                 }
@@ -100,51 +118,60 @@ class ControllerProposition
 
     }
 
-
-    public
-    static function read()
+    /**
+      *Cette fonction affiche les détails de la proposition sélectionnée
+      */
+    public static function read()
     {
+        // Récupère les informations sur la proposition sélectionnée
         $proposition = (new PropositionRepository())->select($_GET['idProposition']);
         $question = (new QuestionRepository())->select($proposition->getIdQuestion());
+        // Récupère les co-auteurs de la proposition
         $coAuts = (new CoAuteurRepository())->selectWhere($_GET['idProposition'], '*', 'idproposition', "Coauteurs");
-        //var_dump((new CoAuteurRepository())->selectAll());
+        // Récupère les sections de la question
         $sections = $question->getSections();
         $idProposition = $_GET['idProposition'];
+        // Affiche la vue avec les informations récupérées
         Controller::afficheVue('view.php', [
-            "question" => $question,
-            "idProposition" => $idProposition,
-            "proposition" => $proposition,
-            "sections" => $sections,
-            "coAuts" => $coAuts,
-            "pagetitle" => "Detail proposition",
-            "cheminVueBody" => "Proposition/detail.php"]);
+        "question" => $question,
+        "idProposition" => $idProposition,
+        "proposition" => $proposition,
+        "sections" => $sections,
+        "coAuts" => $coAuts,
+        "pagetitle" => "Detail proposition",
+        "cheminVueBody" => "Proposition/detail.php"]);
     }
 
-    public
-    static function readAll()
+    /**
+     * Cette fonction affiche toutes les propositions associées à une question
+     */
+    public static function readAll()
     {
+        // Vérifie si l'identifiant de la question est présent dans la requête
         if (!isset($_GET['idQuestion'])) {
             MessageFlash::ajouter("warning", "Veuillez renseigner un ID valide.");
             Controller::redirect('index.php?controller=question&action=readAll');
         }
+        // Récupère la question correspondante à l'identifiant
         $question = (new QuestionRepository())->select($_GET['idQuestion']);
 
-
-        // Au lieu de faire un appel supplémentaire à la base de donnée, on vérifie s'il existe une proposition,
-        // si oui, on récupère la question grâce à l'objet Proposition.
+        // Récupère les votants de la question
         $votants = $question->getVotants();
+        // Récupère les propositions associées à la question, triées par ordre d'insertion
         $propositions = $question->getPropositionsTrie();
+        // S'il n'y a pas de propositions pour la question
         if (sizeof($propositions) == 0) {
             MessageFlash::ajouter('info', 'Il n\'y a pas de propositions pour cette question.');
             Controller::redirect('index.php?action=readAll&controller=question');
         }
 
+        // Affiche la vue en fonction du système de vote
         if ($question->getSystemeVote() == 'majoritaire' || $question->getSystemeVote() == 'valeur') {
 
-            Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
-                "cheminVueBody" => "Proposition/listMajoritaire.php",
-                "votants" => $votants,
-                "propositions" => $propositions, "question" => $question]);
+                Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
+                    "cheminVueBody" => "Proposition/listMajoritaire.php",
+                    "votants" => $votants,
+                    "propositions" => $propositions, "question" => $question]);
         } else {
 
             Controller::afficheVue('view.php', ["pagetitle" => "Liste des propositions",
@@ -154,8 +181,7 @@ class ControllerProposition
         }
     }
 
-    public
-    static function created()
+    public static function created()
     {
         /* On vérifie au préalable si l'utilisateur a le droit de créer une proposition pour la question donnée
         dans l'éventualité où il a tenté de le faire depuis la barre d'adresse. */
@@ -165,16 +191,19 @@ class ControllerProposition
 
         $question = (new QuestionRepository())->select($_GET["idQuestion"]);
         if (is_null($question)) {
+            // Si la question n'existe pas dans la base de donnée, on affiche un message d'erreur
             MessageFlash::ajouter("danger", "Question introuvable");
+            // Et on redirige l'utilisateur vers la liste des questions
             Controller::redirect("index.php?controller=question&action=readAll");
         }
         $bool = true;
 
+        // On vérifie que l'utilisateur connecté est bien un responsable de la question donnée
         if (!ConnexionUtilisateur::estConnecte() || !Responsable::estResponsable($question->getId(), ConnexionUtilisateur::getLoginUtilisateurConnecte())) {
-            MessageFlash::ajouter("danger", "Vous ne pouvez pas créer de proposition, 
-            vous n'êtes pas responsable pour cette question.");
+            MessageFlash::ajouter("danger", "Vous ne pouvez pas créer de proposition, vous n'êtes pas responsable pour cette question.");
             $bool = false;
         }
+
         if ($question->getPhase() != 'ecriture' || $question->aPassePhase()) {
             MessageFlash::ajouter("danger", "Vous ne pouvez pas créer de proposition en dehors de la phase d'écriture.");
             $bool = false;
