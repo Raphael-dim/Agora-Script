@@ -94,6 +94,15 @@ ul[id="Menu"] li {
 nav img{
     max-width: 25px;
 }
+
+.profil>p{
+    max-height:2ch;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 8ch;
+    display: block;
+    overflow: hidden
+}
 @media screen and (max-width: 1000px) {
 
 
@@ -151,9 +160,7 @@ nav img{
         line-height: 22px;
     }
 
-    .profil{
-        right:50px;
-    }
+
     nav:hover .profil{
         top:10px;
     }
