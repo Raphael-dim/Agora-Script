@@ -537,7 +537,7 @@ class ControllerQuestion
                 MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
                 Controller::redirect("index.php?action=form&controller=question&step=2");
             }
-            if ($i < $nbCalendriers && $calendrier->getFinVote() > FormConfig::TextField('debutEcriture' . $i + 1)) {
+            if ($i < $nbCalendriers && $calendrier->getFinVote(true) > FormConfig::TextField('debutEcriture' . $i + 1)) {
                 MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
                 Controller::redirect("index.php?action=form&controller=question&step=2");
             }
