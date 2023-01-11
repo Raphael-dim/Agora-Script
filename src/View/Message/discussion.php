@@ -46,7 +46,7 @@ foreach ($messages as $message) {
 
     } else {
         echo '<p ' . $id . ' class="date" >' . htmlspecialchars($message->getAuteur()->getPrenom()) . ', il y a ' . $diff . ' </p > ';
-        echo '<div style="max-width: 200px" class="messageChat" > ' . htmlspecialchars($message->getContenu()) . '</div > ';
+        echo '<div style="max-width: 60%" class="messageChat" > ' . htmlspecialchars($message->getContenu()) . '</div > ';
     }
     $i++;
 }
