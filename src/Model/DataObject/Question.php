@@ -272,6 +272,7 @@ class Question extends AbstractDataObject
         if ($tous) {
             return $this->calendriers;
         }
+
         $date = date('Y-m-d H:i:s');
         foreach ($this->calendriers as $calendrier) {
             if ($date <= $calendrier->getDebutVote(true) || ($date >= $calendrier->getDebutEcriture(true) && $date <= $calendrier->getFinVote(true))) {
