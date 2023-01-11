@@ -42,11 +42,11 @@ foreach ($messages as $message) {
     }
     if ($message->getAuteur()->getIdentifiant() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) {
         echo ' <p ' . $id . '  style = "margin-left: 50%" class="date" >Vous, il y a ' . $diff . ' </p > ';
-        echo '<div style = "margin-left: 60%; max-width: 50px" class="messageChat" > ' . htmlspecialchars($message->getContenu()) . '</div > ';
+        echo '<div style = "margin-left: 60%" class="messageChat" > ' . htmlspecialchars($message->getContenu()) . '</div > ';
 
     } else {
         echo '<p ' . $id . ' class="date" >' . htmlspecialchars($message->getAuteur()->getPrenom()) . ', il y a ' . $diff . ' </p > ';
-        echo '<div class="messageChat" > ' . htmlspecialchars($message->getContenu()) . '</div > ';
+        echo '<div style="max-width: 50px" class="messageChat" > ' . htmlspecialchars($message->getContenu()) . '</div > ';
     }
     $i++;
 }
