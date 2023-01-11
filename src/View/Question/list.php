@@ -73,7 +73,7 @@ if (isset($_GET['selection'])) {
         }
 
         echo '<h1 class=titre>' . $titreHTML . ' </h1>
-            <a class = "link-custom" style = "position:absolute; right: 5px; top:10px ;" href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($question->getOrganisateur()->getIdentifiant()) . '" class = "link-custom">par ' . $organisateur . ' </a >';
+            <a class = "link-custom" style = "position:absolute; right: 5px; top:10px ;" href="index.php?action=read&controller=utilisateur&idUtilisateur=' . rawurlencode($question->getOrganisateur()->getIdentifiant()) . '">par ' . $organisateur . ' </a >';
         echo '<p class="description mdparse" >' . htmlspecialchars($question->getDescription()) . '</p>';
         if (ConnexionUtilisateur::estAdministrateur() || (ConnexionUtilisateur::estConnecte() &&
                 ConnexionUtilisateur::getLoginUtilisateurConnecte() == $organisateur)) {
