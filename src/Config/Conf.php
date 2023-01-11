@@ -35,7 +35,7 @@ class Conf
 
     static public function getAbsoluteURL(): string
     {
-        return "http://localhost/web/index.php";
+        return "https://webinfo.iutmontp.univ-montp2.fr/~dimeckr/SAE/web/index.php";
     }
 
 

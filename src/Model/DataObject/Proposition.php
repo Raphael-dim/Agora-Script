@@ -5,6 +5,7 @@ namespace App\Vote\Model\DataObject;
 use App\Vote\Model\Repository\CoAuteurRepository;
 use App\Vote\Model\Repository\PropositionSectionRepository;
 use App\Vote\Model\Repository\ResponsableRepository;
+use App\Vote\Model\Repository\VoteRepository;
 
 class Proposition extends AbstractDataObject
 {
@@ -62,7 +63,7 @@ class Proposition extends AbstractDataObject
     /**
      * @return float
      */
-    public function getVotemedian(): float
+    public function getVoteMedian(): float
     {
         return $this->votemedian;
     }
@@ -70,7 +71,7 @@ class Proposition extends AbstractDataObject
     /**
      * @param float $votemedian
      */
-    public function setVotemedian(float $votemedian): void
+    public function setVoteMedian(float $votemedian): void
     {
         $this->votemedian = $votemedian;
     }
@@ -191,6 +192,12 @@ class Proposition extends AbstractDataObject
     public function getContenus()
     {
         return (new PropositionSectionRepository())->selectWhere($this->getId(), '*', 'idproposition', 'Proposition_section');
+    }
+
+    public function getVotes()
+    {
+        return (new VoteRepository())->selectWhere($this->id, '*',
+            'idProposition', 'Votes', 'valeurvote');
     }
 
     public function formatTableau($update = false): array

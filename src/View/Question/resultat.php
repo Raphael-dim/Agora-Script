@@ -6,19 +6,34 @@
 use App\Vote\Model\DataObject\Proposition;
 use App\Vote\Model\DataObject\Question;
 
+function valeurToQualitatif(int $val): string{
+    switch ($val) {
+        case 1 :
+            return 'À rejeter';
+        case 2  :
+            return 'Insuffisant';
+        case 3 :
+            return 'Passable';
+        case 4:
+            return 'Assez bien';
+        case 5 :
+            return 'Bien';
+        case 6 :
+            return 'Très bien';
+    }
+}
 
 $i = 1;
-
 function getResultat(Proposition $proposition, Question $question): string
 {
     if ($question->getSystemeVote() == 'majoritaire') {
-        $voteMedian = number_format($proposition->getMoyenneVote(), 3);
-        return '<h3>Vote médian : ' . $voteMedian . '</h3>';
+        $voteMedian = number_format($proposition->getVoteMedian(), 3);
+        return '<h3>Vote médian : ' . valeurToQualitatif($voteMedian) . '</h3>';
     } else if ($question->getSystemeVote() == 'unique') {
         $nbr = number_format($proposition->getMoyenneVote(), 3);
         return '<h3>Nombre de votes : ' . $nbr . '</h3>';
     } else if ($question->getSystemeVote() == 'valeur') {
-        $moyenne = number_format($proposition->getMoyenneVote(), 3);
+        $moyenne = number_format($proposition->getNbVotes(), 3);
         return '<h3>Moyenne des votes : ' . $moyenne . '</h3>';
     }
     return "";

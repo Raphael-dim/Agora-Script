@@ -3,7 +3,7 @@
 use App\Vote\Lib\ConnexionUtilisateur;
 
 ?>
-    <link href="css/profile.css" rel="stylesheet">
+    <link href="css/Profile.css" rel="stylesheet">
     <div class="barre_utilisateur">
         <img id = "picture" src = "../web/images/profile_pic.jpg">
         <div id = "infos_utilisateur">
@@ -50,7 +50,7 @@ use App\Vote\Lib\ConnexionUtilisateur;
 
 <?php
 if ($bool) {
-    echo '<p  id = "suppression"><a href="index.php?action=delete&controller=utilisateur&idUtilisateur=' . rawurlencode($utilisateur->getIdentifiant()) . '">Supprimer
+    echo '<p  id = "suppression"><a class="link-custom" href="index.php?action=delete&controller=utilisateur&idUtilisateur=' . rawurlencode($utilisateur->getIdentifiant()) . '">Supprimer
     mon compte </a></p>';
     if (ConnexionUtilisateur::estAdministrateur()) {
         echo '<p id = "new"><a href="index.php?action=create&controller=utilisateur">Créer un autre compte </a></p>';

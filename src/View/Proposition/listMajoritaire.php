@@ -24,7 +24,7 @@
                     Il est nécessaire de choisir une mention pour chaque proposition.';
     }
     if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
-        ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
+        ($question->getPhase() == 'debut') && $question->aPassePhase()) {
         $organisateurRole = 'Vous êtes responsable pour cette question multiphase';
         $messageOrganisateur = 'Vous pouvez éliminer les propositions les moins attractives. <br>
                 Par défaut, elles sont triées ' . $methodeTrie . ', si vous éliminez
@@ -33,17 +33,16 @@
         ?>
         <h2 class="custom_titre"><?= $organisateurRole ?></h2>
         <p class="survol">
-            <img class="imageAide" src="images/aide_logo.png" alt="aide"/>
+            <img class="imageAide" src="images/aide_logo.png" alt="aide">
             <span class="messageInfo"><?= $messageOrganisateur ?></span>
         </p>
         <?php
-        echo '<h2></h2>';
     }
 
     ?>
     <h2 class="custom_titre"><?= $modeScrutin ?></h2>
     <p class="survol">
-        <img class="imageAide" src="images/aide_logo.png" alt="aide"/>
+        <img class="imageAide" src="images/aide_logo.png" alt="aide">
         <span class="messageInfo"><?= $message ?></span>
     </p>
     <?php
@@ -68,7 +67,7 @@
             echo '<div class="proposition shadow-effect">';
         }
 
-        echo '<p class=titre> <h2>' . $titreHTML . ' </h2 </p>';
+        echo '<h2>' . $titreHTML . ' </h2>';
         if ($peutVoter && !$proposition->isEstEliminee()) {
             $vote = Votant::aVote($proposition, $votes, 'majoritaire');
             for ($val = 1; $val <= 6; $val++) {
@@ -108,17 +107,9 @@
         }
         $nbEtoiles = htmlspecialchars($proposition->getNbEtoiles());
 
-        /*
-            On récupère les votes dans la vue pour éviter de faire plusieurs appels à la base de donnée
-        dans le controller. La méthode ReadAll() n'est pas appelée par le controllerVote lors du vote / modification de vote.
-        Si c'était le cas, on devrait refaire un appel à la base de donnée pour récupérer la question, les propositions et les votants
-        à chaque interaction avec le système de vote.
-
-        */
+        $votesProposition = $proposition->getVotes();
 
 
-        $votesProposition = (new VoteRepository())->selectWhere($proposition->getId(), '*',
-            'idProposition', 'Votes', 'valeurvote');
         echo '<h3>Nombre de votes : ' . sizeof($votesProposition) . '</h3>';
         if (sizeof($votesProposition) > 0) {
             if ($question->getSystemeVote() == 'majoritaire') {
@@ -139,24 +130,25 @@
 
 
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
-            ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
+            ($question->getPhase() == 'debut') && $question->aPassePhase()) {
             if ($proposition->isEstEliminee()) {
                 echo '<p><a class="link-custom" href="index.php?controller=proposition&action=annulerEliminer&idProposition=' . $idPropositionURL . '">Annuler l\'élimination</a></p>';
             } else {
                 echo '<p><a class="link-custom" href="index.php?controller=proposition&action=eliminer&idProposition=' . $idPropositionURL . '">Eliminer</a></p>';
             }
         }
-
-        if ((CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
-            $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) &&
+        echo '<p>';
+        if (ConnexionUtilisateur::estConnecte() && (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
+                $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) &&
             $question->getPhase() == 'ecriture') {
 
-            echo ' <p><a href="index.php?action=update&controller=proposition&idProposition=' .
+            echo ' <a href="index.php?action=update&controller=proposition&idProposition=' .
                 rawurlencode($proposition->getId()) . '"><img class="modifier" src = "../web/images/modifier.png"  alt="modifier"></a > ';
         }
 
         if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable() && $question->getPhase() != 'vote') {
-            echo ' <a href="index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '"><img style="margin-left: 10px" class="delete" src = "../web/images/delete.png"  alt="supprimer"></a>';
+            echo ' <a href="index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '">
+                        <img style="margin-left: 10px" class="delete" src = "../web/images/delete.png"  alt="supprimer"></a>';
         }
         echo '</p>';
         $i++;

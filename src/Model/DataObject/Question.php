@@ -181,13 +181,13 @@ class Question extends AbstractDataObject
 
     public function getPropositionsTrie()
     {
-        $propositions = (new PropositionRepository())->selectWhere($this->id, '*', "idQuestion",
-            'Propositions', 'nbEtoiles', 'DESC');
+        $propositions = (new PropositionRepository())->selectWhere($this->id, '*', "idquestion",
+            'Propositions', 'nbetoiles', 'DESC');
         if ($this->systemeVote == 'majoritaire') {
             $propositionsTrie = array();
             foreach ($propositions as $proposition) {
                 $votesProposition = (new VoteRepository())->selectWhere($proposition->getId(), '*',
-                    'idProposition', 'Votes', 'valeurvote');
+                    'idproposition', 'Votes', 'valeurvote');
                 $nbVotes = $proposition->getNbVotes();
                 if ($nbVotes > 0) {
                     if ($nbVotes == 1) {
@@ -230,10 +230,10 @@ class Question extends AbstractDataObject
 
     function trieMedianne(Proposition $proposition1, Proposition $proposition2)
     {
-        if ($proposition1->getVotemedian() == $proposition2->getVotemedian()) {
+        if ($proposition1->getVoteMedian() == $proposition2->getVoteMedian()) {
             return 0;
         }
-        return ($proposition1->getVotemedian() < $proposition2->getVotemedian()) ? -1 : 1;
+        return ($proposition1->getVoteMedian() < $proposition2->getVoteMedian()) ? -1 : 1;
     }
 
 

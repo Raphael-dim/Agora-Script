@@ -14,12 +14,12 @@
     ?>
     <h2 class="custom_titre"><?= $modeScrutin ?></h2>
     <p class="survol">
-        <img class="imageAide" src="images/aide_logo.png" alt="aide"/>
+        <img class="imageAide" src="images/aide_logo.png" alt="aide">
         <span class="messageInfo"><?= $message ?></span>
     </p>
     <?php
     if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
-        ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
+        ($question->getPhase() == 'debut') && $question->aPassePhase()) {
         $organisateurRole = 'Vous êtes responsable pour cette question multiphase';
         $messageOrganisateur = 'Vous pouvez éliminer les propositions les moins attractives. 
                 Par défaut, elles sont triées par nombre de votes, si vous éliminez
@@ -27,11 +27,10 @@
         ?>
         <h2 class="custom_titre"><?= $organisateurRole ?></h2>
         <p class="survol">
-            <img class="imageAide" src="images/aide_logo.png" alt="aide"/>
+            <img class="imageAide" src="images/aide_logo.png" alt="aide">
             <span class="messageInfo"><?= $messageOrganisateur ?></span>
         </p>
         <?php
-        echo '<h2></h2>';
     }
     $i = 1;
     $peutVoter = false;
@@ -79,23 +78,25 @@
         $nbVotes = htmlspecialchars($proposition->getNbEtoiles());
         echo '<h3>Nombre de votes : ' . $nbVotes . '</h3>';
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
-            ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
+            ($question->getPhase() == 'debut') && $question->aPassePhase()) {
             if ($proposition->isEstEliminee()) {
                 echo '<p><a class="link-custom" href="index.php?controller=proposition&action=annulerEliminer&idProposition=' . $idPropositionURL . '">Annuler l\'élimination</a><br></p>';
             } else {
                 echo '<p><a class="link-custom" href="index.php?controller=proposition&action=eliminer&idProposition=' . $idPropositionURL . '">Eliminer</a><br></p>';
             }
         }
-        if ((CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
+        echo '<p>';
+        if (ConnexionUtilisateur::estConnecte() && (CoAuteur::estCoAuteur(ConnexionUtilisateur::getLoginUtilisateurConnecte(), $proposition->getId()) ||
                 $proposition->getIdResponsable() == ConnexionUtilisateur::getLoginUtilisateurConnecte()) &&
             $question->getPhase() == 'ecriture') {
 
-            echo ' <p><a href="index.php?action=update&controller=proposition&idProposition=' .
+            echo ' <a href="index.php?action=update&controller=proposition&idProposition=' .
                 rawurlencode($proposition->getId()) . '"><img class="modifier" src = "../web/images/modifier.png"  alt="modifier"></a > ';
         }
 
         if (ConnexionUtilisateur::estConnecte() && ConnexionUtilisateur::getLoginUtilisateurConnecte() == $proposition->getIdResponsable() && $question->getPhase() != 'vote') {
-            echo ' <a style="margin-left: 20px" href="index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '"><img class="delete" src = "../web/images/delete.png"  alt="supprimer"></a>';
+            echo ' <a style="margin-left: 20px" href="index.php?controller=proposition&action=delete&idProposition=' . rawurlencode($proposition->getId()) . '">
+                    <img class="delete" src = "../web/images/delete.png"  alt="supprimer"></a>';
         }
         echo '</p>';
         $i++;
