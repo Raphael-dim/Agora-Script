@@ -422,7 +422,7 @@ class ControllerProposition
         $question = (new QuestionRepository())->select($proposition->getIdQuestion());
         $propositions = $question->getPropositionsTrie();
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant()
-            && ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') & $question->aPassePhase()) {
+            && ($question->getPhase() == 'debut') & $question->aPassePhase()) {
             $proposition->setEstEliminee(true);
             (new PropositionRepository())->update($proposition);
             foreach ($propositions as $propo) {
@@ -449,7 +449,7 @@ class ControllerProposition
         $question = (new QuestionRepository())->select($proposition->getIdQuestion());
         $propositions = $question->getPropositionsTrie();
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant()
-            && ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') & $question->aPassePhase()) {
+            && ($question->getPhase() == 'debut') & $question->aPassePhase()) {
             $proposition->setEstEliminee(false);
             (new PropositionRepository())->update($proposition);
             foreach ($propositions as $propo) {

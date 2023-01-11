@@ -24,7 +24,7 @@
                     Il est nécessaire de choisir une mention pour chaque proposition.';
     }
     if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
-        ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
+        ($question->getPhase() == 'debut') && $question->aPassePhase()) {
         $organisateurRole = 'Vous êtes responsable pour cette question multiphase';
         $messageOrganisateur = 'Vous pouvez éliminer les propositions les moins attractives. <br>
                 Par défaut, elles sont triées ' . $methodeTrie . ', si vous éliminez
@@ -139,7 +139,7 @@
 
 
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
-            ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
+            ($question->getPhase() == 'debut') && $question->aPassePhase()) {
             if ($proposition->isEstEliminee()) {
                 echo '<p><a class="link-custom" href="index.php?controller=proposition&action=annulerEliminer&idProposition=' . $idPropositionURL . '">Annuler l\'élimination</a></p>';
             } else {

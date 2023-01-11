@@ -84,7 +84,10 @@ if (isset($_POST['ajoutPhase'])) {
 if ($_SESSION[FormConfig::$arr]['nbCalendriers'] > 1) {
     $calendrier = 'Calendrier multiphase';
     $message = 'Le calendrier multiphase permet de définir plusieurs phases d\'écriture et de vote pour une même question.<br>
-                         Si vous décidez d\'ajouter des phases de votes, vous devrez vous-même sélectionner les propositions gagnantes entre 2 phase de vote.';
+                         Si vous décidez d\'ajouter des phases de votes et d\'écritures, vous pourrez éliminer des propositions.
+                         Cette opération sera disponible uniquement après les votes et avant le début de la prochaine phase d\'écritures.<br>
+                         Si vous ajoutez un calendrier et que vous souhaitez éliminer des propositions, prévoyez un laps de temps suffisant entre les 2 calendriers.';
+
 
 
     ?>

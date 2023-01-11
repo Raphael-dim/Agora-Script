@@ -131,7 +131,18 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
         </div>
     </div>
 </div>
+<?php
+$modification = 'Modification de vote question';
+$message = 'Attention, une fois la phase d\'écriture débutée, vous ne pourrez plus modifier votre question.<br>
+             Assurez-vous d\'avoir choisi les bonnes informations d\'ici là.';
 
+
+?>
+<h2 class="custom_titre"><?= $modification ?></h2>
+<p class="survol">
+    <img class="imageAide" src="images/aide_logo.png" alt="aide">
+    <span class="messageInfo"><?= $message ?></span>
+</p>
 <form method="post" class="nav">
     <input type="submit" name=previous value="Retour" id="precedent" formnovalidate>
     <input type="submit" name=next value="Suivant" id="suivant">

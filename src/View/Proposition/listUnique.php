@@ -19,7 +19,7 @@
     </p>
     <?php
     if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
-        ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
+        ($question->getPhase() == 'debut') && $question->aPassePhase()) {
         $organisateurRole = 'Vous êtes responsable pour cette question multiphase';
         $messageOrganisateur = 'Vous pouvez éliminer les propositions les moins attractives. 
                 Par défaut, elles sont triées par nombre de votes, si vous éliminez
@@ -79,7 +79,7 @@
         $nbVotes = htmlspecialchars($proposition->getNbEtoiles());
         echo '<h3>Nombre de votes : ' . $nbVotes . '</h3>';
         if (ConnexionUtilisateur::getLoginUtilisateurConnecte() == $question->getOrganisateur()->getIdentifiant() &&
-            ($question->getPhase() == 'entre' || $question->getPhase() == 'debut') && $question->aPassePhase()) {
+            ($question->getPhase() == 'debut') && $question->aPassePhase()) {
             if ($proposition->isEstEliminee()) {
                 echo '<p><a class="link-custom" href="index.php?controller=proposition&action=annulerEliminer&idProposition=' . $idPropositionURL . '">Annuler l\'élimination</a><br></p>';
             } else {
