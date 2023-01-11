@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
     <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
-    <script src ="../src/JS/MarkdownEditor.js"></script>
+    <script src ="../web/JS/MarkdownEditor.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
