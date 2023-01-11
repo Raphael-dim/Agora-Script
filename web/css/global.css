@@ -1013,7 +1013,7 @@ input, textarea {
 }
 
 .shadow-effect:hover {
-    transform: scale(100%);
+    transform: scale(1);
     box-shadow: -3px 3px 0 0 var(--brand)
 }
 
@@ -1074,7 +1074,7 @@ input, textarea {
     min-height: 25px;
     height: auto;
     margin: 10px 10px 10px 10%;
-    min-width: content-box;
+    min-width: fit-content;
     max-width: max-content;
     word-wrap: break-word;
     white-space: normal;
@@ -1214,7 +1214,7 @@ input {
 }
 
 .maximum {
-    display-inside: ruby-text;
+    /*display-inside: ruby-text;*/
     float: right;
     display: flex;
 }
