@@ -333,6 +333,7 @@ class ControllerQuestion
         FormConfig::setArr('SessionQuestion');
         $question->setTitre($_SESSION[FormConfig::$arr]['Titre']);
         $question->setDescription($_SESSION[FormConfig::$arr]['Description']);
+        $question->setSystemeVote($_SESSION[FormConfig::$arr]['systemeVote']);
         (new QuestionRepository())->update($question);
 
         foreach ($question->getCalendrier(true) as $calendrier) {
