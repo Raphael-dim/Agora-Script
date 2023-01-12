@@ -310,7 +310,6 @@ class ControllerQuestion
             $bool = true;
             FormConfig::setArr('SessionQuestion');
             Session::getInstance();
-            // var_dump($_SESSION);
             $question = (new QuestionRepository())->select($_SESSION[FormConfig::$arr]['idQuestion']);
             if (is_null($question)) {
                 MessageFlash::ajouter("danger", "Question introuvable");
