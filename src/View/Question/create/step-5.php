@@ -18,7 +18,7 @@ if (array_key_exists('delete', $_POST)) {
 }
 if (isset($_POST['next'])) {
     FormConfig::postSession();
-    $_SESSION['step'][5] = 5;
+    $_SESSION[FormConfig::$arr]['step'][4] = 4;
     FormConfig::redirect("index.php?controller=question&action=form&step=6");
 } else if (isset($_POST['previous'])) {
     FormConfig::postSession();
