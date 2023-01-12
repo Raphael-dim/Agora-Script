@@ -11,8 +11,12 @@
         <?php
         if (isset($utilisateurs)) {
             foreach ($utilisateurs as $utilisateur) {
-                echo '<br><a href="index.php?action=read&controller=message&idContact=' . rawurlencode($utilisateur->getIdentifiant()) . '">
-                ' . htmlspecialchars($utilisateur->getIdentifiant()) . '</a>';
+                echo ' <div class="contact">
+             <img style="max-height: 40px" src="images/profil.png" alt="profil">
+            <a>' . htmlspecialchars($contact->getPrenom()) . ' ' . htmlspecialchars($contact->getNom()) . '</a>
+
+                <a  style="min-width: 100%" href="index.php?action=read&controller=message&idContact=' . rawurlencode($utilisateur->getIdentifiant()) . '">
+                ' . htmlspecialchars($utilisateur->getIdentifiant()) . '</a></div>';
             }
         }
         ?>

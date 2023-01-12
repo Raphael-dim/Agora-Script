@@ -23,12 +23,12 @@ foreach ($contacts as $contact) {
         $message = 'Écrire un message';
     }
     echo '<div class="contact">
-            <img style="max-height: 40px" src="images/profil.png" alt="">
-            <a class="" href="">' . htmlspecialchars($contact->getPrenom()) . ' ' . htmlspecialchars($contact->getNom()) . '</a>
+            <img style="max-height: 40px" src="images/profil.png" alt="profil">
+            <a href="index.php?action=read&controller=utilisateur&idUtilisateur=' . $contact->getIdentifiant() . '">' . htmlspecialchars($contact->getPrenom()) . ' ' . htmlspecialchars($contact->getNom()) . '</a>
             <a style="min-width: 100%" href="index.php?controller=message&action=read&idContact=' . rawurlencode($contact->getIdentifiant()) . '#dernierMessage">' . $message . '</a>
-            ';
+           </div> ';
     if ($message == 'Nouveau message') {
-        echo '<img style="width: 40px" src="images/nouveau-message.png" >';
+        echo '<img style="width: 40px" src="images/nouveau-message.png"  alt="message">';
     }
 
     echo '</div> ';
