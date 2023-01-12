@@ -5,7 +5,7 @@ use App\Vote\Controller\Controller;
 use App\Vote\Lib\MessageFlash;
 
 if (!isset($_SESSION[FormConfig::$arr]['step'][1])) {
-    FormConfig::redirect("index.php?controller=question&action=create");
+    FormConfig::redirect("index.php?controller=question&action=form&step=1");
 }
 
 if (isset($_POST['next'])) {

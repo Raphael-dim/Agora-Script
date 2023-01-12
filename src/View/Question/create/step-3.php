@@ -3,7 +3,7 @@
 use App\Vote\Config\FormConfig as FormConfig;
 
 if (!isset($_SESSION[FormConfig::$arr]['step'][2])) {
-    FormConfig::redirect("index.php?controller=question&action=create");
+    FormConfig::redirect("index.php?controller=question&action=form&step=2");
 }
 
 if (isset($_POST['next'])) {

@@ -4,6 +4,10 @@ use App\Vote\Config\FormConfig as FormConfig;
 use App\Vote\Controller\Controller;
 use App\Vote\Lib\MessageFlash;
 
+if (!isset($_SESSION[FormConfig::$arr]['step'][3])) {
+    FormConfig::redirect("index.php?controller=question&action=form&step=3");
+}
+
 $_SESSION[FormConfig::$arr]['type'] = 'responsables';
 
 if (array_key_exists('user', $_POST)) {
@@ -12,9 +16,10 @@ if (array_key_exists('user', $_POST)) {
 if (array_key_exists('delete', $_POST)) {
     removeuser($_POST["delete"]);
 }
+
 if (isset($_POST['next'])) {
     FormConfig::postSession();
-    $_SESSION[FormConfig::$arr]['step'][3] = 3;
+    $_SESSION[FormConfig::$arr]['step'][4] = 4;
     FormConfig::redirect("index.php?controller=question&action=form&step=5");
 } else if (isset($_POST['previous'])) {
     FormConfig::postSession();

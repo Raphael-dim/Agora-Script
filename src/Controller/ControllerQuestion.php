@@ -149,7 +149,9 @@ class ControllerQuestion
             case 6:
                 $view = "step-6";
                 break;
-
+            default:
+                echo"a";
+                ControllerAccueil::erreur();
         }
 
         // Affiche la vue avec le titre de page et le chemin de vue spécifiés, et passe le tableau de paramètres en tant que variables

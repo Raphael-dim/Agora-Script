@@ -4,6 +4,9 @@ echo '<div class = "custom-form">';
 use App\Vote\Config\FormConfig as FormConfig;
 use App\Vote\Lib\MessageFlash;
 
+if (!isset($_SESSION[FormConfig::$arr]['step'][4])) {
+    FormConfig::redirect("index.php?controller=question&action=form&step=4");
+}
 
 $_SESSION[FormConfig::$arr]['type'] = 'votants';
 
@@ -15,7 +18,7 @@ if (array_key_exists('delete', $_POST)) {
 }
 if (isset($_POST['next'])) {
     FormConfig::postSession();
-    $_SESSION['step'][3] = 3;
+    $_SESSION['step'][5] = 5;
     FormConfig::redirect("index.php?controller=question&action=form&step=6");
 } else if (isset($_POST['previous'])) {
     FormConfig::postSession();

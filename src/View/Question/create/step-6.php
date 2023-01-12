@@ -2,6 +2,9 @@
 
 use App\Vote\Config\FormConfig as FormConfig;
 
+if (!isset($_SESSION[FormConfig::$arr]['step'][5])) {
+    FormConfig::redirect("index.php?controller=question&action=form&step=5");
+}
 
 if (isset($_POST['previous'])) {
     FormConfig::postSession();
@@ -79,12 +82,7 @@ if (count($_SESSION[FormConfig::$arr]['Sections']) > $_SESSION[FormConfig::$arr]
                 echo '<div class = "section">';
                 echo '<h3 style = "color:black"> Section n° ' . $i . '</h3>';
                 echo '<p>Titre : ' . htmlspecialchars($Section["titre"]) . '  </p>';
-<<<<<<< HEAD
                 echo '<p>Description : </p>';
-=======
-
-                echo '<p>Description : </p>'
->>>>>>> 43e0da16fa70ae7b6501742e6435764e3626743b
                 echo '<p class = "mdparse">' . htmlspecialchars($Section["description"]) . '  </p>';
                 echo '&nbsp;';
                 echo '</div>';
