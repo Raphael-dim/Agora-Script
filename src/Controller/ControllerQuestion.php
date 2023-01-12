@@ -355,7 +355,7 @@ class ControllerQuestion
 
         $ancSections = $question->getSections();
         foreach ($ancSections as $ancSection) {
-            (new SectionRepository())->delete($ancSections->getId());
+            (new SectionRepository())->delete($ancSection->getId());
         }
         $nouvSections = $_SESSION[FormConfig::$arr]['Sections'];
         foreach ($nouvSections as $nouvSection) {
