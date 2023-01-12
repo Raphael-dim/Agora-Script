@@ -150,7 +150,7 @@ class ControllerQuestion
                 $view = "step-6";
                 break;
             default:
-                echo"a";
+                echo "a";
                 ControllerAccueil::erreur();
         }
 
@@ -355,30 +355,17 @@ class ControllerQuestion
         }
 
         $ancSections = $question->getSections();
-        $nouvSections = $_SESSION[FormConfig::$arr]['Sections'];
-        for ($i = 0; $i < count($nouvSections); $i++) {
-            if (count($ancSections) <= $i) {
-                $section = new Section($nouvSections[$i]['titre'], $nouvSections[$i]['description'], $question);
-                if (strlen($nouvSections[$i]['titre']) > 80 || strlen($nouvSections[$i]['description']) > 360) {
-                    MessageFlash::ajouter("danger", "Les contraintes de taille maximales des champs de textes n'ont pas été respectées.");
-                    Controller::redirect("index.php?action=form&controller=question&step=3");
-                }
-                $sectionBD = (new SectionRepository())->sauvegarder($section, true);
-                if ($sectionBD != null) {
-                    $section->setId($sectionBD);
-                } else {
-                    Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
-                }
-            } else {
-                $ancSections[$i]->setTitre($nouvSections[$i]['titre']);
-                $ancSections[$i]->setDescription($nouvSections[$i]['description']);
-                (new SectionRepository())->update($ancSections[$i]);
-            }
+        foreach ($ancSections as $ancSection) {
+            (new SectionRepository())->delete($ancSections->getId());
         }
-        if (count($ancSections) > count($nouvSections)) {
-            for ($diff = count($ancSections) - count($nouvSections); $diff > 0; $diff--) {
-                (new SectionRepository())->delete($ancSections[count($ancSections) - 1]->getId());
-                unset($ancSections[count($ancSections) - 1]);
+        $nouvSections = $_SESSION[FormConfig::$arr]['Sections'];
+        foreach ($nouvSections as $nouvSection) {
+            $section = new Section($nouvSection['titre'], $nouvSection['description'], $question);
+            $sectionBD = (new SectionRepository())->sauvegarder($section, true);
+            if ($sectionBD != null) {
+                $section->setId($sectionBD);
+            } else {
+                Controller::afficheVue('view.php', ["pagetitle" => "erreur", "cheminVueBody" => "Accueil/erreur.php"]);
             }
         }
 
