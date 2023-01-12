@@ -330,6 +330,8 @@ class ControllerQuestion
             }
         }
         self::verifBD($question);
+
+
         FormConfig::setArr('SessionQuestion');
         $question->setTitre($_SESSION[FormConfig::$arr]['Titre']);
         $question->setDescription($_SESSION[FormConfig::$arr]['Description']);
@@ -526,6 +528,7 @@ class ControllerQuestion
      * période de vote),
      * Si toutes les vérifications sont passées avec succès, le calendrier est enregistré
      * en base de données.
+     * Vérifie aussi les sections
      */
     private static function verifBD(Question $question): void
     {
