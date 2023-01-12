@@ -202,6 +202,7 @@ class ControllerQuestion
             Controller::redirect('index.php?action=create&controller=question');
         }
 
+
         $question = new Question($_SESSION[FormConfig::$arr]['Titre'], $_SESSION[FormConfig::$arr]['Description'],
             $creation, $organisateur, $_SESSION[FormConfig::$arr]['systemeVote']);
 
@@ -534,12 +535,11 @@ class ControllerQuestion
     {
         if (strlen($_SESSION[FormConfig::$arr]['Titre']) > 80 || strlen($_SESSION[FormConfig::$arr]['Description']) > 360) {
             MessageFlash::ajouter("danger", "Les contraintes de taille maximales des champs de textes n'ont pas été respectées.");
-            Controller::redirect("index.php?action=form&controller=question&step=2");
+            Controller::redirect("index.php?action=form&controller=question&step=1");
         }
         if ($_SESSION[FormConfig::$arr]['systemeVote'] != "valeur" &&
             $_SESSION[FormConfig::$arr]['systemeVote'] != "majoritaire" &&
             $_SESSION[FormConfig::$arr]['systemeVote'] != "unique") {
-            MessageFlash::ajouter("danger", $_SESSION[FormConfig::$arr]['systemeVote']);
             MessageFlash::ajouter("danger", "Veuillez vérifier le mode de scrutin.");
             Controller::redirect("index.php?action=form&controller=question&step=5");
         }
@@ -570,7 +570,7 @@ class ControllerQuestion
                 FormConfig::TextField('finEcriture' . $i) < date("d-m-Y") ||
                 FormConfig::TextField('debutVote' . $i) < date("d-m-Y") ||
                 FormConfig::TextField('finVote' . $i) < date("d-m-Y")) {
-                MessageFlash::ajouter('warning', "test");
+                MessageFlash::ajouter("danger", "Les contraintes du calendrier n'ont pas été respectées.");
                 Controller::redirect('index.php?controller=question&action=form&step=2');
             }
         }
