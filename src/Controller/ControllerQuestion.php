@@ -506,6 +506,10 @@ class ControllerQuestion
             Controller::redirect('index.php?controller=question&action=readAll');
         }
         $propositions = $question->getPropositionsTrie();
+        if (sizeof($propositions) == 0) {
+            MessageFlash::ajouter('info', "Il n'y a pas de propositions pour cette question");
+            Controller::redirect('index.php?action=readAll&controller=question');
+        }
 
         Controller::afficheVue('view.php',
             ['pagetitle' => 'Page de résultat',
