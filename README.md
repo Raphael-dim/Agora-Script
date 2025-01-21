@@ -1,31 +1,34 @@
 # Agora Script
 
-Bienvenue sur **Agora Script**, une plateforme en ligne qui révolutionne le débat public et les prises de décision collectives. Agora Script permet aux utilisateurs de créer des débats, de voter, de proposer des idées et de s'engager dans une conversation constructive. 🎉
+Welcome to **Agora Script**, an online platform revolutionizing public debate and collective decision-making. Agora Script allows users to create debates, vote on responses, propose ideas, and engage in constructive discussions. 🎉
 
 ---
 
-## 🎯 Fonctionnalités principales
+## 🎯 Key Features
 
-### 1. **Créer des débats**
-- Les utilisateurs peuvent créer un débat en définissant une question ou un sujet de discussion.
-- Possibilité d'ajouter des options de vote initiales.
+### 1. **Create Debates**
+- Users can create a debate by defining a question or topic.
+- Option to add initial voting choices.
 
-### 2. **Voter et aimer**
-- Chaque utilisateur peut voter pour les propositions existantes liées à un débat.
-- Les propositions et réponses peuvent recevoir des "likes" pour montrer leur popularité.
+### 2. **Vote and Like**
+- Users can vote on existing proposals linked to a debate.
+- Proposals and responses can receive "likes" to indicate popularity.
 
-### 3. **Propositions et discussions**
-- Les participants peuvent soumettre leurs propres idées ou solutions dans chaque débat.
-- Un système de commentaires facilite les échanges autour des propositions.
+### 3. **Proposals and Discussions**
+- Participants can submit their own ideas or solutions in any debate.
+- A comment system enables discussions around proposals.
 
-### 4. **Suivi des débats**
-- Classement des débats populaires ou actifs.
-- Notifications sur les nouveaux votes ou commentaires.
+### 4. **Track Debates**
+- View trending or active debates.
+- Notifications for new votes or comments.
 
 ---
 
-## 🚀 Comment commencer ?
+## 🚀 Getting Started
 
-1. **Cloner le projet** :
+1. **Clone the project**:
    ```bash
-   git clone https://github.com/votre-utilisateur/agora-script.git
+   git clone https://github.com/your-username/agora-script.git
+
+## 📄 License
+This project is licensed under the MIT License. Feel free to use and modify it as needed.
